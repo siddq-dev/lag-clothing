@@ -87,15 +87,18 @@ class AppTheme {
 
       dividerColor: AppColors.divider,
 
-      textTheme: const TextTheme(
-        displayLarge: AppTextStyles.heroTitle,
-        displayMedium: AppTextStyles.sectionTitle,
-        titleLarge: AppTextStyles.cardTitle,
-        bodyLarge: AppTextStyles.body,
-        bodyMedium: AppTextStyles.cardSubtitle,
-        bodySmall: AppTextStyles.caption,
-        labelLarge: AppTextStyles.button,
-      ),
+    textTheme: const TextTheme(
+  displayLarge: AppTextStyles.heroTitle,
+  displayMedium: AppTextStyles.sectionTitle,
+
+  titleLarge: AppTextStyles.cardTitle,
+
+  bodyLarge: AppTextStyles.bodyLarge,
+  bodyMedium: AppTextStyles.bodyMedium,
+  bodySmall: AppTextStyles.bodySmall,
+
+  labelLarge: AppTextStyles.button,
+),
     );
   }
 }
