@@ -2,7 +2,7 @@ class NavigationItems {
   final String title;
   final String route;
 
-  NavigationItems({
+  const NavigationItems({
     required this.title,
     required this.route,
   });

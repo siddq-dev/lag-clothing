@@ -3,8 +3,8 @@ class AppRouter {
 
   static const String home = '/';
   static const String shop = '/shop';
-  static const String about = '/about';
-  static const String contact = '/contact';
+  static const String about = '/about-us';
+  static const String contact = '/contact-us';
 
   static const String cart = '/cart';
   static const String checkout = '/checkout';
