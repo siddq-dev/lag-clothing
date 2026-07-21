@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../models/navigation_items.dart';
-import '../../routes/app_router.dart';
+import '../../routes/app_routes.dart';
+
 
 import 'nav_item.dart';
 
@@ -17,25 +18,38 @@ class NavMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final menuItems = [
-      'Home',
-      'Shop',
-      'About us',
-      'Contact',
-    ];
+   
+  final menuItems = [
+  NavigationItems(
+    title: 'Home',
+    route: AppRouter.home,
+  ),
+  NavigationItems(
+    title: 'Shop',
+    route: AppRouter.shop,
+  ),
+  NavigationItems(
+    title: 'About Us',
+    route: AppRouter.about,
+  ),
+  NavigationItems(
+    title: 'Contact Us',
+    route: AppRouter.contact,
+  ),
+];
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: menuItems.map((item) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: NavItem(
-            title: item,
-            isSelected: selectedItem == item,
-            onTap: () => onItemSelected(item),
-          ),
-        );
-      }).toList(),
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 8),
+    child: NavItem(
+      title: item.title,
+      isSelected: selectedItem == item.route,
+      onTap: () => onItemSelected(item.route),
+    ),
+  );
+}).toList(),
     );
   }
 }
