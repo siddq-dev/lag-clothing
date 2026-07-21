@@ -7,12 +7,12 @@ class NavActions extends StatelessWidget {
     super.key,
     required this.onSearch,
     required this.onCart,
-    required this.onLogin,
+    required this.onSignIn,
   });
 
   final VoidCallback onSearch;
   final VoidCallback onCart;
-  final VoidCallback onLogin;
+  final VoidCallback onSignIn;
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +39,8 @@ class NavActions extends StatelessWidget {
         const SizedBox(width: 12),
 
         TextButton(
-          onPressed: onLogin,
-          child: const Text("Login"),
+          onPressed: onSignIn,
+          child: const Text("Sign In"),
         ),
       ],
     );
