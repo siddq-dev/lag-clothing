@@ -5,7 +5,8 @@ import '../../themes/app_colors.dart';
 import '../../themes/app_spacing.dart';
 
 import 'footers_brands.dart';
-import 'footers_contact.dart';
+import 'footer_customer_support.dart';
+import 'footer_company.dart';
 import 'footers_links.dart';
 
 class Footer extends StatelessWidget {
@@ -37,6 +38,7 @@ class _DesktopFooter extends StatelessWidget {
     return const Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+
         Expanded(
           flex: 2,
           child: FooterBrand(),
@@ -51,8 +53,13 @@ class _DesktopFooter extends StatelessWidget {
         SizedBox(width: AppSpacing.xxl),
 
         Expanded(
-          flex: 2,
-          child: FooterContact(),
+          child: FooterCustomerSupport(),
+        ),
+
+        SizedBox(width: AppSpacing.xxl),
+
+        Expanded(
+          child: FooterCompany(),
         ),
       ],
     );
@@ -67,15 +74,29 @@ class _TabletFooter extends StatelessWidget {
     return const Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(child: FooterBrand()),
+
+        Expanded(
+          flex: 2,
+          child: FooterBrand(),
+        ),
 
         SizedBox(width: AppSpacing.lg),
 
-        Expanded(child: FooterLinks()),
+        Expanded(
+          child: FooterLinks(),
+        ),
 
         SizedBox(width: AppSpacing.lg),
 
-        Expanded(child: FooterContact()),
+        Expanded(
+          child: FooterCustomerSupport(),
+        ),
+
+        SizedBox(width: AppSpacing.lg),
+
+        Expanded(
+          child: FooterCompany(),
+        ),
       ],
     );
   }
@@ -89,6 +110,7 @@ class _MobileFooter extends StatelessWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+
         FooterBrand(),
 
         SizedBox(height: AppSpacing.xl),
@@ -97,7 +119,12 @@ class _MobileFooter extends StatelessWidget {
 
         SizedBox(height: AppSpacing.xl),
 
-        FooterContact(),
+        FooterCustomerSupport(),
+
+        SizedBox(height: AppSpacing.xl),
+
+        FooterCompany(),
+
       ],
     );
   }
