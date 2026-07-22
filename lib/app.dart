@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'themes/app_themes.dart';
+import 'package:lag_clothing/features/home/pages/home_pages.dart';
 
 
 class LagClothingApp extends StatelessWidget {
@@ -8,14 +9,10 @@ class LagClothingApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Lag Clothing',
-      theme: AppTheme.darkTheme,
-      home: const Scaffold(
-      body: Center(
-        child: Text('Lag Clothing!'),
-      ),
-    )
-    );
+  debugShowCheckedModeBanner: false,
+  title: 'Lag Clothing',
+  theme: AppTheme.darkTheme,
+  home: const HomePage(),
+);
   }
 }
