@@ -7,7 +7,7 @@ import '../widgets/categories/categories_section.dart';
 import '../widgets/featured_collection/featured_collection.dart';
 import '../widgets/hero/hero_section.dart';
 import '../widgets/new_arrivals/new_arrivals.dart';
-import '../widgets/newsletter/newsletter_section.dart';
+import '../widgets/customer_review/customer_reviews.dart';
 import '../widgets/why_choose_us/why_choose_us.dart';
 
 class HomePage extends StatelessWidget {
@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
           FeaturedCollection(),
           NewArrivals(),
           WhyChooseUs(),
-          NewsletterSection(),
+          CustomerReviews(),
         ],
       ),
     );
