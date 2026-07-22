@@ -1,4 +1,4 @@
-import '../../../../routes/app_routes.dart';
+import '../routes/app_routes.dart';
 
 class CategoryModel {
   final String title;

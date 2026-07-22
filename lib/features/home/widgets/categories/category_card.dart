@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
 
-import 'category_models.dart';
+import '../../../../models/category_models.dart';
 
 class CategoryCard extends StatelessWidget {
   const CategoryCard({
