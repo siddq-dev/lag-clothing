@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lag_clothing/core/constants/section_sizes.dart';
 
 class WhyChooseUs extends StatelessWidget {
   const WhyChooseUs({super.key});
@@ -6,7 +7,7 @@ class WhyChooseUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 500,
+      height: SectionSizes.whyChooseUsHeight,
       width: double.infinity,
       alignment: Alignment.center,
       child: const Text(
