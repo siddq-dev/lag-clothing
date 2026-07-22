@@ -4,7 +4,7 @@ import '../../../../themes/app_text_style.dart';
 import '../../../../core/constants/section_sizes.dart';
 
 import 'category_card.dart';
-import 'category_models.dart';
+import '../../../../models/category_models.dart';
 
 class CategoriesSection extends StatelessWidget {
   const CategoriesSection({super.key});
