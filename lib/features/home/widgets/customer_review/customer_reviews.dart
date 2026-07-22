@@ -38,8 +38,8 @@ class CustomerReviews extends StatelessWidget {
           SizedBox(height: 60),
 
           ReviewSlider(),
-          
-            const SizedBox(height: 100),
+
+             SizedBox(height: 100),
 
         ],
       ),
