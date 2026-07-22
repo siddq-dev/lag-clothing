@@ -20,9 +20,9 @@ class ContactPage extends StatelessWidget {
         children: [
 
           ContactHero(),
-          ContactInfo(),
-          MapSection(),
           ContactForm(),
+          MapSection(),
+          ContactInfo(),
           SocialLinks(),
 
         ],
