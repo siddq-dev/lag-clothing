@@ -3,6 +3,10 @@ class SectionSizes {
 
   static const double heroHeight = 600;
 
+  static const double categoryCardHeight = 300;
+
+  static const double productCardHeight = 500;
+
   static const double categoriesHeight = 500;
 
   static const double featuredCollectionHeight = 600;

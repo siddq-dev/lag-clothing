@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lag_clothing/core/constants/section_sizes.dart';
+
+import '../../../../themes/app_text_style.dart';
+
+import 'feature_card.dart';
+import 'feature_data.dart';
 
 class WhyChooseUs extends StatelessWidget {
   const WhyChooseUs({super.key});
@@ -7,15 +11,46 @@ class WhyChooseUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: SectionSizes.whyChooseUsHeight,
       width: double.infinity,
-      alignment: Alignment.center,
-      child: const Text(
-        'Why Choose Us',
-        style: TextStyle(
-          fontSize: 36,
-          fontWeight: FontWeight.bold,
-        ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 60,
+        vertical: 80,
+      ),
+      child: Column(
+        children: [
+          const Text(
+            'Why Choose LAG Clothing?',
+            style: AppTextStyles.sectionTitle,
+          ),
+
+          const SizedBox(height: 16),
+
+          const Text(
+            'We provide premium-quality jerseys designed for comfort, performance, and style.',
+            style: AppTextStyles.sectionSubtitle,
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 50),
+
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: features.length,
+            gridDelegate:
+                const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              crossAxisSpacing: 24,
+              mainAxisSpacing: 24,
+              childAspectRatio: 1.1,
+            ),
+            itemBuilder: (context, index) {
+              return FeatureCard(
+                feature: features[index],
+              );
+            },
+          ),
+        ],
       ),
     );
   }

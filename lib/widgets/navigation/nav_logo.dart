@@ -6,9 +6,9 @@ class NavLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 60,
+      height: 50,
       child: Image.asset(
-        'assets/images/placeholder_logo.png',
+        'assets/images/logo/lag_logo.png',
         fit: BoxFit.contain,
       ),
     );
