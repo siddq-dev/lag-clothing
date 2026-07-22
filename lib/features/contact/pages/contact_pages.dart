@@ -5,6 +5,9 @@ import '../../../routes/app_routes.dart';
 
 import '../widgets/contact_hero/contact_hero.dart';
 import '../widgets/contact_info.dart';
+import '../widgets/map_section/map_section.dart';
+import '../widgets/contact_form/contact_form.dart';
+import '../widgets/social_links/social_links.dart';
 
 class ContactPage extends StatelessWidget {
   const ContactPage({super.key});
@@ -18,6 +21,9 @@ class ContactPage extends StatelessWidget {
 
           ContactHero(),
           ContactInfo(),
+          MapSection(),
+          ContactForm(),
+          SocialLinks(),
 
         ],
       ),
