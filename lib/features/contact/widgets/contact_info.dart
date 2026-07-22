@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'contact_info_card.dart';
+import 'contact_info/contact_info_card.dart';
 
 class ContactInfo extends StatelessWidget {
   const ContactInfo({super.key});
