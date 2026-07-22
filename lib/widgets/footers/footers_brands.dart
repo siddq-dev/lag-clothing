@@ -10,10 +10,11 @@ class FooterBrand extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'LAG CLOTHING',
-          style: AppTextStyles.heading3,
-        ),
+       Image.asset(
+  'assets/images/logo/lag_logo.png',
+  height: 60,
+  fit: BoxFit.contain,
+),
 
         const SizedBox(height: 16),
 
