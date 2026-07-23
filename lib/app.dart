@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'themes/app_themes.dart';
 import 'package:lag_clothing/features/home/pages/home_pages.dart';
 import 'package:lag_clothing/features/contact/pages/contact_pages.dart';
+import 'package:lag_clothing/features/about/pages/about_page.dart';
 
 
 class LagClothingApp extends StatelessWidget {
