@@ -118,3 +118,126 @@ const List<ProductModel> newArrivalProducts = [
     category: 'national',
   ),
 ];
+
+const List<ProductModel> shopProducts = [
+
+  ProductModel(
+    id: '1',
+    title: 'Home Jersey 24/25',
+    club: 'Real Madrid',
+    price: 1499,
+    image: 'assets/images/products/real_madrid_home.png',
+    rating: 4.8,
+    isFeatured: true,
+    isNew: true,
+    category: 'club',
+  ),
+
+  ProductModel(
+    id: '2',
+    title: 'Home Jersey 24/25',
+    club: 'Barcelona',
+    price: 1499,
+    image: 'assets/images/products/barcelona_home.png',
+    rating: 4.7,
+    isFeatured: true,
+    isNew: true,
+    category: 'club',
+  ),
+
+  ProductModel(
+    id: '3',
+    title: 'Home Jersey',
+    club: 'Manchester United',
+    price: 1599,
+    image: 'assets/images/products/manchester_home.png',
+    rating: 4.8,
+    isFeatured: false,
+    isNew: true,
+    category: 'club',
+  ),
+
+  ProductModel(
+    id: '4',
+    title: 'Away Jersey',
+    club: 'Liverpool',
+    price: 1599,
+    image: 'assets/images/products/liverpool_away.png',
+    rating: 4.9,
+    isFeatured: false,
+    isNew: true,
+    category: 'club',
+  ),
+
+  ProductModel(
+    id: '5',
+    title: 'Away Jersey',
+    club: 'Arsenal',
+    price: 1499,
+    image: 'assets/images/products/arsenal_away.png',
+    rating: 4.7,
+    isFeatured: false,
+    isNew: false,
+    category: 'club',
+  ),
+
+  ProductModel(
+    id: '6',
+    title: 'Home Jersey',
+    club: 'Argentina',
+    price: 1599,
+    image: 'assets/images/products/argentina_home.png',
+    rating: 4.9,
+    isFeatured: false,
+    isNew: true,
+    category: 'national',
+  ),
+
+  ProductModel(
+    id: '7',
+    title: 'Away Jersey',
+    club: 'Brazil',
+    price: 1599,
+    image: 'assets/images/products/brazil_away.png',
+    rating: 4.8,
+    isFeatured: false,
+    isNew: true,
+    category: 'national',
+  ),
+
+  ProductModel(
+    id: '8',
+    title: 'Home Jersey',
+    club: 'France',
+    price: 1599,
+    image: 'assets/images/products/france_home.png',
+    rating: 4.8,
+    isFeatured: false,
+    isNew: false,
+    category: 'national',
+  ),
+
+  ProductModel(
+    id: '9',
+    title: 'Away Jersey',
+    club: 'Germany',
+    price: 1599,
+    image: 'assets/images/products/germany_away.png',
+    rating: 4.7,
+    isFeatured: false,
+    isNew: true,
+    category: 'national',
+  ),
+
+  ProductModel(
+    id: '10',
+    title: 'Home Jersey',
+    club: 'Portugal',
+    price: 1599,
+    image: 'assets/images/products/portugal_home.png',
+    rating: 4.9,
+    isFeatured: false,
+    isNew: true,
+    category: 'national',
+  ),
+];
