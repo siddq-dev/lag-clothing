@@ -1,15 +1,39 @@
 import 'package:flutter/material.dart';
 
+import '../../../../models/cart_models.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_spacing.dart';
 import '../../../../themes/app_text_style.dart';
 import '../coupon_box/coupon_box.dart';
 
 class OrderSummary extends StatelessWidget {
-  const OrderSummary({super.key});
+  const OrderSummary({
+    super.key,
+    required this.cartItems,
+  });
+
+  final List<CartProduct> cartItems;
 
   @override
   Widget build(BuildContext context) {
+    // Calculate total quantity
+    final int totalItems = cartItems.fold(
+      0,
+      (sum, item) => sum + item.quantity,
+    );
+
+    // Calculate subtotal
+    final double subtotal = cartItems.fold(
+      0,
+      (sum, item) => sum + (item.product.price * item.quantity),
+    );
+
+    // Static values for now
+    const double shipping = 0;
+    const double discount = 200;
+
+    final double total = subtotal + shipping - discount;
+
     return Container(
       padding: const EdgeInsets.all(AppSpacing.xl),
       decoration: BoxDecoration(
@@ -30,61 +54,38 @@ class OrderSummary extends StatelessWidget {
 
           const SizedBox(height: AppSpacing.xl),
 
-          _summaryRow("Items (3)", "₹4,597"),
+          _summaryRow(
+            "Items ($totalItems)",
+            "₹${subtotal.toStringAsFixed(0)}",
+          ),
 
           const SizedBox(height: AppSpacing.md),
 
-          _summaryRow("Shipping", "FREE"),
+          _summaryRow(
+            "Shipping",
+            shipping == 0
+                ? "FREE"
+                : "₹${shipping.toStringAsFixed(0)}",
+          ),
 
           const SizedBox(height: AppSpacing.md),
 
-          _summaryRow("Discount", "- ₹200"),
+          _summaryRow(
+            "Discount",
+            "- ₹${discount.toStringAsFixed(0)}",
+          ),
 
           const Divider(height: 40),
 
           _summaryRow(
             "Total",
-            "₹4,397",
+            "₹${total.toStringAsFixed(0)}",
             isTotal: true,
           ),
 
           const SizedBox(height: AppSpacing.xxl),
 
-         const CouponBox(),
-
-          const SizedBox(height: AppSpacing.sm),
-
-          Row(
-            children: [
-
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "Enter Coupon",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(width: 10),
-
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 18,
-                  ),
-                ),
-                child: const Text("Apply"),
-              ),
-
-            ],
-          ),
+          const CouponBox(),
 
           const SizedBox(height: AppSpacing.xxl),
 
@@ -92,7 +93,9 @@ class OrderSummary extends StatelessWidget {
             width: double.infinity,
             height: 55,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                // Navigate to Checkout
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
@@ -102,7 +105,6 @@ class OrderSummary extends StatelessWidget {
               ),
             ),
           ),
-
         ],
       ),
     );
@@ -133,7 +135,6 @@ class OrderSummary extends StatelessWidget {
                 )
               : AppTextStyles.bodyLarge,
         ),
-
       ],
     );
   }
