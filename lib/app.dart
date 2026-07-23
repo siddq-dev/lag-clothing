@@ -18,7 +18,7 @@ class LagClothingApp extends StatelessWidget {
   debugShowCheckedModeBanner: false,
   title: 'Lag Clothing',
   theme: AppTheme.darkTheme,
-  home: const HomePage(),
+  home: const ShopPage(),
 );
   }
 }
