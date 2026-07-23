@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../models/feature_product_model.dart';
-import '../../../../widgets/products/product_card.dart';
+import '../shop_product_card/shop_product_card.dart';
 
 class ShopProductGrid extends StatelessWidget {
   const ShopProductGrid({super.key});
@@ -40,12 +40,9 @@ class ShopProductGrid extends StatelessWidget {
 
             final product = shopProducts[index];
 
-            return ProductCard(
-              product: product,
-              onTap: () {},
-              onAddToCart: () {},
-              onWishlist: () {},
-            );
+        return ShopProductCard(
+  product: product,
+);
           },
         );
       },

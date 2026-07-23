@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
+import 'filter_section.dart';
 
 class ShopSidebar extends StatelessWidget {
   const ShopSidebar({super.key});
@@ -29,115 +30,63 @@ class ShopSidebar extends StatelessWidget {
           ),
 
           const SizedBox(height: 24),
+const FilterSection(
+  title: "Category",
+  options: [
+    "Club Jerseys",
+    "National Jerseys",
+    "Retro Jerseys",
+    "Training Kits",
+    "Goalkeeper Jerseys",
+  ],
+),
 
-          ExpansionTile(
-            tilePadding: EdgeInsets.zero,
-            title: const Text('Category'),
-            children: [
+Divider(),
 
-              ListTile(
-                dense: true,
-                title: const Text('Club Jerseys'),
-                onTap: () {},
-              ),
+FilterSection(
+  title: "Size",
+  options: [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL",
+  ],
+),
 
-              ListTile(
-                dense: true,
-                title: const Text('National Jerseys'),
-                onTap: () {},
-              ),
+Divider(),
 
-              ListTile(
-                dense: true,
-                title: const Text('Retro Jerseys'),
-                onTap: () {},
-              ),
+FilterSection(
+  title: "Price",
+  options: [
+    "₹500 - ₹1000",
+    "₹1000 - ₹1500",
+    "₹1500 - ₹2000",
+    "₹2000+",
+  ],
+),
 
-              ListTile(
-                dense: true,
-                title: const Text('Training Kits'),
-                onTap: () {},
-              ),
+Divider(),
 
-              ListTile(
-                dense: true,
-                title: const Text('Goalkeeper Jerseys'),
-                onTap: () {},
-              ),
-            ],
-          ),
+FilterSection(
+  title: "Brand",
+  options: [
+    "LAG",
+    "Nike",
+    "Adidas",
+    "Puma",
+  ],
+),
 
-          const Divider(),
+Divider(),
 
-          ExpansionTile(
-            tilePadding: EdgeInsets.zero,
-            title: const Text('Size'),
-            children: [
-
-              ListTile(
-                dense: true,
-                title: const Text('S'),
-                onTap: () {},
-              ),
-
-              ListTile(
-                dense: true,
-                title: const Text('M'),
-                onTap: () {},
-              ),
-
-              ListTile(
-                dense: true,
-                title: const Text('L'),
-                onTap: () {},
-              ),
-
-              ListTile(
-                dense: true,
-                title: const Text('XL'),
-                onTap: () {},
-              ),
-
-              ListTile(
-                dense: true,
-                title: const Text('XXL'),
-                onTap: () {},
-              ),
-            ],
-          ),
-
-          const Divider(),
-
-          ExpansionTile(
-            tilePadding: EdgeInsets.zero,
-            title: const Text('Price'),
-            children: [
-
-              ListTile(
-                dense: true,
-                title: const Text('₹500 - ₹1000'),
-                onTap: () {},
-              ),
-
-              ListTile(
-                dense: true,
-                title: const Text('₹1000 - ₹1500'),
-                onTap: () {},
-              ),
-
-              ListTile(
-                dense: true,
-                title: const Text('₹1500 - ₹2000'),
-                onTap: () {},
-              ),
-
-              ListTile(
-                dense: true,
-                title: const Text('₹2000+'),
-                onTap: () {},
-              ),
-            ],
-          ),
+FilterSection(
+  title: "Availability",
+  options: [
+    "In Stock",
+    "Out of Stock",
+  ],
+),
         ],
       ),
     );
