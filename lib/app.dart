@@ -9,6 +9,7 @@ import 'package:lag_clothing/features/auth/pages/register_page.dart';
 import 'package:lag_clothing/features/auth/pages/forgot_password_page.dart';
 import 'package:lag_clothing/features/wishlist/pages/wishlist_page.dart';
 import 'package:lag_clothing/features/cart/pages/cart_page.dart';
+import 'package:lag_clothing/features/checkout/pages/checkout_page.dart';
 
 
 class LagClothingApp extends StatelessWidget {
@@ -20,7 +21,7 @@ class LagClothingApp extends StatelessWidget {
   debugShowCheckedModeBanner: false,
   title: 'Lag Clothing',
   theme: AppTheme.darkTheme,
-  home:  const CartPage(),
+  home:  const CheckoutPage(), // Set the initial page to CheckoutPage
 );
   }
 }
