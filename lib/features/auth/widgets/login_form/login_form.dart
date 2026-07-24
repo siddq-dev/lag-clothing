@@ -15,12 +15,12 @@ class _LoginFormState extends State<LoginForm> {
   bool _obscurePassword = true;
   bool _rememberMe = false;
 
-  final _emailController = TextEditingController();
+  final _userController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _userController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -62,11 +62,11 @@ class _LoginFormState extends State<LoginForm> {
 
                 const SizedBox(height: 10),
 
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your email',
-                    prefixIcon: const Icon(Icons.email_outlined),
+               TextField(
+  controller: _userController,
+  decoration: InputDecoration(
+    hintText: 'Enter email or mobile number',
+    prefixIcon: const Icon(Icons.person_outline),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
 
+enum RecoveryType {
+  phone,
+  email,
+}
+
 class ForgotPasswordForm extends StatefulWidget {
   const ForgotPasswordForm({super.key});
 
@@ -14,26 +19,66 @@ class ForgotPasswordForm extends StatefulWidget {
 class _ForgotPasswordFormState
     extends State<ForgotPasswordForm> {
 
-  final TextEditingController emailController =
-      TextEditingController();
+  RecoveryType recoveryType = RecoveryType.phone;
+
+  final phoneController = TextEditingController();
+  final emailController = TextEditingController();
 
   @override
   void dispose() {
+    phoneController.dispose();
     emailController.dispose();
     super.dispose();
   }
 
-  void resetPassword() {
+  void sendOtp() {
+
+    String destination = recoveryType == RecoveryType.phone
+        ? phoneController.text
+        : emailController.text;
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         content: Text(
-          "Password reset link has been sent to your email.",
+          "OTP will be sent to $destination",
         ),
       ),
     );
 
-    // Firebase implementation later
+    // Later
+    // Navigate to OTP Verification Page
+  }
+
+  Widget buildField({
+    required String label,
+    required TextEditingController controller,
+    required IconData icon,
+    required String hint,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        Text(label),
+
+        const SizedBox(height: 10),
+
+        TextField(
+          controller: controller,
+          keyboardType: keyboardType,
+          decoration: InputDecoration(
+            prefixIcon: Icon(icon),
+            hintText: hint,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+
+      ],
+    );
   }
 
   @override
@@ -61,30 +106,70 @@ class _ForgotPasswordFormState
                 const SizedBox(height: 15),
 
                 const Text(
-                  "Enter your registered email address and we'll send you a password reset link.",
+                  "Choose how you'd like to recover your account.",
                   style: AppTextStyles.bodyMedium,
                 ),
 
-                const SizedBox(height: 40),
+                const SizedBox(height: 35),
 
-                const Text("Email Address"),
+                const Text(
+                  "Recover Using",
+                ),
 
                 const SizedBox(height: 10),
 
-                TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(
-                      Icons.email_outlined,
-                    ),
-                    hintText:
-                        "Enter your email address",
-                    border: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(12),
-                    ),
+                RadioListTile<RecoveryType>(
+                  value: RecoveryType.phone,
+                  groupValue: recoveryType,
+                  activeColor: AppColors.primary,
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text(
+                    "Mobile Number",
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      recoveryType = value!;
+                    });
+                  },
                 ),
+
+                RadioListTile<RecoveryType>(
+                  value: RecoveryType.email,
+                  groupValue: recoveryType,
+                  activeColor: AppColors.primary,
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text(
+                    "Email Address",
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      recoveryType = value!;
+                    });
+                  },
+                ),
+
+                const SizedBox(height: 20),
+
+                if (recoveryType == RecoveryType.phone)
+
+                  buildField(
+                    label: "Mobile Number",
+                    controller: phoneController,
+                    icon: Icons.phone_outlined,
+                    hint: "Enter your mobile number",
+                    keyboardType: TextInputType.phone,
+                  )
+
+                else
+
+                  buildField(
+                    label: "Email Address",
+                    controller: emailController,
+                    icon: Icons.email_outlined,
+                    hint: "Enter your email address",
+                    keyboardType:
+                        TextInputType.emailAddress,
+                  ),
 
                 const SizedBox(height: 35),
 
@@ -92,14 +177,17 @@ class _ForgotPasswordFormState
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: resetPassword,
+                    onPressed: sendOtp,
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           AppColors.primary,
                       foregroundColor: Colors.white,
                     ),
                     child: const Text(
-                      "SEND RESET LINK",
+                      "SEND OTP",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),

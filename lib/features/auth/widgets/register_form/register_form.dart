@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
 
+enum VerificationType {
+  phone,
+  email,
+}
+
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
 
@@ -12,23 +17,19 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
 
-  bool obscurePassword = true;
-  bool obscureConfirmPassword = true;
   bool agree = false;
+
+  VerificationType verificationType = VerificationType.phone;
 
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
     nameController.dispose();
     emailController.dispose();
     phoneController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -36,8 +37,8 @@ class _RegisterFormState extends State<RegisterForm> {
     required String label,
     required TextEditingController controller,
     required IconData icon,
-    bool obscure = false,
-    VoidCallback? toggle,
+    required String hint,
+    TextInputType keyboardType = TextInputType.text,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,21 +50,10 @@ class _RegisterFormState extends State<RegisterForm> {
 
         TextField(
           controller: controller,
-          obscureText: obscure,
+          keyboardType: keyboardType,
           decoration: InputDecoration(
+            hintText: hint,
             prefixIcon: Icon(icon),
-
-            suffixIcon: toggle == null
-                ? null
-                : IconButton(
-                    onPressed: toggle,
-                    icon: Icon(
-                      obscure
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                  ),
-
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
@@ -108,54 +98,69 @@ class _RegisterFormState extends State<RegisterForm> {
                   label: "Full Name",
                   controller: nameController,
                   icon: Icons.person_outline,
+                  hint: "Enter your full name",
                 ),
 
                 const SizedBox(height: 20),
 
                 buildField(
-                  label: "Email",
+                  label: "Email Address",
                   controller: emailController,
                   icon: Icons.email_outlined,
+                  hint: "Enter your email",
+                  keyboardType: TextInputType.emailAddress,
                 ),
 
                 const SizedBox(height: 20),
 
                 buildField(
-                  label: "Phone Number",
+                  label: "Mobile Number",
                   controller: phoneController,
                   icon: Icons.phone_outlined,
+                  hint: "Enter your mobile number",
+                  keyboardType: TextInputType.phone,
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
 
-                buildField(
-                  label: "Password",
-                  controller: passwordController,
-                  icon: Icons.lock_outline,
-                  obscure: obscurePassword,
-                  toggle: () {
+                Text(
+                  "Verify Using",
+                  style: AppTextStyles.bodyLarge,
+                ),
+
+                const SizedBox(height: 10),
+
+                RadioListTile<VerificationType>(
+                  value: VerificationType.phone,
+                  groupValue: verificationType,
+                  activeColor: AppColors.primary,
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text(
+                    "Mobile Number",
+                  ),
+                  onChanged: (value) {
                     setState(() {
-                      obscurePassword = !obscurePassword;
+                      verificationType = value!;
                     });
                   },
                 ),
 
-                const SizedBox(height: 20),
-
-                buildField(
-                  label: "Confirm Password",
-                  controller: confirmPasswordController,
-                  icon: Icons.lock_outline,
-                  obscure: obscureConfirmPassword,
-                  toggle: () {
+                RadioListTile<VerificationType>(
+                  value: VerificationType.email,
+                  groupValue: verificationType,
+                  activeColor: AppColors.primary,
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text(
+                    "Email Address",
+                  ),
+                  onChanged: (value) {
                     setState(() {
-                      obscureConfirmPassword =
-                          !obscureConfirmPassword;
+                      verificationType = value!;
                     });
                   },
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
 
                 CheckboxListTile(
                   value: agree,
@@ -171,19 +176,27 @@ class _RegisterFormState extends State<RegisterForm> {
                   },
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 25),
 
                 SizedBox(
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: agree
+                        ? () {
+                            // Navigate to OTP Verification
+                          }
+                        : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                     ),
                     child: const Text(
-                      "CREATE ACCOUNT",
+                      "CONTINUE",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -199,7 +212,9 @@ class _RegisterFormState extends State<RegisterForm> {
                     ),
 
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        // Navigate to Login
+                      },
                       child: const Text(
                         "LOGIN",
                       ),
