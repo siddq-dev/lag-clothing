@@ -13,6 +13,7 @@ import 'package:lag_clothing/features/checkout/pages/checkout_page.dart';
 import 'package:lag_clothing/features/order_confirmation/page/order_confirmation_page.dart';
 import 'package:lag_clothing/features/profiles/page/profile_page.dart';
 import 'package:lag_clothing/features/personal_information/page/personal_information_page.dart';
+import 'package:lag_clothing/features/my_orders/page/my_orders_page.dart';
 
 
 class LagClothingApp extends StatelessWidget {
@@ -24,7 +25,7 @@ class LagClothingApp extends StatelessWidget {
   debugShowCheckedModeBanner: false,
   title: 'Lag Clothing',
   theme: AppTheme.darkTheme,
-  home:  const PersonalInformationPage(), // Set the initial page to ProfilePage
+  home:  const  MyOrdersPage(), // Set the initial page to MyOrdersPage
 );
   }
 }
