@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lag_clothing/features/notifications/page/notifications_page.dart';
 import 'themes/app_themes.dart';
 import 'package:lag_clothing/features/home/pages/home_pages.dart';
 import 'package:lag_clothing/features/contact/pages/contact_pages.dart';
@@ -19,7 +20,7 @@ import 'package:lag_clothing/features/saved_address/page/saved_address_page.dart
 import 'package:lag_clothing/features/address_form/page/address_form_page.dart';
 import 'package:lag_clothing/features/change_password/page/change_password_page.dart';
 import 'package:lag_clothing/features/payment_methods/page/payment_methods_page.dart';
-
+import 'package:lag_clothing/features/notifications/page/notifications_page.dart';
 
 class LagClothingApp extends StatelessWidget {
   const LagClothingApp({super.key});
@@ -30,7 +31,7 @@ class LagClothingApp extends StatelessWidget {
   debugShowCheckedModeBanner: false,
   title: 'Lag Clothing',
   theme: AppTheme.darkTheme,
-  home:  const  PaymentMethodsPage(), // Set the initial page to MyOrdersPage
+  home:  const  NotificationsPage() // Set the initial page to NotificationsPage
 );
   }
 }
