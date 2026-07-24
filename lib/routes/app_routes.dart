@@ -16,6 +16,8 @@ class AppRouter {
   static const String profile = '/profile';
   static const String orders = '/orders';
   static const String orderConfirmation = '/order-confirmation';
+  static const String savedAddresses = '/saved-addresses';
+static const String addressForm = '/address-form';
 
   // Authentication
   static const String login = '/login';

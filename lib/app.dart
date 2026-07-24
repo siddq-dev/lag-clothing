@@ -15,6 +15,8 @@ import 'package:lag_clothing/features/profiles/page/profile_page.dart';
 import 'package:lag_clothing/features/personal_information/page/personal_information_page.dart';
 import 'package:lag_clothing/features/my_orders/page/my_orders_page.dart';
 import 'package:lag_clothing/features/order_details/page/order_detail_page.dart';
+import 'package:lag_clothing/features/saved_address/page/saved_address_page.dart';
+import 'package:lag_clothing/features/address_form/page/address_form_page.dart';
 
 
 class LagClothingApp extends StatelessWidget {
@@ -26,7 +28,7 @@ class LagClothingApp extends StatelessWidget {
   debugShowCheckedModeBanner: false,
   title: 'Lag Clothing',
   theme: AppTheme.darkTheme,
-  home:  const  OrderDetailsPage(), // Set the initial page to MyOrdersPage
+  home:  const  SavedAddressesPage(), // Set the initial page to MyOrdersPage
 );
   }
 }
