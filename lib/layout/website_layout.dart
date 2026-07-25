@@ -49,7 +49,7 @@ class WebsiteLayout extends StatelessWidget {
 
               // ✅ Profile/Login
               onSignIn: () {
-                context.go(AppRouter.profile);
+                context.go(AppRouter.login);
               },
             ),
 

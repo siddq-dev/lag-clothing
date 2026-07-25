@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
 
+import 'package:go_router/go_router.dart';
+import '../../../../routes/app_routes.dart';
+
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
 
@@ -124,13 +127,12 @@ class _LoginFormState extends State<LoginForm> {
 
                     const Spacer(),
 
-                    TextButton(
-                      onPressed: () {
-                        // Forgot Password
-                      },
-                      child: const Text("Forgot Password?"),
-                    ),
-
+                 TextButton(
+  onPressed: () {
+    context.go(AppRouter.forgotPassword);
+  },
+  child: const Text("Forgot Password?"),
+),
                   ],
                 ),
 
@@ -209,13 +211,12 @@ class _LoginFormState extends State<LoginForm> {
                         "Don't have an account?",
                       ),
 
-                      TextButton(
-                        onPressed: () {
-                          // Register Page
-                        },
-                        child: const Text("Create Account"),
-                      ),
-
+                   TextButton(
+  onPressed: () {
+    context.go(AppRouter.register);
+  },
+  child: const Text("Create Account"),
+),
                     ],
                   ),
                 ),
