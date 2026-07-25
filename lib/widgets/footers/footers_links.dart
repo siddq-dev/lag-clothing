@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../routes/app_routes.dart';
 import '../../themes/app_text_style.dart';
 
 class FooterLinks extends StatelessWidget {
@@ -7,11 +9,11 @@ class FooterLinks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const links = [
-      'Home',
-      'Shop',
-      'About Us',
-      'Contact Us',
+    final links = [
+      ('Home', AppRouter.home),
+      ('Shop', AppRouter.shop),
+      ('About Us', AppRouter.about),
+      ('Contact Us', AppRouter.contact),
     ];
 
     return Column(
@@ -27,9 +29,13 @@ class FooterLinks extends StatelessWidget {
         ...links.map(
           (link) => Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: Text(
-              link,
-              style: AppTextStyles.bodyMedium,
+            child: InkWell(
+              onTap: () => context.go(link.$2),
+              borderRadius: BorderRadius.circular(4),
+              child: Text(
+                link.$1,
+                style: AppTextStyles.bodyMedium,
+              ),
             ),
           ),
         ),

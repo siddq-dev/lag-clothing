@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../models/feature_product_model.dart';
+import '../../../../routes/app_routes.dart';
+import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
 import '../../../../widgets/products/product_card.dart';
 
@@ -41,16 +44,52 @@ class NewArrivals extends StatelessWidget {
               crossAxisCount: 4,
               crossAxisSpacing: 24,
               mainAxisSpacing: 24,
-              childAspectRatio: 0.58,
+              childAspectRatio: 0.48,
             ),
             itemBuilder: (context, index) {
               final product = newArrivalProducts[index];
 
-              return ProductCard(
-                product: product,
-                onTap: () {},
-                onAddToCart: () {},
-                onWishlist: () {},
+              return Column(
+                children: [
+                  Expanded(
+                    child: ProductCard(
+                      product: product,
+
+                      onTap: () {},
+
+                      onAddToCart: () {
+                        context.go(AppRouter.cart);
+                      },
+
+                      onWishlist: () {
+                        context.go(AppRouter.wishlist);
+                      },
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        context.go(AppRouter.shop);
+                      },
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.primary,
+                        side: const BorderSide(
+                          color: AppColors.primary,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                        ),
+                      ),
+                      child: const Text(
+                        "Explore More",
+                      ),
+                    ),
+                  ),
+                ],
               );
             },
           ),
