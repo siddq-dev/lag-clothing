@@ -21,6 +21,7 @@ import 'package:lag_clothing/features/address_form/page/address_form_page.dart';
 import 'package:lag_clothing/features/change_password/page/change_password_page.dart';
 import 'package:lag_clothing/features/payment_methods/page/payment_methods_page.dart';
 import 'package:lag_clothing/features/notifications/page/notifications_page.dart';
+import 'package:lag_clothing/features/help_support/page/help_support_page.dart';
 
 class LagClothingApp extends StatelessWidget {
   const LagClothingApp({super.key});
@@ -28,10 +29,11 @@ class LagClothingApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-  debugShowCheckedModeBanner: false,
-  title: 'Lag Clothing',
-  theme: AppTheme.darkTheme,
-  home:  const  NotificationsPage() // Set the initial page to NotificationsPage
-);
+      debugShowCheckedModeBanner: false,
+      title: 'Lag Clothing',
+      theme: AppTheme.darkTheme,
+      home:
+          const HelpSupportPage(), // Set the initial page to NotificationsPage
+    );
   }
 }
