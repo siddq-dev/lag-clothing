@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lag_clothing/features/notifications/page/notifications_page.dart';
+import 'package:lag_clothing/features/reviews/page/reviews_page.dart';
 import 'themes/app_themes.dart';
 import 'package:lag_clothing/features/home/pages/home_pages.dart';
 import 'package:lag_clothing/features/contact/pages/contact_pages.dart';
@@ -23,6 +24,12 @@ import 'package:lag_clothing/features/payment_methods/page/payment_methods_page.
 import 'package:lag_clothing/features/notifications/page/notifications_page.dart';
 import 'package:lag_clothing/features/help_support/page/help_support_page.dart';
 import 'package:lag_clothing/features/account_settings/page/account_settings_page.dart';
+import 'package:lag_clothing/features/my_orders/page/track_order_page.dart';
+import 'package:lag_clothing/features/my_orders/page/order_details_page.dart';
+import 'package:lag_clothing/features/reviews/page/reviews_page.dart';
+import 'package:lag_clothing/features/size_guide/page/size_guide_page.dart';
+import 'package:lag_clothing/features/returns/page/returns_page.dart';
+
 
 class LagClothingApp extends StatelessWidget {
   const LagClothingApp({super.key});
@@ -33,7 +40,7 @@ class LagClothingApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Lag Clothing',
       theme: AppTheme.darkTheme,
-      home: const AccountSettingsPage(),
+      home: const ReturnsPage(),
     );
   }
 }
