@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lag_clothing/features/legal/privacy_policy_page.dart';
+import 'package:lag_clothing/features/notifications/page/notifications_page.dart';
+import 'package:lag_clothing/features/reviews/page/reviews_page.dart';
 import 'themes/app_themes.dart';
 import 'package:lag_clothing/features/home/pages/home_pages.dart';
 import 'package:lag_clothing/features/contact/pages/contact_pages.dart';
@@ -12,6 +15,25 @@ import 'package:lag_clothing/features/cart/pages/cart_page.dart';
 import 'package:lag_clothing/features/checkout/pages/checkout_page.dart';
 import 'package:lag_clothing/features/order_confirmation/page/order_confirmation_page.dart';
 import 'package:lag_clothing/features/profiles/page/profile_page.dart';
+import 'package:lag_clothing/features/personal_information/page/personal_information_page.dart';
+import 'package:lag_clothing/features/my_orders/page/my_orders_page.dart';
+import 'package:lag_clothing/features/order_details/page/order_detail_page.dart';
+import 'package:lag_clothing/features/saved_address/page/saved_address_page.dart';
+import 'package:lag_clothing/features/address_form/page/address_form_page.dart';
+import 'package:lag_clothing/features/change_password/page/change_password_page.dart';
+import 'package:lag_clothing/features/payment_methods/page/payment_methods_page.dart';
+import 'package:lag_clothing/features/notifications/page/notifications_page.dart';
+import 'package:lag_clothing/features/help_support/page/help_support_page.dart';
+import 'package:lag_clothing/features/account_settings/page/account_settings_page.dart';
+import 'package:lag_clothing/features/my_orders/page/track_order_page.dart';
+import 'package:lag_clothing/features/my_orders/page/order_details_page.dart';
+import 'package:lag_clothing/features/reviews/page/reviews_page.dart';
+import 'package:lag_clothing/features/size_guide/page/size_guide_page.dart';
+import 'package:lag_clothing/features/returns/page/returns_page.dart';
+import 'package:lag_clothing/features/coupons/page/coupons_page.dart';
+import 'package:lag_clothing/features/order_tracking/page/order_tracking_page.dart';  
+import 'package:lag_clothing/features/legal/terms_conditons_page.dart';
+import 'package:lag_clothing/features/legal/privacy_policy_page.dart';
 
 
 class LagClothingApp extends StatelessWidget {
@@ -20,10 +42,10 @@ class LagClothingApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-  debugShowCheckedModeBanner: false,
-  title: 'Lag Clothing',
-  theme: AppTheme.darkTheme,
-  home:  const ProfilePage(), // Set the initial page to ProfilePage
-);
+      debugShowCheckedModeBanner: false,
+      title: 'Lag Clothing',
+      theme: AppTheme.darkTheme,
+      home: const PrivacyPolicyPage(),
+    );
   }
 }
