@@ -9,11 +9,18 @@ class WebsiteLayout extends StatelessWidget {
     super.key,
     required this.child,
     required this.currentRoute,
+    this.scrollable = true,
   });
 
   /// Page content
   final Widget child;
+
+  /// Current selected navigation item
   final String currentRoute;
+
+  /// Forms/About/Contact -> true
+  /// Dashboard/List Pages -> false
+  final bool scrollable;
 
   @override
   Widget build(BuildContext context) {
@@ -22,42 +29,40 @@ class WebsiteLayout extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // ===========================
-            // Navigation Bar
-            // ===========================
-           WebsiteNavigationBar(
-  selectedItem: currentRoute,
+            WebsiteNavigationBar(
+              selectedItem: currentRoute,
+              onMenuSelected: (route) {
+                // Navigation later
+              },
+              onSearch: () {
+                // Search later
+              },
+              onCart: () {
+                // Cart later
+              },
+              onSignIn: () {
+                // Login later
+              },
+            ),
 
-  onMenuSelected: (route) {
-    // Navigation will be connected later
-  },
-
-  onSearch: () {
-    // Search functionality later
-  },
-
-  onCart: () {
-    // Cart page later
-  },
-
-  onSignIn: () {
-    // Sign In later
-  },
-),
-
-            // ===========================
-            // Page Content
-            // ===========================
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    child,
-
-                    const Footer(),
-                  ],
-                ),
-              ),
+              child: scrollable
+                  ? SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          child,
+                          const Footer(),
+                        ],
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        Expanded(
+                          child: child,
+                        ),
+                        const Footer(),
+                      ],
+                    ),
             ),
           ],
         ),
