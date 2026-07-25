@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lag_clothing/features/legal/privacy_policy_page.dart';
 import 'package:lag_clothing/features/notifications/page/notifications_page.dart';
 import 'package:lag_clothing/features/reviews/page/reviews_page.dart';
 import 'themes/app_themes.dart';
@@ -29,7 +30,10 @@ import 'package:lag_clothing/features/my_orders/page/order_details_page.dart';
 import 'package:lag_clothing/features/reviews/page/reviews_page.dart';
 import 'package:lag_clothing/features/size_guide/page/size_guide_page.dart';
 import 'package:lag_clothing/features/returns/page/returns_page.dart';
-import 'package:lag_clothing/features/coupons/page/coupons_page.dart';  
+import 'package:lag_clothing/features/coupons/page/coupons_page.dart';
+import 'package:lag_clothing/features/order_tracking/page/order_tracking_page.dart';  
+import 'package:lag_clothing/features/legal/terms_conditons_page.dart';
+import 'package:lag_clothing/features/legal/privacy_policy_page.dart';
 
 
 class LagClothingApp extends StatelessWidget {
@@ -41,7 +45,7 @@ class LagClothingApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Lag Clothing',
       theme: AppTheme.darkTheme,
-      home: const CouponsPage(),
+      home: const PrivacyPolicyPage(),
     );
   }
 }
