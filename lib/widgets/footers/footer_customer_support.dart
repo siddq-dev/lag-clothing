@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../routes/app_routes.dart';
 import '../../themes/app_text_style.dart';
 import 'footer_section_title.dart';
 
@@ -8,32 +10,39 @@ class FooterCustomerSupport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+  final supportLinks = [
+  ('FAQ', AppRouter.faq),
+  ('Shipping Policy', AppRouter.shippingPolicy),
+  ('Return & Refund Policy', AppRouter.returns),
+  ('Exchange Policy', AppRouter.exchangePolicy),
+  ('Size Guide', AppRouter.sizeGuide),
+  ('Track Order', AppRouter.orderTracking),
+];
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        FooterSectionTitle(
+        const FooterSectionTitle(
           title: 'Customer Support',
         ),
 
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
 
-        Text('FAQ', style: AppTextStyles.bodyMedium),
-        SizedBox(height: 10),
-
-        Text('Shipping Policy', style: AppTextStyles.bodyMedium),
-        SizedBox(height: 10),
-
-        Text('Return & Refund Policy', style: AppTextStyles.bodyMedium),
-        SizedBox(height: 10),
-
-        Text('Exchange Policy', style: AppTextStyles.bodyMedium),
-        SizedBox(height: 10),
-
-        Text('Size Guide', style: AppTextStyles.bodyMedium),
-        SizedBox(height: 10),
-
-        Text('Track Order', style: AppTextStyles.bodyMedium),
+        ...supportLinks.map(
+          (item) => Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(4),
+              onTap: () {
+                context.go(item.$2);
+              },
+              child: Text(
+                item.$1,
+                style: AppTextStyles.bodyMedium,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

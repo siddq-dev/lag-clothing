@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../routes/app_routes.dart';
 import '../themes/app_colors.dart';
 import '../widgets/footers/footer.dart';
 import '../widgets/navigation/navigation_bar.dart';
@@ -12,14 +14,8 @@ class WebsiteLayout extends StatelessWidget {
     this.scrollable = true,
   });
 
-  /// Page content
   final Widget child;
-
-  /// Current selected navigation item
   final String currentRoute;
-
-  /// Forms/About/Contact -> true
-  /// Dashboard/List Pages -> false
   final bool scrollable;
 
   @override
@@ -31,17 +27,29 @@ class WebsiteLayout extends StatelessWidget {
           children: [
             WebsiteNavigationBar(
               selectedItem: currentRoute,
+
+              // ✅ Main Navigation
               onMenuSelected: (route) {
-                // Navigation later
+                context.go(route);
               },
+
+              // ✅ Search (temporary)
               onSearch: () {
-                // Search later
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Search page coming soon'),
+                  ),
+                );
               },
+
+              // ✅ Cart
               onCart: () {
-                // Cart later
+                context.go(AppRouter.cart);
               },
+
+              // ✅ Profile/Login
               onSignIn: () {
-                // Login later
+                context.go(AppRouter.login);
               },
             ),
 
@@ -57,9 +65,7 @@ class WebsiteLayout extends StatelessWidget {
                     )
                   : Column(
                       children: [
-                        Expanded(
-                          child: child,
-                        ),
+                        Expanded(child: child),
                         const Footer(),
                       ],
                     ),

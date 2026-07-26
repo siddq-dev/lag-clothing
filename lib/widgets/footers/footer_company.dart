@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../routes/app_routes.dart';
 import '../../themes/app_text_style.dart';
 import 'footer_section_title.dart';
 
@@ -8,26 +10,38 @@ class FooterCompany extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+  final companyLinks = [
+  ('Privacy Policy', AppRouter.privacyPolicy),
+  ('Terms & Conditions', AppRouter.termsConditions),
+  ('Cookie Policy', AppRouter.cookiePolicy),
+  ('Careers', AppRouter.careers),
+];
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        FooterSectionTitle(
+        const FooterSectionTitle(
           title: 'Company',
         ),
 
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
 
-        Text('Privacy Policy', style: AppTextStyles.bodyMedium),
-        SizedBox(height: 10),
-
-        Text('Terms & Conditions', style: AppTextStyles.bodyMedium),
-        SizedBox(height: 10),
-
-        Text('Cookie Policy', style: AppTextStyles.bodyMedium),
-        SizedBox(height: 10),
-
-        Text('Careers', style: AppTextStyles.bodyMedium),
+        ...companyLinks.map(
+          (item) => Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(4),
+ onTap: () {
+  context.go(item.$2);
+},
+              
+              child: Text(
+                item.$1,
+                style: AppTextStyles.bodyMedium,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:lag_clothing/routes/app_routes.dart';
 import 'package:lag_clothing/themes/app_colors.dart';
 import 'package:lag_clothing/themes/app_text_style.dart';
-
-// import '../../../routes/app_routes.dart';
-
 
 class HeroButtons extends StatelessWidget {
   const HeroButtons({super.key});
@@ -17,8 +17,7 @@ class HeroButtons extends StatelessWidget {
         // ===========================
         ElevatedButton(
           onPressed: () {
-            // TODO: Navigate to Shop Page
-            // context.go(AppRouter.shop);
+            context.go(AppRouter.shop);
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
@@ -44,8 +43,7 @@ class HeroButtons extends StatelessWidget {
         // ===========================
         OutlinedButton(
           onPressed: () {
-            // TODO: Navigate to Collections Page
-            // context.go(AppRouter.collections);
+            context.go(AppRouter.shop);
           },
           style: OutlinedButton.styleFrom(
             foregroundColor: AppColors.primary,

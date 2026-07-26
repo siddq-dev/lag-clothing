@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../models/feature_product_model.dart';
 import '../../../../routes/app_routes.dart';
@@ -18,7 +19,8 @@ class ShopProductCard extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(18),
       onTap: () {
-        // Later navigate to Product Details Page
+        // TODO: Navigate to Product Details Page
+        // context.go(AppRouter.product);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -31,62 +33,53 @@ class ShopProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /// Product Image + Wishlist
+            Expanded(
+              flex: 6,
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(18),
+                    ),
+                    child: Image.asset(
+                      product.image,
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
 
-            /// Product Image
-      /// Product Image + Wishlist
-Expanded(
-  flex: 6,
-  child: Stack(
-    children: [
-
-      ClipRRect(
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(18),
-        ),
-        child: Image.asset(
-          product.image,
-          width: double.infinity,
-          height: double.infinity,
-          fit: BoxFit.cover,
-        ),
-      ),
-
-      Positioned(
-        top: 12,
-        right: 12,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.55),
-            shape: BoxShape.circle,
-          ),
-          child: IconButton(
-            icon: const Icon(
-              Icons.favorite_border,
-              color: Colors.white,
+                  /// Wishlist Button
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.55),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.favorite_border,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          context.go(AppRouter.wishlist);
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            onPressed: () {
-              Navigator.pushNamed(
-                context,
-                AppRouter.wishlist,
-              );
 
-              // If you're using GoRouter, replace the above with:
-              // context.go(AppRouter.wishlist);
-            },
-          ),
-        ),
-      ),
-
-    ],
-  ),
-),
-
+            /// Product Details
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Text(
                     product.club,
                     style: AppTextStyles.heading3,
@@ -107,7 +100,6 @@ Expanded(
 
                   Row(
                     children: [
-
                       const Icon(
                         Icons.star,
                         color: Colors.amber,
@@ -129,22 +121,19 @@ Expanded(
                           color: AppColors.primary,
                         ),
                       ),
-
                     ],
                   ),
 
                   const SizedBox(height: 18),
 
+                  /// Buttons
                   Row(
                     children: [
-
+                      /// Add to Cart
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              AppRouter.cart,
-                            );
+                            context.go(AppRouter.cart);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
@@ -153,8 +142,7 @@ Expanded(
                               vertical: 14,
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                           child: const Text(
@@ -165,13 +153,11 @@ Expanded(
 
                       const SizedBox(width: 10),
 
+                      /// Buy Now
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              AppRouter.checkout,
-                            );
+                            context.go(AppRouter.checkout);
                           },
                           style: OutlinedButton.styleFrom(
                             foregroundColor: AppColors.primary,
@@ -182,8 +168,7 @@ Expanded(
                               vertical: 14,
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                           child: const Text(
@@ -191,14 +176,11 @@ Expanded(
                           ),
                         ),
                       ),
-
                     ],
                   ),
-
                 ],
               ),
             ),
-
           ],
         ),
       ),
