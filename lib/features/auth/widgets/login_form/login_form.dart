@@ -142,9 +142,11 @@ class _LoginFormState extends State<LoginForm> {
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Firebase Login
-                    },
+                   onPressed: () {
+  // TODO: Firebase Authentication
+
+  context.go(AppRouter.profile);
+},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
