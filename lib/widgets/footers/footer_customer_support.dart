@@ -10,14 +10,14 @@ class FooterCustomerSupport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final supportLinks = [
-      ('FAQ', null),
-      ('Shipping Policy', null),
-      ('Return & Refund Policy', AppRouter.returns),
-      ('Exchange Policy', null),
-      ('Size Guide', AppRouter.sizeGuide),
-      ('Track Order', AppRouter.orderTracking),
-    ];
+  final supportLinks = [
+  ('FAQ', AppRouter.faq),
+  ('Shipping Policy', AppRouter.shippingPolicy),
+  ('Return & Refund Policy', AppRouter.returns),
+  ('Exchange Policy', AppRouter.exchangePolicy),
+  ('Size Guide', AppRouter.sizeGuide),
+  ('Track Order', AppRouter.orderTracking),
+];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,15 +34,7 @@ class FooterCustomerSupport extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(4),
               onTap: () {
-                if (item.$2 != null) {
-                  context.go(item.$2!);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${item.$1} page coming soon'),
-                    ),
-                  );
-                }
+                context.go(item.$2);
               },
               child: Text(
                 item.$1,

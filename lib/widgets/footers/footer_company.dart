@@ -10,12 +10,12 @@ class FooterCompany extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final companyLinks = [
-      ('Privacy Policy', AppRouter.privacyPolicy),
-      ('Terms & Conditions', AppRouter.termsConditions),
-      ('Cookie Policy', null),
-      ('Careers', null),
-    ];
+  final companyLinks = [
+  ('Privacy Policy', AppRouter.privacyPolicy),
+  ('Terms & Conditions', AppRouter.termsConditions),
+  ('Cookie Policy', AppRouter.cookiePolicy),
+  ('Careers', AppRouter.careers),
+];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,17 +31,10 @@ class FooterCompany extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 10),
             child: InkWell(
               borderRadius: BorderRadius.circular(4),
-              onTap: () {
-                if (item.$2 != null) {
-                  context.go(item.$2!);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${item.$1} page coming soon'),
-                    ),
-                  );
-                }
-              },
+ onTap: () {
+  context.go(item.$2);
+},
+              
               child: Text(
                 item.$1,
                 style: AppTextStyles.bodyMedium,
