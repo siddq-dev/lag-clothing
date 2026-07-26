@@ -31,6 +31,12 @@ import '../features/returns/page/returns_page.dart';
 import '../features/coupons/page/coupons_page.dart';
 import '../features/legal/privacy_policy_page.dart';
 import '../features/legal/terms_conditions_page.dart';
+import '../features/legal/page/careers_page.dart';
+import '../features/legal/page/faq_page.dart';
+import '../features/legal/page/exchange_policy_page.dart';
+import '../features/legal/page/shipping_policy_page.dart';
+import '../features/legal/page/cookie_policy_page.dart';
+
 
 class AppRouter {
   AppRouter._();
@@ -119,6 +125,16 @@ static const String privacyPolicy =
 
 static const String termsConditions =
     '/terms-conditions';
+
+    static const String faq = '/faq';
+
+static const String shippingPolicy = '/shipping-policy';
+
+static const String exchangePolicy = '/exchange-policy';
+
+static const String careers = '/careers';
+
+static const String cookiePolicy = '/cookie-policy';
 
 // ==========================
 // Admin
@@ -347,6 +363,38 @@ GoRoute(
   path: termsConditions,
   builder: (context, state) =>
       const TermsConditionsPage(),
+),
+
+// ==========================
+// legal Pages
+// ==========================
+
+
+
+
+GoRoute(
+  path: faq,
+  builder: (context, state) => const FAQPage(),
+),
+
+GoRoute(
+  path: shippingPolicy,
+  builder: (context, state) => const ShippingPolicyPage(),
+),
+
+GoRoute(
+  path: exchangePolicy,
+  builder: (context, state) => const ExchangePolicyPage(),
+),
+
+GoRoute(
+  path: careers,
+  builder: (context, state) => const CareersPage(),
+),
+
+GoRoute(
+  path: cookiePolicy,
+  builder: (context, state) => const CookiePolicyPage(),
 ),
 
 // ==========================
