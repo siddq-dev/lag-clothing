@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../services/auth_service.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
-
-enum RecoveryType {
-  phone,
-  email,
-}
+import '../../../../routes/app_routes.dart';
 
 class ForgotPasswordForm extends StatefulWidget {
   const ForgotPasswordForm({super.key});
@@ -19,34 +17,59 @@ class ForgotPasswordForm extends StatefulWidget {
 class _ForgotPasswordFormState
     extends State<ForgotPasswordForm> {
 
-  RecoveryType recoveryType = RecoveryType.phone;
-
-  final phoneController = TextEditingController();
   final emailController = TextEditingController();
+
+  bool isLoading = false;
 
   @override
   void dispose() {
-    phoneController.dispose();
     emailController.dispose();
     super.dispose();
   }
 
-  void sendOtp() {
-
-    String destination = recoveryType == RecoveryType.phone
-        ? phoneController.text
-        : emailController.text;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          "OTP will be sent to $destination",
+  Future<void> sendResetLink() async {
+    if (emailController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please enter your email address."),
         ),
-      ),
-    );
+      );
+      return;
+    }
 
-    // Later
-    // Navigate to OTP Verification Page
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      await AuthService.forgotPassword(
+        emailController.text.trim(),
+      );
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Password reset link sent. Please check your email.",
+          ),
+        ),
+      );
+
+      context.go(AppRouter.login);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 
   Widget buildField({
@@ -54,9 +77,7 @@ class _ForgotPasswordFormState
     required TextEditingController controller,
     required IconData icon,
     required String hint,
-    TextInputType keyboardType = TextInputType.text,
   }) {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -67,7 +88,7 @@ class _ForgotPasswordFormState
 
         TextField(
           controller: controller,
-          keyboardType: keyboardType,
+          keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             prefixIcon: Icon(icon),
             hintText: hint,
@@ -76,7 +97,6 @@ class _ForgotPasswordFormState
             ),
           ),
         ),
-
       ],
     );
   }
@@ -106,70 +126,18 @@ class _ForgotPasswordFormState
                 const SizedBox(height: 15),
 
                 const Text(
-                  "Choose how you'd like to recover your account.",
+                  "Enter your registered email address. We'll send you a password reset link.",
                   style: AppTextStyles.bodyMedium,
                 ),
 
                 const SizedBox(height: 35),
 
-                const Text(
-                  "Recover Using",
+                buildField(
+                  label: "Email Address",
+                  controller: emailController,
+                  icon: Icons.email_outlined,
+                  hint: "Enter your email address",
                 ),
-
-                const SizedBox(height: 10),
-
-                RadioListTile<RecoveryType>(
-                  value: RecoveryType.phone,
-                  groupValue: recoveryType,
-                  activeColor: AppColors.primary,
-                  contentPadding: EdgeInsets.zero,
-                  title: const Text(
-                    "Mobile Number",
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      recoveryType = value!;
-                    });
-                  },
-                ),
-
-                RadioListTile<RecoveryType>(
-                  value: RecoveryType.email,
-                  groupValue: recoveryType,
-                  activeColor: AppColors.primary,
-                  contentPadding: EdgeInsets.zero,
-                  title: const Text(
-                    "Email Address",
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      recoveryType = value!;
-                    });
-                  },
-                ),
-
-                const SizedBox(height: 20),
-
-                if (recoveryType == RecoveryType.phone)
-
-                  buildField(
-                    label: "Mobile Number",
-                    controller: phoneController,
-                    icon: Icons.phone_outlined,
-                    hint: "Enter your mobile number",
-                    keyboardType: TextInputType.phone,
-                  )
-
-                else
-
-                  buildField(
-                    label: "Email Address",
-                    controller: emailController,
-                    icon: Icons.email_outlined,
-                    hint: "Enter your email address",
-                    keyboardType:
-                        TextInputType.emailAddress,
-                  ),
 
                 const SizedBox(height: 35),
 
@@ -177,18 +145,24 @@ class _ForgotPasswordFormState
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: sendOtp,
+                    onPressed: isLoading
+                        ? null
+                        : sendResetLink,
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           AppColors.primary,
                       foregroundColor: Colors.white,
                     ),
-                    child: const Text(
-                      "SEND OTP",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    child: isLoading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text(
+                            "SEND RESET LINK",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
 
@@ -197,7 +171,7 @@ class _ForgotPasswordFormState
                 Center(
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      context.go(AppRouter.login);
                     },
                     child: const Text(
                       "Back to Login",

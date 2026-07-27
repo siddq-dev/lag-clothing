@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "450460249427",
+    "project_id": "lag-clothing-e4567",
+    "storage_bucket": "lag-clothing-e4567.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450460249427:android:ed8670ece5dc67efe885a6",
+        "android_client_info": {
+          "package_name": "com.example.lag_clothing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "450460249427-aal5fill275qoeukdea5a8101fanovu4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lag_clothing",
+            "certificate_hash": "de7b638fc74b0c38cc6df1db76243ba7990d70ac"
+          }
+        },
+        {
+          "client_id": "450460249427-60h6vigio0bthathvlqgld0jocvdarut.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJJROxre-0QaitIckozvSvB3bj5-hjHM8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "450460249427-60h6vigio0bthathvlqgld0jocvdarut.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "450460249427-02er5j2fis87hard2vjcjaen65gm7gvr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.lagClothing"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

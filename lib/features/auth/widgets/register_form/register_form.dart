@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../routes/app_routes.dart';
+import '../../../../services/auth_service.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
 
@@ -16,21 +20,119 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-
   bool agree = false;
+  bool isLoading = false;
 
-  VerificationType verificationType = VerificationType.phone;
+  VerificationType verificationType = VerificationType.email;
 
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
     nameController.dispose();
     emailController.dispose();
     phoneController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  Future<void> register() async {
+    if (!agree) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please accept Terms & Privacy Policy"),
+        ),
+      );
+      return;
+    }
+
+    if (verificationType == VerificationType.phone) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Phone verification coming soon."),
+        ),
+      );
+      return;
+    }
+
+    if (nameController.text.trim().isEmpty ||
+    emailController.text.trim().isEmpty ||
+    phoneController.text.trim().isEmpty ||
+    passwordController.text.trim().isEmpty ||
+    confirmPasswordController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please fill all required fields."),
+        ),
+      );
+      return;
+    }
+
+    if (passwordController.text != confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Passwords do not match."),
+        ),
+      );
+      return;
+    }
+
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+   await AuthService.register(
+  fullName: nameController.text.trim(),
+  email: emailController.text.trim(),
+  phone: phoneController.text.trim(),
+  password: passwordController.text.trim(),
+);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Account created successfully."),
+        ),
+      );
+
+      context.go(AppRouter.profile);
+    } on FirebaseAuthException catch (e) {
+      String message = "Registration Failed";
+
+      switch (e.code) {
+        case "email-already-in-use":
+          message = "Email already registered.";
+          break;
+
+        case "invalid-email":
+          message = "Invalid email address.";
+          break;
+
+        case "weak-password":
+          message = "Password is too weak.";
+          break;
+
+        default:
+          message = e.message ?? message;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 
   Widget buildField({
@@ -38,12 +140,12 @@ class _RegisterFormState extends State<RegisterForm> {
     required TextEditingController controller,
     required IconData icon,
     required String hint,
+    bool obscureText = false,
     TextInputType keyboardType = TextInputType.text,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         Text(label),
 
         const SizedBox(height: 10),
@@ -51,6 +153,7 @@ class _RegisterFormState extends State<RegisterForm> {
         TextField(
           controller: controller,
           keyboardType: keyboardType,
+          obscureText: obscureText,
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: Icon(icon),
@@ -59,14 +162,12 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
           ),
         ),
-
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: AppColors.background,
       child: Center(
@@ -79,7 +180,6 @@ class _RegisterFormState extends State<RegisterForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Text(
                   "Create Account",
                   style: AppTextStyles.heading2,
@@ -121,6 +221,26 @@ class _RegisterFormState extends State<RegisterForm> {
                   keyboardType: TextInputType.phone,
                 ),
 
+                const SizedBox(height: 20),
+
+                buildField(
+                  label: "Password",
+                  controller: passwordController,
+                  icon: Icons.lock_outline,
+                  hint: "Enter password",
+                  obscureText: true,
+                ),
+
+                const SizedBox(height: 20),
+
+                buildField(
+                  label: "Confirm Password",
+                  controller: confirmPasswordController,
+                  icon: Icons.lock_outline,
+                  hint: "Confirm password",
+                  obscureText: true,
+                ),
+
                 const SizedBox(height: 30),
 
                 Text(
@@ -136,12 +256,16 @@ class _RegisterFormState extends State<RegisterForm> {
                   activeColor: AppColors.primary,
                   contentPadding: EdgeInsets.zero,
                   title: const Text(
-                    "Mobile Number",
+                    "Mobile Number (Coming Soon)",
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      verificationType = value!;
-                    });
+                  onChanged: (_) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          "Phone verification coming soon.",
+                        ),
+                      ),
+                    );
                   },
                 ),
 
@@ -182,22 +306,22 @@ class _RegisterFormState extends State<RegisterForm> {
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: agree
-                        ? () {
-                            // Navigate to OTP Verification
-                          }
-                        : null,
+                    onPressed: isLoading ? null : register,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                     ),
-                    child: const Text(
-                      "CONTINUE",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    child: isLoading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text(
+                            "CONTINUE",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
 
@@ -206,23 +330,17 @@ class _RegisterFormState extends State<RegisterForm> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
                     const Text(
                       "Already have an account?",
                     ),
-
                     TextButton(
                       onPressed: () {
-                        // Navigate to Login
+                        context.go(AppRouter.login);
                       },
-                      child: const Text(
-                        "LOGIN",
-                      ),
+                      child: const Text("LOGIN"),
                     ),
-
                   ],
                 ),
-
               ],
             ),
           ),
