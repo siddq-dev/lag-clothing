@@ -6,6 +6,7 @@ import 'firebase_options.dart';
 import 'app.dart';
 import 'providers/wishlist_provider.dart';
 import 'providers/customer_provider.dart';
+import 'providers/address_provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,7 @@ void main() async{
       providers: [
         ChangeNotifierProvider(create: (_) => WishlistProvider(), ),
         ChangeNotifierProvider(create: (_) => CustomerProvider(), ),
+        ChangeNotifierProvider(create: (_) => AddressProvider(), ),
 
       ],
       child: const LagClothingApp(),
