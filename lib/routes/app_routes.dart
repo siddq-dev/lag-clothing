@@ -36,6 +36,7 @@ import '../features/legal/page/faq_page.dart';
 import '../features/legal/page/exchange_policy_page.dart';
 import '../features/legal/page/shipping_policy_page.dart';
 import '../features/legal/page/cookie_policy_page.dart';
+import '../features/profiles/page/edit_profile_page.dart';
 
 
 class AppRouter {
@@ -82,6 +83,8 @@ static const String orderConfirmation = '/order-confirmation';
 // Profile
 // ==========================
 
+
+static const String editProfile = '/edit-profile';
 static const String profile = '/profile';
 static const String personalInformation =
     '/profile/personal-information';
@@ -228,6 +231,11 @@ GoRoute(
 // ==========================
 // Profile
 // ==========================
+
+GoRoute(
+  path: AppRouter.editProfile,
+  builder: (context, state) => const EditProfilePage(),
+),
 
 GoRoute(
   path: profile,

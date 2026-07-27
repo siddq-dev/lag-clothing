@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../providers/customer_provider.dart';
 import '../stat_card/stat_card.dart';
 
 class QuickStats extends StatelessWidget {
@@ -7,33 +9,34 @@ class QuickStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
-      children: [
+    final provider = context.watch<CustomerProvider>();
+    final customer = provider.customer;
 
+    return Row(
+      children: [
         StatCard(
           title: "Orders",
-          count: "12",
+          count: "${customer?.orders.length ?? 0}",
           icon: Icons.shopping_bag_outlined,
         ),
 
         StatCard(
           title: "Wishlist",
-          count: "08",
+          count: "${customer?.wishlist.length ?? 0}",
           icon: Icons.favorite_border,
         ),
 
         StatCard(
           title: "Addresses",
-          count: "02",
+          count: "${customer?.addresses.length ?? 0}",
           icon: Icons.location_on_outlined,
         ),
 
-        StatCard(
+        const StatCard(
           title: "Coupons",
-          count: "04",
+          count: "0",
           icon: Icons.local_offer_outlined,
         ),
-
       ],
     );
   }
