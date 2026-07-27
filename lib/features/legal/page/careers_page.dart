@@ -12,7 +12,7 @@ class CareersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WebsiteLayout(
-      currentRoute: AppRouter.about,
+      currentRoute: AppRouter.careers,
       child: Column(
         children: [
           const LegalHeader(
