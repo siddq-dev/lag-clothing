@@ -1,41 +1,61 @@
 import 'package:flutter/material.dart';
 
 class EmptyPayment extends StatelessWidget {
-  const EmptyPayment({super.key});
+  const EmptyPayment({
+    super.key,
+    required this.onAddCard,
+  });
 
-@override
-Widget build(BuildContext context) {
-  return Center(
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+  final VoidCallback onAddCard;
 
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 60,
+        ),
+        child: Column(
+          children: [
             Icon(
-              Icons.credit_card_off,
-              size: 80,
-              color: Colors.grey,
+              Icons.credit_card_outlined,
+              size: 90,
+              color: Colors.grey.shade500,
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 24),
 
-            Text(
-              "No Payment Methods Found",
+            const Text(
+              "No Payment Methods",
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
             Text(
-              "Save your debit or credit card\nfor faster checkout.",
+              "You haven't added any debit or credit cards yet.\nAdd a card for faster checkout.",
               textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey.shade600,
+                height: 1.6,
+              ),
             ),
 
+            const SizedBox(height: 30),
+
+            FilledButton.icon(
+              onPressed: onAddCard,
+              icon: const Icon(Icons.add),
+              label: const Text(
+                "Add Payment Method",
+              ),
+            ),
           ],
         ),
-      );
+      ),
+    );
   }
 }

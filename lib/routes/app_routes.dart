@@ -39,6 +39,8 @@ import '../features/legal/page/shipping_policy_page.dart';
 import '../features/legal/page/cookie_policy_page.dart';
 import '../features/profiles/page/edit_profile_page.dart';
 import '../models/address_model.dart';
+import '../models/payment_method_model.dart';
+import '../features/payment_methods/page/add_payment_method_page.dart';
 
 
 class AppRouter {
@@ -116,6 +118,12 @@ static const String accountSettings =
 
 static const String helpSupport =
     '/profile/help-support';
+
+    static const String addPaymentMethod =
+    '/profile/payment-methods/add';
+
+static const String editPaymentMethod =
+    '/profile/payment-methods/edit';
     
 
 // ==========================
@@ -314,6 +322,25 @@ GoRoute(
   path: accountSettings,
   builder: (context, state) =>
       const AccountSettingsPage(),
+),
+
+GoRoute(
+  path: addPaymentMethod,
+  builder: (context, state) =>
+      const AddPaymentMethodPage(),
+),
+
+GoRoute(
+  path: editPaymentMethod,
+  builder: (context, state) {
+    final payment =
+        state.extra as PaymentMethodModel;
+
+    return AddPaymentMethodPage(
+      paymentMethod: payment,
+      isEditing: true,
+    );
+  },
 ),
 
 // ==========================
