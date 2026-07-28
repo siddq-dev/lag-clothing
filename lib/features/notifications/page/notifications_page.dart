@@ -1,125 +1,217 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../layout/website_layout.dart';
-import '../../../themes/app_spacing.dart';
+import '../../../routes/app_routes.dart';
 
-import '../widgets/empty_notifications.dart';
-import '../widgets/notifications_filter.dart';
-import '../widgets/notification_header.dart';
+import '../../../providers/notification_provider.dart';
+import '../../../models/notification_settings_model.dart';
+
 import '../widgets/notification_tile.dart';
+import '../widgets/save_notification_button.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
 
   @override
-  State<NotificationsPage> createState() => _NotificationsPageState();
+  State<NotificationsPage> createState() =>
+      _NotificationsPageState();
 }
 
-class _NotificationsPageState extends State<NotificationsPage> {
-  int selectedFilter = 0;
+class _NotificationsPageState
+    extends State<NotificationsPage> {
 
-  final List<Map<String, dynamic>> notifications = [
-    {
-      "icon": Icons.local_shipping,
-      "title": "Order Shipped",
-      "message": "Your order #1023 has been shipped.",
-      "time": "2 hrs ago",
-      "unread": true,
-      "type": "Orders",
-    },
-    {
-      "icon": Icons.new_releases,
-      "title": "New Arrival",
-      "message": "Manchester United 2026 Home Jersey is now available.",
-      "time": "Today",
-      "unread": true,
-      "type": "Products",
-    },
-    {
-      "icon": Icons.local_offer,
-      "title": "Weekend Sale",
-      "message": "Flat 20% OFF on all Jerseys.",
-      "time": "Yesterday",
-      "unread": false,
-      "type": "Offers",
-    },
-    {
-      "icon": Icons.favorite,
-      "title": "Wishlist Update",
-      "message": "One of your wishlist items is back in stock.",
-      "time": "Yesterday",
-      "unread": false,
-      "type": "Wishlist",
-    },
-    {
-      "icon": Icons.person,
-      "title": "Profile Updated",
-      "message": "Your profile information has been updated successfully.",
-      "time": "3 days ago",
-      "unread": false,
-      "type": "Account",
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      context
+          .read<NotificationProvider>()
+          .loadSettings();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> filteredNotifications;
+    final provider =
+        context.watch<NotificationProvider>();
 
-    if (selectedFilter == 0) {
-      filteredNotifications = notifications;
-    } else {
-      final filter = NotificationFilter.filters[selectedFilter];
-
-      filteredNotifications = notifications
-          .where((item) => item["type"] == filter)
-          .toList();
+    if (provider.isLoading &&
+        provider.settings == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
 
+    NotificationSettingsModel settings =
+        provider.settings ??
+            const NotificationSettingsModel(
+              orderUpdates: true,
+              promotions: true,
+              newArrivals: true,
+              backInStock: true,
+              pushNotifications: true,
+              emailNotifications: true,
+              smsNotifications: false,
+            );
+
     return WebsiteLayout(
-      currentRoute: '',
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xxl),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const NotificationHeader(),
-
-            const SizedBox(height: AppSpacing.xxl),
-
-            NotificationFilter(
-              selectedIndex: selectedFilter,
-              onChanged: (index) {
-                setState(() {
-                  selectedFilter = index;
-                });
-              },
-            ),
-
-            const SizedBox(height: AppSpacing.xxl),
-
-            if (filteredNotifications.isEmpty)
-              const EmptyNotifications()
-            else
-              Column(
-                children: List.generate(
-                  filteredNotifications.length,
-                  (index) {
-                    final notification = filteredNotifications[index];
-
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: NotificationTile(
-                        icon: notification["icon"],
-                        title: notification["title"],
-                        message: notification["message"],
-                        time: notification["time"],
-                        unread: notification["unread"],
-                      ),
-                    );
-                  },
-                ),
+      currentRoute: AppRouter.notifications,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 60,
+            vertical: 40,
+          ),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: 900,
               ),
-          ],
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                children: [
+
+                  const Text(
+                    "Notification Settings",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  Text(
+                    "Manage how you receive notifications from LAG Clothing.",
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+
+                  const SizedBox(height: 35),
+
+                  NotificationTile(
+                    title: "Order Updates",
+                    subtitle:
+                        "Receive updates about your orders.",
+                    icon: Icons.local_shipping,
+                    value: settings.orderUpdates,
+                    onChanged: (value) {
+                      settings = settings.copyWith(
+                        orderUpdates: value,
+                      );
+                      provider.updateSettings(
+                          settings);
+                    },
+                  ),
+
+                  NotificationTile(
+                    title: "Promotions",
+                    subtitle:
+                        "Receive offers and discounts.",
+                    icon: Icons.local_offer,
+                    value: settings.promotions,
+                    onChanged: (value) {
+                      settings = settings.copyWith(
+                        promotions: value,
+                      );
+                      provider.updateSettings(
+                          settings);
+                    },
+                  ),
+
+                  NotificationTile(
+                    title: "New Arrivals",
+                    subtitle:
+                        "Get notified about new collections.",
+                    icon: Icons.new_releases,
+                    value: settings.newArrivals,
+                    onChanged: (value) {
+                      settings = settings.copyWith(
+                        newArrivals: value,
+                      );
+                      provider.updateSettings(
+                          settings);
+                    },
+                  ),
+
+                  NotificationTile(
+                    title: "Back In Stock",
+                    subtitle:
+                        "Receive stock availability alerts.",
+                    icon: Icons.inventory_2,
+                    value: settings.backInStock,
+                    onChanged: (value) {
+                      settings = settings.copyWith(
+                        backInStock: value,
+                      );
+                      provider.updateSettings(
+                          settings);
+                    },
+                  ),
+
+                  NotificationTile(
+                    title: "Push Notifications",
+                    subtitle:
+                        "Allow push notifications.",
+                    icon: Icons.notifications,
+                    value: settings.pushNotifications,
+                    onChanged: (value) {
+                      settings = settings.copyWith(
+                        pushNotifications: value,
+                      );
+                      provider.updateSettings(
+                          settings);
+                    },
+                  ),
+
+                  NotificationTile(
+                    title: "Email Notifications",
+                    subtitle:
+                        "Receive updates via email.",
+                    icon: Icons.email_outlined,
+                    value:
+                        settings.emailNotifications,
+                    onChanged: (value) {
+                      settings = settings.copyWith(
+                        emailNotifications: value,
+                      );
+                      provider.updateSettings(
+                          settings);
+                    },
+                  ),
+
+                  NotificationTile(
+                    title: "SMS Notifications",
+                    subtitle:
+                        "Receive updates through SMS.",
+                    icon: Icons.sms_outlined,
+                    value:
+                        settings.smsNotifications,
+                    onChanged: (value) {
+                      settings = settings.copyWith(
+                        smsNotifications: value,
+                      );
+                      provider.updateSettings(
+                          settings);
+                    },
+                  ),
+
+                  const SizedBox(height: 35),
+
+                  SaveNotificationButton(
+                    provider: provider,
+                    settings: settings,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
