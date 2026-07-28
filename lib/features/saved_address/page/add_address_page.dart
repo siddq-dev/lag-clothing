@@ -6,9 +6,17 @@ import '../../../providers/address_provider.dart';
 import '../widgets/address_form.dart';
 import '../widgets/billing_form.dart';
 import '../widgets/save_address_button.dart';
+import '../../../models/address_model.dart';
 
 class AddAddressPage extends StatefulWidget {
-  const AddAddressPage({super.key});
+  const AddAddressPage({
+    super.key,
+    this.address,
+    this.isEditing = false,
+  });
+
+  final AddressModel? address;
+  final bool isEditing;
 
   @override
   State<AddAddressPage> createState() =>
@@ -52,6 +60,27 @@ class _AddAddressPageState
   bool billingDefault = false;
 
   @override
+void initState() {
+  super.initState();
+
+  if (widget.isEditing && widget.address != null) {
+    final address = widget.address!;
+
+    shippingName.text = address.fullName;
+    shippingPhone.text = address.phone;
+    shippingAddress1.text = address.addressLine1;
+    shippingAddress2.text = address.addressLine2;
+    shippingLandmark.text = address.landmark;
+    shippingCity.text = address.city;
+    shippingState.text = address.state;
+    shippingPincode.text = address.pincode;
+    shippingCountry.text = address.country;
+
+    shippingDefault = address.isDefault;
+  }
+}
+
+  @override
   void dispose() {
     shippingName.dispose();
     shippingPhone.dispose();
@@ -82,7 +111,11 @@ class _AddAddressPageState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Address"),
+        title: Text(
+  widget.isEditing
+      ? "Edit Address"
+      : "Add Address",
+),
       ),
 
       body: SingleChildScrollView(
@@ -90,3 +123,108 @@ class _AddAddressPageState
 
         child: Column(
           children: [
+            const Align(
+  alignment: Alignment.centerLeft,
+  child: Text(
+    "Shipping Address",
+    style: TextStyle(
+      fontSize: 22,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+),
+
+const SizedBox(height: 20),
+
+AddressForm(
+  formKey: shippingFormKey,
+
+  fullNameController: shippingName,
+  phoneController: shippingPhone,
+  address1Controller: shippingAddress1,
+  address2Controller: shippingAddress2,
+  landmarkController: shippingLandmark,
+  cityController: shippingCity,
+  stateController: shippingState,
+  pincodeController: shippingPincode,
+  countryController: shippingCountry,
+
+  isDefault: shippingDefault,
+  onDefaultChanged: (value) {
+    setState(() {
+      shippingDefault = value ?? false;
+    });
+  },
+),
+
+const SizedBox(height: 35),
+BillingForm(
+  sameAsShipping: billingSame,
+
+  onChanged: (value) {
+    setState(() {
+      billingSame = value ?? true;
+    });
+  },
+
+  formKey: billingFormKey,
+
+  fullNameController: billingName,
+  phoneController: billingPhone,
+  address1Controller: billingAddress1,
+  address2Controller: billingAddress2,
+  landmarkController: billingLandmark,
+  cityController: billingCity,
+  stateController: billingState,
+  pincodeController: billingPincode,
+  countryController: billingCountry,
+
+  isDefault: billingDefault,
+  onDefaultChanged: (value) {
+    setState(() {
+      billingDefault = value ?? false;
+    });
+  },
+),
+
+const SizedBox(height: 35),
+
+SaveAddressButton(
+  provider: provider,
+
+  isEditing: widget.isEditing,
+addressId: widget.address?.id,
+
+  shippingFormKey: shippingFormKey,
+  billingFormKey: billingFormKey,
+
+  billingSame: billingSame,
+
+  shippingName: shippingName,
+  shippingPhone: shippingPhone,
+  shippingAddress1: shippingAddress1,
+  shippingAddress2: shippingAddress2,
+  shippingLandmark: shippingLandmark,
+  shippingCity: shippingCity,
+  shippingState: shippingState,
+  shippingPincode: shippingPincode,
+  shippingCountry: shippingCountry,
+  shippingDefault: shippingDefault,
+
+  billingName: billingName,
+  billingPhone: billingPhone,
+  billingAddress1: billingAddress1,
+  billingAddress2: billingAddress2,
+  billingLandmark: billingLandmark,
+  billingCity: billingCity,
+  billingState: billingState,
+  billingPincode: billingPincode,
+  billingCountry: billingCountry,
+  billingDefault: billingDefault,
+),
+          ],
+        ),
+      ),
+    );
+  }
+}

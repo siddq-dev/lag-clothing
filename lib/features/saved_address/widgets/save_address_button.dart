@@ -10,6 +10,8 @@ class SaveAddressButton extends StatefulWidget {
   const SaveAddressButton({
     super.key,
     required this.provider,
+    this.isEditing = false,
+  this.addressId,
 
     required this.shippingFormKey,
     required this.billingFormKey,
@@ -40,6 +42,8 @@ class SaveAddressButton extends StatefulWidget {
   });
 
   final AddressProvider provider;
+  final bool isEditing;
+final String? addressId;
 
   final GlobalKey<FormState> shippingFormKey;
   final GlobalKey<FormState> billingFormKey;
@@ -114,16 +118,26 @@ class _SaveAddressButtonState extends State<SaveAddressButton> {
         updatedAt: Timestamp.now(),
       );
 
-      await widget.provider.addAddress(shippingAddress);
+      if (widget.isEditing) {
+  await widget.provider.updateAddress(
+    shippingAddress.copyWith(
+      id: widget.addressId!,
+    ),
+  );
+} else {
+  await widget.provider.addAddress(shippingAddress);
+}
 
-      if (widget.billingSame) {
-        final billingAddress = shippingAddress.copyWith(
-          addressType: shippingAddress.addressType,
-          purpose: AddressPurpose.billing,
-        );
+    if (widget.billingSame) {
+  final billingAddress = shippingAddress.copyWith(
+    addressType: shippingAddress.addressType,
+    purpose: AddressPurpose.billing,
+  );
 
-        await widget.provider.addAddress(billingAddress);
-      } else {
+  if (!widget.isEditing) {
+    await widget.provider.addAddress(billingAddress);
+  }
+} else {
         final billingAddress = AddressModel(
           id: '',
           userId: user.uid,
@@ -143,7 +157,9 @@ class _SaveAddressButtonState extends State<SaveAddressButton> {
           updatedAt: Timestamp.now(),
         );
 
-        await widget.provider.addAddress(billingAddress);
+        if (!widget.isEditing) {
+  await widget.provider.addAddress(billingAddress);
+}
       }
 
       if (!mounted) return;
@@ -192,12 +208,14 @@ class _SaveAddressButtonState extends State<SaveAddressButton> {
                   color: Colors.white,
                 ),
               )
-            : const Text(
-                "SAVE ADDRESS",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+            : Text(
+  widget.isEditing
+      ? "UPDATE ADDRESS"
+      : "SAVE ADDRESS",
+  style: const TextStyle(
+    fontWeight: FontWeight.bold,
+  ),
+),
       ),
     );
   }

@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lag_clothing/features/saved_address/page/add_address_page.dart';
 
 import '../features/about/pages/about_page.dart';
 import '../features/auth/pages/forgot_password_page.dart';
@@ -37,6 +38,7 @@ import '../features/legal/page/exchange_policy_page.dart';
 import '../features/legal/page/shipping_policy_page.dart';
 import '../features/legal/page/cookie_policy_page.dart';
 import '../features/profiles/page/edit_profile_page.dart';
+import '../models/address_model.dart';
 
 
 class AppRouter {
@@ -94,6 +96,11 @@ static const String savedAddresses =
 
 static const String addressForm =
     '/profile/address-form';
+    static const String addAddress =
+    '/profile/add-address';
+
+static const String editAddress =
+    '/profile/edit-address';
 
 static const String paymentMethods =
     '/profile/payment-methods';
@@ -259,6 +266,24 @@ GoRoute(
   path: addressForm,
   builder: (context, state) =>
       const AddressFormPage(),
+),
+
+GoRoute(
+  path: addAddress,
+  builder: (context, state) =>
+      const AddAddressPage(),
+),
+
+GoRoute(
+  path: editAddress,
+  builder: (context, state) {
+    final address = state.extra as AddressModel;
+
+    return AddAddressPage(
+      address: address,
+      isEditing: true,
+    );
+  },
 ),
 
 GoRoute(
