@@ -9,6 +9,7 @@ import 'providers/customer_provider.dart';
 import 'providers/address_provider.dart';
 import 'providers/payment_method_provider.dart';
 import 'providers/notification_provider.dart';
+import 'providers/account_settings_provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +25,7 @@ void main() async{
         ChangeNotifierProvider(create: (_) => AddressProvider(), ),
         ChangeNotifierProvider(create: (_) => PaymentMethodProvider(), ),
         ChangeNotifierProvider(create: (_) => NotificationProvider(), ),
+        ChangeNotifierProvider(create: (_) => AccountSettingsProvider(), ),
 
       ],
       child: const LagClothingApp(),
