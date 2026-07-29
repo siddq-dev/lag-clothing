@@ -30,6 +30,7 @@ void main() async{
         ChangeNotifierProvider(create: (_) => AccountSettingsProvider(), ),
         ChangeNotifierProvider(create: (_) => OrderProvider(), ),
         ChangeNotifierProvider(create: (_) => ProductProvider(), ),
+        
 
       ],
       child: const LagClothingApp(),
