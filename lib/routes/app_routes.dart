@@ -45,6 +45,9 @@ import '../features/payment_methods/page/add_payment_method_page.dart';
 import '../features/admin/products/pages/add_product_page.dart';
 import '../features/admin/products/pages/edit_product_page.dart';
 import '../features/admin/products/pages/product_preview_page.dart';
+import '../features/admin/dashboard/admin_dashboard_page.dart';
+import '../features/auth/widgets/role_redirect.dart';
+import '../features/admin/products/pages/manage_products_page.dart';
 
 
 class AppRouter {
@@ -68,6 +71,7 @@ static const String contact = '/contact';
 static const String login = '/login';
 static const String register = '/register';
 static const String forgotPassword = '/forgot-password';
+static const String roleRedirect = '/role-redirect';
 
 // ==========================
 // Shopping
@@ -94,40 +98,28 @@ static const String orderConfirmation = '/order-confirmation';
 
 static const String editProfile = '/edit-profile';
 static const String profile = '/profile';
-static const String personalInformation =
-    '/profile/personal-information';
+static const String personalInformation = '/profile/personal-information';
 
-static const String savedAddresses =
-    '/profile/saved-addresses';
+static const String savedAddresses = '/profile/saved-addresses';
 
-static const String addressForm =
-    '/profile/address-form';
-    static const String addAddress =
-    '/profile/add-address';
+static const String addressForm = '/profile/address-form';
+    static const String addAddress ='/profile/add-address';
 
-static const String editAddress =
-    '/profile/edit-address';
+static const String editAddress = '/profile/edit-address';
 
-static const String paymentMethods =
-    '/profile/payment-methods';
+static const String paymentMethods = '/profile/payment-methods';
 
-static const String changePassword =
-    '/profile/change-password';
+static const String changePassword = '/profile/change-password';
 
-static const String notifications =
-    '/profile/notifications';
+static const String notifications = '/profile/notifications';
 
-static const String accountSettings =
-    '/profile/account-settings';
+static const String accountSettings = '/profile/account-settings';
 
-static const String helpSupport =
-    '/profile/help-support';
+static const String helpSupport = '/profile/help-support';
 
-    static const String addPaymentMethod =
-    '/profile/payment-methods/add';
+    static const String addPaymentMethod = '/profile/payment-methods/add';
 
-static const String editPaymentMethod =
-    '/profile/payment-methods/edit';
+static const String editPaymentMethod = '/profile/payment-methods/edit';
     
 
 // ==========================
@@ -145,11 +137,9 @@ static const String productPreview = '/productPreview';
 // Legal
 // ==========================
 
-static const String privacyPolicy =
-    '/privacy-policy';
+static const String privacyPolicy = '/privacy-policy';
 
-static const String termsConditions =
-    '/terms-conditions';
+static const String termsConditions = '/terms-conditions';
 
     static const String faq = '/faq';
 
@@ -166,17 +156,18 @@ static const String cookiePolicy = '/cookie-policy';
 // ==========================
 
 static const String admin = '/admin';
-static const String adminDashboard =
-    '/admin/dashboard';
 
-static const String adminProducts =
-    '/admin/products';
+static const String adminDashboard ='/admin/dashboard';
 
-static const String adminOrders =
-    '/admin/orders';
+static const String adminProducts = '/admin/products';
 
-static const String adminCustomers =
-    '/admin/customers';
+static const String adminOrders = '/admin/orders';
+
+static const String adminCustomers = '/admin/customers';
+
+    static const String manageProducts = '/admin/manage-products';
+
+    static const String adminManagement = '/admin-management';
 
 
   static final GoRouter router = GoRouter(
@@ -513,10 +504,27 @@ GoRoute(
   ),
 ),
 
+GoRoute(
+  path: AppRouter.roleRedirect,
+  builder: (context, state) =>
+      const RoleRedirect(),
+),
+
+GoRoute(
+  path: AppRouter.adminDashboard,
+  builder: (context, state) =>
+      const AdminDashboardPage(),
+),
+
 // ==========================
 // product
 // ==========================
 
+GoRoute(
+  path: AppRouter.manageProducts,
+  builder: (context, state) =>
+      const ManageProductsPage(),
+),
 
 GoRoute(
   path: addProduct,
@@ -534,6 +542,8 @@ GoRoute(
     );
   },
 ),
+
+
 
 GoRoute(
   path: AppRouter.productPreview,

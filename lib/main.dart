@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lag_clothing/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -22,6 +23,7 @@ void main() async{
   runApp(
     MultiProvider(
       providers: [
+         ChangeNotifierProvider(create: (_) => AuthProvider(),),
         ChangeNotifierProvider(create: (_) => WishlistProvider(), ),
         ChangeNotifierProvider(create: (_) => CustomerProvider(), ),
         ChangeNotifierProvider(create: (_) => AddressProvider(), ),
@@ -30,7 +32,7 @@ void main() async{
         ChangeNotifierProvider(create: (_) => AccountSettingsProvider(), ),
         ChangeNotifierProvider(create: (_) => OrderProvider(), ),
         ChangeNotifierProvider(create: (_) => ProductProvider(), ),
-        
+
 
       ],
       child: const LagClothingApp(),

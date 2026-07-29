@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../providers/auth_provider.dart';
 import '../../../../routes/app_routes.dart';
-import '../../../../services/auth_service.dart';
+import '../../../../services/google_auth_service.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
-import '../../../../services/google_auth_service.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -20,8 +20,11 @@ class _LoginFormState extends State<LoginForm> {
   bool _rememberMe = false;
   bool isLoading = false;
 
-  final _userController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final TextEditingController _userController =
+      TextEditingController();
+
+  final TextEditingController _passwordController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -35,57 +38,67 @@ class _LoginFormState extends State<LoginForm> {
         _passwordController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Please enter email and password."),
+          content: Text(
+            "Please enter email and password.",
+          ),
         ),
       );
       return;
     }
 
+    setState(() {
+      isLoading = true;
+    });
+
+    final success =
+        await context.read<AuthProvider>().login(
+              email: _userController.text.trim(),
+              password: _passwordController.text.trim(),
+            );
+
+    if (!mounted) return;
+
+    setState(() {
+      isLoading = false;
+    });
+
+    if (success) {
+      context.go(AppRouter.roleRedirect);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.read<AuthProvider>().error ??
+                "Login Failed",
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> googleLogin() async {
     try {
       setState(() {
         isLoading = true;
       });
 
-      await AuthService.login(
-        email: _userController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
+      final credential =
+          await GoogleAuthService.signInWithGoogle();
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Login Successful"),
-        ),
-      );
-
-      context.go(AppRouter.profile);
-    } on FirebaseAuthException catch (e) {
-      String message = "Login Failed";
-
-      switch (e.code) {
-        case "user-not-found":
-          message = "No account found with this email.";
-          break;
-
-        case "wrong-password":
-          message = "Incorrect password.";
-          break;
-
-        case "invalid-email":
-          message = "Invalid email address.";
-          break;
-
-        case "invalid-credential":
-          message = "Invalid email or password.";
-          break;
-
-        default:
-          message = e.message ?? message;
+      if (credential != null) {
+        context.go(AppRouter.roleRedirect);
       }
+    } catch (e) {
+      if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
+        SnackBar(
+          content: Text(
+            e.toString(),
+          ),
+        ),
       );
     } finally {
       if (mounted) {
@@ -111,40 +124,43 @@ class _LoginFormState extends State<LoginForm> {
               maxWidth: 420,
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Sign In',
+                  "Sign In",
                   style: AppTextStyles.heading2,
                 ),
 
                 const SizedBox(height: 12),
 
                 const Text(
-                  'Welcome back! Please login to continue.',
+                  "Welcome back! Please login to continue.",
                   style: AppTextStyles.bodyMedium,
                 ),
 
                 const SizedBox(height: 40),
 
-                const Text('Email Address'),
+                const Text("Email Address"),
 
                 const SizedBox(height: 10),
 
                 TextField(
                   controller: _userController,
                   decoration: InputDecoration(
-                    hintText: 'Enter your email',
-                    prefixIcon: const Icon(Icons.person_outline),
+                    hintText: "Enter your email",
+                    prefixIcon:
+                        const Icon(Icons.person_outline),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius:
+                          BorderRadius.circular(12),
                     ),
                   ),
                 ),
 
                 const SizedBox(height: 24),
 
-                const Text('Password'),
+                const Text("Password"),
 
                 const SizedBox(height: 10),
 
@@ -152,12 +168,15 @@ class _LoginFormState extends State<LoginForm> {
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
-                    hintText: 'Enter your password',
-                    prefixIcon: const Icon(Icons.lock_outline),
+                    hintText:
+                        "Enter your password",
+                    prefixIcon:
+                        const Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       onPressed: () {
                         setState(() {
-                          _obscurePassword = !_obscurePassword;
+                          _obscurePassword =
+                              !_obscurePassword;
                         });
                       },
                       icon: Icon(
@@ -167,7 +186,8 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius:
+                          BorderRadius.circular(12),
                     ),
                   ),
                 ),
@@ -178,23 +198,26 @@ class _LoginFormState extends State<LoginForm> {
                   children: [
                     Checkbox(
                       value: _rememberMe,
-                      activeColor: AppColors.primary,
+                      activeColor:
+                          AppColors.primary,
                       onChanged: (value) {
                         setState(() {
-                          _rememberMe = value ?? false;
+                          _rememberMe =
+                              value ?? false;
                         });
                       },
                     ),
-
                     const Text("Remember Me"),
-
                     const Spacer(),
-
                     TextButton(
                       onPressed: () {
-                        context.go(AppRouter.forgotPassword);
+                        context.go(
+                          AppRouter.forgotPassword,
+                        );
                       },
-                      child: const Text("Forgot Password?"),
+                      child: const Text(
+                        "Forgot Password?",
+                      ),
                     ),
                   ],
                 ),
@@ -205,20 +228,31 @@ class _LoginFormState extends State<LoginForm> {
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: isLoading ? null : login,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
+                    onPressed:
+                        isLoading ? null : login,
+                    style:
+                        ElevatedButton.styleFrom(
+                      backgroundColor:
+                          AppColors.primary,
+                      foregroundColor:
+                          Colors.white,
                     ),
                     child: isLoading
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
+                        ? const SizedBox(
+                            height: 22,
+                            width: 22,
+                            child:
+                                CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
                           )
                         : const Text(
-                            'LOGIN',
+                            "LOGIN",
                             style: TextStyle(
                               fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                              fontWeight:
+                                  FontWeight.bold,
                             ),
                           ),
                   ),
@@ -230,7 +264,9 @@ class _LoginFormState extends State<LoginForm> {
                   children: const [
                     Expanded(child: Divider()),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      padding:
+                          EdgeInsets.symmetric(
+                              horizontal: 12),
                       child: Text("OR"),
                     ),
                     Expanded(child: Divider()),
@@ -243,50 +279,14 @@ class _LoginFormState extends State<LoginForm> {
                   width: double.infinity,
                   height: 55,
                   child: OutlinedButton.icon(
-                    onPressed: isLoading
-    ? null
-    : () async {
-        try {
-          setState(() {
-            isLoading = true;
-          });
-
-          final userCredential =
-              await GoogleAuthService.signInWithGoogle();
-
-          if (!mounted) return;
-
-          if (userCredential != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Google Sign-In Successful"),
-              ),
-            );
-
-            context.go(AppRouter.profile);
-          }
-        } on FirebaseAuthException catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(e.message ?? "Google Sign-In Failed"),
-            ),
-          );
-        } catch (_) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Google Sign-In Cancelled"),
-            ),
-          );
-        } finally {
-          if (mounted) {
-            setState(() {
-              isLoading = false;
-            });
-          }
-        }
-      },
-                    icon: const Icon(Icons.g_mobiledata),
-                    label: const Text("Continue with Google"),
+                    onPressed:
+                        isLoading ? null : googleLogin,
+                    icon: const Icon(
+                      Icons.g_mobiledata,
+                    ),
+                    label: const Text(
+                      "Continue with Google",
+                    ),
                   ),
                 ),
 
@@ -296,11 +296,12 @@ class _LoginFormState extends State<LoginForm> {
                   width: double.infinity,
                   height: 55,
                   child: OutlinedButton.icon(
-                    onPressed: () {
-                      // Apple Sign-In (later)
-                    },
-                    icon: const Icon(Icons.apple),
-                    label: const Text("Continue with Apple"),
+                    onPressed: () {},
+                    icon:
+                        const Icon(Icons.apple),
+                    label: const Text(
+                      "Continue with Apple",
+                    ),
                   ),
                 ),
 
@@ -308,16 +309,21 @@ class _LoginFormState extends State<LoginForm> {
 
                 Center(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment:
+                        MainAxisAlignment.center,
                     children: [
                       const Text(
                         "Don't have an account?",
                       ),
                       TextButton(
                         onPressed: () {
-                          context.go(AppRouter.register);
+                          context.go(
+                            AppRouter.register,
+                          );
                         },
-                        child: const Text("Create Account"),
+                        child: const Text(
+                          "Create Account",
+                        ),
                       ),
                     ],
                   ),
