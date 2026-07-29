@@ -40,7 +40,11 @@ import '../features/legal/page/cookie_policy_page.dart';
 import '../features/profiles/page/edit_profile_page.dart';
 import '../models/address_model.dart';
 import '../models/payment_method_model.dart';
+import '../models/product_model.dart';
 import '../features/payment_methods/page/add_payment_method_page.dart';
+import '../features/admin/products/pages/add_product_page.dart';
+import '../features/admin/products/pages/edit_product_page.dart';
+import '../features/admin/products/pages/product_preview_page.dart';
 
 
 class AppRouter {
@@ -133,6 +137,9 @@ static const String editPaymentMethod =
 static const String reviews = '/reviews';
 static const String sizeGuide = '/size-guide';
 static const String returns = '/returns';
+static const String addProduct = '/addproduct';
+static const String editProduct = '/editProduct';
+static const String productPreview = '/productPreview';
 
 // ==========================
 // Legal
@@ -505,6 +512,40 @@ GoRoute(
     ),
   ),
 ),
+
+// ==========================
+// product
+// ==========================
+
+
+GoRoute(
+  path: addProduct,
+  builder: (context, state) => const AddProductPage(),
+),
+
+GoRoute(
+  path: AppRouter.editProduct,
+  builder: (context, state) {
+    // state.extra may not have a static type here; use dynamic to avoid invalid cast
+    final product = state.extra as dynamic;
+
+    return EditProductPage(
+      product: product,
+    );
+  },
+),
+
+GoRoute(
+  path: AppRouter.productPreview,
+  builder: (context, state) {
+    final product = state.extra as ProductModel;
+
+    return ProductPreviewPage(
+      product: product,
+    );
+  },
+),
+
 
     ],
   );
