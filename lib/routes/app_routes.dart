@@ -48,6 +48,7 @@ import '../features/admin/products/pages/product_preview_page.dart';
 import '../features/admin/dashboard/admin_dashboard_page.dart';
 import '../features/auth/widgets/role_redirect.dart';
 import '../features/admin/products/pages/manage_products_page.dart';
+import '../features/super_admin/dashboard/pages/super_admin_dashboard_page.dart';
 
 
 class AppRouter {
@@ -167,7 +168,28 @@ static const String adminCustomers = '/admin/customers';
 
     static const String manageProducts = '/admin/manage-products';
 
-    static const String adminManagement = '/admin-management';
+   
+
+
+// ==========================
+// super Admin
+// ==========================
+
+static const String superAdminDashboard = '/super-admin/dashboard';
+
+static const String adminManagement = '/super-admin/admin-management';
+
+static const String customerManagement = '/super-admin/customer-management';
+
+static const String analytics = '/super-admin/analytics';
+
+static const String websiteSettings = '/super-admin/website-settings';
+
+
+// ==========================
+// goroutes
+// ==========================
+
 
 
   static final GoRouter router = GoRouter(
@@ -468,14 +490,7 @@ GoRoute(
   ),
 ),
 
-GoRoute(
-  path: adminDashboard,
-  builder: (context, state) => const Scaffold(
-    body: Center(
-      child: Text("Admin Dashboard"),
-    ),
-  ),
-),
+
 
 GoRoute(
   path: adminProducts,
@@ -556,6 +571,52 @@ GoRoute(
   },
 ),
 
+// ==========================
+// super Admin
+// ==========================
+
+
+GoRoute(
+  path: AppRouter.superAdminDashboard,
+  builder: (context, state) =>
+      const SuperAdminDashboardPage(),
+),
+
+GoRoute(
+  path: AppRouter.adminManagement,
+  builder: (context, state) => const Scaffold(
+    body: Center(
+      child: Text("Admin Management"),
+    ),
+  ),
+),
+
+GoRoute(
+  path: AppRouter.customerManagement,
+  builder: (context, state) => const Scaffold(
+    body: Center(
+      child: Text("Customer Management"),
+    ),
+  ),
+),
+
+GoRoute(
+  path: AppRouter.analytics,
+  builder: (context, state) => const Scaffold(
+    body: Center(
+      child: Text("Analytics"),
+    ),
+  ),
+),
+
+GoRoute(
+  path: AppRouter.websiteSettings,
+  builder: (context, state) => const Scaffold(
+    body: Center(
+      child: Text("Website Settings"),
+    ),
+  ),
+),
 
     ],
   );

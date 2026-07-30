@@ -30,16 +30,19 @@ class _RoleRedirectState extends State<RoleRedirect> {
         return;
       }
 
-      switch (user.role) {
-        case UserRole.customer:
-          context.go(AppRouter.home);
-          break;
+     switch (user.role) {
+  case UserRole.customer:
+    context.go(AppRouter.home);
+    break;
 
-        case UserRole.admin:
-        case UserRole.superAdmin:
-          context.go(AppRouter.adminDashboard);
-          break;
-      }
+  case UserRole.admin:
+    context.go(AppRouter.adminDashboard);
+    break;
+
+  case UserRole.superAdmin:
+    context.go(AppRouter.superAdminDashboard);
+    break;
+}
     });
   }
 
