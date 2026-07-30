@@ -112,9 +112,10 @@ class _AdminProductFilterState
                       ),
 
                     ],
-                  onChanged: (value) {
-  provider.updateCategory(value);
-},
+  onChanged: (value) {
+    provider.updateStatus(value);
+  },
+
                   ),
                 ),
 
