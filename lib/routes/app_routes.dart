@@ -49,6 +49,10 @@ import '../features/admin/dashboard/admin_dashboard_page.dart';
 import '../features/auth/widgets/role_redirect.dart';
 import '../features/admin/products/pages/manage_products_page.dart';
 import '../features/super_admin/dashboard/pages/super_admin_dashboard_page.dart';
+import '../features/super_admin/admin_management/pages/admin_management_page.dart';
+import '../features/super_admin/admin_management/pages/add_admin_page.dart';
+import '../features/super_admin/admin_management/pages/edit_admin_page.dart';
+import '/models/user_model.dart';
 
 
 class AppRouter {
@@ -184,6 +188,10 @@ static const String customerManagement = '/super-admin/customer-management';
 static const String analytics = '/super-admin/analytics';
 
 static const String websiteSettings = '/super-admin/website-settings';
+
+static const String addAdmin = '/super-admin/add-admin';
+
+static const String editAdmin = '/super-admin/edit-admin';
 
 
 // ==========================
@@ -584,12 +592,27 @@ GoRoute(
 
 GoRoute(
   path: AppRouter.adminManagement,
-  builder: (context, state) => const Scaffold(
-    body: Center(
-      child: Text("Admin Management"),
-    ),
-  ),
+  builder: (context, state) =>
+      const AdminManagementPage(),
 ),
+
+GoRoute(
+  path: AppRouter.addAdmin,
+  builder: (context, state) =>
+      const AddAdminPage(),
+),
+
+GoRoute(
+  path: AppRouter.editAdmin,
+  builder: (context, state) {
+    final admin = state.extra as UserModel;
+
+    return EditAdminPage(
+      admin: admin,
+    );
+  },
+),
+
 
 GoRoute(
   path: AppRouter.customerManagement,

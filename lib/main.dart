@@ -13,6 +13,7 @@ import 'providers/notification_provider.dart';
 import 'providers/account_settings_provider.dart';
 import 'providers/order_provider.dart';
 import 'providers/product_provider.dart';
+import 'providers/admin_management_provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +33,7 @@ void main() async{
         ChangeNotifierProvider(create: (_) => AccountSettingsProvider(), ),
         ChangeNotifierProvider(create: (_) => OrderProvider(), ),
         ChangeNotifierProvider(create: (_) => ProductProvider(), ),
+        ChangeNotifierProvider(create: (_) => AdminManagementProvider()),
 
 
       ],
