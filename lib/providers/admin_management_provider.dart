@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../models/user_model.dart';
 import '../repositories/admin_management_repository.dart';
+import '../../../../models/admin_permission_model.dart';
 
 class AdminManagementProvider extends ChangeNotifier {
   bool _loading = false;
@@ -21,6 +22,7 @@ class AdminManagementProvider extends ChangeNotifier {
   required String email,
   required String phone,
   required String password,
+  required AdminPermissionModel permissions,
 }) async {
   _loading = true;
   notifyListeners();
@@ -31,6 +33,7 @@ class AdminManagementProvider extends ChangeNotifier {
       email: email,
       phone: phone,
       password: password,
+      permissions: permissions,
     );
 
     await loadAdmins();
@@ -65,6 +68,7 @@ Future<void> updateAdmin({
   required String name,
   required String phone,
   required bool status,
+  required AdminPermissionModel permissions,
 }) async {
   _loading = true;
   notifyListeners();
@@ -75,6 +79,7 @@ Future<void> updateAdmin({
       name: name,
       phone: phone,
       status: status,
+      permissions: permissions,
     );
 
     await loadAdmins();

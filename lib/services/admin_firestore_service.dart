@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 import '../../../../firebase_options.dart';
 import '../../../../models/user_model.dart';
+import '../../../../models/admin_permission_model.dart';
 
 class AdminFirestoreService {
   AdminFirestoreService._();
@@ -40,6 +41,7 @@ class AdminFirestoreService {
     required String email,
     required String phone,
     required String password,
+    required AdminPermissionModel permissions,
   }) async {
     FirebaseApp? secondaryApp;
 
@@ -75,6 +77,7 @@ class AdminFirestoreService {
       phone: phone,
       role: UserRole.admin,
       status: true,
+      permissions: permissions,
     );
 
     await _users.doc(uid).set(user.toMap());
@@ -127,11 +130,13 @@ static Future<void> sendPasswordReset(
     required String name,
     required String phone,
     required bool status,
+    required AdminPermissionModel permissions,
   }) async {
     await _users.doc(uid).update({
       "name": name,
       "phone": phone,
       "status": status,
+      "permissions": permissions.toMap(),
       "updatedAt": Timestamp.now(),
     });
   }

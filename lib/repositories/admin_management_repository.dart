@@ -1,5 +1,6 @@
 import '../../../../models/user_model.dart';
 import '../services/admin_firestore_service.dart';
+import '../../../../models/admin_permission_model.dart';
 
 class AdminManagementRepository {
   AdminManagementRepository._();
@@ -13,12 +14,14 @@ class AdminManagementRepository {
     required String email,
     required String phone,
     required String password,
+    required AdminPermissionModel permissions,
   }) {
     return AdminFirestoreService.createAdmin(
       name: name,
       email: email,
       phone: phone,
       password: password,
+      permissions: permissions,
     );
   }
 
@@ -27,12 +30,14 @@ class AdminManagementRepository {
   required String name,
   required String phone,
   required bool status,
+  required AdminPermissionModel permissions,
 }) {
   return AdminFirestoreService.updateAdmin(
     uid: uid,
     name: name,
     phone: phone,
     status: status,
+    permissions: permissions,
   );
 }
 

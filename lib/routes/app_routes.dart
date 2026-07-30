@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lag_clothing/features/admin/widgets/permission_guard.dart';
 import 'package:lag_clothing/features/saved_address/page/add_address_page.dart';
 
 import '../features/about/pages/about_page.dart';
@@ -53,6 +54,7 @@ import '../features/super_admin/admin_management/pages/admin_management_page.dar
 import '../features/super_admin/admin_management/pages/add_admin_page.dart';
 import '../features/super_admin/admin_management/pages/edit_admin_page.dart';
 import '/models/user_model.dart';
+
 
 
 class AppRouter {
@@ -545,8 +547,12 @@ GoRoute(
 
 GoRoute(
   path: AppRouter.manageProducts,
-  builder: (context, state) =>
-      const ManageProductsPage(),
+  builder: (context, state) {
+    return PermissionGuard(
+      hasPermission: (p) => p.products,
+      builder: (_) => const ManageProductsPage(),
+    );
+  },
 ),
 
 GoRoute(

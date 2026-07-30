@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../../../../../models/user_model.dart';
 import '../../../../../providers/admin_management_provider.dart';
+import 'admin_permissions_section.dart';
+import '../../../../../models/admin_permission_model.dart';
 
 class AdminForm extends StatefulWidget {
   const AdminForm({
@@ -29,6 +31,9 @@ class _AdminFormState extends State<AdminForm> {
 
   bool status = true;
 
+  AdminPermissionModel permissions =
+    AdminPermissionModel.defaultAdmin();
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +43,11 @@ class _AdminFormState extends State<AdminForm> {
       emailController.text = widget.admin!.email;
       phoneController.text = widget.admin!.phone;
       status = widget.admin!.status;
+
+      status = widget.admin!.status;
+
+    permissions = widget.admin!.permissions;
+
     }
   }
 
@@ -128,6 +138,15 @@ class _AdminFormState extends State<AdminForm> {
 
           const SizedBox(height: 40),
 
+          AdminPermissionsSection(
+  permissions: permissions,
+  onChanged: (value) {
+    setState(() {
+      permissions = value;
+    });
+  },
+),
+
           SizedBox(
             height: 50,
             child: ElevatedButton.icon(
@@ -159,6 +178,7 @@ class _AdminFormState extends State<AdminForm> {
                           email: emailController.text.trim(),
                           phone: phoneController.text.trim(),
                           password: passwordController.text.trim(),
+                          permissions: permissions,
                         );
                       } else {
                         await provider.updateAdmin(
@@ -166,6 +186,7 @@ class _AdminFormState extends State<AdminForm> {
                           name: nameController.text.trim(),
                           phone: phoneController.text.trim(),
                           status: status,
+                          permissions: permissions,
                         );
                       }
 

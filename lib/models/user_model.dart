@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'admin_permission_model.dart';
 
 enum UserRole {
   customer,
@@ -19,6 +20,8 @@ class UserModel {
 
   final bool status;
 
+  final AdminPermissionModel permissions;
+
   final Timestamp? createdAt;
 
   final Timestamp? lastLogin;
@@ -30,6 +33,7 @@ class UserModel {
     required this.phone,
     required this.role,
     required this.status,
+    this.permissions = const AdminPermissionModel(),
     this.createdAt,
     this.lastLogin,
   });
@@ -42,6 +46,7 @@ class UserModel {
       "phone": phone,
       "role": role.name,
       "status": status,
+      'permissions': permissions.toMap(),
       "createdAt": createdAt,
       "lastLogin": lastLogin,
     };
@@ -59,6 +64,9 @@ class UserModel {
         map["role"],
       ),
       status: map["status"] ?? true,
+      permissions: AdminPermissionModel.fromMap(
+  map['permissions'],
+),
       createdAt: map["createdAt"],
       lastLogin: map["lastLogin"],
     );
@@ -86,6 +94,7 @@ class UserModel {
     String? phone,
     UserRole? role,
     bool? status,
+    AdminPermissionModel? permissions,
     Timestamp? createdAt,
     Timestamp? lastLogin,
   }) {
@@ -96,6 +105,7 @@ class UserModel {
       phone: phone ?? this.phone,
       role: role ?? this.role,
       status: status ?? this.status,
+      permissions: permissions ?? this.permissions,
       createdAt: createdAt ?? this.createdAt,
       lastLogin: lastLogin ?? this.lastLogin,
     );
