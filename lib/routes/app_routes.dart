@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lag_clothing/features/admin/orders/pages/order_details_page.dart';
 import 'package:lag_clothing/features/admin/widgets/permission_guard.dart';
 import 'package:lag_clothing/features/saved_address/page/add_address_page.dart';
 
@@ -54,7 +55,7 @@ import '../features/super_admin/admin_management/pages/admin_management_page.dar
 import '../features/super_admin/admin_management/pages/add_admin_page.dart';
 import '../features/super_admin/admin_management/pages/edit_admin_page.dart';
 import '/models/user_model.dart';
-
+import '../features/admin/orders/pages/manage_orders_page.dart';
 
 
 class AppRouter {
@@ -168,7 +169,7 @@ static const String adminDashboard ='/admin/dashboard';
 
 static const String adminProducts = '/admin/products';
 
-static const String adminOrders = '/admin/orders';
+static const String adminOrderDetails ='/admin/order-details';
 
 static const String adminCustomers = '/admin/customers';
 
@@ -512,12 +513,9 @@ GoRoute(
 ),
 
 GoRoute(
-  path: adminOrders,
-  builder: (context, state) => const Scaffold(
-    body: Center(
-      child: Text("Admin Orders"),
-    ),
-  ),
+  path: adminOrderDetails,
+  builder: (context, state) =>
+      const AdminManageOrdersPage(),
 ),
 
 GoRoute(

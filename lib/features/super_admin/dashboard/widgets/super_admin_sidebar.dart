@@ -61,7 +61,7 @@ class SuperAdminSidebar extends StatelessWidget {
             context,
             Icons.receipt_long,
             "Orders",
-            AppRouter.adminOrders,
+            AppRouter.adminOrderDetails,
           ),
 
           _tile(

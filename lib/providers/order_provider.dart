@@ -71,6 +71,26 @@ class OrderProvider extends ChangeNotifier {
 
 
   // ==========================================
+// Admin - Get All Orders
+// ==========================================
+
+Future<void> fetchAllOrders() async {
+  try {
+    _setLoading(true);
+
+    _orders = await OrderRepository.getAllOrders();
+
+    _error = null;
+  } catch (e) {
+    _error = e.toString();
+  } finally {
+    _setLoading(false);
+  }
+}
+
+
+
+  // ==========================================
   // Listen Orders Real Time
   // ==========================================
 
@@ -107,6 +127,25 @@ class OrderProvider extends ChangeNotifier {
 
 
   }
+
+
+
+  // ==========================================
+// Admin Listen Orders
+// ==========================================
+
+void listenAllOrders() {
+  OrderRepository.streamAllOrders().listen(
+    (data) {
+      _orders = data;
+      notifyListeners();
+    },
+    onError: (error) {
+      _error = error.toString();
+      notifyListeners();
+    },
+  );
+}
 
 
 

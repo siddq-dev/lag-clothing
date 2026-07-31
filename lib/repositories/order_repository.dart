@@ -62,6 +62,28 @@ class OrderRepository {
         .toList();
   }
 
+
+  // ==========================================
+// Admin - Get All Orders
+// ==========================================
+
+static Future<List<OrderModel>> getAllOrders() async {
+  final snapshot = await _collection
+      .orderBy(
+        'createdAt',
+        descending: true,
+      )
+      .get();
+
+  return snapshot.docs
+      .map(
+        (doc) => OrderModel.fromMap(
+          doc.data(),
+        ),
+      )
+      .toList();
+}
+
   // ==========================================
   // Stream Orders
   // ==========================================
@@ -84,6 +106,29 @@ class OrderRepository {
               .toList(),
         );
   }
+
+
+  // ==========================================
+// Admin Stream
+// ==========================================
+
+static Stream<List<OrderModel>> streamAllOrders() {
+  return _collection
+      .orderBy(
+        'createdAt',
+        descending: true,
+      )
+      .snapshots()
+      .map(
+        (snapshot) => snapshot.docs
+            .map(
+              (doc) => OrderModel.fromMap(
+                doc.data(),
+              ),
+            )
+            .toList(),
+      );
+}
 
   // ==========================================
   // Get Single Order

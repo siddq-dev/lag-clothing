@@ -79,8 +79,9 @@ class UserModel {
       case "admin":
         return UserRole.admin;
 
-      case "super_admin":
-        return UserRole.superAdmin;
+     case "superAdmin":
+    case "super_admin":
+      return UserRole.superAdmin;
 
       default:
         return UserRole.customer;
