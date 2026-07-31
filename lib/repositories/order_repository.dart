@@ -161,6 +161,21 @@ static Stream<List<OrderModel>> streamAllOrders() {
     });
   }
 
+
+// ==========================================
+// Update Payment Status
+// ==========================================
+
+static Future<void> updatePaymentStatus(
+  String orderId,
+  PaymentStatus status,
+) async {
+  await _collection.doc(orderId).update({
+    'paymentStatus': status.name,
+    'updatedAt': Timestamp.now(),
+  });
+}  
+
   // ==========================================
   // Cancel Order
   // ==========================================
@@ -186,6 +201,17 @@ static Stream<List<OrderModel>> streamAllOrders() {
       OrderStatus.returned,
     );
   }
+
+
+static Future<void> updateAdminNotes(
+  String orderId,
+  String notes,
+) async {
+  await _collection.doc(orderId).update({
+    'adminNotes': notes,
+    'updatedAt': Timestamp.now(),
+  });
+}
 
   // ==========================================
   // Delete Order

@@ -1,87 +1,171 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../models/order_model.dart';
+
 class OrderTimeline extends StatelessWidget {
-  const OrderTimeline({super.key});
+  const OrderTimeline({
+    super.key,
+    required this.order,
+  });
+
+  final OrderModel order;
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = _statusIndex(order.orderStatus);
+
+    const statuses = [
+      "Placed",
+      "Confirmed",
+      "Packed",
+      "Shipped",
+      "Out For Delivery",
+      "Delivered",
+    ];
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment:
               CrossAxisAlignment.start,
-          children: const [
-
-            Text(
+          children: [
+            const Text(
               "Order Timeline",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            SizedBox(height: 25),
+            const SizedBox(height: 20),
 
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.green,
-                child: Icon(
-                  Icons.check,
-                  color: Colors.white,
-                ),
-              ),
-              title: Text("Order Placed"),
-              subtitle: Text(
-                "31 Jul 2026 • 09:30 AM",
-              ),
+            ...List.generate(
+              statuses.length,
+              (index) {
+                final completed =
+                    index <= currentIndex;
+
+                final isLast =
+                    index == statuses.length - 1;
+
+                return Row(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                  children: [
+
+                    Column(
+                      children: [
+
+                        CircleAvatar(
+                          radius: 14,
+                          backgroundColor:
+                              completed
+                                  ? Colors.green
+                                  : Colors.grey.shade400,
+                          child: Icon(
+                            completed
+                                ? Icons.check
+                                : Icons.circle,
+                            size: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+
+                        if (!isLast)
+                          Container(
+                            width: 2,
+                            height: 45,
+                            color: completed
+                                ? Colors.green
+                                : Colors.grey.shade300,
+                          ),
+                      ],
+                    ),
+
+                    const SizedBox(width: 16),
+
+                    Expanded(
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(
+                          top: 4,
+                        ),
+                        child: Text(
+                          statuses[index],
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight:
+                                completed
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                            color: completed
+                                ? Colors.green
+                                : Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
 
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.green,
-                child: Icon(
-                  Icons.inventory,
-                  color: Colors.white,
+            if (order.orderStatus ==
+                OrderStatus.cancelled)
+              const Padding(
+                padding: EdgeInsets.only(top: 12),
+                child: Text(
+                  "Order Cancelled",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight:
+                        FontWeight.bold,
+                  ),
                 ),
               ),
-              title: Text("Packed"),
-              subtitle: Text(
-                "31 Jul 2026 • 02:00 PM",
-              ),
-            ),
 
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.orange,
-                child: Icon(
-                  Icons.local_shipping,
-                  color: Colors.white,
+            if (order.orderStatus ==
+                OrderStatus.returned)
+              const Padding(
+                padding: EdgeInsets.only(top: 12),
+                child: Text(
+                  "Order Returned",
+                  style: TextStyle(
+                    color: Colors.deepOrange,
+                    fontWeight:
+                        FontWeight.bold,
+                  ),
                 ),
               ),
-              title: Text("Shipped"),
-              subtitle: Text(
-                "Waiting...",
-              ),
-            ),
-
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.grey,
-                child: Icon(
-                  Icons.home,
-                  color: Colors.white,
-                ),
-              ),
-              title: Text("Delivered"),
-              subtitle: Text(
-                "Pending",
-              ),
-            ),
-
           ],
         ),
       ),
     );
+  }
+
+  int _statusIndex(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.placed:
+        return 0;
+
+      case OrderStatus.confirmed:
+        return 1;
+
+      case OrderStatus.packed:
+        return 2;
+
+      case OrderStatus.shipped:
+        return 3;
+
+      case OrderStatus.outForDelivery:
+        return 4;
+
+      case OrderStatus.delivered:
+        return 5;
+
+      default:
+        return -1;
+    }
   }
 }

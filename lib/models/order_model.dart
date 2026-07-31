@@ -26,6 +26,7 @@ class OrderModel {
   final String userId;
 
   final String orderNumber;
+  
 
   final List<OrderItemModel> items;
 
@@ -47,11 +48,13 @@ class OrderModel {
 
   final Timestamp? createdAt;
   final Timestamp? updatedAt;
+  final String adminNotes;
 
   const OrderModel({
     required this.id,
     required this.userId,
     required this.orderNumber,
+    
     required this.items,
     required this.subtotal,
     required this.shippingCharge,
@@ -66,6 +69,7 @@ class OrderModel {
     required this.billingAddress,
     this.createdAt,
     this.updatedAt,
+    required this.adminNotes,
   });
 
   Map<String, dynamic> toMap() {
@@ -73,6 +77,7 @@ class OrderModel {
       'id': id,
       'userId': userId,
       'orderNumber': orderNumber,
+      
       'items': items.map((e) => e.toMap()).toList(),
       'subtotal': subtotal,
       'shippingCharge': shippingCharge,
@@ -87,6 +92,7 @@ class OrderModel {
       'billingAddress': billingAddress.toMap(),
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+      'adminNotes': adminNotes,
     };
   }
 
@@ -129,6 +135,7 @@ class OrderModel {
       ),
       createdAt: map['createdAt'],
       updatedAt: map['updatedAt'],
+      adminNotes: map['adminNotes'] ?? '',
     );
   }
 
@@ -150,6 +157,7 @@ class OrderModel {
     AddressModel? billingAddress,
     Timestamp? createdAt,
     Timestamp? updatedAt,
+    String? adminNotes,
   }) {
     return OrderModel(
       id: id ?? this.id,
@@ -171,6 +179,7 @@ class OrderModel {
           billingAddress ?? this.billingAddress,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      adminNotes: adminNotes ?? this.adminNotes,
     );
   }
 }

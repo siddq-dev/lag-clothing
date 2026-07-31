@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../models/order_model.dart';
+
 class OrderItemsTable extends StatelessWidget {
-  const OrderItemsTable({super.key});
+  const OrderItemsTable({
+    super.key,
+    required this.order,
+  });
+
+  final OrderModel order;
 
   @override
   Widget build(BuildContext context) {
@@ -11,99 +18,99 @@ class OrderItemsTable extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Text(
               "Ordered Items",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
             const SizedBox(height: 20),
 
-            DataTable(
-              columns: const [
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                headingRowHeight: 55,
+                dataRowMinHeight: 80,
+                dataRowMaxHeight: 90,
 
-                DataColumn(
-                  label: Text("Product"),
-                ),
+                columns: const [
+                  DataColumn(label: Text("Image")),
+                  DataColumn(label: Text("Product")),
+                  DataColumn(label: Text("Size")),
+                  DataColumn(label: Text("Color")),
+                  DataColumn(label: Text("Qty")),
+                  DataColumn(label: Text("Price")),
+                  DataColumn(label: Text("Total")),
+                ],
 
-                DataColumn(
-                  label: Text("Size"),
-                ),
+                rows: order.items.map((item) {
+                  return DataRow(
+                    cells: [
+                      DataCell(
+                        ClipRRect(
+                          borderRadius:
+                              BorderRadius.circular(8),
+                          child: Image.network(
+                            item.productImage,
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.cover,
+                            errorBuilder:
+                                (_, __, ___) =>
+                                    const Icon(
+                                      Icons.image_not_supported,
+                                    ),
+                          ),
+                        ),
+                      ),
 
-                DataColumn(
-                  label: Text("Qty"),
-                ),
+                      DataCell(
+                        SizedBox(
+                          width: 220,
+                          child: Text(
+                            item.productName,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
 
-                DataColumn(
-                  label: Text("Price"),
-                ),
+                      DataCell(
+                        Text(item.size),
+                      ),
 
-                DataColumn(
-                  label: Text("Total"),
-                ),
+                      DataCell(
+                        Text(item.color),
+                      ),
 
-              ],
+                      DataCell(
+                        Text(
+                          item.quantity.toString(),
+                        ),
+                      ),
 
-              rows: const [
+                      DataCell(
+                        Text(
+                          "₹${item.price.toStringAsFixed(2)}",
+                        ),
+                      ),
 
-                DataRow(
-                  cells: [
-
-                    DataCell(
-                      Text("Home Jersey"),
-                    ),
-
-                    DataCell(
-                      Text("L"),
-                    ),
-
-                    DataCell(
-                      Text("2"),
-                    ),
-
-                    DataCell(
-                      Text("₹1200"),
-                    ),
-
-                    DataCell(
-                      Text("₹2400"),
-                    ),
-
-                  ],
-                ),
-
-                DataRow(
-                  cells: [
-
-                    DataCell(
-                      Text("Training Shorts"),
-                    ),
-
-                    DataCell(
-                      Text("M"),
-                    ),
-
-                    DataCell(
-                      Text("1"),
-                    ),
-
-                    DataCell(
-                      Text("₹800"),
-                    ),
-
-                    DataCell(
-                      Text("₹800"),
-                    ),
-
-                  ],
-                ),
-
-              ],
+                      DataCell(
+                        Text(
+                          "₹${item.total.toStringAsFixed(2)}",
+                          style: const TextStyle(
+                            fontWeight:
+                                FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }).toList(),
+              ),
             ),
-
           ],
         ),
       ),

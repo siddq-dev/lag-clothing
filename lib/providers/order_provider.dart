@@ -276,6 +276,30 @@ void listenAllOrders() {
 
 
   // ==========================================
+// Update Payment Status
+// ==========================================
+
+Future<void> updatePaymentStatus(
+  String orderId,
+  PaymentStatus status,
+) async {
+  try {
+    await OrderRepository.updatePaymentStatus(
+      orderId,
+      status,
+    );
+
+    await fetchAllOrders();
+
+  } catch (e) {
+    _error = e.toString();
+    notifyListeners();
+  }
+}
+
+
+
+  // ==========================================
   // Cancel Order
   // ==========================================
 
@@ -393,6 +417,29 @@ void listenAllOrders() {
 
   }
 
+
+
+Future<void> updateAdminNotes(
+  String orderId,
+  String notes,
+) async {
+  try {
+    _setLoading(true);
+
+    await OrderRepository.updateAdminNotes(
+      orderId,
+      notes,
+    );
+
+    await fetchAllOrders();
+
+    _error = null;
+  } catch (e) {
+    _error = e.toString();
+  } finally {
+    _setLoading(false);
+  }
+}
 
 
   // ==========================================

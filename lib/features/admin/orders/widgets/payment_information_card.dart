@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../models/order_model.dart';
+
 class PaymentInformationCard extends StatelessWidget {
-  const PaymentInformationCard({super.key});
+  const PaymentInformationCard({
+    super.key,
+    required this.order,
+  });
+
+  final OrderModel order;
 
   @override
   Widget build(BuildContext context) {
@@ -10,34 +17,106 @@ class PaymentInformationCard extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
 
-            Text(
+            const Text(
               "Payment Information",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-            ListTile(
-              leading: Icon(Icons.payments),
-              title: Text("Paid"),
-              subtitle: Text("Razorpay"),
+            _row(
+              "Payment Method",
+              order.paymentMethod,
             ),
 
-            Divider(),
+            const Divider(),
 
-            ListTile(
-              leading: Icon(Icons.receipt_long),
-              title: Text("Transaction ID"),
-              subtitle: Text("TXN123456789"),
+            _row(
+              "Payment Status",
+              order.paymentStatus.name.toUpperCase(),
+            ),
+
+            const Divider(),
+
+            _row(
+              "Subtotal",
+              "₹${order.subtotal.toStringAsFixed(2)}",
+            ),
+
+            const Divider(),
+
+            _row(
+              "Shipping Charge",
+              "₹${order.shippingCharge.toStringAsFixed(2)}",
+            ),
+
+            const Divider(),
+
+            _row(
+              "Discount",
+              "- ₹${order.discount.toStringAsFixed(2)}",
+            ),
+
+            const Divider(),
+
+            _row(
+              "Tax",
+              "₹${order.tax.toStringAsFixed(2)}",
+            ),
+
+            const Divider(),
+
+            _row(
+              "Grand Total",
+              "₹${order.total.toStringAsFixed(2)}",
+              isBold: true,
             ),
 
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _row(
+    String title,
+    String value, {
+    bool isBold = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 8,
+      ),
+      child: Row(
+        children: [
+
+          Expanded(
+            child: Text(
+              title,
+              style: TextStyle(
+                fontWeight: isBold
+                    ? FontWeight.bold
+                    : FontWeight.w500,
+              ),
+            ),
+          ),
+
+          Text(
+            value,
+            style: TextStyle(
+              fontWeight: isBold
+                  ? FontWeight.bold
+                  : FontWeight.normal,
+              fontSize: isBold ? 16 : 14,
+            ),
+          ),
+
+        ],
       ),
     );
   }
