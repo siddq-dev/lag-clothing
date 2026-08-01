@@ -18,10 +18,16 @@ import 'providers/admin_product_provider.dart';
 import 'providers/admin_order_filter_provider.dart';
 import 'providers/coupon_provider.dart';
 import 'providers/customer_management_provider.dart';
+import 'providers/analytics_provider.dart';
+import '/services/analytics_lifecycle_service.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   
+  WidgetsBinding.instance.addObserver(
+  AnalyticsLifecycleService(),
+);
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
 );
@@ -42,6 +48,7 @@ void main() async{
         ChangeNotifierProvider(create: (_) => AdminOrderFilterProvider()),
         ChangeNotifierProvider(create: (_) => CouponProvider(),),
          ChangeNotifierProvider(create: (_) => CustomerManagementProvider(),),
+        ChangeNotifierProvider(create: (_) => AnalyticsProvider(),),
 
 
       ],

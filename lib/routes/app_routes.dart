@@ -6,6 +6,7 @@ import 'package:lag_clothing/features/admin/widgets/permission_guard.dart';
 import 'package:lag_clothing/features/orders/order_page.dart';
 import 'package:lag_clothing/features/saved_address/page/add_address_page.dart';
 import 'package:lag_clothing/models/customer_admin_model.dart';
+import 'package:lag_clothing/routes/router_observer.dart';
 
 import '../features/about/pages/about_page.dart';
 import '../features/auth/pages/forgot_password_page.dart';
@@ -61,6 +62,7 @@ import '../features/admin/orders/pages/manage_orders_page.dart';
 import '../features/checkout/pages/order_success_page.dart';
 import '../features/super_admin/customer_management/pages/customer_details_page.dart';
 import '../features/super_admin/customer_management/pages/customer_management_page.dart';
+import '../features/super_admin/analytics/pages/analytics_dashboard_page.dart';
 
 
 class AppRouter {
@@ -218,6 +220,9 @@ static const String customerDetails ='/admin/customer-details';
 
 
   static final GoRouter router = GoRouter(
+    observers: [
+    AnalyticsRouteObserver(),
+  ],
     initialLocation: home,
     routes: [
 
@@ -661,11 +666,8 @@ GoRoute(
 
 GoRoute(
   path: AppRouter.analytics,
-  builder: (context, state) => const Scaffold(
-    body: Center(
-      child: Text("Analytics"),
-    ),
-  ),
+  builder: (context, state) =>
+      const AnalyticsDashboardPage(),
 ),
 
 GoRoute(
