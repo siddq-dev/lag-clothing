@@ -17,6 +17,7 @@ import 'providers/admin_management_provider.dart';
 import 'providers/admin_product_provider.dart';
 import 'providers/admin_order_filter_provider.dart';
 import 'providers/coupon_provider.dart';
+import 'providers/customer_management_provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,7 @@ void main() async{
         ChangeNotifierProvider(create: (_) => AdminProductProvider()),
         ChangeNotifierProvider(create: (_) => AdminOrderFilterProvider()),
         ChangeNotifierProvider(create: (_) => CouponProvider(),),
+         ChangeNotifierProvider(create: (_) => CustomerManagementProvider(),),
 
 
       ],

@@ -5,6 +5,7 @@ import 'package:lag_clothing/features/admin/orders/pages/order_details_page.dart
 import 'package:lag_clothing/features/admin/widgets/permission_guard.dart';
 import 'package:lag_clothing/features/orders/order_page.dart';
 import 'package:lag_clothing/features/saved_address/page/add_address_page.dart';
+import 'package:lag_clothing/models/customer_admin_model.dart';
 
 import '../features/about/pages/about_page.dart';
 import '../features/auth/pages/forgot_password_page.dart';
@@ -58,6 +59,8 @@ import '../features/super_admin/admin_management/pages/edit_admin_page.dart';
 import '/models/user_model.dart';
 import '../features/admin/orders/pages/manage_orders_page.dart';
 import '../features/checkout/pages/order_success_page.dart';
+import '../features/super_admin/customer_management/pages/customer_details_page.dart';
+import '../features/super_admin/customer_management/pages/customer_management_page.dart';
 
 
 class AppRouter {
@@ -202,6 +205,10 @@ static const String websiteSettings = '/super-admin/website-settings';
 static const String addAdmin = '/super-admin/add-admin';
 
 static const String editAdmin = '/super-admin/edit-admin';
+
+static const String customer ='/admin/customer-management';
+
+static const String customerDetails ='/admin/customer-details';
 
 
 // ==========================
@@ -620,6 +627,24 @@ GoRoute(
 
     return EditAdminPage(
       admin: admin,
+    );
+  },
+),
+
+GoRoute(
+  path: AppRouter.customerManagement,
+  builder: (context, state) =>
+      const CustomerManagementPage(),
+),
+
+GoRoute(
+  path: AppRouter.customerDetails,
+  builder: (context, state) {
+    final customer =
+        state.extra as CustomerAdminModel;
+
+    return CustomerDetailsPage(
+      customer: customer,
     );
   },
 ),
