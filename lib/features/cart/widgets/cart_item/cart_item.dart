@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../../models/feature_product_model.dart';
+import '../../../../models/cart_item_model.dart';
+import '../../../../providers/cart_provider.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_spacing.dart';
 import '../../../../themes/app_text_style.dart';
@@ -8,15 +10,15 @@ import '../../../../themes/app_text_style.dart';
 class CartItem extends StatelessWidget {
   const CartItem({
     super.key,
-    required this.product,
-    required this.quantity,
+    required this.item,
   });
 
-  final ProductModel product;
-  final int quantity;
+  final CartItemModel item;
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = context.read<CartProvider>();
+
     return Container(
       margin: const EdgeInsets.only(bottom: AppSpacing.lg),
       padding: const EdgeInsets.all(AppSpacing.lg),
@@ -30,42 +32,57 @@ class CartItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          //--------------------------------------------------
+          // Product Image
+          //--------------------------------------------------
 
-          /// Product Image
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              product.image,
+            child: Image.network(
+              item.productImage,
               width: 130,
               height: 130,
               fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) {
+                return Container(
+                  width: 130,
+                  height: 130,
+                  color: Colors.grey.shade200,
+                  child: const Icon(
+                    Icons.image_not_supported,
+                    size: 40,
+                  ),
+                );
+              },
             ),
           ),
 
           const SizedBox(width: AppSpacing.lg),
 
-          /// Product Details
+          //--------------------------------------------------
+          // Product Details
+          //--------------------------------------------------
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  item.productName,
+                  style: AppTextStyles.heading3,
+                ),
+
+                const SizedBox(height: 10),
 
                 Text(
-                  product.club,
-                  style: AppTextStyles.heading3,
+                  "Size : ${item.size}",
+                  style: AppTextStyles.bodyMedium,
                 ),
 
                 const SizedBox(height: 6),
 
                 Text(
-                  product.title,
-                  style: AppTextStyles.bodyMedium,
-                ),
-
-                const SizedBox(height: 10),
-
-                const Text(
-                  "Size : XL",
+                  "Color : ${item.color}",
                   style: AppTextStyles.bodyMedium,
                 ),
 
@@ -73,6 +90,9 @@ class CartItem extends StatelessWidget {
 
                 Row(
                   children: [
+                    //--------------------------------------------------
+                    // Quantity Selector
+                    //--------------------------------------------------
 
                     Container(
                       decoration: BoxDecoration(
@@ -83,42 +103,65 @@ class CartItem extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await cartProvider.decreaseQuantity(item);
+                            },
                             icon: const Icon(Icons.remove),
                           ),
 
                           Text(
-                            quantity.toString(),
+                            item.quantity.toString(),
                             style: AppTextStyles.bodyLarge,
                           ),
 
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await cartProvider.increaseQuantity(item);
+                            },
                             icon: const Icon(Icons.add),
                           ),
-
                         ],
                       ),
                     ),
 
                     const Spacer(),
 
+                    //--------------------------------------------------
+                    // Price
+                    //--------------------------------------------------
+
                     Text(
-                      "₹${product.price.toStringAsFixed(0)}",
+                      "₹${item.total.toStringAsFixed(2)}",
                       style: AppTextStyles.heading2.copyWith(
                         color: AppColors.primary,
                       ),
                     ),
-
                   ],
                 ),
 
                 const SizedBox(height: 20),
 
+                //--------------------------------------------------
+                // Remove
+                //--------------------------------------------------
+
                 TextButton.icon(
-                  onPressed: () {},
+                  onPressed: () async {
+                    await cartProvider.removeItem(
+                      item.productId,
+                    );
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            "Item removed from cart",
+                          ),
+                        ),
+                      );
+                    }
+                  },
                   icon: const Icon(
                     Icons.delete_outline,
                     color: Colors.red,
@@ -130,11 +173,9 @@ class CartItem extends StatelessWidget {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
-
         ],
       ),
     );

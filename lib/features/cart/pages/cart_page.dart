@@ -1,55 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../layout/website_layout.dart';
+import '../../../providers/cart_provider.dart';
 import '../../../routes/app_routes.dart';
-import '../../../models/feature_product_model.dart';
-import '../../../models/cart_models.dart';
 
 import '../widgets/cart_header/cart_header.dart';
 import '../widgets/cart_item/cart_item.dart';
 import '../widgets/order_summary/order_summary.dart';
+import '../widgets/empty_cart/empty_cart.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return WebsiteLayout(
+    return const WebsiteLayout(
       currentRoute: AppRouter.cart,
       child: Column(
-        children: const [
-
+        children: [
           CartHeader(),
-
-          _CartBody(),
-
+          Expanded(
+            child: _CartBody(),
+          ),
         ],
       ),
     );
   }
 }
 
-class _CartBody extends StatelessWidget {
+class _CartBody extends StatefulWidget {
   const _CartBody();
 
   @override
-  Widget build(BuildContext context) {
-    final List<CartProduct> cartItems = [
-      CartProduct(
-        product: shopProducts[0],
-        quantity: 1,
-      ),
-      CartProduct(
-        product: shopProducts[3],
-        quantity: 2,
-      ),
-      CartProduct(
-        product: shopProducts[6],
-        quantity: 1,
-      ),
-    ];
+  State<_CartBody> createState() => _CartBodyState();
+}
 
-    return Padding(
+class _CartBodyState extends State<_CartBody> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      context.read<CartProvider>().listenCart();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<CartProvider>();
+    final cartItems = provider.items;
+
+    if (provider.isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (provider.error != null) {
+      return Center(
+        child: Text(provider.error!),
+      );
+    }
+
+    if (cartItems.isEmpty) {
+      return const EmptyCart();
+    }
+
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(
         horizontal: 60,
         vertical: 40,
@@ -57,17 +76,20 @@ class _CartBody extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          //--------------------------------------------------
+          // LEFT SIDE
+          //--------------------------------------------------
 
-          /// LEFT SIDE
           Expanded(
             flex: 7,
             child: Column(
               children: [
-
                 ...cartItems.map(
-                  (item) => CartItem(
-                    product: item.product,
-                    quantity: item.quantity,
+                  (item) => Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: CartItem(
+                      item: item,
+                    ),
                   ),
                 ),
 
@@ -77,10 +99,7 @@ class _CartBody extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: OutlinedButton.icon(
                     onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        AppRouter.shop,
-                      );
+                      context.go(AppRouter.shop);
                     },
                     icon: const Icon(Icons.arrow_back),
                     label: const Text(
@@ -88,21 +107,26 @@ class _CartBody extends StatelessWidget {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
 
           const SizedBox(width: 40),
 
-          /// RIGHT SIDE
+          //--------------------------------------------------
+          // RIGHT SIDE
+          //--------------------------------------------------
+
           Expanded(
             flex: 3,
             child: OrderSummary(
-              cartItems: cartItems,
+              subtotal: provider.subtotal,
+              shipping: provider.shipping,
+              tax: provider.tax,
+              discount: provider.discount,
+              total: provider.grandTotal,
             ),
           ),
-
         ],
       ),
     );

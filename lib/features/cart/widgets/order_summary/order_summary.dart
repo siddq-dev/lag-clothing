@@ -1,39 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-import '../../../../models/cart_models.dart';
+import '../../../../routes/app_routes.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_spacing.dart';
 import '../../../../themes/app_text_style.dart';
+import '../../../../models/cart_item_model.dart';
+import 'package:lag_clothing/services/checkout_validation_service.dart';
+import '../../../../providers/cart_provider.dart';
+
 import '../coupon_box/coupon_box.dart';
 
 class OrderSummary extends StatelessWidget {
   const OrderSummary({
     super.key,
-    required this.cartItems,
+    required this.subtotal,
+    required this.shipping,
+    required this.tax,
+    required this.discount,
+    required this.total,
   });
 
-  final List<CartProduct> cartItems;
+  final double subtotal;
+  final double shipping;
+  final double tax;
+  final double discount;
+  final double total;
 
   @override
   Widget build(BuildContext context) {
-    // Calculate total quantity
-    final int totalItems = cartItems.fold(
-      0,
-      (sum, item) => sum + item.quantity,
-    );
-
-    // Calculate subtotal
-    final double subtotal = cartItems.fold(
-      0,
-      (sum, item) => sum + (item.product.price * item.quantity),
-    );
-
-    // Static values for now
-    const double shipping = 0;
-    const double discount = 200;
-
-    final double total = subtotal + shipping - discount;
-
     return Container(
       padding: const EdgeInsets.all(AppSpacing.xl),
       decoration: BoxDecoration(
@@ -46,7 +42,6 @@ class OrderSummary extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Text(
             "Order Summary",
             style: AppTextStyles.heading2,
@@ -55,8 +50,8 @@ class OrderSummary extends StatelessWidget {
           const SizedBox(height: AppSpacing.xl),
 
           _summaryRow(
-            "Items ($totalItems)",
-            "₹${subtotal.toStringAsFixed(0)}",
+            "Subtotal",
+            "₹${subtotal.toStringAsFixed(2)}",
           ),
 
           const SizedBox(height: AppSpacing.md),
@@ -65,49 +60,75 @@ class OrderSummary extends StatelessWidget {
             "Shipping",
             shipping == 0
                 ? "FREE"
-                : "₹${shipping.toStringAsFixed(0)}",
+                : "₹${shipping.toStringAsFixed(2)}",
+          ),
+
+          const SizedBox(height: AppSpacing.md),
+
+          _summaryRow(
+            "Tax",
+            "₹${tax.toStringAsFixed(2)}",
           ),
 
           const SizedBox(height: AppSpacing.md),
 
           _summaryRow(
             "Discount",
-            "- ₹${discount.toStringAsFixed(0)}",
+            "- ₹${discount.toStringAsFixed(2)}",
           ),
 
           const Divider(height: 40),
 
           _summaryRow(
-            "Total",
-            "₹${total.toStringAsFixed(0)}",
+            "Grand Total",
+            "₹${total.toStringAsFixed(2)}",
             isTotal: true,
           ),
 
-          const SizedBox(height: AppSpacing.xxl),
+          const SizedBox(height: AppSpacing.xl),
 
           const CouponBox(),
 
-          const SizedBox(height: AppSpacing.xxl),
+          const SizedBox(height: AppSpacing.xl),
 
           SizedBox(
-            width: double.infinity,
-            height: 55,
-            child: ElevatedButton(
-              onPressed: () {
-                // Navigate to Checkout
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text(
-                "Proceed to Checkout",
-              ),
-            ),
+  width: double.infinity,
+  height: 55,
+  child: ElevatedButton(
+    onPressed: () async {
+      final cartProvider = context.read<CartProvider>();
+
+      final error = await CheckoutValidationService.validate(
+        cartProvider,
+      );
+
+      if (!context.mounted) return;
+
+      if (error != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error),
           ),
-        ],
-      ),
-    );
+        );
+        return;
+      }
+
+      context.go(AppRouter.checkout);
+    },
+    style: ElevatedButton.styleFrom(
+      backgroundColor: AppColors.primary,
+      foregroundColor: Colors.white,
+    ),
+    child: const Text(
+      "Proceed to Checkout",
+    ),
+  ),
+),
+         ]
+          ),
+        
+      );
+    
   }
 
   Widget _summaryRow(
@@ -117,7 +138,6 @@ class OrderSummary extends StatelessWidget {
   }) {
     return Row(
       children: [
-
         Text(
           title,
           style: isTotal
