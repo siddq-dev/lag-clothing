@@ -6,7 +6,7 @@ import '../../../../routes/app_routes.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_spacing.dart';
 import '../../../../themes/app_text_style.dart';
-import '../../../../models/cart_item_model.dart';
+
 import 'package:lag_clothing/services/checkout_validation_service.dart';
 import '../../../../providers/cart_provider.dart';
 

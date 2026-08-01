@@ -43,6 +43,9 @@ dependencies:
   google_sign_in: ^7.1.1
   uuid: ^4.5.1
   file_picker: ^10.3.2
+  pdf: ^3.11.3
+  printing: ^5.14.2
+
 
 dev_dependencies:
   flutter_test:
