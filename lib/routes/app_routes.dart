@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lag_clothing/features/admin/orders/pages/order_details_page.dart';
 import 'package:lag_clothing/features/admin/widgets/permission_guard.dart';
+import 'package:lag_clothing/features/orders/order_page.dart';
 import 'package:lag_clothing/features/saved_address/page/add_address_page.dart';
 
 import '../features/about/pages/about_page.dart';
@@ -56,6 +57,7 @@ import '../features/super_admin/admin_management/pages/add_admin_page.dart';
 import '../features/super_admin/admin_management/pages/edit_admin_page.dart';
 import '/models/user_model.dart';
 import '../features/admin/orders/pages/manage_orders_page.dart';
+import '../features/checkout/pages/order_success_page.dart';
 
 
 class AppRouter {
@@ -89,6 +91,9 @@ static const String cart = '/cart';
 static const String checkout = '/checkout';
 static const String wishlist = '/wishlist';
 static const String coupons = '/coupons';
+static const String orderSuccess = '/order-success';
+static const String orders = '/orders';
+
 
 // ==========================
 // Orders
@@ -98,6 +103,8 @@ static const String myOrders = '/my-orders';
 static const String orderDetails = '/order-details';
 static const String orderTracking = '/order-tracking';
 static const String orderConfirmation = '/order-confirmation';
+
+
 
 // ==========================
 // Profile
@@ -643,6 +650,32 @@ GoRoute(
       child: Text("Website Settings"),
     ),
   ),
+),
+
+
+
+// ==========================
+// shopping
+// ==========================
+
+
+
+GoRoute(
+  path: AppRouter.checkout,
+  builder: (context, state) =>
+      const CheckoutPage(),
+),
+
+GoRoute(
+  path: AppRouter.orderSuccess,
+  builder: (context, state) =>
+      const OrderSuccessPage(),
+),
+
+GoRoute(
+  path: AppRouter.orders,
+  builder: (context, state) =>
+      const OrdersPage(),
 ),
 
     ],

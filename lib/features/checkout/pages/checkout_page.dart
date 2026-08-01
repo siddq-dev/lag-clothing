@@ -1,136 +1,126 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../layout/website_layout.dart';
-import '../../../routes/app_routes.dart';
-
-import '../../../models/cart_models.dart';
-import '../../../models/feature_product_model.dart';
+import '../../../../layout/website_layout.dart';
+import '../../../../providers/checkout_provider.dart';
+import '../../../../routes/app_routes.dart';
 
 import '../widgets/checkout_header/checkout_header.dart';
-import '../widgets/shipping_form/shipping_form.dart';
-import '../widgets/payment_section/payment_section.dart';
-import '../widgets/billing_address/billing_address.dart';
-import '../widgets/order_review/order_review.dart';
-import '../widgets/checkout_summary/checkout_summary.dart';
+import '../widgets/delivery_address/delivery_address_card.dart';
+import '../widgets/shipping_method/shipping_method_card.dart';
+import '../widgets/payment_method/payment_method_card.dart';
+import '../widgets/order_summary/checkout_order_summary.dart';
+import '../widgets/terms_checkbox/terms_checkbox.dart';
+import '../widgets/place_order_button/place_order_button.dart';
 
-class CheckoutPage extends StatelessWidget {
+class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
 
   @override
+  State<CheckoutPage> createState() =>
+      _CheckoutPageState();
+}
+
+class _CheckoutPageState
+    extends State<CheckoutPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      context.read<CheckoutProvider>().initialize();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final List<CartProduct> cartItems = [
+    final provider =
+        context.watch<CheckoutProvider>();
 
-      CartProduct(
-        product: shopProducts[0],
-        quantity: 1,
-      ),
+    if (provider.isLoading) {
+      return const WebsiteLayout(
+        currentRoute: AppRouter.checkout,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
-      CartProduct(
-        product: shopProducts[3],
-        quantity: 2,
-      ),
+    if (provider.error != null) {
+      return WebsiteLayout(
+        currentRoute: AppRouter.checkout,
+        child: Center(
+          child: Text(provider.error!),
+        ),
+      );
+    }
 
-      CartProduct(
-        product: shopProducts[6],
-        quantity: 1,
-      ),
+    final checkout = provider.checkout;
 
-    ];
+    if (checkout == null) {
+      return const WebsiteLayout(
+        currentRoute: AppRouter.checkout,
+        child: Center(
+          child: Text("Checkout unavailable"),
+        ),
+      );
+    }
 
     return WebsiteLayout(
       currentRoute: AppRouter.checkout,
-      child: Column(
-        children: [
-
-          const CheckoutHeader(),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 60,
-              vertical: 50,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 60,
+          vertical: 40,
+        ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 1300,
             ),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
+            child: Row(
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 7,
+                  child: Column(
+                    children: const [
+                      CheckoutHeader(),
 
-                /// Mobile Layout
-                if (constraints.maxWidth < 900) {
-                  return Column(
-                    children: [
+                      SizedBox(height: 24),
 
-                      const ShippingForm(),
+                      DeliveryAddressCard(),
 
-                      const SizedBox(height: 30),
+                      SizedBox(height: 24),
 
-                      const PaymentSection(),
+                      ShippingMethodCard(),
 
-                      const SizedBox(height: 30),
+                      SizedBox(height: 24),
 
-                      const BillingAddress(),
+                      PaymentMethodCard(),
 
-                      const SizedBox(height: 30),
+                      SizedBox(height: 24),
 
-                      OrderReview(
-                        cartItems: cartItems,
-                      ),
+                      TermsCheckbox(),
 
-                      const SizedBox(height: 30),
+                      SizedBox(height: 30),
 
-                      const CheckoutSummary(),
-
+                      PlaceOrderButton(),
                     ],
-                  );
-                }
+                  ),
+                ),
 
-                /// Desktop Layout
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                const SizedBox(width: 35),
 
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        children: [
-
-                          const ShippingForm(),
-
-                          const SizedBox(height: 30),
-
-                          const PaymentSection(),
-
-                          const SizedBox(height: 30),
-
-                          const BillingAddress(),
-
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(width: 32),
-
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        children: [
-
-                          OrderReview(
-                            cartItems: cartItems,
-                          ),
-
-                          const SizedBox(height: 30),
-
-                          const CheckoutSummary(),
-
-                        ],
-                      ),
-                    ),
-
-                  ],
-                );
-              },
+                const Expanded(
+                  flex: 3,
+                  child: CheckoutOrderSummary(),
+                ),
+              ],
             ),
           ),
-
-        ],
+        ),
       ),
     );
   }
