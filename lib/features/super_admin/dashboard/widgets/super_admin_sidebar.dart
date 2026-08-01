@@ -53,7 +53,7 @@ class SuperAdminSidebar extends StatelessWidget {
           _tile(
             context,
             Icons.people,
-            "Customers",
+            "Customers management",
             AppRouter.customerManagement,
           ),
 
@@ -68,6 +68,13 @@ class SuperAdminSidebar extends StatelessWidget {
             context,
             Icons.analytics,
             "Analytics",
+            AppRouter.analytics,
+          ),
+
+           _tile(
+            context,
+            Icons.inventory_2,
+            "Inventory",
             AppRouter.analytics,
           ),
 

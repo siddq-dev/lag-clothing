@@ -42,13 +42,13 @@ class SuperAdminDashboardPage extends StatelessWidget {
                       ),
 
                       _DashboardCard(
-                        title: "Products",
+                        title: "Products ",
                         value: "0",
                         icon: Icons.shopping_bag,
                       ),
 
                       _DashboardCard(
-                        title: "Customers",
+                        title: "Customers ",
                         value: "0",
                         icon: Icons.people,
                       ),
