@@ -52,7 +52,7 @@ import '../features/admin/products/pages/edit_product_page.dart';
 import '../features/admin/products/pages/product_preview_page.dart';
 import '../features/admin/dashboard/admin_dashboard_page.dart';
 import '../features/auth/widgets/role_redirect.dart';
-import '../features/admin/products/pages/manage_products_page.dart';
+// import '../features/admin/products/pages/manage_products_page.dart';
 import '../features/super_admin/dashboard/pages/super_admin_dashboard_page.dart';
 import '../features/super_admin/admin_management/pages/admin_management_page.dart';
 import '../features/super_admin/admin_management/pages/add_admin_page.dart';
@@ -64,7 +64,8 @@ import '../features/super_admin/customer_management/pages/customer_details_page.
 import '../features/super_admin/customer_management/pages/customer_management_page.dart';
 import '../features/super_admin/analytics/pages/analytics_dashboard_page.dart';
 import '../features/inventory/pages/inventory_dashboard_page.dart';
-
+import 'package:lag_clothing/features/super_admin/product_management/pages/product_management_page.dart';
+// import '../features/super_admin/product_management/pages/add_product_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -567,20 +568,18 @@ GoRoute(
 
 GoRoute(
   path: AppRouter.manageProducts,
-  builder: (context, state) {
-    return PermissionGuard(
-      hasPermission: (p) => p.products,
-      builder: (_) => const ManageProductsPage(),
-    );
-  },
+  builder: (context, state) =>
+      const ProductManagementPage(),
 ),
 
 
 
 
 GoRoute(
-  path: addProduct,
-  builder: (context, state) => const AddProductPage(),
+  path: AppRouter.addProduct,
+  builder: (context, state) {
+    return const AddProductPage();
+  },
 ),
 
 GoRoute(

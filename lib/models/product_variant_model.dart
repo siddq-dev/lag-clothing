@@ -10,6 +10,8 @@ class ProductVariantModel {
 
   final bool available;
 
+  final double additionalPrice;
+
   const ProductVariantModel({
     required this.id,
     required this.size,
@@ -17,6 +19,7 @@ class ProductVariantModel {
     required this.sku,
     required this.stock,
     required this.available,
+    this.additionalPrice = 0.0,
   });
 
   Map<String, dynamic> toMap() {
@@ -27,6 +30,7 @@ class ProductVariantModel {
       'sku': sku,
       'stock': stock,
       'available': available,
+      'additionalPrice': additionalPrice,
     };
   }
 
@@ -40,6 +44,7 @@ class ProductVariantModel {
       sku: map['sku'] ?? '',
       stock: map['stock'] ?? 0,
       available: map['available'] ?? true,
+      additionalPrice: (map['additionalPrice'] as num?)?.toDouble() ?? 0.0,
     );
   }
 
@@ -50,6 +55,7 @@ class ProductVariantModel {
     String? sku,
     int? stock,
     bool? available,
+    double? additionalPrice,
   }) {
     return ProductVariantModel(
       id: id ?? this.id,
@@ -58,6 +64,7 @@ class ProductVariantModel {
       sku: sku ?? this.sku,
       stock: stock ?? this.stock,
       available: available ?? this.available,
+      additionalPrice: additionalPrice ?? this.additionalPrice,
     );
   }
 }

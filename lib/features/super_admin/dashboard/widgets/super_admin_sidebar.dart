@@ -53,7 +53,7 @@ class SuperAdminSidebar extends StatelessWidget {
           _tile(
             context,
             Icons.people,
-            "Customers management",
+            "Customers ",
             AppRouter.customerManagement,
           ),
 

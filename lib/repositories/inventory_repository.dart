@@ -74,39 +74,26 @@ class InventoryRepository {
   // Increase Stock
   //----------------------------------------------------------
 
-  static Future<void> increaseStock({
-    required String productId,
-    required int quantity,
-  }) async {
-    final doc =
-        await _products.doc(productId).get();
-
-    final current =
-        (doc.data()?["stock"] ?? 0) as int;
-
-    await updateStock(
-      productId: productId,
-      stock: current + quantity,
-    );
-  }
-
+ static Future<void> increaseStock({
+  required String productId,
+  required int quantity,
+}) async {
+  await _products.doc(productId).update({
+    "stock": FieldValue.increment(quantity),
+    "updatedAt": Timestamp.now(),
+  });
+}
   //----------------------------------------------------------
   // Decrease Stock
   //----------------------------------------------------------
 
   static Future<void> decreaseStock({
-    required String productId,
-    required int quantity,
-  }) async {
-    final doc =
-        await _products.doc(productId).get();
-
-    final current =
-        (doc.data()?["stock"] ?? 0) as int;
-
-    await updateStock(
-      productId: productId,
-      stock: current - quantity,
-    );
-  }
+  required String productId,
+  required int quantity,
+}) async {
+  await _products.doc(productId).update({
+    "stock": FieldValue.increment(-quantity),
+    "updatedAt": Timestamp.now(),
+  });
+}
 }

@@ -28,6 +28,25 @@ class ProductRepository {
   }
 
   // ==========================
+// Create Product
+// ==========================
+
+static Future<ProductModel> createProduct(
+  ProductModel product,
+) async {
+  final doc = _collection.doc();
+
+  final newProduct = product.copyWith(
+    id: doc.id,
+    createdAt: Timestamp.now(),
+    updatedAt: Timestamp.now(),
+  );
+
+  await doc.set(newProduct.toMap());
+
+  return newProduct;
+}
+  // ==========================
   // Stream Products
   // ==========================
 
