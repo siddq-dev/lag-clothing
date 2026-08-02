@@ -578,7 +578,12 @@ GoRoute(
 GoRoute(
   path: AppRouter.addProduct,
   builder: (context, state) {
-    return const AddProductPage();
+    final productId =
+        state.uri.queryParameters["id"];
+
+    return AddProductPage(
+      productId: productId,
+    );
   },
 ),
 

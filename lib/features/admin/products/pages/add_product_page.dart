@@ -15,7 +15,7 @@ import '../widgets/product_seo_section.dart';
 
 
 class AddProductPage extends StatefulWidget {
-  const AddProductPage({super.key});
+  const AddProductPage({super.key, String? productId});
 
   @override
   State<AddProductPage> createState() =>
