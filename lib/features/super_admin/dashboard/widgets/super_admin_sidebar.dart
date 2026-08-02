@@ -75,7 +75,7 @@ class SuperAdminSidebar extends StatelessWidget {
             context,
             Icons.inventory_2,
             "Inventory",
-            AppRouter.analytics,
+            AppRouter.inventory,
           ),
 
           _tile(

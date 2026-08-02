@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../services/stock_update_service.dart';
 
 import '../models/order_model.dart';
 
@@ -19,26 +20,99 @@ class OrderRepository {
       get _collection =>
           _firestore.collection('orders');
 
-  // ==========================================
-  // Create Order
-  // ==========================================
+// ==========================================
+// Create Order
+// ==========================================
 
-  static Future<void> createOrder(
-    OrderModel order,
-  ) async {
-    final doc = _collection.doc();
+static Future<void> createOrder(
+  OrderModel order,
+) async {
+  final orderDoc = _collection.doc();
 
-    await doc.set(
-      order
-          .copyWith(
-            id: doc.id,
-            userId: _uid,
-            createdAt: Timestamp.now(),
-            updatedAt: Timestamp.now(),
-          )
-          .toMap(),
+  final newOrder = order.copyWith(
+    id: orderDoc.id,
+    userId: _uid,
+    createdAt: Timestamp.now(),
+    updatedAt: Timestamp.now(),
+  );
+
+  // Store stock information for logging
+  final List<Map<String, dynamic>> stockLogs = [];
+
+  await _firestore.runTransaction((transaction) async {
+    // Create Order
+    transaction.set(
+      orderDoc,
+      newOrder.toMap(),
+    );
+
+    // Update Inventory
+    for (final item in newOrder.items) {
+      final productRef = _firestore
+          .collection("products")
+          .doc(item.productId);
+
+      final productSnapshot =
+          await transaction.get(productRef);
+
+      if (!productSnapshot.exists) {
+        throw Exception(
+          "Product not found: ${item.productName}",
+        );
+      }
+
+      final data = productSnapshot.data()!;
+
+      final int currentStock =
+          (data["stock"] ?? 0) as int;
+
+      if (currentStock < item.quantity) {
+        throw Exception(
+          "${item.productName} is out of stock.",
+        );
+      }
+
+      final int newStock =
+          currentStock - item.quantity;
+
+      final double price =
+          (data["price"] ?? 0).toDouble();
+
+      transaction.update(productRef, {
+        "stock": newStock,
+        "soldCount":
+            FieldValue.increment(item.quantity),
+        "revenue":
+            FieldValue.increment(
+          item.quantity * price,
+        ),
+        "updatedAt": Timestamp.now(),
+      });
+
+      // Save values for inventory logs
+      stockLogs.add({
+        "productId": item.productId,
+        "productName": item.productName,
+        "quantity": item.quantity,
+        "previousStock": currentStock,
+        "newStock": newStock,
+      });
+    }
+  });
+
+  // Write inventory logs AFTER transaction succeeds
+  for (final log in stockLogs) {
+    await StockUpdateService.logStockOut(
+      productId: log["productId"],
+      productName: log["productName"],
+      quantity: log["quantity"],
+      previousStock: log["previousStock"],
+      newStock: log["newStock"],
+      reference: newOrder.orderNumber,
+      performedBy: "system",
     );
   }
+}
 
   // ==========================================
   // Get User Orders

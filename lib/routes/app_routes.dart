@@ -63,6 +63,7 @@ import '../features/checkout/pages/order_success_page.dart';
 import '../features/super_admin/customer_management/pages/customer_details_page.dart';
 import '../features/super_admin/customer_management/pages/customer_management_page.dart';
 import '../features/super_admin/analytics/pages/analytics_dashboard_page.dart';
+import '../features/inventory/pages/inventory_dashboard_page.dart';
 
 
 class AppRouter {
@@ -211,6 +212,8 @@ static const String editAdmin = '/super-admin/edit-admin';
 static const String customer ='/admin/customer-management';
 
 static const String customerDetails ='/admin/customer-details';
+
+static const String inventory ='/admin/inventory';
 
 
 // ==========================
@@ -572,6 +575,9 @@ GoRoute(
   },
 ),
 
+
+
+
 GoRoute(
   path: addProduct,
   builder: (context, state) => const AddProductPage(),
@@ -652,6 +658,12 @@ GoRoute(
       customer: customer,
     );
   },
+),
+
+GoRoute(
+  path: AppRouter.inventory,
+  builder: (context, state) =>
+      const InventoryDashboardPage(),
 ),
 
 
