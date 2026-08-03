@@ -47,9 +47,7 @@ import '../models/address_model.dart';
 import '../models/payment_method_model.dart';
 import '../models/product_model.dart';
 import '../features/payment_methods/page/add_payment_method_page.dart';
-import '../features/admin/products/pages/add_product_page.dart';
-import '../features/admin/products/pages/edit_product_page.dart';
-import '../features/admin/products/pages/product_preview_page.dart';
+
 import '../features/admin/dashboard/admin_dashboard_page.dart';
 import '../features/auth/widgets/role_redirect.dart';
 // import '../features/admin/products/pages/manage_products_page.dart';
@@ -65,7 +63,7 @@ import '../features/super_admin/customer_management/pages/customer_management_pa
 import '../features/super_admin/analytics/pages/analytics_dashboard_page.dart';
 import '../features/inventory/pages/inventory_dashboard_page.dart';
 import 'package:lag_clothing/features/super_admin/product_management/pages/product_management_page.dart';
-// import '../features/super_admin/product_management/pages/add_product_page.dart';
+import '../features/super_admin/product_management/pages/add_product_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -573,44 +571,17 @@ GoRoute(
 ),
 
 
-
-
 GoRoute(
   path: AppRouter.addProduct,
-  builder: (context, state) {
-    final productId =
-        state.uri.queryParameters["id"];
-
-    return AddProductPage(
-      productId: productId,
-    );
-  },
-),
-
-GoRoute(
-  path: AppRouter.editProduct,
-  builder: (context, state) {
-    // state.extra may not have a static type here; use dynamic to avoid invalid cast
-    final product = state.extra as dynamic;
-
-    return EditProductPage(
-      product: product,
-    );
-  },
+  builder: (context, state) =>
+  const AddProductPage(),
 ),
 
 
 
-GoRoute(
-  path: AppRouter.productPreview,
-  builder: (context, state) {
-    final product = state.extra as ProductModel;
 
-    return ProductPreviewPage(
-      product: product,
-    );
-  },
-),
+
+
 
 // ==========================
 // super Admin

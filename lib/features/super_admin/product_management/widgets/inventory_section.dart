@@ -6,12 +6,12 @@ import '/providers/product_management_provider.dart';
 class InventorySection extends StatelessWidget {
   const InventorySection({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final provider =
-        context.watch<ProductManagementProvider>();
+@override
+Widget build(BuildContext context) {
+  final provider =
+      context.read<ProductManagementProvider>();
 
-    final stock = provider.form.stock;
+    final stock = provider.totalStock;
 
     Color statusColor;
     String statusText;
@@ -34,7 +34,6 @@ class InventorySection extends StatelessWidget {
           crossAxisAlignment:
               CrossAxisAlignment.start,
           children: [
-
             const Text(
               "Inventory",
               style: TextStyle(
@@ -45,18 +44,45 @@ class InventorySection extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-            TextFormField(
-              initialValue:
-                  stock == 0
-                      ? ""
-                      : stock.toString(),
-              keyboardType:
-                  TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: "Available Stock",
-                border: OutlineInputBorder(),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1B1B1B),
+                borderRadius:
+                    BorderRadius.circular(12),
               ),
-              onChanged: provider.updateStock,
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Total Available Stock",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  Text(
+                    "$stock",
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  const Text(
+                    "Calculated automatically from the product variants.",
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
             ),
 
             const SizedBox(height: 25),
@@ -70,7 +96,6 @@ class InventorySection extends StatelessWidget {
               ),
               child: Row(
                 children: [
-
                   Icon(
                     Icons.inventory_2,
                     color: statusColor,
@@ -87,21 +112,6 @@ class InventorySection extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-
-            const SizedBox(height: 20),
-
-            const Text(
-              "Inventory Preview",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
-            Text(
-              "Current Stock : $stock",
             ),
           ],
         ),

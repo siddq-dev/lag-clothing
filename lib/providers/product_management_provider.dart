@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lag_clothing/repositories/product_repository.dart';
 
 import '../../../../models/product_model.dart';
+import 'package:lag_clothing/models/product_color_variant_model.dart';
 
 import '../repositories/product_management_repository.dart';
 
@@ -16,6 +17,54 @@ import '../../../../models/product_seo_model.dart';
 import '../services/stock_update_service.dart';
 
 class ProductManagementProvider extends ChangeNotifier {
+
+bool _sameStockForAll = false;
+
+bool get sameStockForAll => _sameStockForAll;
+
+String _commonStock = "";
+
+String get commonStock => _commonStock;
+
+
+void toggleSameStock(bool value) {
+  _sameStockForAll = value;
+
+  if (!value) {
+    _commonStock = "";
+  }
+
+  notifyListeners();
+}
+
+void updateCommonStock(String value) {
+  _commonStock = value;
+
+  final stock = int.tryParse(value) ?? 0;
+
+  for (int i = 0; i < _colorVariants.length; i++) {
+    final group = _colorVariants[i];
+
+    final updatedVariants = group.variants
+        .map(
+          (variant) => variant.copyWith(
+            stock: stock,
+            available: stock > 0,
+          ),
+        )
+        .toList();
+
+    _colorVariants[i] = group.copyWith(
+      variants: updatedVariants,
+    );
+  }
+
+  _recalculateVariants();
+
+  notifyListeners();
+}
+
+
   //==========================================================
   // Product Form
   //==========================================================
@@ -23,6 +72,16 @@ class ProductManagementProvider extends ChangeNotifier {
   ProductFormModel _form = ProductFormModel();
 
   ProductFormModel get form => _form;
+
+
+   ///--------------------------------------------------
+// Color Variants
+//--------------------------------------------------
+
+final List<ProductColorVariantModel> _colorVariants = [];
+
+List<ProductColorVariantModel> get colorVariants =>
+    _colorVariants;
 
   //==========================================================
   // Basic Information
@@ -87,6 +146,13 @@ ProductModel? get editingProduct => _editingProduct;
     _form.stock = int.tryParse(value) ?? 0;
     notifyListeners();
   }
+
+  int get totalStock {
+  return _form.variants.fold(
+    0,
+    (sum, variant) => sum + variant.stock,
+  );
+}
 
   //==========================================================
   // Flags
@@ -162,9 +228,17 @@ ProductModel? get editingProduct => _editingProduct;
   // Reset Form
   //==========================================================
 
- void resetForm() {
+void resetForm() {
   _editingProduct = null;
+
   _form = ProductFormModel();
+
+  _colorVariants.clear();
+
+  _commonStock = "";
+
+  _sameStockForAll = false;
+
   notifyListeners();
 }
 
@@ -192,19 +266,7 @@ void removeImage(ProductImageModel image) {
   notifyListeners();
 }
 
-//======================================================
-// Variants
-//======================================================
 
-void addVariant(ProductVariantModel variant) {
-  _form.variants.add(variant);
-  notifyListeners();
-}
-
-void removeVariant(ProductVariantModel variant) {
-  _form.variants.remove(variant);
-  notifyListeners();
-}
 
 
 
@@ -212,67 +274,42 @@ void removeVariant(ProductVariantModel variant) {
 // Update Variant
 //======================================================
 
-void updateVariantSize(
-  ProductVariantModel variant,
-  String value,
-) {
-  final index = _form.variants.indexOf(variant);
 
-  if (index == -1) return;
 
-  _form.variants[index] = variant.copyWith(
-    size: value,
-  );
 
-  notifyListeners();
+
+
+
+
+
+//--------------------------------------------------
+  // product Sizes
+  //---------------------------------------------------
+
+//--------------------------------------------------
+// Available Sizes
+//--------------------------------------------------
+
+final List<String> availableSizes = [
+  "XS",
+  "S",
+  "M",
+  "L",
+  "XL",
+  "XXL",
+  "3XL",
+];
+
+
+void _recalculateVariants() {
+  _form.variants.clear();
+
+  for (final group in _colorVariants) {
+    _form.variants.addAll(group.variants);
+  }
+
+  _form.stock = totalStock;
 }
-
-void updateVariantColor(
-  ProductVariantModel variant,
-  String value,
-) {
-  final index = _form.variants.indexOf(variant);
-
-  if (index == -1) return;
-
-  _form.variants[index] = variant.copyWith(
-    color: value,
-  );
-
-  notifyListeners();
-}
-
-void updateVariantStock(
-  ProductVariantModel variant,
-  String value,
-) {
-  final index = _form.variants.indexOf(variant);
-
-  if (index == -1) return;
-
-  _form.variants[index] = variant.copyWith(
-    stock: int.tryParse(value) ?? 0,
-  );
-
-  notifyListeners();
-}
-
-void updateVariantPrice(
-  ProductVariantModel variant,
-  String value,
-) {
-  final index = _form.variants.indexOf(variant);
-
-  if (index == -1) return;
-
-  _form.variants[index] = variant.copyWith(
-    additionalPrice:
-        double.tryParse(value) ?? 0,
-  );
-
-  notifyListeners();
-}
-
   //--------------------------------------------------
   // Statistics
   //--------------------------------------------------
@@ -397,10 +434,62 @@ Future<void> loadProduct(String productId) async {
       product.images,
     );
 
-    // Variants
     _form.variants = List<ProductVariantModel>.from(
-      product.variants,
+  product.variants,
+);
+
+   _colorVariants.clear();
+
+for (final variant in product.variants) {
+  final existing = _colorVariants.indexWhere(
+    (c) => c.color == variant.color,
+  );
+
+  if (existing == -1) {
+    _colorVariants.add(
+      ProductColorVariantModel(
+        color: variant.color,
+        variants: [variant],
+      ),
     );
+  } else {
+    final current = _colorVariants[existing];
+
+    _colorVariants[existing] = current.copyWith(
+      variants: [
+        ...current.variants,
+        variant,
+      ],
+    );
+  }
+}
+
+// Build Color Groups
+_colorVariants.clear();
+
+for (final variant in product.variants) {
+  final index = _colorVariants.indexWhere(
+    (g) => g.color == variant.color,
+  );
+
+  if (index == -1) {
+    _colorVariants.add(
+      ProductColorVariantModel(
+        color: variant.color,
+        variants: [variant],
+      ),
+    );
+  } else {
+    final group = _colorVariants[index];
+
+    _colorVariants[index] = group.copyWith(
+      variants: [
+        ...group.variants,
+        variant,
+      ],
+    );
+  }
+}
 
     // SEO
     _form.seo = product.seo;
@@ -419,6 +508,162 @@ void clearEditing() {
   resetForm();
 }
 
+void addColorVariant() {
+  _colorVariants.add(
+    ProductColorVariantModel(
+      color: "",
+      variants: [],
+    ),
+  );
+
+  notifyListeners();
+}
+
+void removeColorVariant(
+  ProductColorVariantModel color,
+) {
+  _colorVariants.remove(color);
+
+  _recalculateVariants();
+
+  notifyListeners();
+}
+
+
+
+void updateColorName(
+  ProductColorVariantModel group,
+  String color,
+) {
+  final index = _colorVariants.indexOf(group);
+
+  if (index == -1) return;
+
+  _colorVariants[index] =
+      _colorVariants[index].copyWith(
+    color: color,
+  );
+
+  _recalculateVariants();
+
+  notifyListeners();
+}
+
+void toggleSizeForColor(
+  ProductColorVariantModel group,
+  String size,
+) {
+  final groupIndex = _colorVariants.indexOf(group);
+
+  debugPrint("Group Index = $groupIndex");
+  debugPrint("Color = ${group.color}");
+  debugPrint("Color Variants Count = ${_colorVariants.length}");
+
+  if (groupIndex == -1) return;
+
+  final variants = List<ProductVariantModel>.from(
+    group.variants,
+  );
+
+  final existingIndex = variants.indexWhere(
+    (v) => v.size == size,
+  );
+
+  if (existingIndex != -1) {
+    variants.removeAt(existingIndex);
+  } else {
+    variants.add(
+      ProductVariantModel(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        size: size,
+        color: group.color,
+        sku: "",
+        stock: 0,
+        available: true,
+        additionalPrice: 0,
+      ),
+    );
+  }
+
+  _colorVariants[groupIndex] = group.copyWith(
+    variants: variants,
+  );
+
+  _recalculateVariants();
+
+  debugPrint("Form Variants = ${_form.variants.length}");
+
+  notifyListeners();
+}
+
+
+void updateStockForColorSize(
+  ProductColorVariantModel group,
+  ProductVariantModel variant,
+  String value,
+) {
+  final stock = int.tryParse(value) ?? 0;
+
+  final groupIndex = _colorVariants.indexOf(group);
+
+  if (groupIndex == -1) return;
+
+  final variants = List<ProductVariantModel>.from(
+    group.variants,
+  );
+
+  final variantIndex = variants.indexOf(variant);
+
+  if (variantIndex == -1) return;
+
+  variants[variantIndex] =
+      variant.copyWith(
+    stock: stock,
+    available: stock > 0,
+  );
+
+  _colorVariants[groupIndex] =
+      group.copyWith(
+    variants: variants,
+  );
+
+  _recalculateVariants();
+
+  notifyListeners();
+}
+
+
+void updateSkuForColorSize(
+  ProductColorVariantModel group,
+  ProductVariantModel variant,
+  String sku,
+) {
+  final groupIndex = _colorVariants.indexOf(group);
+
+  if (groupIndex == -1) return;
+
+  final variants = List<ProductVariantModel>.from(
+    group.variants,
+  );
+
+  final variantIndex = variants.indexOf(variant);
+
+  if (variantIndex == -1) return;
+
+  variants[variantIndex] =
+      variant.copyWith(
+    sku: sku,
+  );
+
+  _colorVariants[groupIndex] =
+      group.copyWith(
+    variants: variants,
+  );
+
+  _recalculateVariants();
+
+  notifyListeners();
+}
   //--------------------------------------------------
   // Refresh
   //--------------------------------------------------
@@ -429,6 +674,15 @@ void clearEditing() {
 
 
 Future<void> publishProduct() async {
+  _recalculateVariants();
+  debugPrint("========= VARIANTS =========");
+
+for (final v in _form.variants) {
+  debugPrint(
+      "${v.color} ${v.size} ${v.stock} ${v.sku}");
+}
+
+debugPrint("Total Stock = $totalStock");
   try {
     _isLoading = true;
     _error = null;
@@ -450,6 +704,8 @@ Future<void> publishProduct() async {
     if (_form.price <= 0) {
       throw Exception("Price must be greater than zero.");
     }
+_recalculateVariants();
+_form.stock = totalStock;
 
     final product = ProductModel(
       id: "",
@@ -460,7 +716,7 @@ Future<void> publishProduct() async {
       subCategory: _form.subCategory,
       price: _form.price,
       salePrice: _form.salePrice,
-      stock: _form.stock,
+      stock: totalStock,
       rating: 0,
       reviewCount: 0,
       featured: _form.featured,
@@ -485,7 +741,7 @@ if (isEditing) {
     subCategory: _form.subCategory,
     price: _form.price,
     salePrice: _form.salePrice,
-    stock: _form.stock,
+    stock: totalStock,
     featured: _form.featured,
     bestSeller: _form.bestSeller,
     newArrival: _form.newArrival,

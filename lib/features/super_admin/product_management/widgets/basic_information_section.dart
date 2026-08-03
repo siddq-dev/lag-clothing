@@ -70,10 +70,10 @@ class _BasicInformationSectionState
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final provider =
-        context.watch<ProductManagementProvider>();
+ @override
+Widget build(BuildContext context) {
+  final provider =
+      context.read<ProductManagementProvider>();
 
     return Card(
       child: Padding(
@@ -159,35 +159,46 @@ class _BasicInformationSectionState
             ),
 
             const SizedBox(height: 15),
+            
+Consumer<ProductManagementProvider>(
+  builder: (_, provider, __) {
+    return SwitchListTile(
+      title: const Text("Featured"),
+      value: provider.form.featured,
+      onChanged: provider.updateFeatured,
+    );
+  },
+),
 
-            SwitchListTile(
-              title: const Text("Featured"),
-              value: provider.form.featured,
-              onChanged:
-                  provider.updateFeatured,
-            ),
+            Consumer<ProductManagementProvider>(
+  builder: (_, provider, __) {
+    return SwitchListTile(
+      title: const Text("Best Seller"),
+      value: provider.form.bestSeller,
+      onChanged: provider.updateBestSeller,
+    );
+  },
+),
 
-            SwitchListTile(
-              title: const Text("Best Seller"),
-              value: provider.form.bestSeller,
-              onChanged:
-                  provider.updateBestSeller,
-            ),
+Consumer<ProductManagementProvider>(
+  builder: (_, provider, __) {
+    return SwitchListTile(
+      title: const Text("New Arrival"),
+      value: provider.form.newArrival,
+      onChanged: provider.updateNewArrival,
+    );
+  },
+),
 
-            SwitchListTile(
-              title: const Text("New Arrival"),
-              value: provider.form.newArrival,
-              onChanged:
-                  provider.updateNewArrival,
-            ),
-
-            SwitchListTile(
-              title: const Text(
-                  "Product Active"),
-              value: provider.form.status,
-              onChanged:
-                  provider.updateStatus,
-            ),
+Consumer<ProductManagementProvider>(
+  builder: (_, provider, __) {
+    return SwitchListTile(
+      title: const Text("Product Active"),
+      value: provider.form.status,
+      onChanged: provider.updateStatus,
+    );
+  },
+),
           ],
         ),
       ),

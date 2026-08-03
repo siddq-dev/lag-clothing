@@ -55,9 +55,9 @@ class _SeoSectionState extends State<SeoSection> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final provider =
-        context.watch<ProductManagementProvider>();
+Widget build(BuildContext context) {
+  final provider =
+      context.read<ProductManagementProvider>();
 
     return Card(
       child: Padding(
@@ -116,7 +116,7 @@ class _SeoSectionState extends State<SeoSection> {
               width: double.infinity,
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: Colors.grey.shade100,
+                color: const Color(0xFF1B1B1B),
                 borderRadius:
                     BorderRadius.circular(12),
               ),

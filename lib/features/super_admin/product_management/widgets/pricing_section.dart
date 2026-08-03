@@ -64,9 +64,9 @@ class _PricingSectionState
   }
 
   @override
-  Widget build(BuildContext context) {
-    final provider =
-        context.watch<ProductManagementProvider>();
+Widget build(BuildContext context) {
+  final provider =
+      context.read<ProductManagementProvider>();
 
     final price = provider.form.price;
     final salePrice = provider.form.salePrice;
@@ -142,7 +142,7 @@ class _PricingSectionState
               padding:
                   const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.green.shade50,
+                color: const Color(0xFF1B1B1B),
                 borderRadius:
                     BorderRadius.circular(12),
               ),
