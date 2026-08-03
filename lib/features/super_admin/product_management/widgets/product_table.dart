@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '/routes/app_routes.dart';
 
 import '../widgets/product_table_row.dart';
 import '../../../../models/product_model.dart';
@@ -33,7 +35,11 @@ class ProductTable extends StatelessWidget {
                 (product) => ProductTableRow(
                   product: product,
                   onView: () {},
-                  onEdit: () {},
+                  onEdit: () {
+  context.push(
+    "${AppRouter.addProduct}?id=${product.id}",
+  );
+},
                   onDelete: () {},
                 ),
               )

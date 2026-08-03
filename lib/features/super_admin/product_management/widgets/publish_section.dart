@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../routes/app_routes.dart';
 
 import '/providers/product_management_provider.dart';
 
@@ -31,35 +33,33 @@ class PublishSection extends StatelessWidget {
 
             FilledButton.icon(
               onPressed: provider.isLoading
-                  ? null
-                  : () async {
-                      await provider.publishProduct();
+    ? null
+    : () async {
+        await provider.publishProduct();
 
-                      if (context.mounted &&
-                          provider.error == null) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              provider.isEditing
-                                  ? "Product updated successfully."
-                                  : "Product published successfully.",
-                            ),
-                          ),
-                        );
-                      }
+        if (!context.mounted) return;
 
-                      if (context.mounted &&
-                          provider.error != null) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(
-                          SnackBar(
-                            backgroundColor: Colors.red,
-                            content: Text(provider.error!),
-                          ),
-                        );
-                      }
-                    },
+        if (provider.error == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                provider.isEditing
+                    ? "Product updated successfully."
+                    : "Product published successfully.",
+              ),
+            ),
+          );
+
+          context.go(AppRouter.manageProducts);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red,
+              content: Text(provider.error!),
+            ),
+          );
+        }
+      },
               icon: provider.isLoading
                   ? const SizedBox(
                       width: 18,

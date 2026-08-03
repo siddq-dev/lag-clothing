@@ -675,20 +675,27 @@ void updateSkuForColorSize(
 
 Future<void> publishProduct() async {
   _recalculateVariants();
+  _form.stock = totalStock;
+
   debugPrint("========= VARIANTS =========");
 
-for (final v in _form.variants) {
-  debugPrint(
-      "${v.color} ${v.size} ${v.stock} ${v.sku}");
-}
+  for (final v in _form.variants) {
+    debugPrint(
+      "${v.color} ${v.size} | Stock: ${v.stock} | SKU: ${v.sku}",
+    );
+  }
 
-debugPrint("Total Stock = $totalStock");
+  debugPrint("Total Stock = $totalStock");
+
   try {
     _isLoading = true;
     _error = null;
     notifyListeners();
 
+    //--------------------------------------------------
     // Validation
+    //--------------------------------------------------
+
     if (_form.name.trim().isEmpty) {
       throw Exception("Product name is required.");
     }
@@ -697,15 +704,15 @@ debugPrint("Total Stock = $totalStock");
       throw Exception("Category is required.");
     }
 
-    // if (_form.images.isEmpty) {
-    //   throw Exception("Please upload at least one product image.");
-    // }
-
     if (_form.price <= 0) {
-      throw Exception("Price must be greater than zero.");
+      throw Exception(
+        "Price must be greater than zero.",
+      );
     }
-_recalculateVariants();
-_form.stock = totalStock;
+
+    //--------------------------------------------------
+    // Create Product Model
+    //--------------------------------------------------
 
     final product = ProductModel(
       id: "",
@@ -724,71 +731,75 @@ _form.stock = totalStock;
       newArrival: _form.newArrival,
       status: _form.status,
       images: _form.images,
-      variants: _form.variants,
+      variants: _form.variants.map((e) => e.copyWith()).toList(),
       seo: _form.seo,
       createdAt: null,
       updatedAt: null,
     );
 
- ProductModel savedProduct;
+    ProductModel savedProduct;
 
-if (isEditing) {
-  savedProduct = _editingProduct!.copyWith(
-    name: _form.name,
-    description: _form.description,
-    brand: _form.brand,
-    category: _form.category,
-    subCategory: _form.subCategory,
-    price: _form.price,
-    salePrice: _form.salePrice,
-    stock: totalStock,
-    featured: _form.featured,
-    bestSeller: _form.bestSeller,
-    newArrival: _form.newArrival,
-    status: _form.status,
-    images: _form.images,
-    variants: _form.variants,
-    seo: _form.seo,
-    updatedAt: Timestamp.now(),
-  );
+    //--------------------------------------------------
+    // UPDATE PRODUCT
+    //--------------------------------------------------
 
-  await ProductManagementRepository.updateProduct(
-    savedProduct,
-  );
-} else {
-  savedProduct =
-      await ProductManagementRepository.createProduct(
-    product,
-  );
+    if (isEditing) {
+      savedProduct = _editingProduct!.copyWith(
+        name: _form.name,
+        description: _form.description,
+        brand: _form.brand,
+        category: _form.category,
+        subCategory: _form.subCategory,
+        price: _form.price,
+        salePrice: _form.salePrice,
+        stock: totalStock,
+        featured: _form.featured,
+        bestSeller: _form.bestSeller,
+        newArrival: _form.newArrival,
+        status: _form.status,
+        images: _form.images,
+        variants: List<ProductVariantModel>.from(
+          _form.variants,
+        ),
+        seo: _form.seo,
+        updatedAt: Timestamp.now(),
+      );
 
-  await StockUpdateService.logStockIn(
-    productId: savedProduct.id,
-    productName: savedProduct.name,
-    quantity: savedProduct.stock,
-    previousStock: 0,
-    newStock: savedProduct.stock,
-    reference: "Product Created",
-    performedBy: "Super Admin",
-  );
-}
+      await ProductManagementRepository.updateProduct(
+        savedProduct,
+      );
+    }
 
-   await loadStatistics();
+    //--------------------------------------------------
+    // CREATE PRODUCT
+    //--------------------------------------------------
 
-listenProducts();
+    else {
+      savedProduct =
+          await ProductManagementRepository
+              .createProduct(product);
 
-resetForm();
+      await StockUpdateService.logStockIn(
+        productId: savedProduct.id,
+        productName: savedProduct.name,
+        quantity: savedProduct.stock,
+        previousStock: 0,
+        newStock: savedProduct.stock,
+        reference: "Product Created",
+        performedBy: "Super Admin",
+      );
+    }
+
+    //--------------------------------------------------
+    // Refresh Dashboard
+    //--------------------------------------------------
+
+    await loadStatistics();
+    listenProducts();
   } catch (e) {
     _error = e.toString();
+  } finally {
+    _isLoading = false;
+    notifyListeners();
   }
-
-  _isLoading = false;
-  notifyListeners();
-
-if (isEditing) {
-  // UPDATE PRODUCT
-} else {
-  // CREATE PRODUCT
-}
-
-}
-}
+}}
