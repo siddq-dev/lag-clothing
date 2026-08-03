@@ -173,7 +173,7 @@ final products =
 
                         onSelectChanged: (_) {
                           context.push(
-                            AppRouter.productPreview,
+                            AppRouter.productDetails,
                             extra: product,
                           );
                         },
@@ -243,7 +243,7 @@ final products =
                                   onPressed: () {
                                     context.push(
                                       AppRouter
-                                          .productPreview,
+                                          .productDetails,
                                       extra: product,
                                     );
                                   },

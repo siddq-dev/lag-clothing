@@ -4,10 +4,12 @@ class AdminLayout extends StatelessWidget {
   const AdminLayout({
     super.key,
     required this.currentRoute,
+    required this.title,
     required this.child,
   });
 
   final String currentRoute;
+  final String title;
   final Widget child;
 
   @override
@@ -77,12 +79,40 @@ class AdminLayout extends StatelessWidget {
             ),
           ),
 
-          //-----------------------------------
+         //-----------------------------------
           // Main Content
           //-----------------------------------
 
           Expanded(
-            child: child,
+            child: Column(
+              children: [
+                Container(
+                  height: 70,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                  ),
+                  alignment: Alignment.centerLeft,
+                  decoration: const BoxDecoration(
+                    color: Color(0xff181818),
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Color(0xff2A2A2A),
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
+                Expanded(child: child),
+              ],
+            ),
           ),
         ],
       ),

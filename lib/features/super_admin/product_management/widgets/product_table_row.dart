@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../models/product_model.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../routes/app_routes.dart';
 
 class ProductTableRow extends DataRow {
   ProductTableRow({
@@ -80,10 +82,10 @@ class ProductTableRow extends DataRow {
             DataCell(
               Row(
                 children: [
-                  IconButton(
-                    onPressed: onView,
-                    icon: const Icon(Icons.visibility),
-                  ),
+           IconButton(
+  icon: const Icon(Icons.visibility),
+  onPressed: onView,
+),
 
                   IconButton(
                     onPressed: onEdit,

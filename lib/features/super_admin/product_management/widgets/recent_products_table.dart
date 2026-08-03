@@ -52,13 +52,13 @@ class RecentProductsTable extends StatelessWidget {
           ],
           rows: products.map((product) {
             return ProductTableRow(
-              product: product,
-
-              onView: () {
-                context.push(
-                  "${AppRouter.manageProducts}/${product.id}",
-                );
-              },
+  product: product,
+  onView: () {
+    context.go(
+      "/admin/product/${product.id}",
+    );
+  },
+             
 
               onEdit: () {
                 context.push(

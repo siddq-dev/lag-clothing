@@ -64,6 +64,7 @@ import '../features/super_admin/analytics/pages/analytics_dashboard_page.dart';
 import '../features/inventory/pages/inventory_dashboard_page.dart';
 import 'package:lag_clothing/features/super_admin/product_management/pages/product_management_page.dart';
 import '../features/super_admin/product_management/pages/add_product_page.dart';
+import '../features/super_admin/product_management/pages/product_details_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -151,7 +152,7 @@ static const String sizeGuide = '/size-guide';
 static const String returns = '/returns';
 static const String addProduct = '/addproduct';
 static const String editProduct = '/editProduct';
-static const String productPreview = '/productPreview';
+static const String productDetails = '/product-details-page';
 
 // ==========================
 // Legal
@@ -664,6 +665,17 @@ GoRoute(
       child: Text("Website Settings"),
     ),
   ),
+),
+
+GoRoute(
+  path: '/admin/product/:id',
+  builder: (context, state) {
+    final id = state.pathParameters['id']!;
+
+    return ProductDetailsPage(
+      productId: id,
+    );
+  },
 ),
 
 

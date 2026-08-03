@@ -44,6 +44,7 @@ class _CustomerDetailsPageState
         context.watch<CustomerManagementProvider>();
 
     return AdminLayout(
+      title: 'Customer Details',
       currentRoute: AppRouter.customerManagement,
       child: provider.isLoading
           ? const Center(

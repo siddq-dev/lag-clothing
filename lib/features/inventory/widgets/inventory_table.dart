@@ -139,7 +139,7 @@ class InventoryTable extends StatelessWidget {
                     ),
                     onPressed: () {
                       context.push(
-                        "/admin/inventory/details",
+                         "/admin/product/${product.id}",
                         extra: product,
                       );
                     },

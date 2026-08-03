@@ -45,6 +45,7 @@ class _ProductManagementPageState
         context.watch<ProductManagementProvider>();
 
     return AdminLayout(
+      title: 'Product Management',
       currentRoute: AppRouter.manageProducts,
       child: provider.isLoading
           ? const Center(

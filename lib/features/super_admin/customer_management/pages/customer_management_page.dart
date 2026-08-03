@@ -42,6 +42,7 @@ class _CustomerManagementPageState
     );
 
     return AdminLayout(
+      title: 'Customer Management',
       currentRoute: AppRouter.customerManagement,
       child: Padding(
         padding: const EdgeInsets.all(30),
