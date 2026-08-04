@@ -90,6 +90,7 @@ class ProductTableRow extends DataRow {
                   IconButton(
                     onPressed: onEdit,
                     icon: const Icon(Icons.edit),
+                    
                   ),
 
                   IconButton(

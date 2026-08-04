@@ -60,11 +60,11 @@ class RecentProductsTable extends StatelessWidget {
   },
              
 
-              onEdit: () {
-                context.push(
-                  "${AppRouter.addProduct}?id=${product.id}",
-                );
-              },
+          onEdit: () {
+  context.push(
+    "/editproduct/${product.id}",
+  );
+},
 
               onDelete: () async {
                 final confirmed = await showDialog<bool>(

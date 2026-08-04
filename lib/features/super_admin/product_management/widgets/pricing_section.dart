@@ -65,120 +65,122 @@ class _PricingSectionState
 
   @override
 Widget build(BuildContext context) {
-  final provider =
-      context.read<ProductManagementProvider>();
+  final provider = context.watch<ProductManagementProvider>();
 
-    final price = provider.form.price;
-    final salePrice = provider.form.salePrice;
+  if (_priceController.text !=
+      (provider.form.price == 0
+          ? ""
+          : provider.form.price.toString())) {
+    _priceController.text =
+        provider.form.price == 0
+            ? ""
+            : provider.form.price.toString();
+  }
 
-    double discount = 0;
+  if (_salePriceController.text !=
+      (provider.form.salePrice == 0
+          ? ""
+          : provider.form.salePrice.toString())) {
+    _salePriceController.text =
+        provider.form.salePrice == 0
+            ? ""
+            : provider.form.salePrice.toString();
+  }
 
-    if (price > 0 && salePrice > 0) {
-      discount =
-          ((price - salePrice) / price) * 100;
-    }
+  final price = provider.form.price;
+  final salePrice = provider.form.salePrice;
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Pricing",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+  double discount = 0;
+
+  if (price > 0 && salePrice > 0) {
+    discount = ((price - salePrice) / price) * 100;
+  }
+
+  return Card(
+    child: Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Pricing",
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
             ),
+          ),
 
-            const SizedBox(height: 25),
+          const SizedBox(height: 25),
 
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _priceController,
-                    keyboardType:
-                        TextInputType.number,
-                    decoration:
-                        const InputDecoration(
-                      labelText: "Price",
-                      prefixText: "₹ ",
-                      border:
-                          OutlineInputBorder(),
-                    ),
-                    onChanged:
-                        provider.updatePrice,
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: _priceController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: "Price",
+                    prefixText: "₹ ",
+                    border: OutlineInputBorder(),
                   ),
+                  onChanged: provider.updatePrice,
                 ),
+              ),
 
-                const SizedBox(width: 20),
+              const SizedBox(width: 20),
 
-                Expanded(
-                  child: TextFormField(
-                    controller:
-                        _salePriceController,
-                    keyboardType:
-                        TextInputType.number,
-                    decoration:
-                        const InputDecoration(
-                      labelText: "Sale Price",
-                      prefixText: "₹ ",
-                      border:
-                          OutlineInputBorder(),
-                    ),
-                    onChanged:
-                        provider.updateSalePrice,
+              Expanded(
+                child: TextFormField(
+                  controller: _salePriceController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: "Sale Price",
+                    prefixText: "₹ ",
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: provider.updateSalePrice,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 25),
+
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1B1B1B),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.local_offer,
+                  color: Colors.green,
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  "Discount : ${discount.toStringAsFixed(1)} %",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
+          ),
 
-            const SizedBox(height: 25),
+          const SizedBox(height: 20),
 
-            Container(
-              padding:
-                  const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFF1B1B1B),
-                borderRadius:
-                    BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.local_offer,
-                    color: Colors.green,
-                  ),
-
-                  const SizedBox(width: 12),
-
-                  Text(
-                    "Discount : ${discount.toStringAsFixed(1)} %",
-                    style: const TextStyle(
-                      fontWeight:
-                          FontWeight.bold,
-                    ),
-                  ),
-                ],
+          if (salePrice > price && price != 0)
+            const Text(
+              "Sale price cannot be greater than Price.",
+              style: TextStyle(
+                color: Colors.red,
               ),
             ),
-
-            const SizedBox(height: 20),
-
-            if (salePrice > price &&
-                price != 0)
-              const Text(
-                "Sale price cannot be greater than Price.",
-                style: TextStyle(
-                  color: Colors.red,
-                ),
-              ),
-          ],
-        ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

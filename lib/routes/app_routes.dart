@@ -151,8 +151,9 @@ static const String reviews = '/reviews';
 static const String sizeGuide = '/size-guide';
 static const String returns = '/returns';
 static const String addProduct = '/addproduct';
-static const String editProduct = '/editProduct';
-static const String productDetails = '/product-details-page';
+static const String editProduct = '/editproduct';
+static const String productDetails = '/admin/product';
+
 
 // ==========================
 // Legal
@@ -571,20 +572,33 @@ GoRoute(
       const ProductManagementPage(),
 ),
 
-
 GoRoute(
   path: AppRouter.addProduct,
+  builder: (context, state) =>
+      const AddProductPage(),
+),
+
+GoRoute(
+  path: '${AppRouter.editProduct}/:id',
   builder: (context, state) {
-    final productId = state.uri.queryParameters['id'];
+    final id = state.pathParameters['id']!;
 
     return AddProductPage(
-      productId: productId,
+      productId: id,
     );
   },
 ),
 
+GoRoute(
+  path: '${AppRouter.productDetails}/:id',
+  builder: (context, state) {
+    final id = state.pathParameters['id']!;
 
-
+    return ProductDetailsPage(
+      productId: id,
+    );
+  },
+),
 
 
 
@@ -648,14 +662,7 @@ GoRoute(
 ),
 
 
-GoRoute(
-  path: AppRouter.customerManagement,
-  builder: (context, state) => const Scaffold(
-    body: Center(
-      child: Text("Customer Management"),
-    ),
-  ),
-),
+
 
 GoRoute(
   path: AppRouter.analytics,
@@ -672,16 +679,7 @@ GoRoute(
   ),
 ),
 
-GoRoute(
-  path: '/admin/product/:id',
-  builder: (context, state) {
-    final id = state.pathParameters['id']!;
 
-    return ProductDetailsPage(
-      productId: id,
-    );
-  },
-),
 
 
 

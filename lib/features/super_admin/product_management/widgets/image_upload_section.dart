@@ -50,165 +50,145 @@ Future<void> _pickImage(
 }
 
   @override
-  Widget build(BuildContext context) {
-    final provider =
-        context.watch<ProductManagementProvider>();
+Widget build(BuildContext context) {
+  final provider = context.watch<ProductManagementProvider>();
 
-    return Card(
+  if (provider.isLoading) {
+    return const Card(
       child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
-          children: [
-
-            const Text(
-              "Product Images",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight:
-                    FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 25),
-
-            ElevatedButton.icon(
-              onPressed: () =>
-                  _pickImage(context),
-              icon:
-                  const Icon(Icons.image),
-              label:
-                  const Text("Add Image"),
-            ),
-
-            const SizedBox(height: 25),
-
-            if (provider.form.images.isEmpty)
-              const Text(
-                "No images selected.",
-              ),
-
-            if (provider.form.images.isNotEmpty)
-              GridView.builder(
-                shrinkWrap: true,
-                physics:
-                    const NeverScrollableScrollPhysics(),
-                itemCount:
-                    provider.form.images.length,
-                gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                ),
-                itemBuilder:
-                    (context, index) {
-                  final image =
-                      provider
-                          .form.images[index];
-
-                  return Stack(
-                    children: [
-
-                      Positioned.fill(
-                        child: ClipRRect(
-                          borderRadius:
-                              BorderRadius.circular(
-                            10,
-                          ),
-                          child: Image.network(
-  image.imageUrl,
-  fit: BoxFit.cover,
-  loadingBuilder: (context, child, loadingProgress) {
-    if (loadingProgress == null) {
-      return child;
-    }
-
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  },
-  errorBuilder: (
-    context,
-    error,
-    stackTrace,
-  ) {
-    return Container(
-      color: Colors.grey.shade200,
-      child: const Icon(
-        Icons.broken_image,
-        size: 40,
-      ),
-    );
-  },
-)
-                        ),
-                      ),
-
-                      Positioned(
-                        top: 5,
-                        right: 5,
-                        child: InkWell(
-                          onTap: () {
-                            provider
-                                .removeImage(
-                              image,
-                            );
-                          },
-                          child:
-                              const CircleAvatar(
-                            radius: 12,
-                            backgroundColor:
-                                Colors.red,
-                            child: Icon(
-                              Icons.close,
-                              size: 15,
-                              color:
-                                  Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      if (image.isPrimary)
-                        Positioned(
-                          left: 5,
-                          bottom: 5,
-                          child: Container(
-                            padding:
-                                const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration:
-                                BoxDecoration(
-                              color:
-                                  Colors.green,
-                              borderRadius:
-                                  BorderRadius.circular(
-                                6,
-                              ),
-                            ),
-                            child:
-                                const Text(
-                              "Primary",
-                              style:
-                                  TextStyle(
-                                color:
-                                    Colors.white,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  );
-                },
-              ),
-          ],
+        padding: EdgeInsets.all(30),
+        child: Center(
+          child: CircularProgressIndicator(),
         ),
       ),
     );
   }
+
+  final images = provider.form.images;
+
+  return Card(
+    child: Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Product Images",
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          const SizedBox(height: 25),
+
+          ElevatedButton.icon(
+            onPressed: () => _pickImage(context),
+            icon: const Icon(Icons.image),
+            label: const Text("Add Image"),
+          ),
+
+          const SizedBox(height: 25),
+
+          if (images.isEmpty)
+            const Center(
+              child: Text("No images selected."),
+            ),
+
+          if (images.isNotEmpty)
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: images.length,
+              gridDelegate:
+                  const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+              ),
+              itemBuilder: (context, index) {
+                final image = images[index];
+
+                return Stack(
+                  children: [
+                    Positioned.fill(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          image.imageUrl,
+                          fit: BoxFit.cover,
+                          loadingBuilder:
+                              (context, child, progress) {
+                            if (progress == null) return child;
+
+                            return const Center(
+                              child:
+                                  CircularProgressIndicator(),
+                            );
+                          },
+                          errorBuilder:
+                              (_, __, ___) =>
+                                  Container(
+                            color: Colors.grey.shade300,
+                            child: const Icon(
+                              Icons.broken_image,
+                              size: 40,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Positioned(
+                      top: 5,
+                      right: 5,
+                      child: InkWell(
+                        onTap: () {
+                          provider.removeImage(image);
+                        },
+                        child: const CircleAvatar(
+                          radius: 12,
+                          backgroundColor: Colors.red,
+                          child: Icon(
+                            Icons.close,
+                            size: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    if (image.isPrimary)
+                      Positioned(
+                        left: 5,
+                        bottom: 5,
+                        child: Container(
+                          padding:
+                              const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius:
+                                BorderRadius.circular(6),
+                          ),
+                          child: const Text(
+                            "Primary",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ),
+        ],
+      ),
+    ),
+  );
+}
 }

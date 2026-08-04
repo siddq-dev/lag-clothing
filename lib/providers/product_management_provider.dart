@@ -411,6 +411,21 @@ Future<void> loadProduct(String productId) async {
 
     // Basic Information
     _form.name = product.name;
+    debugPrint("======== LOADED PRODUCT ========");
+debugPrint(_form.name);
+debugPrint(_form.description);
+debugPrint(_form.brand);
+debugPrint(_form.category);
+debugPrint(_form.subCategory);
+debugPrint(_form.price.toString());
+debugPrint(_form.salePrice.toString());
+debugPrint(_form.stock.toString());
+debugPrint(_form.featured.toString());
+debugPrint(_form.bestSeller.toString());
+debugPrint(_form.newArrival.toString());
+debugPrint(_form.status.toString());
+debugPrint(_form.images.length.toString());
+debugPrint(_form.variants.length.toString());
     _form.description = product.description;
     _form.brand = product.brand;
     _form.category = product.category;
@@ -438,31 +453,7 @@ Future<void> loadProduct(String productId) async {
   product.variants,
 );
 
-   _colorVariants.clear();
 
-for (final variant in product.variants) {
-  final existing = _colorVariants.indexWhere(
-    (c) => c.color == variant.color,
-  );
-
-  if (existing == -1) {
-    _colorVariants.add(
-      ProductColorVariantModel(
-        color: variant.color,
-        variants: [variant],
-      ),
-    );
-  } else {
-    final current = _colorVariants[existing];
-
-    _colorVariants[existing] = current.copyWith(
-      variants: [
-        ...current.variants,
-        variant,
-      ],
-    );
-  }
-}
 
 // Build Color Groups
 _colorVariants.clear();
@@ -501,6 +492,9 @@ for (final variant in product.variants) {
     _isLoading = false;
     notifyListeners();
   }
+
+
+
 }
 
 void clearEditing() {
