@@ -1,27 +1,21 @@
 import 'package:flutter/material.dart';
 
-class FilterSection extends StatefulWidget {
+class FilterSection extends StatelessWidget {
   const FilterSection({
     super.key,
     required this.title,
     required this.options,
+    required this.selectedValues,
+    required this.onChanged,
   });
 
   final String title;
+
   final List<String> options;
 
-  @override
-  State<FilterSection> createState() => _FilterSectionState();
-}
+  final Set<String> selectedValues;
 
-class _FilterSectionState extends State<FilterSection> {
-  late List<bool> selected;
-
-  @override
-  void initState() {
-    super.initState();
-    selected = List.generate(widget.options.length, (_) => false);
-  }
+  final Function(String value) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -29,27 +23,27 @@ class _FilterSectionState extends State<FilterSection> {
       tilePadding: EdgeInsets.zero,
       childrenPadding: EdgeInsets.zero,
       title: Text(
-        widget.title,
+        title,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 17,
         ),
       ),
-      children: List.generate(
-        widget.options.length,
-        (index) => CheckboxListTile(
+      children: options.map((option) {
+        return CheckboxListTile(
           dense: true,
-          contentPadding: const EdgeInsets.only(left: 8),
-          controlAffinity: ListTileControlAffinity.leading,
-          title: Text(widget.options[index]),
-          value: selected[index],
-          onChanged: (value) {
-            setState(() {
-              selected[index] = value!;
-            });
+          contentPadding: const EdgeInsets.only(
+            left: 8,
+          ),
+          controlAffinity:
+              ListTileControlAffinity.leading,
+          title: Text(option),
+          value: selectedValues.contains(option),
+          onChanged: (_) {
+            onChanged(option);
           },
-        ),
-      ),
+        );
+      }).toList(),
     );
   }
 }

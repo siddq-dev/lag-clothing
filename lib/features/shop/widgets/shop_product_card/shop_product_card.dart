@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../models/feature_product_model.dart';
+import '../../../../models/product_model.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
@@ -19,8 +19,9 @@ class ShopProductCard extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(18),
       onTap: () {
-        // TODO: Navigate to Product Details Page
-        // context.go(AppRouter.product);
+        context.go(
+          "/product/${product.id}",
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -33,30 +34,45 @@ class ShopProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// Product Image + Wishlist
+            /// Image
             Expanded(
               flex: 6,
               child: Stack(
                 children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(18),
-                    ),
-                    child: Image.asset(
-                      product.image,
-                      width: double.infinity,
-                      height: double.infinity,
-                      fit: BoxFit.cover,
+                  Positioned.fill(
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(18),
+                      ),
+                      child: product.images.isNotEmpty
+                          ? Image.network(
+                              product.images.first.imageUrl,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) {
+                                return const Center(
+                                  child: Icon(
+                                    Icons.image,
+                                    size: 50,
+                                  ),
+                                );
+                              },
+                            )
+                          : const Center(
+                              child: Icon(
+                                Icons.image,
+                                size: 50,
+                              ),
+                            ),
                     ),
                   ),
 
-                  /// Wishlist Button
+                  /// Wishlist
                   Positioned(
                     top: 12,
                     right: 12,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.55),
+                        color: Colors.black.withOpacity(.55),
                         shape: BoxShape.circle,
                       ),
                       child: IconButton(
@@ -74,26 +90,27 @@ class ShopProductCard extends StatelessWidget {
               ),
             ),
 
-            /// Product Details
+            /// Details
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product.club,
-                    style: AppTextStyles.heading3,
+                    product.brand,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.heading3,
                   ),
 
                   const SizedBox(height: 4),
 
                   Text(
-                    product.title,
-                    style: AppTextStyles.bodyMedium,
-                    maxLines: 1,
+                    product.name,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.bodyMedium,
                   ),
 
                   const SizedBox(height: 8),
@@ -109,14 +126,16 @@ class ShopProductCard extends StatelessWidget {
                       const SizedBox(width: 4),
 
                       Text(
-                        product.rating.toString(),
+                        product.rating.toStringAsFixed(1),
                         style: AppTextStyles.bodyMedium,
                       ),
 
                       const Spacer(),
 
                       Text(
-                        "₹${product.price.toStringAsFixed(0)}",
+                        product.salePrice > 0
+                            ? "₹${product.salePrice.toStringAsFixed(0)}"
+                            : "₹${product.price.toStringAsFixed(0)}",
                         style: AppTextStyles.heading3.copyWith(
                           color: AppColors.primary,
                         ),
@@ -124,25 +143,41 @@ class ShopProductCard extends StatelessWidget {
                     ],
                   ),
 
+                  if (product.salePrice > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        "₹${product.price.toStringAsFixed(0)}",
+                        style: const TextStyle(
+                          decoration:
+                              TextDecoration.lineThrough,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+
                   const SizedBox(height: 18),
 
-                  /// Buttons
                   Row(
                     children: [
-                      /// Add to Cart
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
                             context.go(AppRouter.cart);
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
+                            backgroundColor:
+                                AppColors.primary,
+                            foregroundColor:
+                                Colors.white,
+                            padding:
+                                const EdgeInsets.symmetric(
                               vertical: 14,
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                            shape:
+                                RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(10),
                             ),
                           ),
                           child: const Text(
@@ -153,22 +188,27 @@ class ShopProductCard extends StatelessWidget {
 
                       const SizedBox(width: 10),
 
-                      /// Buy Now
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
-                            context.go(AppRouter.checkout);
+                            context.go(
+                                AppRouter.checkout);
                           },
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: AppColors.primary,
+                          style:
+                              OutlinedButton.styleFrom(
+                            foregroundColor:
+                                AppColors.primary,
                             side: BorderSide(
                               color: AppColors.primary,
                             ),
-                            padding: const EdgeInsets.symmetric(
+                            padding:
+                                const EdgeInsets.symmetric(
                               vertical: 14,
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                            shape:
+                                RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(10),
                             ),
                           ),
                           child: const Text(

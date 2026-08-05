@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../providers/shop_provider.dart';
 import '../../../../themes/app_colors.dart';
 
 class ShopSearch extends StatelessWidget {
@@ -7,14 +9,33 @@ class ShopSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.read<ShopProvider>();
+
     return Align(
       alignment: Alignment.centerRight,
       child: SizedBox(
         width: 420,
         child: TextField(
+          onChanged: provider.updateSearch,
           decoration: InputDecoration(
-            hintText: 'Search Jerseys...',
+            hintText: "Search Jerseys...",
             prefixIcon: const Icon(Icons.search),
+
+            suffixIcon: Consumer<ShopProvider>(
+              builder: (_, provider, __) {
+                if (provider.products.isEmpty) {
+                  return const Icon(Icons.search_off);
+                }
+
+                return IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    provider.updateSearch("");
+                    FocusScope.of(context).unfocus();
+                  },
+                );
+              },
+            ),
 
             filled: true,
             fillColor: AppColors.surface,

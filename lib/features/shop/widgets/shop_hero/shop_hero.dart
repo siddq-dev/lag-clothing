@@ -11,31 +11,37 @@ class ShopHero extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 320,
-      color: AppColors.background,
+      decoration: const BoxDecoration(
+        color: AppColors.background,
+      ),
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-
-            Text(
-              'SHOP JERSEYS',
-              style: AppTextStyles.heading1.copyWith(
-                color: AppColors.primary,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            const SizedBox(
-              width: 700,
-              child: Text(
-                'Explore premium football jerseys from clubs and national teams around the world.',
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "SHOP JERSEYS",
                 textAlign: TextAlign.center,
-                style: AppTextStyles.bodyLarge,
+                style: AppTextStyles.heading1.copyWith(
+                  color: AppColors.primary,
+                ),
               ),
-            ),
 
-          ],
+              const SizedBox(height: 20),
+
+              ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 700,
+                ),
+                child: const Text(
+                  "Explore premium football jerseys from clubs and national teams around the world.",
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.bodyLarge,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

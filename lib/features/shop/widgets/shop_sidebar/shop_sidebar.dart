@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../providers/shop_provider.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
+
 import 'filter_section.dart';
 
 class ShopSidebar extends StatelessWidget {
@@ -9,6 +12,8 @@ class ShopSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<ShopProvider>();
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -21,72 +26,71 @@ class ShopSidebar extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Text(
-            'FILTERS',
+            "FILTERS",
             style: AppTextStyles.heading3.copyWith(
               color: AppColors.primary,
             ),
           ),
 
           const SizedBox(height: 24),
-const FilterSection(
-  title: "Category",
-  options: [
-    "Club Jerseys",
-    "National Jerseys",
-    "Retro Jerseys",
-    "Training Kits",
-    "Goalkeeper Jerseys",
-  ],
-),
 
-Divider(),
+          FilterSection(
+            title: "Category",
+            options: provider.categories,
+            selectedValues: provider.selectedCategories,
+            onChanged: provider.toggleCategory,
+          ),
 
-FilterSection(
-  title: "Size",
-  options: [
-    "S",
-    "M",
-    "L",
-    "XL",
-    "XXL",
-  ],
-),
+          const Divider(),
 
-Divider(),
+          FilterSection(
+            title: "Size",
+            options: const [
+              "S",
+              "M",
+              "L",
+              "XL",
+              "XXL",
+            ],
+            selectedValues: provider.selectedSizes,
+            onChanged: provider.toggleSize,
+          ),
 
-FilterSection(
-  title: "Price",
-  options: [
-    "₹500 - ₹1000",
-    "₹1000 - ₹1500",
-    "₹1500 - ₹2000",
-    "₹2000+",
-  ],
-),
+          const Divider(),
 
-Divider(),
+          FilterSection(
+            title: "Price",
+            options: const [
+              "₹500 - ₹1000",
+              "₹1000 - ₹1500",
+              "₹1500 - ₹2000",
+              "₹2000+",
+            ],
+            selectedValues: provider.selectedPrices,
+            onChanged: provider.togglePrice,
+          ),
 
-FilterSection(
-  title: "Brand",
-  options: [
-    "LAG",
-    "Nike",
-    "Adidas",
-    "Puma",
-  ],
-),
+          const Divider(),
 
-Divider(),
+          FilterSection(
+            title: "Brand",
+            options: provider.brands,
+            selectedValues: provider.selectedBrands,
+            onChanged: provider.toggleBrand,
+          ),
 
-FilterSection(
-  title: "Availability",
-  options: [
-    "In Stock",
-    "Out of Stock",
-  ],
-),
+          const Divider(),
+
+          FilterSection(
+            title: "Availability",
+            options: const [
+              "In Stock",
+              "Out of Stock",
+            ],
+            selectedValues: provider.selectedAvailability,
+            onChanged: provider.toggleAvailability,
+          ),
         ],
       ),
     );

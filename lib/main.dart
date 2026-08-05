@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lag_clothing/providers/auth_provider.dart';
 import 'package:lag_clothing/providers/inventory_provider.dart';
+import 'package:lag_clothing/providers/shop_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -22,6 +23,7 @@ import 'providers/customer_management_provider.dart';
 import 'providers/analytics_provider.dart';
 import '/services/analytics_lifecycle_service.dart';
 import 'providers/product_management_provider.dart';
+import 'providers/shop_provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,6 +55,7 @@ void main() async{
         ChangeNotifierProvider(create: (_) => AnalyticsProvider(),),
         ChangeNotifierProvider(create: (_) => InventoryProvider(),),
         ChangeNotifierProvider(create: (_) => ProductManagementProvider(),),
+        ChangeNotifierProvider(create:  (_) => ShopProvider(),),
 
 
       ],

@@ -37,23 +37,7 @@ class _PricingSectionState
     );
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    final provider =
-        context.read<ProductManagementProvider>();
-
-    _priceController.text =
-        provider.form.price == 0
-            ? ""
-            : provider.form.price.toString();
-
-    _salePriceController.text =
-        provider.form.salePrice == 0
-            ? ""
-            : provider.form.salePrice.toString();
-  }
+ 
 
   @override
   void dispose() {
