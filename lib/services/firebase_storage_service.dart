@@ -1,42 +1,33 @@
-import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FirebaseStorageService {
   FirebaseStorageService._();
 
-  static final FirebaseStorage _storage =
-      FirebaseStorage.instance;
+  static final FirebaseStorage _storage = FirebaseStorage.instance;
 
   //==========================================================
   // Upload Product Image
   //==========================================================
 
-  static Future<String> uploadProductImage(
-    XFile image,
-  ) async {
+  static Future<String> uploadProductImage(XFile image) async {
     try {
-      final file = File(image.path);
+      final bytes = await image.readAsBytes();
 
-      final fileName =
-          "${DateTime.now().millisecondsSinceEpoch}_${image.name}";
+      final fileName = "${DateTime.now().millisecondsSinceEpoch}_${image.name}";
 
-      final ref = _storage
-          .ref()
-          .child("products")
-          .child(fileName);
+      final ref = _storage.ref().child("products").child(fileName);
 
-      final uploadTask = await ref.putFile(file);
+      final uploadTask = await ref.putData(
+        bytes,
+        SettableMetadata(contentType: image.mimeType),
+      );
 
-      final downloadUrl =
-          await uploadTask.ref.getDownloadURL();
+      final downloadUrl = await uploadTask.ref.getDownloadURL();
 
       return downloadUrl;
     } catch (e) {
-      throw Exception(
-        "Failed to upload product image: $e",
-      );
+      throw Exception("Failed to upload product image: $e");
     }
   }
 
@@ -44,14 +35,11 @@ class FirebaseStorageService {
   // Upload Multiple Images
   //==========================================================
 
-  static Future<List<String>> uploadProductImages(
-    List<XFile> images,
-  ) async {
+  static Future<List<String>> uploadProductImages(List<XFile> images) async {
     final List<String> urls = [];
 
     for (final image in images) {
-      final url =
-          await uploadProductImage(image);
+      final url = await uploadProductImage(image);
 
       urls.add(url);
     }
@@ -63,18 +51,13 @@ class FirebaseStorageService {
   // Delete Image
   //==========================================================
 
-  static Future<void> deleteImage(
-    String imageUrl,
-  ) async {
+  static Future<void> deleteImage(String imageUrl) async {
     try {
-      final ref =
-          _storage.refFromURL(imageUrl);
+      final ref = _storage.refFromURL(imageUrl);
 
       await ref.delete();
     } catch (e) {
-      throw Exception(
-        "Failed to delete image: $e",
-      );
+      throw Exception("Failed to delete image: $e");
     }
   }
 
@@ -89,13 +72,9 @@ class FirebaseStorageService {
     try {
       await deleteImage(oldImageUrl);
 
-      return await uploadProductImage(
-        newImage,
-      );
+      return await uploadProductImage(newImage);
     } catch (e) {
-      throw Exception(
-        "Failed to replace image: $e",
-      );
+      throw Exception("Failed to replace image: $e");
     }
   }
 }

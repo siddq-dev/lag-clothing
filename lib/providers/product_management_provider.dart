@@ -13,57 +13,48 @@ import '../../../../models/product_variant_model.dart';
 import '../models/product_form_model.dart';
 import '../../../../models/product_seo_model.dart';
 
-
 import '../services/stock_update_service.dart';
 
 class ProductManagementProvider extends ChangeNotifier {
+  bool _sameStockForAll = false;
 
-bool _sameStockForAll = false;
+  bool get sameStockForAll => _sameStockForAll;
 
-bool get sameStockForAll => _sameStockForAll;
+  String _commonStock = "";
 
-String _commonStock = "";
+  String get commonStock => _commonStock;
 
-String get commonStock => _commonStock;
+  void toggleSameStock(bool value) {
+    _sameStockForAll = value;
 
+    if (!value) {
+      _commonStock = "";
+    }
 
-void toggleSameStock(bool value) {
-  _sameStockForAll = value;
-
-  if (!value) {
-    _commonStock = "";
+    notifyListeners();
   }
 
-  notifyListeners();
-}
+  void updateCommonStock(String value) {
+    _commonStock = value;
 
-void updateCommonStock(String value) {
-  _commonStock = value;
+    final stock = int.tryParse(value) ?? 0;
 
-  final stock = int.tryParse(value) ?? 0;
+    for (int i = 0; i < _colorVariants.length; i++) {
+      final group = _colorVariants[i];
 
-  for (int i = 0; i < _colorVariants.length; i++) {
-    final group = _colorVariants[i];
+      final updatedVariants = group.variants
+          .map(
+            (variant) => variant.copyWith(stock: stock, available: stock > 0),
+          )
+          .toList();
 
-    final updatedVariants = group.variants
-        .map(
-          (variant) => variant.copyWith(
-            stock: stock,
-            available: stock > 0,
-          ),
-        )
-        .toList();
+      _colorVariants[i] = group.copyWith(variants: updatedVariants);
+    }
 
-    _colorVariants[i] = group.copyWith(
-      variants: updatedVariants,
-    );
+    _recalculateVariants();
+
+    notifyListeners();
   }
-
-  _recalculateVariants();
-
-  notifyListeners();
-}
-
 
   //==========================================================
   // Product Form
@@ -73,15 +64,13 @@ void updateCommonStock(String value) {
 
   ProductFormModel get form => _form;
 
+  ///--------------------------------------------------
+  // Color Variants
+  //--------------------------------------------------
 
-   ///--------------------------------------------------
-// Color Variants
-//--------------------------------------------------
+  final List<ProductColorVariantModel> _colorVariants = [];
 
-final List<ProductColorVariantModel> _colorVariants = [];
-
-List<ProductColorVariantModel> get colorVariants =>
-    _colorVariants;
+  List<ProductColorVariantModel> get colorVariants => _colorVariants;
 
   //==========================================================
   // Basic Information
@@ -113,16 +102,14 @@ List<ProductColorVariantModel> get colorVariants =>
   }
 
   //--------------------------------------------------
-// Editing
-//--------------------------------------------------
+  // Editing
+  //--------------------------------------------------
 
-ProductModel? _editingProduct;
+  ProductModel? _editingProduct;
 
-bool get isEditing => _editingProduct != null;
+  bool get isEditing => _editingProduct != null;
 
-ProductModel? get editingProduct => _editingProduct;
-
-
+  ProductModel? get editingProduct => _editingProduct;
 
   //==========================================================
   // Pricing
@@ -148,11 +135,8 @@ ProductModel? get editingProduct => _editingProduct;
   }
 
   int get totalStock {
-  return _form.variants.fold(
-    0,
-    (sum, variant) => sum + variant.stock,
-  );
-}
+    return _form.variants.fold(0, (sum, variant) => sum + variant.stock);
+  }
 
   //==========================================================
   // Flags
@@ -228,19 +212,19 @@ ProductModel? get editingProduct => _editingProduct;
   // Reset Form
   //==========================================================
 
-void resetForm() {
-  _editingProduct = null;
+  void resetForm() {
+    _editingProduct = null;
 
-  _form = ProductFormModel();
+    _form = ProductFormModel();
 
-  _colorVariants.clear();
+    _colorVariants.clear();
 
-  _commonStock = "";
+    _commonStock = "";
 
-  _sameStockForAll = false;
+    _sameStockForAll = false;
 
-  notifyListeners();
-}
+    notifyListeners();
+  }
 
   //--------------------------------------------------
   // Products
@@ -248,68 +232,45 @@ void resetForm() {
 
   List<ProductModel> _products = [];
 
-  List<ProductModel> get products =>
-      _products;
+  List<ProductModel> get products => _products;
 
+  //======================================================
+  // Images
+  //======================================================
 
-//======================================================
-// Images
-//======================================================
+  void addImage(ProductImageModel image) {
+    _form.images.add(image);
+    notifyListeners();
+  }
 
-void addImage(ProductImageModel image) {
-  _form.images.add(image);
-  notifyListeners();
-}
+  void removeImage(ProductImageModel image) {
+    _form.images.remove(image);
+    notifyListeners();
+  }
 
-void removeImage(ProductImageModel image) {
-  _form.images.remove(image);
-  notifyListeners();
-}
+  //======================================================
+  // Update Variant
+  //======================================================
 
-
-
-
-
-//======================================================
-// Update Variant
-//======================================================
-
-
-
-
-
-
-
-
-
-//--------------------------------------------------
+  //--------------------------------------------------
   // product Sizes
   //---------------------------------------------------
 
-//--------------------------------------------------
-// Available Sizes
-//--------------------------------------------------
+  //--------------------------------------------------
+  // Available Sizes
+  //--------------------------------------------------
 
-final List<String> availableSizes = [
-  "XS",
-  "S",
-  "M",
-  "L",
-  "XL",
-  "XXL",
-  "3XL",
-];
+  final List<String> availableSizes = ["XS", "S", "M", "L", "XL", "XXL", "3XL"];
 
+  void _recalculateVariants() {
+    _form.variants.clear();
 
-void _recalculateVariants() {
-  _form.variants.clear();
+    for (final group in _colorVariants) {
+      _form.variants.addAll(group.variants);
+    }
 
-  for (final group in _colorVariants) {
-    _form.variants.addAll(group.variants);
+    _form.stock = totalStock;
   }
-
-  _form.stock = totalStock;
-}
   //--------------------------------------------------
   // Statistics
   //--------------------------------------------------
@@ -343,9 +304,7 @@ void _recalculateVariants() {
 
     notifyListeners();
 
-    ProductManagementRepository
-        .streamRecentProducts()
-        .listen(
+    ProductManagementRepository.streamRecentProducts().listen(
       (products) {
         _products = products;
 
@@ -368,9 +327,7 @@ void _recalculateVariants() {
   //--------------------------------------------------
 
   Future<void> loadStatistics() async {
-    final stats =
-        await ProductManagementRepository
-            .getStatistics();
+    final stats = await ProductManagementRepository.getStatistics();
 
     totalProducts = stats["total"] ?? 0;
 
@@ -385,279 +342,218 @@ void _recalculateVariants() {
   // Delete Product
   //--------------------------------------------------
 
-  Future<void> deleteProduct(
-    String productId,
-  ) async {
-    await ProductManagementRepository
-        .deleteProduct(productId);
+  Future<void> deleteProduct(String productId) async {
+    await ProductManagementRepository.deleteProduct(productId);
   }
 
+  Future<void> loadProduct(String productId) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
 
+    try {
+      final product = await ProductRepository.getProduct(productId);
 
-Future<void> loadProduct(String productId) async {
-  _isLoading = true;
-  _error = null;
-  notifyListeners();
+      if (product == null) {
+        throw Exception("Product not found.");
+      }
 
-  try {
-    final product =
-        await ProductRepository.getProduct(productId);
+      _editingProduct = product;
 
-    if (product == null) {
-      throw Exception("Product not found.");
+      // Basic Information
+      _form.name = product.name;
+      debugPrint("======== LOADED PRODUCT ========");
+      debugPrint(_form.name);
+      debugPrint(_form.description);
+      debugPrint(_form.brand);
+      debugPrint(_form.category);
+      debugPrint(_form.subCategory);
+      debugPrint(_form.price.toString());
+      debugPrint(_form.salePrice.toString());
+      debugPrint(_form.stock.toString());
+      debugPrint(_form.featured.toString());
+      debugPrint(_form.bestSeller.toString());
+      debugPrint(_form.newArrival.toString());
+      debugPrint(_form.status.toString());
+      debugPrint(_form.images.length.toString());
+      debugPrint(_form.variants.length.toString());
+      _form.description = product.description;
+      _form.brand = product.brand;
+      _form.category = product.category;
+      _form.subCategory = product.subCategory;
+
+      // Pricing
+      _form.price = product.price;
+      _form.salePrice = product.salePrice;
+
+      // Inventory
+      _form.stock = product.stock;
+
+      // Flags
+      _form.featured = product.featured;
+      _form.bestSeller = product.bestSeller;
+      _form.newArrival = product.newArrival;
+      _form.status = product.status;
+
+      // Images
+      _form.images = List<ProductImageModel>.from(product.images);
+
+      _form.variants = List<ProductVariantModel>.from(product.variants);
+
+      // Build Color Groups
+      _colorVariants.clear();
+
+      for (final variant in product.variants) {
+        final index = _colorVariants.indexWhere(
+          (g) => g.color == variant.color,
+        );
+
+        if (index == -1) {
+          _colorVariants.add(
+            ProductColorVariantModel(color: variant.color, variants: [variant]),
+          );
+        } else {
+          final group = _colorVariants[index];
+
+          _colorVariants[index] = group.copyWith(
+            variants: [...group.variants, variant],
+          );
+        }
+      }
+
+      // SEO
+      _form.seo = product.seo;
+
+      notifyListeners();
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void clearEditing() {
+    _editingProduct = null;
+    resetForm();
+  }
+
+  void addColorVariant() {
+    _colorVariants.add(ProductColorVariantModel(color: "", variants: []));
+
+    notifyListeners();
+  }
+
+  void removeColorVariant(ProductColorVariantModel color) {
+    _colorVariants.remove(color);
+
+    _recalculateVariants();
+
+    notifyListeners();
+  }
+
+  void updateColorName(ProductColorVariantModel group, String color) {
+    final index = _colorVariants.indexOf(group);
+
+    if (index == -1) return;
+
+    _colorVariants[index] = _colorVariants[index].copyWith(color: color);
+
+    _recalculateVariants();
+
+    notifyListeners();
+  }
+
+  void toggleSizeForColor(ProductColorVariantModel group, String size) {
+    final groupIndex = _colorVariants.indexOf(group);
+
+    debugPrint("Group Index = $groupIndex");
+    debugPrint("Color = ${group.color}");
+    debugPrint("Color Variants Count = ${_colorVariants.length}");
+
+    if (groupIndex == -1) return;
+
+    final variants = List<ProductVariantModel>.from(group.variants);
+
+    final existingIndex = variants.indexWhere((v) => v.size == size);
+
+    if (existingIndex != -1) {
+      variants.removeAt(existingIndex);
+    } else {
+      variants.add(
+        ProductVariantModel(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          size: size,
+          color: group.color,
+          sku: "",
+          stock: 0,
+          available: true,
+          additionalPrice: 0,
+        ),
+      );
     }
 
-    _editingProduct = product;
+    _colorVariants[groupIndex] = group.copyWith(variants: variants);
 
-    // Basic Information
-    _form.name = product.name;
-    debugPrint("======== LOADED PRODUCT ========");
-debugPrint(_form.name);
-debugPrint(_form.description);
-debugPrint(_form.brand);
-debugPrint(_form.category);
-debugPrint(_form.subCategory);
-debugPrint(_form.price.toString());
-debugPrint(_form.salePrice.toString());
-debugPrint(_form.stock.toString());
-debugPrint(_form.featured.toString());
-debugPrint(_form.bestSeller.toString());
-debugPrint(_form.newArrival.toString());
-debugPrint(_form.status.toString());
-debugPrint(_form.images.length.toString());
-debugPrint(_form.variants.length.toString());
-    _form.description = product.description;
-    _form.brand = product.brand;
-    _form.category = product.category;
-    _form.subCategory = product.subCategory;
+    _recalculateVariants();
 
-    // Pricing
-    _form.price = product.price;
-    _form.salePrice = product.salePrice;
-
-    // Inventory
-    _form.stock = product.stock;
-
-    // Flags
-    _form.featured = product.featured;
-    _form.bestSeller = product.bestSeller;
-    _form.newArrival = product.newArrival;
-    _form.status = product.status;
-
-    // Images
-    _form.images = List<ProductImageModel>.from(
-      product.images,
-    );
-
-    _form.variants = List<ProductVariantModel>.from(
-  product.variants,
-);
-
-
-
-// Build Color Groups
-_colorVariants.clear();
-
-for (final variant in product.variants) {
-  final index = _colorVariants.indexWhere(
-    (g) => g.color == variant.color,
-  );
-
-  if (index == -1) {
-    _colorVariants.add(
-      ProductColorVariantModel(
-        color: variant.color,
-        variants: [variant],
-      ),
-    );
-  } else {
-    final group = _colorVariants[index];
-
-    _colorVariants[index] = group.copyWith(
-      variants: [
-        ...group.variants,
-        variant,
-      ],
-    );
-  }
-}
-
-    // SEO
-    _form.seo = product.seo;
+    debugPrint("Form Variants = ${_form.variants.length}");
 
     notifyListeners();
-  } catch (e) {
-    _error = e.toString();
-  } finally {
-    _isLoading = false;
+  }
+
+  void updateStockForColorSize(
+    ProductColorVariantModel group,
+    ProductVariantModel variant,
+    String value,
+  ) {
+    final stock = int.tryParse(value) ?? 0;
+
+    final groupIndex = _colorVariants.indexOf(group);
+
+    if (groupIndex == -1) return;
+
+    final variants = List<ProductVariantModel>.from(group.variants);
+
+    final variantIndex = variants.indexOf(variant);
+
+    if (variantIndex == -1) return;
+
+    variants[variantIndex] = variant.copyWith(
+      stock: stock,
+      available: stock > 0,
+    );
+
+    _colorVariants[groupIndex] = group.copyWith(variants: variants);
+
+    _recalculateVariants();
+
     notifyListeners();
   }
 
+  void updateSkuForColorSize(
+    ProductColorVariantModel group,
+    ProductVariantModel variant,
+    String sku,
+  ) {
+    final groupIndex = _colorVariants.indexOf(group);
 
+    if (groupIndex == -1) return;
 
-}
+    final variants = List<ProductVariantModel>.from(group.variants);
 
-void clearEditing() {
-  _editingProduct = null;
-  resetForm();
-}
+    final variantIndex = variants.indexOf(variant);
 
-void addColorVariant() {
-  _colorVariants.add(
-    ProductColorVariantModel(
-      color: "",
-      variants: [],
-    ),
-  );
+    if (variantIndex == -1) return;
 
-  notifyListeners();
-}
+    variants[variantIndex] = variant.copyWith(sku: sku);
 
-void removeColorVariant(
-  ProductColorVariantModel color,
-) {
-  _colorVariants.remove(color);
+    _colorVariants[groupIndex] = group.copyWith(variants: variants);
 
-  _recalculateVariants();
+    _recalculateVariants();
 
-  notifyListeners();
-}
-
-
-
-void updateColorName(
-  ProductColorVariantModel group,
-  String color,
-) {
-  final index = _colorVariants.indexOf(group);
-
-  if (index == -1) return;
-
-  _colorVariants[index] =
-      _colorVariants[index].copyWith(
-    color: color,
-  );
-
-  _recalculateVariants();
-
-  notifyListeners();
-}
-
-void toggleSizeForColor(
-  ProductColorVariantModel group,
-  String size,
-) {
-  final groupIndex = _colorVariants.indexOf(group);
-
-  debugPrint("Group Index = $groupIndex");
-  debugPrint("Color = ${group.color}");
-  debugPrint("Color Variants Count = ${_colorVariants.length}");
-
-  if (groupIndex == -1) return;
-
-  final variants = List<ProductVariantModel>.from(
-    group.variants,
-  );
-
-  final existingIndex = variants.indexWhere(
-    (v) => v.size == size,
-  );
-
-  if (existingIndex != -1) {
-    variants.removeAt(existingIndex);
-  } else {
-    variants.add(
-      ProductVariantModel(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        size: size,
-        color: group.color,
-        sku: "",
-        stock: 0,
-        available: true,
-        additionalPrice: 0,
-      ),
-    );
+    notifyListeners();
   }
-
-  _colorVariants[groupIndex] = group.copyWith(
-    variants: variants,
-  );
-
-  _recalculateVariants();
-
-  debugPrint("Form Variants = ${_form.variants.length}");
-
-  notifyListeners();
-}
-
-
-void updateStockForColorSize(
-  ProductColorVariantModel group,
-  ProductVariantModel variant,
-  String value,
-) {
-  final stock = int.tryParse(value) ?? 0;
-
-  final groupIndex = _colorVariants.indexOf(group);
-
-  if (groupIndex == -1) return;
-
-  final variants = List<ProductVariantModel>.from(
-    group.variants,
-  );
-
-  final variantIndex = variants.indexOf(variant);
-
-  if (variantIndex == -1) return;
-
-  variants[variantIndex] =
-      variant.copyWith(
-    stock: stock,
-    available: stock > 0,
-  );
-
-  _colorVariants[groupIndex] =
-      group.copyWith(
-    variants: variants,
-  );
-
-  _recalculateVariants();
-
-  notifyListeners();
-}
-
-
-void updateSkuForColorSize(
-  ProductColorVariantModel group,
-  ProductVariantModel variant,
-  String sku,
-) {
-  final groupIndex = _colorVariants.indexOf(group);
-
-  if (groupIndex == -1) return;
-
-  final variants = List<ProductVariantModel>.from(
-    group.variants,
-  );
-
-  final variantIndex = variants.indexOf(variant);
-
-  if (variantIndex == -1) return;
-
-  variants[variantIndex] =
-      variant.copyWith(
-    sku: sku,
-  );
-
-  _colorVariants[groupIndex] =
-      group.copyWith(
-    variants: variants,
-  );
-
-  _recalculateVariants();
-
-  notifyListeners();
-}
   //--------------------------------------------------
   // Refresh
   //--------------------------------------------------
@@ -666,79 +562,53 @@ void updateSkuForColorSize(
     await loadStatistics();
   }
 
+  Future<void> publishProduct() async {
+    _recalculateVariants();
+    _form.stock = totalStock;
 
-Future<void> publishProduct() async {
-  _recalculateVariants();
-  _form.stock = totalStock;
+    debugPrint("========= VARIANTS =========");
 
-  debugPrint("========= VARIANTS =========");
-
-  for (final v in _form.variants) {
-    debugPrint(
-      "${v.color} ${v.size} | Stock: ${v.stock} | SKU: ${v.sku}",
-    );
-  }
-
-  debugPrint("Total Stock = $totalStock");
-
-  try {
-    _isLoading = true;
-    _error = null;
-    notifyListeners();
-
-    //--------------------------------------------------
-    // Validation
-    //--------------------------------------------------
-
-    if (_form.name.trim().isEmpty) {
-      throw Exception("Product name is required.");
+    for (final v in _form.variants) {
+      debugPrint("${v.color} ${v.size} | Stock: ${v.stock} | SKU: ${v.sku}");
     }
 
-    if (_form.category.trim().isEmpty) {
-      throw Exception("Category is required.");
-    }
+    debugPrint("Total Stock = $totalStock");
 
-    if (_form.price <= 0) {
-      throw Exception(
-        "Price must be greater than zero.",
-      );
-    }
+    try {
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
 
-    //--------------------------------------------------
-    // Create Product Model
-    //--------------------------------------------------
+      //--------------------------------------------------
+      // Validation
+      //--------------------------------------------------
 
-    final product = ProductModel(
-      id: "",
-      name: _form.name,
-      description: _form.description,
-      brand: _form.brand,
-      category: _form.category,
-      subCategory: _form.subCategory,
-      price: _form.price,
-      salePrice: _form.salePrice,
-      stock: totalStock,
-      rating: 0,
-      reviewCount: 0,
-      featured: _form.featured,
-      bestSeller: _form.bestSeller,
-      newArrival: _form.newArrival,
-      status: _form.status,
-      images: _form.images,
-      variants: _form.variants.map((e) => e.copyWith()).toList(),
-      seo: _form.seo,
-      createdAt: null,
-      updatedAt: null,
-    );
+      if (_form.name.trim().isEmpty) {
+        throw Exception("Product name is required.");
+      }
 
-    ProductModel savedProduct;
+      if (_form.category.trim().isEmpty) {
+        throw Exception("Category is required.");
+      }
 
-    //--------------------------------------------------
-    // UPDATE PRODUCT
-    //--------------------------------------------------
+      if (_form.price <= 0) {
+        throw Exception("Price must be greater than zero.");
+      }
 
-    if (isEditing) {
-      savedProduct = _editingProduct!.copyWith(
+      if (_form.images.isEmpty) {
+        throw Exception("At least one product image is required.");
+      }
+
+      if (_form.images.length > 5) {
+        throw Exception("A maximum of 5 product images is allowed.");
+      }
+
+      //--------------------------------------------------
+      // Create Product Model
+      //--------------------------------------------------
+
+      final product = ProductModel(
+        id: "",
         name: _form.name,
         description: _form.description,
         brand: _form.brand,
@@ -747,53 +617,75 @@ Future<void> publishProduct() async {
         price: _form.price,
         salePrice: _form.salePrice,
         stock: totalStock,
+        rating: 0,
+        reviewCount: 0,
         featured: _form.featured,
         bestSeller: _form.bestSeller,
         newArrival: _form.newArrival,
         status: _form.status,
         images: _form.images,
-        variants: List<ProductVariantModel>.from(
-          _form.variants,
-        ),
+        variants: _form.variants.map((e) => e.copyWith()).toList(),
         seo: _form.seo,
-        updatedAt: Timestamp.now(),
+        createdAt: null,
+        updatedAt: null,
       );
 
-      await ProductManagementRepository.updateProduct(
-        savedProduct,
-      );
+      ProductModel savedProduct;
+
+      //--------------------------------------------------
+      // UPDATE PRODUCT
+      //--------------------------------------------------
+
+      if (isEditing) {
+        savedProduct = _editingProduct!.copyWith(
+          name: _form.name,
+          description: _form.description,
+          brand: _form.brand,
+          category: _form.category,
+          subCategory: _form.subCategory,
+          price: _form.price,
+          salePrice: _form.salePrice,
+          stock: totalStock,
+          featured: _form.featured,
+          bestSeller: _form.bestSeller,
+          newArrival: _form.newArrival,
+          status: _form.status,
+          images: _form.images,
+          variants: List<ProductVariantModel>.from(_form.variants),
+          seo: _form.seo,
+          updatedAt: Timestamp.now(),
+        );
+
+        await ProductManagementRepository.updateProduct(savedProduct);
+      }
+      //--------------------------------------------------
+      // CREATE PRODUCT
+      //--------------------------------------------------
+      else {
+        savedProduct = await ProductManagementRepository.createProduct(product);
+
+        await StockUpdateService.logStockIn(
+          productId: savedProduct.id,
+          productName: savedProduct.name,
+          quantity: savedProduct.stock,
+          previousStock: 0,
+          newStock: savedProduct.stock,
+          reference: "Product Created",
+          performedBy: "Super Admin",
+        );
+      }
+
+      //--------------------------------------------------
+      // Refresh Dashboard
+      //--------------------------------------------------
+
+      await loadStatistics();
+      listenProducts();
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-
-    //--------------------------------------------------
-    // CREATE PRODUCT
-    //--------------------------------------------------
-
-    else {
-      savedProduct =
-          await ProductManagementRepository
-              .createProduct(product);
-
-      await StockUpdateService.logStockIn(
-        productId: savedProduct.id,
-        productName: savedProduct.name,
-        quantity: savedProduct.stock,
-        previousStock: 0,
-        newStock: savedProduct.stock,
-        reference: "Product Created",
-        performedBy: "Super Admin",
-      );
-    }
-
-    //--------------------------------------------------
-    // Refresh Dashboard
-    //--------------------------------------------------
-
-    await loadStatistics();
-    listenProducts();
-  } catch (e) {
-    _error = e.toString();
-  } finally {
-    _isLoading = false;
-    notifyListeners();
   }
-}}
+}
