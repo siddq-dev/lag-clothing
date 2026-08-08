@@ -22,7 +22,7 @@ class ShopSearch extends StatelessWidget {
             prefixIcon: const Icon(Icons.search),
 
             suffixIcon: Consumer<ShopProvider>(
-              builder: (_, provider, __) {
+              builder: (_, provider, _) {
                 if (provider.products.isEmpty) {
                   return const Icon(Icons.search_off);
                 }
@@ -47,17 +47,12 @@ class ShopSearch extends StatelessWidget {
 
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(
-                color: AppColors.border,
-              ),
+              borderSide: BorderSide(color: AppColors.border),
             ),
 
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(
-                color: AppColors.primary,
-                width: 2,
-              ),
+              borderSide: BorderSide(color: AppColors.primary, width: 2),
             ),
           ),
         ),

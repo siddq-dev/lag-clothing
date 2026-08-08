@@ -12,7 +12,7 @@ class CategoryFilter extends StatelessWidget {
   final ValueChanged<String?> onChanged;
 
   static const List<String> categories = [
-     "All",
+    "All",
     "Football Jerseys",
     "Cricket Jerseys",
     "Basketball Jerseys",
@@ -25,17 +25,15 @@ class CategoryFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      value: value.isEmpty ? null : value,
+      initialValue: value.isEmpty ? null : value,
       decoration: const InputDecoration(
         labelText: "Category",
         border: OutlineInputBorder(),
       ),
       items: categories
           .map(
-            (category) => DropdownMenuItem(
-              value: category,
-              child: Text(category),
-            ),
+            (category) =>
+                DropdownMenuItem(value: category, child: Text(category)),
           )
           .toList(),
       onChanged: onChanged,

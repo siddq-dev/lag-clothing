@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../models/address_model.dart';
-import '../models/cart_item_model.dart';
 import '../models/checkout_model.dart';
 import '../repositories/checkout_repository.dart';
 
 class CheckoutProvider extends ChangeNotifier {
-  CheckoutProvider({
-    CheckoutRepository? repository,
-  }) : _repository = repository ?? CheckoutRepository();
+  CheckoutProvider({CheckoutRepository? repository})
+    : _repository = repository ?? CheckoutRepository();
 
   final CheckoutRepository _repository;
 
@@ -33,11 +31,9 @@ class CheckoutProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final address =
-          await _repository.getDefaultAddress();
+      final address = await _repository.getDefaultAddress();
 
-      final cartItems =
-          await _repository.getCartItems();
+      final cartItems = await _repository.getCartItems();
 
       final subtotal = cartItems.fold<double>(
         0,
@@ -58,8 +54,7 @@ class CheckoutProvider extends ChangeNotifier {
         shippingCharge: shipping,
         tax: tax,
         discount: 0,
-        grandTotal:
-            subtotal + shipping + tax,
+        grandTotal: subtotal + shipping + tax,
       );
     } catch (e) {
       _error = e.toString();
@@ -74,12 +69,8 @@ class CheckoutProvider extends ChangeNotifier {
   // Address
   //----------------------------------------------------------
 
-  void selectAddress(
-    AddressModel address,
-  ) {
-    _checkout = _checkout?.copyWith(
-      selectedAddress: address,
-    );
+  void selectAddress(AddressModel address) {
+    _checkout = _checkout?.copyWith(selectedAddress: address);
 
     notifyListeners();
   }
@@ -88,20 +79,14 @@ class CheckoutProvider extends ChangeNotifier {
   // Shipping
   //----------------------------------------------------------
 
-  void selectShipping(
-    String method,
-    double charge,
-  ) {
+  void selectShipping(String method, double charge) {
     if (_checkout == null) return;
 
     _checkout = _checkout!.copyWith(
       shippingMethod: method,
       shippingCharge: charge,
       grandTotal:
-          _checkout!.subtotal +
-          charge +
-          _checkout!.tax -
-          _checkout!.discount,
+          _checkout!.subtotal + charge + _checkout!.tax - _checkout!.discount,
     );
 
     notifyListeners();
@@ -111,14 +96,10 @@ class CheckoutProvider extends ChangeNotifier {
   // Payment
   //----------------------------------------------------------
 
-  void selectPayment(
-    String payment,
-  ) {
+  void selectPayment(String payment) {
     if (_checkout == null) return;
 
-    _checkout = _checkout!.copyWith(
-      paymentMethod: payment,
-    );
+    _checkout = _checkout!.copyWith(paymentMethod: payment);
 
     notifyListeners();
   }
@@ -127,19 +108,17 @@ class CheckoutProvider extends ChangeNotifier {
   // Coupon
   //----------------------------------------------------------
 
-  void applyDiscount(
-    double discount,
-  ) {
+  void applyDiscount(double discount) {
     if (_checkout == null) return;
 
- _checkout = _checkout!.copyWith(
-  discount: discount,
-  grandTotal:
-      _checkout!.subtotal +
-      _checkout!.shippingCharge +
-      _checkout!.tax -
-      discount,
-);
+    _checkout = _checkout!.copyWith(
+      discount: discount,
+      grandTotal:
+          _checkout!.subtotal +
+          _checkout!.shippingCharge +
+          _checkout!.tax -
+          discount,
+    );
 
     notifyListeners();
   }
@@ -154,73 +133,54 @@ class CheckoutProvider extends ChangeNotifier {
     }
 
     try {
-      final validStock =
-          await _repository.validateInventory(
+      final validStock = await _repository.validateInventory(
         _checkout!.cartItems,
       );
 
       if (!validStock) {
-        _error =
-            "Some items are out of stock.";
+        _error = "Some items are out of stock.";
 
         notifyListeners();
 
         return false;
       }
 
-      final validPrices =
-          await _repository.validatePrices(
+      final validPrices = await _repository.validatePrices(
         _checkout!.cartItems,
       );
 
       if (!validPrices) {
-        _error =
-            "Prices changed. Please refresh cart.";
+        _error = "Prices changed. Please refresh cart.";
 
         notifyListeners();
 
         return false;
       }
 
-      final orderNumber =
-          _repository.generateOrderNumber();
+      final orderNumber = _repository.generateOrderNumber();
 
-      final trackingId =
-          _repository.generateTrackingId();
+      final trackingId = _repository.generateTrackingId();
 
       await _repository.createOrder(
         orderData: {
           "orderNumber": orderNumber,
           "trackingId": trackingId,
-          "address":
-              _checkout!.selectedAddress?.toMap(),
-          "items": _checkout!.cartItems
-              .map((e) => e.toMap())
-              .toList(),
-          "paymentMethod":
-              _checkout!.paymentMethod,
-          "shippingMethod":
-              _checkout!.shippingMethod,
-          "subtotal":
-              _checkout!.subtotal,
-          "shipping":
-              _checkout!.shippingCharge,
-          "tax":
-              _checkout!.tax,
-          "discount":
-              _checkout!.discount,
-          "grandTotal":
-              _checkout!.grandTotal,
+          "address": _checkout!.selectedAddress?.toMap(),
+          "items": _checkout!.cartItems.map((e) => e.toMap()).toList(),
+          "paymentMethod": _checkout!.paymentMethod,
+          "shippingMethod": _checkout!.shippingMethod,
+          "subtotal": _checkout!.subtotal,
+          "shipping": _checkout!.shippingCharge,
+          "tax": _checkout!.tax,
+          "discount": _checkout!.discount,
+          "grandTotal": _checkout!.grandTotal,
           "orderStatus": "pending",
           "paymentStatus": "pending",
-          "createdAt":
-              DateTime.now(),
+          "createdAt": DateTime.now(),
         },
       );
 
-      await _repository.updateInventory(
-        _checkout!.cartItems,
-      );
+      await _repository.updateInventory(_checkout!.cartItems);
 
       await _repository.clearCart();
 

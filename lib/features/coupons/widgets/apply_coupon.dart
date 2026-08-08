@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../themes/app_colors.dart';
 import 'apply_coupon_button.dart';
 
 class ApplyCoupon extends StatefulWidget {
@@ -11,8 +10,7 @@ class ApplyCoupon extends StatefulWidget {
 }
 
 class _ApplyCouponState extends State<ApplyCoupon> {
-  final TextEditingController couponController =
-      TextEditingController();
+  final TextEditingController couponController = TextEditingController();
 
   @override
   void dispose() {
@@ -25,11 +23,7 @@ class _ApplyCouponState extends State<ApplyCoupon> {
 
     if (code.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Please enter a coupon code.",
-          ),
-        ),
+        const SnackBar(content: Text("Please enter a coupon code.")),
       );
       return;
     }
@@ -37,11 +31,7 @@ class _ApplyCouponState extends State<ApplyCoupon> {
     // Firebase validation will be added later
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          "Coupon '$code' applied successfully!",
-        ),
-      ),
+      SnackBar(content: Text("Coupon '$code' applied successfully!")),
     );
   }
 
@@ -49,22 +39,15 @@ class _ApplyCouponState extends State<ApplyCoupon> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Text(
               "Apply Coupon",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 10),
@@ -79,9 +62,7 @@ class _ApplyCouponState extends State<ApplyCoupon> {
               controller: couponController,
               decoration: InputDecoration(
                 hintText: "Enter Coupon Code",
-                prefixIcon: const Icon(
-                  Icons.local_offer_outlined,
-                ),
+                prefixIcon: const Icon(Icons.local_offer_outlined),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.clear),
                   onPressed: () {
@@ -89,18 +70,14 @@ class _ApplyCouponState extends State<ApplyCoupon> {
                   },
                 ),
                 border: OutlineInputBorder(
-                  borderRadius:
-                      BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
             ),
 
             const SizedBox(height: 25),
 
-            ApplyCouponButton(
-              onPressed: applyCoupon,
-            ),
-
+            ApplyCouponButton(onPressed: applyCoupon),
           ],
         ),
       ),

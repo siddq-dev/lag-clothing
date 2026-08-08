@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 
 class OrderStatusDropdown extends StatefulWidget {
-  const OrderStatusDropdown({
-    super.key,
-  });
+  const OrderStatusDropdown({super.key});
 
   @override
-  State<OrderStatusDropdown> createState() =>
-      _OrderStatusDropdownState();
+  State<OrderStatusDropdown> createState() => _OrderStatusDropdownState();
 }
 
-class _OrderStatusDropdownState
-    extends State<OrderStatusDropdown> {
-
+class _OrderStatusDropdownState extends State<OrderStatusDropdown> {
   String status = "Pending";
 
   final List<String> statuses = [
@@ -27,7 +22,7 @@ class _OrderStatusDropdownState
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      value: status,
+      initialValue: status,
 
       decoration: const InputDecoration(
         labelText: "Order Status",
@@ -35,12 +30,7 @@ class _OrderStatusDropdownState
       ),
 
       items: statuses
-          .map(
-            (e) => DropdownMenuItem(
-              value: e,
-              child: Text(e),
-            ),
-          )
+          .map((e) => DropdownMenuItem(value: e, child: Text(e)))
           .toList(),
 
       onChanged: (value) {

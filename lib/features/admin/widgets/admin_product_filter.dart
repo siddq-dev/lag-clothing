@@ -5,38 +5,26 @@ import 'package:provider/provider.dart';
 import '/providers/admin_product_filter_provider.dart';
 
 class AdminProductFilter extends StatefulWidget {
-  const AdminProductFilter({
-    super.key,
-  });
+  const AdminProductFilter({super.key});
 
   @override
-  State<AdminProductFilter> createState() =>
-      _AdminProductFilterState();
+  State<AdminProductFilter> createState() => _AdminProductFilterState();
 }
 
-class _AdminProductFilterState
-    extends State<AdminProductFilter> {
-
-
+class _AdminProductFilterState extends State<AdminProductFilter> {
   @override
   Widget build(BuildContext context) {
-    final provider =
-    context.watch<AdminProductFilterProvider>();
+    final provider = context.watch<AdminProductFilterProvider>();
     return Card(
       elevation: 1,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Text(
               "Filters",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 25),
@@ -45,80 +33,54 @@ class _AdminProductFilterState
               spacing: 20,
               runSpacing: 20,
               children: [
-
                 SizedBox(
                   width: 220,
                   child: DropdownButtonFormField<String>(
-                    value: provider.category,
-                    decoration: const InputDecoration(
-                      labelText: "Category",
-                    ),
+                    initialValue: provider.category,
+                    decoration: const InputDecoration(labelText: "Category"),
                     items: const [
-                      DropdownMenuItem(
-                        value: "Sports",
-                        child: Text("Sports"),
-                      ),
-                      DropdownMenuItem(
-                        value: "Casual",
-                        child: Text("Casual"),
-                      ),
+                      DropdownMenuItem(value: "Sports", child: Text("Sports")),
+                      DropdownMenuItem(value: "Casual", child: Text("Casual")),
                     ],
-                  onChanged: (value) {
-  provider.updateCategory(value);
-},
+                    onChanged: (value) {
+                      provider.updateCategory(value);
+                    },
                   ),
                 ),
 
                 SizedBox(
                   width: 220,
                   child: DropdownButtonFormField<String>(
-                    value: provider.brand,
-                    decoration: const InputDecoration(
-                      labelText: "Brand",
-                    ),
+                    initialValue: provider.brand,
+                    decoration: const InputDecoration(labelText: "Brand"),
                     items: const [
-                      DropdownMenuItem(
-                        value: "Nike",
-                        child: Text("Nike"),
-                      ),
-                      DropdownMenuItem(
-                        value: "Puma",
-                        child: Text("Puma"),
-                      ),
+                      DropdownMenuItem(value: "Nike", child: Text("Nike")),
+                      DropdownMenuItem(value: "Puma", child: Text("Puma")),
                     ],
-                   onChanged: (value) {
-  provider.updateBrand(value);
-},
+                    onChanged: (value) {
+                      provider.updateBrand(value);
+                    },
                   ),
                 ),
 
                 SizedBox(
                   width: 220,
                   child: DropdownButtonFormField<String>(
-                    value: provider.status,
-                    decoration: const InputDecoration(
-                      labelText: "Status",
-                    ),
+                    initialValue: provider.status,
+                    decoration: const InputDecoration(labelText: "Status"),
                     items: const [
-
-                      DropdownMenuItem(
-                        value: "active",
-                        child: Text("Active"),
-                      ),
+                      DropdownMenuItem(value: "active", child: Text("Active")),
 
                       DropdownMenuItem(
                         value: "inactive",
                         child: Text("Inactive"),
                       ),
-
                     ],
-  onChanged: (value) {
-    provider.updateStatus(value);
-  },
-
+                    onChanged: (value) {
+                      provider.updateStatus(value);
+                    },
                   ),
                 ),
-
               ],
             ),
 
@@ -128,11 +90,10 @@ class _AdminProductFilterState
               spacing: 20,
               runSpacing: 10,
               children: [
-
                 FilterChip(
                   label: const Text("Featured"),
                   selected: provider.featured,
-                 onSelected: provider.toggleFeatured,
+                  onSelected: provider.toggleFeatured,
                 ),
 
                 FilterChip(
@@ -150,7 +111,7 @@ class _AdminProductFilterState
                 FilterChip(
                   label: const Text("Low Stock"),
                   selected: provider.lowStock,
-                 onSelected: provider.toggleLowStock,
+                  onSelected: provider.toggleLowStock,
                 ),
 
                 FilterChip(
@@ -158,7 +119,6 @@ class _AdminProductFilterState
                   selected: provider.outOfStock,
                   onSelected: provider.toggleOutOfStock,
                 ),
-
               ],
             ),
 
@@ -168,13 +128,12 @@ class _AdminProductFilterState
               alignment: Alignment.centerRight,
               child: FilledButton.icon(
                 onPressed: () {
-  Navigator.pop(context);
-},
+                  Navigator.pop(context);
+                },
                 icon: const Icon(Icons.filter_alt),
                 label: const Text("Apply Filters"),
               ),
             ),
-
           ],
         ),
       ),

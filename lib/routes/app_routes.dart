@@ -1,8 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lag_clothing/features/admin/orders/pages/order_details_page.dart';
-import 'package:lag_clothing/features/admin/widgets/permission_guard.dart';
 import 'package:lag_clothing/features/orders/order_page.dart';
 import 'package:lag_clothing/features/saved_address/page/add_address_page.dart';
 import 'package:lag_clothing/models/customer_admin_model.dart';
@@ -45,7 +42,6 @@ import '../features/legal/page/cookie_policy_page.dart';
 import '../features/profiles/page/edit_profile_page.dart';
 import '../models/address_model.dart';
 import '../models/payment_method_model.dart';
-import '../models/product_model.dart';
 import '../features/payment_methods/page/add_payment_method_page.dart';
 
 import '../features/admin/dashboard/admin_dashboard_page.dart';
@@ -70,202 +66,167 @@ class AppRouter {
   AppRouter._();
 
   // ==========================
-// Public
-// ==========================
+  // Public
+  // ==========================
 
-static const String home = '/';
-static const String shop = '/shop';
-static const String collections = '/collections';
-static const String product = '/product';
-static const String about = '/about';
-static const String contact = '/contact';
+  static const String home = '/';
+  static const String shop = '/shop';
+  static const String collections = '/collections';
+  static const String product = '/product';
+  static const String about = '/about';
+  static const String contact = '/contact';
 
-// ==========================
-// Authentication
-// ==========================
+  // ==========================
+  // Authentication
+  // ==========================
 
-static const String login = '/login';
-static const String register = '/register';
-static const String forgotPassword = '/forgot-password';
-static const String roleRedirect = '/role-redirect';
+  static const String login = '/login';
+  static const String register = '/register';
+  static const String forgotPassword = '/forgot-password';
+  static const String roleRedirect = '/role-redirect';
 
-// ==========================
-// Shopping
-// ==========================
+  // ==========================
+  // Shopping
+  // ==========================
 
-static const String cart = '/cart';
-static const String checkout = '/checkout';
-static const String wishlist = '/wishlist';
-static const String coupons = '/coupons';
-static const String orderSuccess = '/order-success';
-static const String orders = '/orders';
+  static const String cart = '/cart';
+  static const String checkout = '/checkout';
+  static const String wishlist = '/wishlist';
+  static const String coupons = '/coupons';
+  static const String orderSuccess = '/order-success';
+  static const String orders = '/orders';
 
+  // ==========================
+  // Orders
+  // ==========================
 
-// ==========================
-// Orders
-// ==========================
+  static const String myOrders = '/my-orders';
+  static const String orderDetails = '/order-details';
+  static const String orderTracking = '/order-tracking';
+  static const String orderConfirmation = '/order-confirmation';
 
-static const String myOrders = '/my-orders';
-static const String orderDetails = '/order-details';
-static const String orderTracking = '/order-tracking';
-static const String orderConfirmation = '/order-confirmation';
+  // ==========================
+  // Profile
+  // ==========================
 
+  static const String editProfile = '/edit-profile';
+  static const String profile = '/profile';
+  static const String personalInformation = '/profile/personal-information';
 
+  static const String savedAddresses = '/profile/saved-addresses';
 
-// ==========================
-// Profile
-// ==========================
+  static const String addressForm = '/profile/address-form';
+  static const String addAddress = '/profile/add-address';
 
+  static const String editAddress = '/profile/edit-address';
 
-static const String editProfile = '/edit-profile';
-static const String profile = '/profile';
-static const String personalInformation = '/profile/personal-information';
+  static const String paymentMethods = '/profile/payment-methods';
 
-static const String savedAddresses = '/profile/saved-addresses';
+  static const String changePassword = '/profile/change-password';
 
-static const String addressForm = '/profile/address-form';
-    static const String addAddress ='/profile/add-address';
+  static const String notifications = '/profile/notifications';
 
-static const String editAddress = '/profile/edit-address';
+  static const String accountSettings = '/profile/account-settings';
 
-static const String paymentMethods = '/profile/payment-methods';
+  static const String helpSupport = '/profile/help-support';
 
-static const String changePassword = '/profile/change-password';
+  static const String addPaymentMethod = '/profile/payment-methods/add';
 
-static const String notifications = '/profile/notifications';
+  static const String editPaymentMethod = '/profile/payment-methods/edit';
 
-static const String accountSettings = '/profile/account-settings';
+  // ==========================
+  // Product
+  // ==========================
 
-static const String helpSupport = '/profile/help-support';
+  static const String reviews = '/reviews';
+  static const String sizeGuide = '/size-guide';
+  static const String returns = '/returns';
+  static const String addProduct = '/addproduct';
+  static const String editProduct = '/editproduct';
+  static const String productDetails = '/admin/product';
 
-    static const String addPaymentMethod = '/profile/payment-methods/add';
+  // ==========================
+  // Legal
+  // ==========================
 
-static const String editPaymentMethod = '/profile/payment-methods/edit';
-    
+  static const String privacyPolicy = '/privacy-policy';
 
-// ==========================
-// Product
-// ==========================
+  static const String termsConditions = '/terms-conditions';
 
-static const String reviews = '/reviews';
-static const String sizeGuide = '/size-guide';
-static const String returns = '/returns';
-static const String addProduct = '/addproduct';
-static const String editProduct = '/editproduct';
-static const String productDetails = '/admin/product';
+  static const String faq = '/faq';
 
+  static const String shippingPolicy = '/shipping-policy';
 
-// ==========================
-// Legal
-// ==========================
+  static const String exchangePolicy = '/exchange-policy';
 
-static const String privacyPolicy = '/privacy-policy';
+  static const String careers = '/careers';
 
-static const String termsConditions = '/terms-conditions';
+  static const String cookiePolicy = '/cookie-policy';
 
-    static const String faq = '/faq';
+  // ==========================
+  // Admin
+  // ==========================
 
-static const String shippingPolicy = '/shipping-policy';
+  static const String admin = '/admin';
 
-static const String exchangePolicy = '/exchange-policy';
+  static const String adminDashboard = '/admin/dashboard';
 
-static const String careers = '/careers';
+  static const String adminProducts = '/admin/products';
 
-static const String cookiePolicy = '/cookie-policy';
+  static const String adminOrderDetails = '/admin/order-details';
 
-// ==========================
-// Admin
-// ==========================
+  static const String adminCustomers = '/admin/customers';
 
-static const String admin = '/admin';
+  static const String manageProducts = '/admin/manage-products';
 
-static const String adminDashboard ='/admin/dashboard';
+  // ==========================
+  // super Admin
+  // ==========================
 
-static const String adminProducts = '/admin/products';
+  static const String superAdminDashboard = '/super-admin/dashboard';
 
-static const String adminOrderDetails ='/admin/order-details';
+  static const String adminManagement = '/super-admin/admin-management';
 
-static const String adminCustomers = '/admin/customers';
+  static const String customerManagement = '/super-admin/customer-management';
 
-    static const String manageProducts = '/admin/manage-products';
+  static const String analytics = '/super-admin/analytics';
 
-   
+  static const String websiteSettings = '/super-admin/website-settings';
 
+  static const String addAdmin = '/super-admin/add-admin';
 
-// ==========================
-// super Admin
-// ==========================
+  static const String editAdmin = '/super-admin/edit-admin';
 
-static const String superAdminDashboard = '/super-admin/dashboard';
+  static const String customer = '/admin/customer-management';
 
-static const String adminManagement = '/super-admin/admin-management';
+  static const String customerDetails = '/admin/customer-details';
 
-static const String customerManagement = '/super-admin/customer-management';
+  static const String inventory = '/admin/inventory';
 
-static const String analytics = '/super-admin/analytics';
-
-static const String websiteSettings = '/super-admin/website-settings';
-
-static const String addAdmin = '/super-admin/add-admin';
-
-static const String editAdmin = '/super-admin/edit-admin';
-
-static const String customer ='/admin/customer-management';
-
-static const String customerDetails ='/admin/customer-details';
-
-static const String inventory ='/admin/inventory';
-
-
-// ==========================
-// goroutes
-// ==========================
-
-
+  // ==========================
+  // goroutes
+  // ==========================
 
   static final GoRouter router = GoRouter(
-    observers: [
-    AnalyticsRouteObserver(),
-  ],
+    observers: [AnalyticsRouteObserver()],
     initialLocation: home,
     routes: [
+      GoRoute(path: home, builder: (context, state) => const HomePage()),
 
-      GoRoute(
-        path: home,
-        builder: (context, state) => const HomePage(),
-      ),
+      GoRoute(path: shop, builder: (context, state) => const ShopPage()),
 
-      GoRoute(
-        path: shop,
-        builder: (context, state) => const ShopPage(),
-      ),
+      GoRoute(path: about, builder: (context, state) => const AboutPage()),
 
-      GoRoute(
-        path: about,
-        builder: (context, state) => const AboutPage(),
-      ),
+      GoRoute(path: contact, builder: (context, state) => const ContactPage()),
 
-      GoRoute(
-        path: contact,
-        builder: (context, state) => const ContactPage(),
-      ),
-
-      GoRoute(
-        path: cart,
-        builder: (context, state) => const CartPage(),
-      ),
+      GoRoute(path: cart, builder: (context, state) => const CartPage()),
 
       GoRoute(
         path: checkout,
         builder: (context, state) => const CheckoutPage(),
       ),
 
-    
-
-      GoRoute(
-        path: login,
-        builder: (context, state) => const LoginPage(),
-      ),
+      GoRoute(path: login, builder: (context, state) => const LoginPage()),
 
       GoRoute(
         path: register,
@@ -274,442 +235,323 @@ static const String inventory ='/admin/inventory';
 
       GoRoute(
         path: forgotPassword,
-        builder: (context, state) =>
-            const ForgotPasswordPage(),
+        builder: (context, state) => const ForgotPasswordPage(),
       ),
 
       // ==========================
-// Wishlist
-// ==========================
-
-GoRoute(
-  path: wishlist,
-  builder: (context, state) => const WishlistPage(),
-),
-
-// ==========================
-// Order Confirmation
-// ==========================
-
-GoRoute(
-  path: orderConfirmation,
-  builder: (context, state) =>
-      const OrderConfirmationPage(),
-),
-
-// ==========================
-// Profile
-// ==========================
-
-GoRoute(
-  path: AppRouter.editProfile,
-  builder: (context, state) => const EditProfilePage(),
-),
-
-GoRoute(
-  path: profile,
-  builder: (context, state) =>
-      const ProfilePage(),
-),
-
-GoRoute(
-  path: personalInformation,
-  builder: (context, state) =>
-      const PersonalInformationPage(),
-),
-
-GoRoute(
-  path: savedAddresses,
-  builder: (context, state) =>
-      const SavedAddressesPage(),
-),
-
-GoRoute(
-  path: addressForm,
-  builder: (context, state) =>
-      const AddressFormPage(),
-),
-
-GoRoute(
-  path: addAddress,
-  builder: (context, state) =>
-      const AddAddressPage(),
-),
-
-GoRoute(
-  path: editAddress,
-  builder: (context, state) {
-    final address = state.extra as AddressModel;
-
-    return AddAddressPage(
-      address: address,
-      isEditing: true,
-    );
-  },
-),
-
-GoRoute(
-  path: paymentMethods,
-  builder: (context, state) =>
-      const PaymentMethodsPage(),
-),
-
-GoRoute(
-  path: changePassword,
-  builder: (context, state) =>
-      const ChangePasswordPage(),
-),
-
-GoRoute(
-  path: notifications,
-  builder: (context, state) =>
-      const NotificationsPage(),
-),
-
-GoRoute(
-  path: helpSupport,
-  builder: (context, state) =>
-      const HelpSupportPage(),
-),
-
-GoRoute(
-  path: accountSettings,
-  builder: (context, state) =>
-      const AccountSettingsPage(),
-),
-
-GoRoute(
-  path: addPaymentMethod,
-  builder: (context, state) =>
-      const AddPaymentMethodPage(),
-),
-
-GoRoute(
-  path: editPaymentMethod,
-  builder: (context, state) {
-    final payment =
-        state.extra as PaymentMethodModel;
-
-    return AddPaymentMethodPage(
-      paymentMethod: payment,
-      isEditing: true,
-    );
-  },
-),
-
-// ==========================
-// Orders
-// ==========================
-
-GoRoute(
-  path: myOrders,
-  builder: (context, state) =>
-      const MyOrdersPage(),
-),
-
-GoRoute(
-  path: orderDetails,
-  builder: (context, state) =>
-      const OrderDetailsPage(),
-),
-
-GoRoute(
-  path: orderTracking,
-  builder: (context, state) =>
-      const OrderTrackingPage(),
-),
-
-// ==========================
-// Reviews
-// ==========================
-
-GoRoute(
-  path: reviews,
-  builder: (context, state) =>
-      const ReviewsPage(),
-),
-
-// ==========================
-// Size Guide
-// ==========================
-
-GoRoute(
-  path: sizeGuide,
-  builder: (context, state) =>
-      const SizeGuidePage(),
-),
-
-// ==========================
-// Returns
-// ==========================
-
-GoRoute(
-  path: returns,
-  builder: (context, state) =>
-      const ReturnsPage(),
-),
-
-// ==========================
-// Coupons
-// ==========================
-
-GoRoute(
-  path: coupons,
-  builder: (context, state) =>
-      const CouponsPage(),
-),
-
-// ==========================
-// Privacy Policy
-// ==========================
-
-GoRoute(
-  path: privacyPolicy,
-  builder: (context, state) =>
-      const PrivacyPolicyPage(),
-),
-
-// ==========================
-// Terms & Conditions
-// ==========================
-
-GoRoute(
-  path: termsConditions,
-  builder: (context, state) =>
-      const TermsConditionsPage(),
-),
-
-// ==========================
-// legal Pages
-// ==========================
-
-
-
-
-GoRoute(
-  path: faq,
-  builder: (context, state) => const FAQPage(),
-),
-
-GoRoute(
-  path: shippingPolicy,
-  builder: (context, state) => const ShippingPolicyPage(),
-),
-
-GoRoute(
-  path: exchangePolicy,
-  builder: (context, state) => const ExchangePolicyPage(),
-),
-
-GoRoute(
-  path: careers,
-  builder: (context, state) => const CareersPage(),
-),
-
-GoRoute(
-  path: cookiePolicy,
-  builder: (context, state) => const CookiePolicyPage(),
-),
-
-// ==========================
-// Admin (Placeholder)
-// ==========================
-
-GoRoute(
-  path: admin,
-  builder: (context, state) => const Scaffold(
-    body: Center(
-      child: Text("Admin Dashboard"),
-    ),
-  ),
-),
-
-
-
-GoRoute(
-  path: adminProducts,
-  builder: (context, state) => const Scaffold(
-    body: Center(
-      child: Text("Admin Products"),
-    ),
-  ),
-),
-
-GoRoute(
-  path: adminOrderDetails,
-  builder: (context, state) =>
-      const AdminManageOrdersPage(),
-),
-
-GoRoute(
-  path: adminCustomers,
-  builder: (context, state) => const Scaffold(
-    body: Center(
-      child: Text("Admin Customers"),
-    ),
-  ),
-),
-
-GoRoute(
-  path: AppRouter.roleRedirect,
-  builder: (context, state) =>
-      const RoleRedirect(),
-),
-
-GoRoute(
-  path: AppRouter.adminDashboard,
-  builder: (context, state) =>
-      const AdminDashboardPage(),
-),
-
-// ==========================
-// product
-// ==========================
-
-GoRoute(
-  path: AppRouter.manageProducts,
-  builder: (context, state) =>
-      const ProductManagementPage(),
-),
-
-GoRoute(
-  path: AppRouter.addProduct,
-  builder: (context, state) =>
-      const AddProductPage(),
-),
-
-GoRoute(
-  path: '${AppRouter.editProduct}/:id',
-  builder: (context, state) {
-    final id = state.pathParameters['id']!;
-
-    return AddProductPage(
-      productId: id,
-    );
-  },
-),
-
-GoRoute(
-  path: '${AppRouter.productDetails}/:id',
-  builder: (context, state) {
-    final id = state.pathParameters['id']!;
-
-    return ProductDetailsPage(
-      productId: id,
-    );
-  },
-),
-
-
-
-
-// ==========================
-// super Admin
-// ==========================
-
-
-GoRoute(
-  path: AppRouter.superAdminDashboard,
-  builder: (context, state) =>
-      const SuperAdminDashboardPage(),
-),
-
-GoRoute(
-  path: AppRouter.adminManagement,
-  builder: (context, state) =>
-      const AdminManagementPage(),
-),
-
-GoRoute(
-  path: AppRouter.addAdmin,
-  builder: (context, state) =>
-      const AddAdminPage(),
-),
-
-GoRoute(
-  path: AppRouter.editAdmin,
-  builder: (context, state) {
-    final admin = state.extra as UserModel;
-
-    return EditAdminPage(
-      admin: admin,
-    );
-  },
-),
-
-GoRoute(
-  path: AppRouter.customerManagement,
-  builder: (context, state) =>
-      const CustomerManagementPage(),
-),
-
-GoRoute(
-  path: AppRouter.customerDetails,
-  builder: (context, state) {
-    final customer =
-        state.extra as CustomerAdminModel;
-
-    return CustomerDetailsPage(
-      customer: customer,
-    );
-  },
-),
-
-GoRoute(
-  path: AppRouter.inventory,
-  builder: (context, state) =>
-      const InventoryDashboardPage(),
-),
-
-
-
-
-GoRoute(
-  path: AppRouter.analytics,
-  builder: (context, state) =>
-      const AnalyticsDashboardPage(),
-),
-
-GoRoute(
-  path: AppRouter.websiteSettings,
-  builder: (context, state) => const Scaffold(
-    body: Center(
-      child: Text("Website Settings"),
-    ),
-  ),
-),
-
-
-
-
-
-// ==========================
-// shopping
-// ==========================
-
-
-
-GoRoute(
-  path: AppRouter.checkout,
-  builder: (context, state) =>
-      const CheckoutPage(),
-),
-
-GoRoute(
-  path: AppRouter.orderSuccess,
-  builder: (context, state) =>
-      const OrderSuccessPage(),
-),
-
-GoRoute(
-  path: AppRouter.orders,
-  builder: (context, state) =>
-      const OrdersPage(),
-),
-
+      // Wishlist
+      // ==========================
+      GoRoute(
+        path: wishlist,
+        builder: (context, state) => const WishlistPage(),
+      ),
+
+      // ==========================
+      // Order Confirmation
+      // ==========================
+      GoRoute(
+        path: orderConfirmation,
+        builder: (context, state) => const OrderConfirmationPage(),
+      ),
+
+      // ==========================
+      // Profile
+      // ==========================
+      GoRoute(
+        path: AppRouter.editProfile,
+        builder: (context, state) => const EditProfilePage(),
+      ),
+
+      GoRoute(path: profile, builder: (context, state) => const ProfilePage()),
+
+      GoRoute(
+        path: personalInformation,
+        builder: (context, state) => const PersonalInformationPage(),
+      ),
+
+      GoRoute(
+        path: savedAddresses,
+        builder: (context, state) => const SavedAddressesPage(),
+      ),
+
+      GoRoute(
+        path: addressForm,
+        builder: (context, state) => const AddressFormPage(),
+      ),
+
+      GoRoute(
+        path: addAddress,
+        builder: (context, state) => const AddAddressPage(),
+      ),
+
+      GoRoute(
+        path: editAddress,
+        builder: (context, state) {
+          final address = state.extra as AddressModel;
+
+          return AddAddressPage(address: address, isEditing: true);
+        },
+      ),
+
+      GoRoute(
+        path: paymentMethods,
+        builder: (context, state) => const PaymentMethodsPage(),
+      ),
+
+      GoRoute(
+        path: changePassword,
+        builder: (context, state) => const ChangePasswordPage(),
+      ),
+
+      GoRoute(
+        path: notifications,
+        builder: (context, state) => const NotificationsPage(),
+      ),
+
+      GoRoute(
+        path: helpSupport,
+        builder: (context, state) => const HelpSupportPage(),
+      ),
+
+      GoRoute(
+        path: accountSettings,
+        builder: (context, state) => const AccountSettingsPage(),
+      ),
+
+      GoRoute(
+        path: addPaymentMethod,
+        builder: (context, state) => const AddPaymentMethodPage(),
+      ),
+
+      GoRoute(
+        path: editPaymentMethod,
+        builder: (context, state) {
+          final payment = state.extra as PaymentMethodModel;
+
+          return AddPaymentMethodPage(paymentMethod: payment, isEditing: true);
+        },
+      ),
+
+      // ==========================
+      // Orders
+      // ==========================
+      GoRoute(
+        path: myOrders,
+        builder: (context, state) => const MyOrdersPage(),
+      ),
+
+      GoRoute(
+        path: orderDetails,
+        builder: (context, state) => const OrderDetailsPage(),
+      ),
+
+      GoRoute(
+        path: orderTracking,
+        builder: (context, state) => const OrderTrackingPage(),
+      ),
+
+      // ==========================
+      // Reviews
+      // ==========================
+      GoRoute(path: reviews, builder: (context, state) => const ReviewsPage()),
+
+      // ==========================
+      // Size Guide
+      // ==========================
+      GoRoute(
+        path: sizeGuide,
+        builder: (context, state) => const SizeGuidePage(),
+      ),
+
+      // ==========================
+      // Returns
+      // ==========================
+      GoRoute(path: returns, builder: (context, state) => const ReturnsPage()),
+
+      // ==========================
+      // Coupons
+      // ==========================
+      GoRoute(path: coupons, builder: (context, state) => const CouponsPage()),
+
+      // ==========================
+      // Privacy Policy
+      // ==========================
+      GoRoute(
+        path: privacyPolicy,
+        builder: (context, state) => const PrivacyPolicyPage(),
+      ),
+
+      // ==========================
+      // Terms & Conditions
+      // ==========================
+      GoRoute(
+        path: termsConditions,
+        builder: (context, state) => const TermsConditionsPage(),
+      ),
+
+      // ==========================
+      // legal Pages
+      // ==========================
+      GoRoute(path: faq, builder: (context, state) => const FAQPage()),
+
+      GoRoute(
+        path: shippingPolicy,
+        builder: (context, state) => const ShippingPolicyPage(),
+      ),
+
+      GoRoute(
+        path: exchangePolicy,
+        builder: (context, state) => const ExchangePolicyPage(),
+      ),
+
+      GoRoute(path: careers, builder: (context, state) => const CareersPage()),
+
+      GoRoute(
+        path: cookiePolicy,
+        builder: (context, state) => const CookiePolicyPage(),
+      ),
+
+      // ==========================
+      // Admin (Placeholder)
+      // ==========================
+      GoRoute(
+        path: admin,
+        builder: (context, state) =>
+            const Scaffold(body: Center(child: Text("Admin Dashboard"))),
+      ),
+
+      GoRoute(
+        path: adminProducts,
+        builder: (context, state) =>
+            const Scaffold(body: Center(child: Text("Admin Products"))),
+      ),
+
+      GoRoute(
+        path: adminOrderDetails,
+        builder: (context, state) => const AdminManageOrdersPage(),
+      ),
+
+      GoRoute(
+        path: adminCustomers,
+        builder: (context, state) =>
+            const Scaffold(body: Center(child: Text("Admin Customers"))),
+      ),
+
+      GoRoute(
+        path: AppRouter.roleRedirect,
+        builder: (context, state) => const RoleRedirect(),
+      ),
+
+      GoRoute(
+        path: AppRouter.adminDashboard,
+        builder: (context, state) => const AdminDashboardPage(),
+      ),
+
+      // ==========================
+      // product
+      // ==========================
+      GoRoute(
+        path: AppRouter.manageProducts,
+        builder: (context, state) => const ProductManagementPage(),
+      ),
+
+      GoRoute(
+        path: AppRouter.addProduct,
+        builder: (context, state) => const AddProductPage(),
+      ),
+
+      GoRoute(
+        path: '${AppRouter.editProduct}/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+
+          return AddProductPage(productId: id);
+        },
+      ),
+
+      GoRoute(
+        path: '${AppRouter.productDetails}/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+
+          return ProductDetailsPage(productId: id);
+        },
+      ),
+
+      // ==========================
+      // super Admin
+      // ==========================
+      GoRoute(
+        path: AppRouter.superAdminDashboard,
+        builder: (context, state) => const SuperAdminDashboardPage(),
+      ),
+
+      GoRoute(
+        path: AppRouter.adminManagement,
+        builder: (context, state) => const AdminManagementPage(),
+      ),
+
+      GoRoute(
+        path: AppRouter.addAdmin,
+        builder: (context, state) => const AddAdminPage(),
+      ),
+
+      GoRoute(
+        path: AppRouter.editAdmin,
+        builder: (context, state) {
+          final admin = state.extra as UserModel;
+
+          return EditAdminPage(admin: admin);
+        },
+      ),
+
+      GoRoute(
+        path: AppRouter.customerManagement,
+        builder: (context, state) => const CustomerManagementPage(),
+      ),
+
+      GoRoute(
+        path: AppRouter.customerDetails,
+        builder: (context, state) {
+          final customer = state.extra as CustomerAdminModel;
+
+          return CustomerDetailsPage(customer: customer);
+        },
+      ),
+
+      GoRoute(
+        path: AppRouter.inventory,
+        builder: (context, state) => const InventoryDashboardPage(),
+      ),
+
+      GoRoute(
+        path: AppRouter.analytics,
+        builder: (context, state) => const AnalyticsDashboardPage(),
+      ),
+
+      GoRoute(
+        path: AppRouter.websiteSettings,
+        builder: (context, state) =>
+            const Scaffold(body: Center(child: Text("Website Settings"))),
+      ),
+
+      // ==========================
+      // shopping
+      // ==========================
+      GoRoute(
+        path: AppRouter.checkout,
+        builder: (context, state) => const CheckoutPage(),
+      ),
+
+      GoRoute(
+        path: AppRouter.orderSuccess,
+        builder: (context, state) => const OrderSuccessPage(),
+      ),
+
+      GoRoute(
+        path: AppRouter.orders,
+        builder: (context, state) => const OrdersPage(),
+      ),
     ],
   );
-  
-
-  
 }

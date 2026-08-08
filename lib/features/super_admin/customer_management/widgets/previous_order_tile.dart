@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../models/order_model.dart';
 
 class PreviousOrderTile extends StatelessWidget {
-  const PreviousOrderTile({
-    super.key,
-    required this.order,
-  });
+  const PreviousOrderTile({super.key, required this.order});
 
   final OrderModel order;
 
@@ -44,9 +41,7 @@ class PreviousOrderTile extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
-        side: BorderSide(
-          color: Colors.grey.shade300,
-        ),
+        side: BorderSide(color: Colors.grey.shade300),
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -56,28 +51,21 @@ class PreviousOrderTile extends StatelessWidget {
               flex: 2,
               child: Text(
                 order.orderNumber,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
 
             Expanded(
               child: Text(
-                order.createdAt
-                        ?.toDate()
-                        .toString()
-                        .split(" ")
-                        .first ??
-                    "-",
+                order.createdAt?.toDate().toString().split(" ").first ?? "-",
               ),
             ),
 
             Expanded(
               child: Chip(
-                backgroundColor:
-                    _statusColor(order.orderStatus)
-                        .withOpacity(.15),
+                backgroundColor: _statusColor(
+                  order.orderStatus,
+                ).withValues(alpha: .15),
                 label: Text(
                   order.orderStatus.name.toUpperCase(),
                   style: TextStyle(
@@ -91,15 +79,11 @@ class PreviousOrderTile extends StatelessWidget {
             Expanded(
               child: Text(
                 "₹${order.total.toStringAsFixed(2)}",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
 
-            Expanded(
-              child: Text(order.trackingId),
-            ),
+            Expanded(child: Text(order.trackingId)),
 
             ElevatedButton(
               onPressed: () {
@@ -123,34 +107,23 @@ class PreviousOrderTile extends StatelessWidget {
             width: 500,
             child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Status : ${order.orderStatus.name}",
-                  ),
+                  Text("Status : ${order.orderStatus.name}"),
                   const SizedBox(height: 10),
 
-                  Text(
-                    "Payment : ${order.paymentMethod}",
-                  ),
+                  Text("Payment : ${order.paymentMethod}"),
                   const SizedBox(height: 10),
 
-                  Text(
-                    "Payment Status : ${order.paymentStatus.name}",
-                  ),
+                  Text("Payment Status : ${order.paymentStatus.name}"),
                   const SizedBox(height: 10),
 
-                  Text(
-                    "Tracking ID : ${order.trackingId}",
-                  ),
+                  Text("Tracking ID : ${order.trackingId}"),
                   const Divider(height: 30),
 
                   const Text(
                     "Items",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
 
                   const SizedBox(height: 10),
@@ -160,29 +133,17 @@ class PreviousOrderTile extends StatelessWidget {
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                       title: Text(item.productName),
-                      subtitle: Text(
-                        "Qty : ${item.quantity}",
-                      ),
-                      trailing: Text(
-                        "₹${item.total.toStringAsFixed(2)}",
-                      ),
+                      subtitle: Text("Qty : ${item.quantity}"),
+                      trailing: Text("₹${item.total.toStringAsFixed(2)}"),
                     ),
                   ),
 
                   const Divider(height: 30),
 
-                  Text(
-                    "Subtotal : ₹${order.subtotal}",
-                  ),
-                  Text(
-                    "Shipping : ₹${order.shippingCharge}",
-                  ),
-                  Text(
-                    "Discount : ₹${order.discount}",
-                  ),
-                  Text(
-                    "Tax : ₹${order.tax}",
-                  ),
+                  Text("Subtotal : ₹${order.subtotal}"),
+                  Text("Shipping : ₹${order.shippingCharge}"),
+                  Text("Discount : ₹${order.discount}"),
+                  Text("Tax : ₹${order.tax}"),
 
                   const SizedBox(height: 15),
 
@@ -199,9 +160,7 @@ class PreviousOrderTile extends StatelessWidget {
 
                     const Text(
                       "Admin Notes",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
 
                     const SizedBox(height: 8),
@@ -214,8 +173,7 @@ class PreviousOrderTile extends StatelessWidget {
           ),
           actions: [
             TextButton(
-              onPressed: () =>
-                  Navigator.pop(context),
+              onPressed: () => Navigator.pop(context),
               child: const Text("Close"),
             ),
           ],

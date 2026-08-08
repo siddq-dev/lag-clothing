@@ -8,10 +8,7 @@ import '../../../../themes/app_spacing.dart';
 import '../../../../themes/app_text_style.dart';
 
 class CartItem extends StatelessWidget {
-  const CartItem({
-    super.key,
-    required this.item,
-  });
+  const CartItem({super.key, required this.item});
 
   final CartItemModel item;
 
@@ -25,9 +22,7 @@ class CartItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,7 +30,6 @@ class CartItem extends StatelessWidget {
           //--------------------------------------------------
           // Product Image
           //--------------------------------------------------
-
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.network(
@@ -43,15 +37,12 @@ class CartItem extends StatelessWidget {
               width: 130,
               height: 130,
               fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) {
+              errorBuilder: (_, _, _) {
                 return Container(
                   width: 130,
                   height: 130,
                   color: Colors.grey.shade200,
-                  child: const Icon(
-                    Icons.image_not_supported,
-                    size: 40,
-                  ),
+                  child: const Icon(Icons.image_not_supported, size: 40),
                 );
               },
             ),
@@ -62,29 +53,19 @@ class CartItem extends StatelessWidget {
           //--------------------------------------------------
           // Product Details
           //--------------------------------------------------
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  item.productName,
-                  style: AppTextStyles.heading3,
-                ),
+                Text(item.productName, style: AppTextStyles.heading3),
 
                 const SizedBox(height: 10),
 
-                Text(
-                  "Size : ${item.size}",
-                  style: AppTextStyles.bodyMedium,
-                ),
+                Text("Size : ${item.size}", style: AppTextStyles.bodyMedium),
 
                 const SizedBox(height: 6),
 
-                Text(
-                  "Color : ${item.color}",
-                  style: AppTextStyles.bodyMedium,
-                ),
+                Text("Color : ${item.color}", style: AppTextStyles.bodyMedium),
 
                 const SizedBox(height: 20),
 
@@ -93,12 +74,9 @@ class CartItem extends StatelessWidget {
                     //--------------------------------------------------
                     // Quantity Selector
                     //--------------------------------------------------
-
                     Container(
                       decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AppColors.border,
-                        ),
+                        border: Border.all(color: AppColors.border),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -130,7 +108,6 @@ class CartItem extends StatelessWidget {
                     //--------------------------------------------------
                     // Price
                     //--------------------------------------------------
-
                     Text(
                       "₹${item.total.toStringAsFixed(2)}",
                       style: AppTextStyles.heading2.copyWith(
@@ -145,32 +122,20 @@ class CartItem extends StatelessWidget {
                 //--------------------------------------------------
                 // Remove
                 //--------------------------------------------------
-
                 TextButton.icon(
                   onPressed: () async {
-                    await cartProvider.removeItem(
-                      item.productId,
-                    );
+                    await cartProvider.removeItem(item.productId);
 
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Item removed from cart",
-                          ),
-                        ),
+                        const SnackBar(content: Text("Item removed from cart")),
                       );
                     }
                   },
-                  icon: const Icon(
-                    Icons.delete_outline,
-                    color: Colors.red,
-                  ),
+                  icon: const Icon(Icons.delete_outline, color: Colors.red),
                   label: const Text(
                     "Remove",
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
+                    style: TextStyle(color: Colors.red),
                   ),
                 ),
               ],

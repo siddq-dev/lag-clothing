@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../routes/app_routes.dart';
 import '../../../../services/auth_service.dart';
-import '../../../../themes/app_colors.dart';
 
 class LogoutButton extends StatelessWidget {
   const LogoutButton({super.key});
@@ -14,9 +13,7 @@ class LogoutButton extends StatelessWidget {
       builder: (context) {
         return AlertDialog(
           title: const Text("Logout"),
-          content: const Text(
-            "Are you sure you want to logout?",
-          ),
+          content: const Text("Are you sure you want to logout?"),
           actions: [
             TextButton(
               onPressed: () {
@@ -47,11 +44,9 @@ class LogoutButton extends StatelessWidget {
 
     context.go(AppRouter.login);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Logged out successfully."),
-      ),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text("Logged out successfully.")));
   }
 
   @override
@@ -68,9 +63,7 @@ class LogoutButton extends StatelessWidget {
         icon: const Icon(Icons.logout),
         label: const Text(
           "LOGOUT",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
     );

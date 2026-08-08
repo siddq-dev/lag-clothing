@@ -14,12 +14,10 @@ class CouponsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     /// Temporary Data
     /// Replace with Firebase later
 
     final List<Map<String, dynamic>> coupons = [
-
       {
         "title": "20% OFF",
         "code": "LAG20",
@@ -35,7 +33,6 @@ class CouponsPage extends StatelessWidget {
         "minimum": "\$80",
         "expiry": "15 Aug 2026",
       },
-
     ];
 
     return WebsiteLayout(
@@ -45,7 +42,6 @@ class CouponsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const CouponHeader(),
 
             const SizedBox(height: AppSpacing.xxxl),
@@ -55,31 +51,22 @@ class CouponsPage extends StatelessWidget {
             const SizedBox(height: AppSpacing.xxxl),
 
             if (coupons.isEmpty)
-
               const EmptyCoupon()
-
             else
-
               ListView.separated(
                 shrinkWrap: true,
-                physics:
-                    const NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: coupons.length,
-                separatorBuilder: (_, __) =>
-                    const SizedBox(height: 18),
+                separatorBuilder: (_, _) => const SizedBox(height: 18),
                 itemBuilder: (context, index) {
-
                   final coupon = coupons[index];
 
                   return CouponCard(
                     title: coupon["title"],
                     code: coupon["code"],
-                    description:
-                        coupon["description"],
-                    minimum:
-                        coupon["minimum"],
-                    expiry:
-                        coupon["expiry"],
+                    description: coupon["description"],
+                    minimum: coupon["minimum"],
+                    expiry: coupon["expiry"],
                   );
                 },
               ),
@@ -87,7 +74,6 @@ class CouponsPage extends StatelessWidget {
             const SizedBox(height: AppSpacing.xxxl),
 
             const CouponTerms(),
-
           ],
         ),
       ),

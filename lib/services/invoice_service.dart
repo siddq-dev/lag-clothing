@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -13,7 +11,6 @@ import '../features/invoice/invoice_header.dart';
 import '../features/invoice/invoice_payment_card.dart';
 import '../features/invoice/invoice_product_table.dart';
 import '../features/invoice/invoice_summary.dart';
-import '../features/invoice/invoice_theme.dart';
 
 class InvoiceService {
   InvoiceService._();
@@ -22,15 +19,10 @@ class InvoiceService {
   // Generate Invoice
   //==========================================================
 
-  static Future<Uint8List> generateInvoice(
-    OrderModel order,
-  ) async {
-    final logoData = await rootBundle.load(
-      'assets/images/logo.png',
-    );
+  static Future<Uint8List> generateInvoice(OrderModel order) async {
+    final logoData = await rootBundle.load('assets/images/logo.png');
 
-    final logoBytes =
-        logoData.buffer.asUint8List();
+    final logoBytes = logoData.buffer.asUint8List();
 
     final pdf = pw.Document();
 
@@ -41,63 +33,45 @@ class InvoiceService {
 
         build: (context) {
           return [
-
             //--------------------------------------------------
             // Header
             //--------------------------------------------------
-
-            InvoiceHeader(
-              order: order,
-              logo: logoBytes,
-            ),
+            InvoiceHeader(order: order, logo: logoBytes),
 
             pw.SizedBox(height: 24),
 
             //--------------------------------------------------
             // Customer
             //--------------------------------------------------
-
-            InvoiceCustomerCard(
-              order: order,
-            ),
+            InvoiceCustomerCard(order: order),
 
             pw.SizedBox(height: 24),
 
             //--------------------------------------------------
             // Product Table
             //--------------------------------------------------
-
-            InvoiceProductTable(
-              order: order,
-            ),
+            InvoiceProductTable(order: order),
 
             pw.SizedBox(height: 24),
 
             //--------------------------------------------------
             // Invoice Summary
             //--------------------------------------------------
-
-            InvoiceSummary(
-              order: order,
-            ),
+            InvoiceSummary(order: order),
 
             pw.SizedBox(height: 24),
 
             //--------------------------------------------------
             // Payment
             //--------------------------------------------------
-
-            InvoicePaymentCard(
-              order: order,
-            ),
+            InvoicePaymentCard(order: order),
 
             pw.SizedBox(height: 30),
 
             //--------------------------------------------------
             // Footer
             //--------------------------------------------------
-
-             InvoiceFooter(),
+            InvoiceFooter(),
           ];
         },
       ),
@@ -110,29 +84,20 @@ class InvoiceService {
   // Print Invoice
   //==========================================================
 
-  static Future<void> printInvoice(
-    OrderModel order,
-  ) async {
-    await Printing.layoutPdf(
-      onLayout: (_) async =>
-          generateInvoice(order),
-    );
+  static Future<void> printInvoice(OrderModel order) async {
+    await Printing.layoutPdf(onLayout: (_) async => generateInvoice(order));
   }
 
   //==========================================================
   // Download / Share Invoice
   //==========================================================
 
-  static Future<void> downloadInvoice(
-    OrderModel order,
-  ) async {
-    final bytes =
-        await generateInvoice(order);
+  static Future<void> downloadInvoice(OrderModel order) async {
+    final bytes = await generateInvoice(order);
 
     await Printing.sharePdf(
       bytes: bytes,
-      filename:
-          "Invoice-${order.orderNumber}.pdf",
+      filename: "Invoice-${order.orderNumber}.pdf",
     );
   }
 }

@@ -5,10 +5,7 @@ import '/models/inventory_item_model.dart';
 import '../widgets/stock_status_chip.dart';
 
 class InventoryTable extends StatelessWidget {
-  const InventoryTable({
-    super.key,
-    required this.products,
-  });
+  const InventoryTable({super.key, required this.products});
 
   final List<InventoryItemModel> products;
 
@@ -19,66 +16,28 @@ class InventoryTable extends StatelessWidget {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: DataTable(
-          headingRowColor:
-              MaterialStateProperty.all(
-            Colors.black26,
-          ),
+          headingRowColor: WidgetStateProperty.all(Colors.black26),
           columns: const [
             DataColumn(
-              label: Text(
-                "Product",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+              label: Text("Product", style: TextStyle(color: Colors.white)),
             ),
             DataColumn(
-              label: Text(
-                "SKU",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+              label: Text("SKU", style: TextStyle(color: Colors.white)),
             ),
             DataColumn(
-              label: Text(
-                "Category",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+              label: Text("Category", style: TextStyle(color: Colors.white)),
             ),
             DataColumn(
-              label: Text(
-                "Price",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+              label: Text("Price", style: TextStyle(color: Colors.white)),
             ),
             DataColumn(
-              label: Text(
-                "Stock",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+              label: Text("Stock", style: TextStyle(color: Colors.white)),
             ),
             DataColumn(
-              label: Text(
-                "Status",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+              label: Text("Status", style: TextStyle(color: Colors.white)),
             ),
             DataColumn(
-              label: Text(
-                "Action",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+              label: Text("Action", style: TextStyle(color: Colors.white)),
             ),
           ],
           rows: products.map((product) {
@@ -87,59 +46,45 @@ class InventoryTable extends StatelessWidget {
                 DataCell(
                   Text(
                     product.name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
                 DataCell(
                   Text(
                     product.sku,
-                    style: const TextStyle(
-                      color: Colors.white70,
-                    ),
+                    style: const TextStyle(color: Colors.white70),
                   ),
                 ),
                 DataCell(
                   Text(
                     product.category,
-                    style: const TextStyle(
-                      color: Colors.white70,
-                    ),
+                    style: const TextStyle(color: Colors.white70),
                   ),
                 ),
                 DataCell(
                   Text(
                     "₹${product.price.toStringAsFixed(0)}",
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
                 DataCell(
                   Text(
                     product.stock.toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
                 DataCell(
                   StockStatusChip(
                     stock: product.stock,
-                    reorderLevel:
-                        product.reorderLevel,
+                    reorderLevel: product.reorderLevel,
                   ),
                 ),
                 DataCell(
                   IconButton(
-                    icon: const Icon(
-                      Icons.visibility,
-                      color: Colors.white,
-                    ),
+                    icon: const Icon(Icons.visibility, color: Colors.white),
                     onPressed: () {
                       context.push(
-                         "/admin/product/${product.id}",
+                        "/admin/product/${product.id}",
                         extra: product,
                       );
                     },

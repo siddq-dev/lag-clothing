@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../themes/app_spacing.dart';
-import '../../../../themes/app_text_style.dart';
 
 import 'package:lag_clothing/features/change_password/widgets/password_strength/password_strength.dart';
 import 'package:lag_clothing/features/change_password/widgets/update_password_button/update_password_button.dart';
@@ -14,7 +13,6 @@ class PasswordForm extends StatefulWidget {
 }
 
 class _PasswordFormState extends State<PasswordForm> {
-
   final currentController = TextEditingController();
   final newController = TextEditingController();
   final confirmController = TextEditingController();
@@ -27,7 +25,6 @@ class _PasswordFormState extends State<PasswordForm> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         _passwordField(
           "Current Password",
           currentController,
@@ -41,22 +38,15 @@ class _PasswordFormState extends State<PasswordForm> {
 
         const SizedBox(height: AppSpacing.xl),
 
-        _passwordField(
-          "New Password",
-          newController,
-          newHidden,
-          () {
-            setState(() {
-              newHidden = !newHidden;
-            });
-          },
-        ),
+        _passwordField("New Password", newController, newHidden, () {
+          setState(() {
+            newHidden = !newHidden;
+          });
+        }),
 
         const SizedBox(height: 12),
 
-        PasswordStrength(
-          password: newController.text,
-        ),
+        PasswordStrength(password: newController.text),
 
         const SizedBox(height: AppSpacing.xl),
 
@@ -78,7 +68,6 @@ class _PasswordFormState extends State<PasswordForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
-
               Text("✓ Minimum 8 Characters"),
               SizedBox(height: 4),
 
@@ -89,17 +78,13 @@ class _PasswordFormState extends State<PasswordForm> {
               SizedBox(height: 4),
 
               Text("✓ One Special Character"),
-
             ],
           ),
         ),
 
         const SizedBox(height: 35),
 
-        UpdatePasswordButton(
-          onPressed: () {},
-        ),
-
+        UpdatePasswordButton(onPressed: () {}),
       ],
     );
   }
@@ -120,11 +105,7 @@ class _PasswordFormState extends State<PasswordForm> {
         labelText: label,
         border: const OutlineInputBorder(),
         suffixIcon: IconButton(
-          icon: Icon(
-            hidden
-                ? Icons.visibility_off
-                : Icons.visibility,
-          ),
+          icon: Icon(hidden ? Icons.visibility_off : Icons.visibility),
           onPressed: toggle,
         ),
       ),

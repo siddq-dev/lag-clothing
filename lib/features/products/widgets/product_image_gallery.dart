@@ -3,20 +3,15 @@ import 'package:flutter/material.dart';
 import '../../../models/product_model.dart';
 
 class ProductImageGallery extends StatefulWidget {
-  const ProductImageGallery({
-    super.key,
-    required this.product,
-  });
+  const ProductImageGallery({super.key, required this.product});
 
   final ProductModel product;
 
   @override
-  State<ProductImageGallery> createState() =>
-      _ProductImageGalleryState();
+  State<ProductImageGallery> createState() => _ProductImageGalleryState();
 }
 
-class _ProductImageGalleryState
-    extends State<ProductImageGallery> {
+class _ProductImageGalleryState extends State<ProductImageGallery> {
   int selectedIndex = 0;
 
   @override
@@ -29,27 +24,19 @@ class _ProductImageGalleryState
         child: Container(
           decoration: BoxDecoration(
             color: Colors.grey.shade200,
-            borderRadius:
-                BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(18),
           ),
-          child: const Center(
-            child: Icon(
-              Icons.image_not_supported,
-              size: 80,
-            ),
-          ),
+          child: const Center(child: Icon(Icons.image_not_supported, size: 80)),
         ),
       );
     }
 
     return Column(
       children: [
-
         AspectRatio(
           aspectRatio: 1,
           child: ClipRRect(
-            borderRadius:
-                BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(18),
             child: Image.network(
               images[selectedIndex].imageUrl,
               fit: BoxFit.cover,
@@ -65,8 +52,7 @@ class _ProductImageGalleryState
             scrollDirection: Axis.horizontal,
             itemCount: images.length,
 
-            separatorBuilder: (_, __) =>
-                const SizedBox(width: 15),
+            separatorBuilder: (_, _) => const SizedBox(width: 15),
 
             itemBuilder: (_, index) {
               return GestureDetector(
@@ -80,12 +66,10 @@ class _ProductImageGalleryState
                   width: 80,
 
                   decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12),
 
                     border: Border.all(
-                      color: selectedIndex ==
-                              index
+                      color: selectedIndex == index
                           ? Colors.black
                           : Colors.grey.shade300,
                       width: 2,
@@ -93,8 +77,7 @@ class _ProductImageGalleryState
                   ),
 
                   child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10),
                     child: Image.network(
                       images[index].imageUrl,
                       fit: BoxFit.cover,
@@ -105,7 +88,6 @@ class _ProductImageGalleryState
             },
           ),
         ),
-
       ],
     );
   }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../models/product_model.dart';
-import '../../../../routes/app_routes.dart';
 
 import 'product_table_row.dart';
 
@@ -37,9 +36,9 @@ class RecentProductsTable extends StatelessWidget {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: DataTable(
-        headingRowHeight: 55,
-  dataRowMinHeight: 70,
-  dataRowMaxHeight: 70,
+          headingRowHeight: 55,
+          dataRowMinHeight: 70,
+          dataRowMaxHeight: 70,
           columns: const [
             DataColumn(label: Text("Image")),
             DataColumn(label: Text("Product")),
@@ -52,19 +51,14 @@ class RecentProductsTable extends StatelessWidget {
           ],
           rows: products.map((product) {
             return ProductTableRow(
-  product: product,
-  onView: () {
-    context.go(
-      "/admin/product/${product.id}",
-    );
-  },
-             
+              product: product,
+              onView: () {
+                context.go("/admin/product/${product.id}");
+              },
 
-          onEdit: () {
-  context.push(
-    "/editproduct/${product.id}",
-  );
-},
+              onEdit: () {
+                context.push("/editproduct/${product.id}");
+              },
 
               onDelete: () async {
                 final confirmed = await showDialog<bool>(
@@ -72,18 +66,14 @@ class RecentProductsTable extends StatelessWidget {
                   builder: (_) {
                     return AlertDialog(
                       title: const Text("Delete Product"),
-                      content: Text(
-                        "Delete '${product.name}'?",
-                      ),
+                      content: Text("Delete '${product.name}'?"),
                       actions: [
                         TextButton(
-                          onPressed: () =>
-                              Navigator.pop(context, false),
+                          onPressed: () => Navigator.pop(context, false),
                           child: const Text("Cancel"),
                         ),
                         FilledButton(
-                          onPressed: () =>
-                              Navigator.pop(context, true),
+                          onPressed: () => Navigator.pop(context, true),
                           child: const Text("Delete"),
                         ),
                       ],

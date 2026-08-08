@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../models/order_model.dart';
 
 class OrderItemsTable extends StatelessWidget {
-  const OrderItemsTable({
-    super.key,
-    required this.order,
-  });
+  const OrderItemsTable({super.key, required this.order});
 
   final OrderModel order;
 
@@ -20,10 +17,7 @@ class OrderItemsTable extends StatelessWidget {
           children: [
             const Text(
               "Ordered Items",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 20),
@@ -50,18 +44,14 @@ class OrderItemsTable extends StatelessWidget {
                     cells: [
                       DataCell(
                         ClipRRect(
-                          borderRadius:
-                              BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(8),
                           child: Image.network(
                             item.productImage,
                             width: 60,
                             height: 60,
                             fit: BoxFit.cover,
-                            errorBuilder:
-                                (_, __, ___) =>
-                                    const Icon(
-                                      Icons.image_not_supported,
-                                    ),
+                            errorBuilder: (_, _, _) =>
+                                const Icon(Icons.image_not_supported),
                           ),
                         ),
                       ),
@@ -77,33 +67,18 @@ class OrderItemsTable extends StatelessWidget {
                         ),
                       ),
 
-                      DataCell(
-                        Text(item.size),
-                      ),
+                      DataCell(Text(item.size)),
 
-                      DataCell(
-                        Text(item.color),
-                      ),
+                      DataCell(Text(item.color)),
 
-                      DataCell(
-                        Text(
-                          item.quantity.toString(),
-                        ),
-                      ),
+                      DataCell(Text(item.quantity.toString())),
 
-                      DataCell(
-                        Text(
-                          "₹${item.price.toStringAsFixed(2)}",
-                        ),
-                      ),
+                      DataCell(Text("₹${item.price.toStringAsFixed(2)}")),
 
                       DataCell(
                         Text(
                           "₹${item.total.toStringAsFixed(2)}",
-                          style: const TextStyle(
-                            fontWeight:
-                                FontWeight.bold,
-                          ),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],

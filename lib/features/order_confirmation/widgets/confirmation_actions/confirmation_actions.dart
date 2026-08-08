@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../routes/app_routes.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_spacing.dart';
 
@@ -11,7 +10,6 @@ class ConfirmationActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         SizedBox(
           width: double.infinity,
           height: 55,
@@ -44,16 +42,13 @@ class ConfirmationActions extends StatelessWidget {
             label: const Text("Continue Shopping"),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.primary,
-              side: const BorderSide(
-                color: AppColors.primary,
-              ),
+              side: const BorderSide(color: AppColors.primary),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
           ),
         ),
-
       ],
     );
   }

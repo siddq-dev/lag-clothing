@@ -5,20 +5,15 @@ import '../../../../../models/order_model.dart';
 import '../../../../../providers/order_provider.dart';
 
 class UpdateOrderStatusCard extends StatefulWidget {
-  const UpdateOrderStatusCard({
-    super.key,
-    required this.order,
-  });
+  const UpdateOrderStatusCard({super.key, required this.order});
 
   final OrderModel order;
 
   @override
-  State<UpdateOrderStatusCard> createState() =>
-      _UpdateOrderStatusCardState();
+  State<UpdateOrderStatusCard> createState() => _UpdateOrderStatusCardState();
 }
 
-class _UpdateOrderStatusCardState
-    extends State<UpdateOrderStatusCard> {
+class _UpdateOrderStatusCardState extends State<UpdateOrderStatusCard> {
   late OrderStatus selectedStatus;
 
   @override
@@ -35,22 +30,17 @@ class _UpdateOrderStatusCardState
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Text(
               "Update Order Status",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 20),
 
             DropdownButtonFormField<OrderStatus>(
-              value: selectedStatus,
+              initialValue: selectedStatus,
 
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -61,9 +51,7 @@ class _UpdateOrderStatusCardState
                   .map(
                     (status) => DropdownMenuItem(
                       value: status,
-                      child: Text(
-                        status.name,
-                      ),
+                      child: Text(status.name),
                     ),
                   )
                   .toList(),
@@ -88,30 +76,25 @@ class _UpdateOrderStatusCardState
                     ? const SizedBox(
                         height: 18,
                         width: 18,
-                        child:
-                            CircularProgressIndicator(
+                        child: CircularProgressIndicator(
                           strokeWidth: 2,
                           color: Colors.white,
                         ),
                       )
-                    : const Text(
-                        "Update Status",
-                      ),
+                    : const Text("Update Status"),
 
                 onPressed: provider.isLoading
                     ? null
                     : () async {
                         try {
-                          await provider
-                              .updateOrderStatus(
+                          await provider.updateOrderStatus(
                             widget.order.id,
                             selectedStatus,
                           );
 
                           if (!context.mounted) return;
 
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
                                 "Order status updated successfully",
@@ -121,14 +104,9 @@ class _UpdateOrderStatusCardState
                         } catch (e) {
                           if (!context.mounted) return;
 
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                e.toString(),
-                              ),
-                            ),
-                          );
+                          ScaffoldMessenger.of(
+                            context,
+                          ).showSnackBar(SnackBar(content: Text(e.toString())));
                         }
                       },
               ),

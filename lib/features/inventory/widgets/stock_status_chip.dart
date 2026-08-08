@@ -27,14 +27,11 @@ class StockStatusChip extends StatelessWidget {
     }
 
     return Chip(
-      backgroundColor: color.withOpacity(.15),
+      backgroundColor: color.withValues(alpha: .15),
       side: BorderSide(color: color),
       label: Text(
         text,
-        style: TextStyle(
-          color: color,
-          fontWeight: FontWeight.bold,
-        ),
+        style: TextStyle(color: color, fontWeight: FontWeight.bold),
       ),
     );
   }

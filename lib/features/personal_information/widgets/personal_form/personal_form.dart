@@ -15,58 +15,40 @@ class PersonalForm extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         children: [
-
           /// First Name + Last Name
           Row(
             children: [
-
               Expanded(
-                child: _buildTextField(
-                  label: "First Name",
-                  hint: "John",
-                ),
+                child: _buildTextField(label: "First Name", hint: "John"),
               ),
 
               const SizedBox(width: 20),
 
               Expanded(
-                child: _buildTextField(
-                  label: "Last Name",
-                  hint: "Doe",
-                ),
+                child: _buildTextField(label: "Last Name", hint: "Doe"),
               ),
-
             ],
           ),
 
           const SizedBox(height: 24),
 
           /// Email
-          _buildTextField(
-            label: "Email Address",
-            hint: "john@email.com",
-          ),
+          _buildTextField(label: "Email Address", hint: "john@email.com"),
 
           const SizedBox(height: 24),
 
           /// Phone
-          _buildTextField(
-            label: "Phone Number",
-            hint: "+91 9876543210",
-          ),
+          _buildTextField(label: "Phone Number", hint: "+91 9876543210"),
 
           const SizedBox(height: 24),
 
           /// DOB + Gender
           Row(
             children: [
-
               Expanded(
                 child: _buildTextField(
                   label: "Date of Birth",
@@ -76,30 +58,19 @@ class PersonalForm extends StatelessWidget {
 
               const SizedBox(width: 20),
 
-              Expanded(
-                child: _buildDropdown(),
-              ),
-
+              Expanded(child: _buildDropdown()),
             ],
           ),
-
         ],
       ),
     );
   }
 
-  Widget _buildTextField({
-    required String label,
-    required String hint,
-  }) {
+  Widget _buildTextField({required String label, required String hint}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        Text(
-          label,
-          style: AppTextStyles.bodyLarge,
-        ),
+        Text(label, style: AppTextStyles.bodyLarge),
 
         const SizedBox(height: 10),
 
@@ -108,12 +79,9 @@ class PersonalForm extends StatelessWidget {
             hintText: hint,
             filled: true,
             fillColor: Colors.black26,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
-
       ],
     );
   }
@@ -122,44 +90,26 @@ class PersonalForm extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        Text(
-          "Gender",
-          style: AppTextStyles.bodyLarge,
-        ),
+        Text("Gender", style: AppTextStyles.bodyLarge),
 
         const SizedBox(height: 10),
 
         DropdownButtonFormField<String>(
-          value: "Male",
+          initialValue: "Male",
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.black26,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
           items: const [
+            DropdownMenuItem(value: "Male", child: Text("Male")),
 
-            DropdownMenuItem(
-              value: "Male",
-              child: Text("Male"),
-            ),
+            DropdownMenuItem(value: "Female", child: Text("Female")),
 
-            DropdownMenuItem(
-              value: "Female",
-              child: Text("Female"),
-            ),
-
-            DropdownMenuItem(
-              value: "Other",
-              child: Text("Other"),
-            ),
-
+            DropdownMenuItem(value: "Other", child: Text("Other")),
           ],
           onChanged: (value) {},
         ),
-
       ],
     );
   }

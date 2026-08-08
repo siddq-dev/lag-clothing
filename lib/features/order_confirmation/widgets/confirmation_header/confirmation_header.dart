@@ -18,18 +18,15 @@ class ConfirmationHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         children: [
-
           Container(
             width: 90,
             height: 90,
             decoration: BoxDecoration(
-              color: Colors.green.withOpacity(.15),
+              color: Colors.green.withValues(alpha: .15),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -56,10 +53,7 @@ class ConfirmationHeader extends StatelessWidget {
             text: TextSpan(
               style: AppTextStyles.bodyLarge,
               children: [
-
-                const TextSpan(
-                  text: "Thank You For Shopping With ",
-                ),
+                const TextSpan(text: "Thank You For Shopping With "),
 
                 TextSpan(
                   text: "LAG CLOTHING",
@@ -68,7 +62,6 @@ class ConfirmationHeader extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
               ],
             ),
           ),
@@ -80,7 +73,6 @@ class ConfirmationHeader extends StatelessWidget {
             textAlign: TextAlign.center,
             style: AppTextStyles.bodyMedium,
           ),
-
         ],
       ),
     );

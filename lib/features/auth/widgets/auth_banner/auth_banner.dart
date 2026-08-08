@@ -11,26 +11,16 @@ class AuthBanner extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
+        Image.asset('assets/images/auth/login_banner.jpg', fit: BoxFit.cover),
 
-        Image.asset(
-          'assets/images/auth/login_banner.jpg',
-          fit: BoxFit.cover,
-        ),
-
-        Container(
-          color: Colors.black.withOpacity(0.65),
-        ),
+        Container(color: Colors.black.withValues(alpha: 0.65)),
 
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 80,
-            vertical: 80,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 80),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
               Text(
                 'LAG',
                 style: AppTextStyles.heading1.copyWith(
@@ -43,9 +33,7 @@ class AuthBanner extends StatelessWidget {
 
               Text(
                 'WELCOME BACK',
-                style: AppTextStyles.heading2.copyWith(
-                  color: Colors.white,
-                ),
+                style: AppTextStyles.heading2.copyWith(color: Colors.white),
               ),
 
               const SizedBox(height: 20),
@@ -61,11 +49,9 @@ class AuthBanner extends StatelessWidget {
                   ),
                 ),
               ),
-
             ],
           ),
         ),
-
       ],
     );
   }

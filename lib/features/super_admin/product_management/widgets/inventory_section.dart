@@ -6,10 +6,9 @@ import '/providers/product_management_provider.dart';
 class InventorySection extends StatelessWidget {
   const InventorySection({super.key});
 
-@override
-Widget build(BuildContext context) {
-  final provider =
-      context.read<ProductManagementProvider>();
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.read<ProductManagementProvider>();
 
     final stock = provider.totalStock;
 
@@ -31,15 +30,11 @@ Widget build(BuildContext context) {
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               "Inventory",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 25),
@@ -49,18 +44,14 @@ Widget build(BuildContext context) {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: const Color(0xFF1B1B1B),
-                borderRadius:
-                    BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
                     "Total Available Stock",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
 
                   const SizedBox(height: 10),
@@ -77,9 +68,7 @@ Widget build(BuildContext context) {
 
                   const Text(
                     "Calculated automatically from the product variants.",
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
+                    style: TextStyle(color: Colors.grey),
                   ),
                 ],
               ),
@@ -90,16 +79,12 @@ Widget build(BuildContext context) {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: statusColor.withOpacity(.12),
-                borderRadius:
-                    BorderRadius.circular(12),
+                color: statusColor.withValues(alpha: .12),
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.inventory_2,
-                    color: statusColor,
-                  ),
+                  Icon(Icons.inventory_2, color: statusColor),
 
                   const SizedBox(width: 12),
 

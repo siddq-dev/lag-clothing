@@ -23,15 +23,13 @@ class NotificationFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return SizedBox(
       height: 45,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: filters.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 10),
+        separatorBuilder: (_, _) => const SizedBox(width: 10),
         itemBuilder: (context, index) {
-
           final selected = selectedIndex == index;
 
           return ChoiceChip(
@@ -39,9 +37,7 @@ class NotificationFilter extends StatelessWidget {
             selected: selected,
             selectedColor: AppColors.primary,
             labelStyle: TextStyle(
-              color: selected
-                  ? Colors.white
-                  : Colors.black,
+              color: selected ? Colors.white : Colors.black,
             ),
             onSelected: (_) => onChanged(index),
           );

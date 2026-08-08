@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '/models/inventory_analytics_model.dart';
 
 class InventorySummaryCard extends StatelessWidget {
-  const InventorySummaryCard({
-    super.key,
-    required this.inventory,
-  });
+  const InventorySummaryCard({super.key, required this.inventory});
 
   final InventoryAnalyticsModel inventory;
 
@@ -14,9 +11,7 @@ class InventorySummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -24,10 +19,7 @@ class InventorySummaryCard extends StatelessWidget {
           children: [
             const Text(
               "Inventory Summary",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 24),
@@ -88,17 +80,12 @@ class InventorySummaryCard extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.indigo.withOpacity(.08),
+                color: Colors.indigo.withValues(alpha: .08),
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Column(
                 children: [
-                  const Text(
-                    "Inventory Value",
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
+                  const Text("Inventory Value", style: TextStyle(fontSize: 16)),
 
                   const SizedBox(height: 8),
 
@@ -128,26 +115,20 @@ class InventorySummaryCard extends StatelessWidget {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        color: color.withOpacity(.08),
+        color: color.withValues(alpha: .08),
       ),
       child: Column(
         children: [
           CircleAvatar(
-            backgroundColor: color.withOpacity(.15),
-            child: Icon(
-              icon,
-              color: color,
-            ),
+            backgroundColor: color.withValues(alpha: .15),
+            child: Icon(icon, color: color),
           ),
 
           const SizedBox(height: 12),
 
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
 
           const SizedBox(height: 6),

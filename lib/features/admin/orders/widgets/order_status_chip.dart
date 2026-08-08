@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class OrderStatusChip extends StatelessWidget {
-  const OrderStatusChip({
-    super.key,
-    required this.status,
-  });
+  const OrderStatusChip({super.key, required this.status});
 
   final String status;
 
@@ -36,13 +33,10 @@ class OrderStatusChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Chip(
-      backgroundColor: color.withOpacity(.15),
+      backgroundColor: color.withValues(alpha: .15),
       label: Text(
         status,
-        style: TextStyle(
-          color: color,
-          fontWeight: FontWeight.bold,
-        ),
+        style: TextStyle(color: color, fontWeight: FontWeight.bold),
       ),
     );
   }

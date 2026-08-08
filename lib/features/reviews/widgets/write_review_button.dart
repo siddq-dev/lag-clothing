@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../themes/app_colors.dart';
 import 'review_form.dart';
-import '../page/reviews_page.dart';
 
 class WriteReviewButton extends StatelessWidget {
   const WriteReviewButton({super.key});
@@ -23,10 +22,7 @@ class WriteReviewButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 18,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -34,9 +30,7 @@ class WriteReviewButton extends StatelessWidget {
         icon: const Icon(Icons.rate_review_outlined),
         label: const Text(
           "WRITE A REVIEW",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -50,14 +44,10 @@ class _WriteReviewDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       insetPadding: const EdgeInsets.all(30),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       child: const Padding(
         padding: EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: ReviewForm(),
-        ),
+        child: SingleChildScrollView(child: ReviewForm()),
       ),
     );
   }

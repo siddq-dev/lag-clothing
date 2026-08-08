@@ -5,10 +5,7 @@ import '../../../../themes/app_spacing.dart';
 import '../../../../themes/app_text_style.dart';
 
 class EmptyAddresses extends StatelessWidget {
-  const EmptyAddresses({
-    super.key,
-    required this.onAddAddress,
-  });
+  const EmptyAddresses({super.key, required this.onAddAddress});
 
   final VoidCallback onAddAddress;
 
@@ -21,17 +18,14 @@ class EmptyAddresses extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: AppColors.border,
-          ),
+          border: Border.all(color: AppColors.border),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-
             CircleAvatar(
               radius: 45,
-              backgroundColor: AppColors.primary.withOpacity(0.15),
+              backgroundColor: AppColors.primary.withValues(alpha: 0.15),
               child: const Icon(
                 Icons.location_on_outlined,
                 size: 50,
@@ -41,10 +35,7 @@ class EmptyAddresses extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.xl),
 
-            Text(
-              "No Saved Addresses",
-              style: AppTextStyles.heading2,
-            ),
+            Text("No Saved Addresses", style: AppTextStyles.heading2),
 
             const SizedBox(height: AppSpacing.md),
 
@@ -65,22 +56,15 @@ class EmptyAddresses extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 18,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 18),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                icon: const Icon(
-                  Icons.add_location_alt_outlined,
-                ),
-                label: const Text(
-                  "Add Address",
-                ),
+                icon: const Icon(Icons.add_location_alt_outlined),
+                label: const Text("Add Address"),
               ),
             ),
-
           ],
         ),
       ),

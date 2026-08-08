@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_spacing.dart';
 import '../../../../themes/app_text_style.dart';
 
@@ -21,13 +20,10 @@ class DetailRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: AppSpacing.md,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           SizedBox(
             width: 180,
             child: Text(
@@ -42,13 +38,8 @@ class DetailRow extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 if (icon != null) ...[
-                  Icon(
-                    icon,
-                    color: valueColor,
-                    size: 18,
-                  ),
+                  Icon(icon, color: valueColor, size: 18),
                   const SizedBox(width: 8),
                 ],
 
@@ -61,11 +52,9 @@ class DetailRow extends StatelessWidget {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
-
         ],
       ),
     );

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../models/product_model.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../routes/app_routes.dart';
 
 class ProductTableRow extends DataRow {
   ProductTableRow({
@@ -11,98 +9,69 @@ class ProductTableRow extends DataRow {
     required VoidCallback onEdit,
     required VoidCallback onDelete,
   }) : super(
-          cells: [
-            DataCell(
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: product.images.isNotEmpty
-                    ? Image.network(
-                        product.images.first.imageUrl,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                        errorBuilder: (
-                          context,
-                          error,
-                          stackTrace,
-                        ) {
-                          return const Icon(Icons.image);
-                        },
-                      )
-                    : const Icon(Icons.image),
-              ),
-            ),
+         cells: [
+           DataCell(
+             ClipRRect(
+               borderRadius: BorderRadius.circular(8),
+               child: product.images.isNotEmpty
+                   ? Image.network(
+                       product.images.first.imageUrl,
+                       width: 50,
+                       height: 50,
+                       fit: BoxFit.cover,
+                       errorBuilder: (context, error, stackTrace) {
+                         return const Icon(Icons.image);
+                       },
+                     )
+                   : const Icon(Icons.image),
+             ),
+           ),
 
-            DataCell(
-              SizedBox(
-                width: 220,
-                child: Text(
-                  product.name,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
+           DataCell(
+             SizedBox(
+               width: 220,
+               child: Text(
+                 product.name,
+                 overflow: TextOverflow.ellipsis,
+                 style: const TextStyle(fontWeight: FontWeight.w600),
+               ),
+             ),
+           ),
 
-            DataCell(
-              Text(product.brand),
-            ),
+           DataCell(Text(product.brand)),
 
-            DataCell(
-              Text(product.category),
-            ),
+           DataCell(Text(product.category)),
 
-            DataCell(
-              Text(
-                "₹${product.price.toStringAsFixed(0)}",
-              ),
-            ),
+           DataCell(Text("₹${product.price.toStringAsFixed(0)}")),
 
-            DataCell(
-              Text(
-                product.stock.toString(),
-              ),
-            ),
+           DataCell(Text(product.stock.toString())),
 
-            DataCell(
-              Chip(
-                backgroundColor: product.status
-                    ? Colors.green.shade100
-                    : Colors.red.shade100,
-                label: Text(
-                  product.status
-                      ? "Active"
-                      : "Inactive",
-                ),
-              ),
-            ),
+           DataCell(
+             Chip(
+               backgroundColor: product.status
+                   ? Colors.green.shade100
+                   : Colors.red.shade100,
+               label: Text(product.status ? "Active" : "Inactive"),
+             ),
+           ),
 
-            DataCell(
-              Row(
-                children: [
-           IconButton(
-  icon: const Icon(Icons.visibility),
-  onPressed: onView,
-),
+           DataCell(
+             Row(
+               children: [
+                 IconButton(
+                   icon: const Icon(Icons.visibility),
+                   onPressed: onView,
+                 ),
 
-                  IconButton(
-                    onPressed: onEdit,
-                    icon: const Icon(Icons.edit),
-                    
-                  ),
+                 IconButton(onPressed: onEdit, icon: const Icon(Icons.edit)),
 
-                  IconButton(
-                    onPressed: onDelete,
-                    icon: const Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
+                 IconButton(
+                   onPressed: onDelete,
+                   icon: const Icon(Icons.delete, color: Colors.red),
+                 ),
+               ],
+             ),
+           ),
+         ],
+       );
 }

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AdminOrderSort extends StatelessWidget {
-  const AdminOrderSort({
-    super.key,
-    this.value = "Newest",
-    this.onChanged,
-  });
+  const AdminOrderSort({super.key, this.value = "Newest", this.onChanged});
 
   final String value;
   final ValueChanged<String?>? onChanged;
@@ -15,21 +11,13 @@ class AdminOrderSort extends StatelessWidget {
     return SizedBox(
       width: 190,
       child: DropdownButtonFormField<String>(
-        value: value,
+        initialValue: value,
         decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         ),
         items: const [
-          DropdownMenuItem(
-            value: "Newest",
-            child: Text("Newest"),
-          ),
-          DropdownMenuItem(
-            value: "Oldest",
-            child: Text("Oldest"),
-          ),
+          DropdownMenuItem(value: "Newest", child: Text("Newest")),
+          DropdownMenuItem(value: "Oldest", child: Text("Oldest")),
           DropdownMenuItem(
             value: "Highest Amount",
             child: Text("Highest Amount"),

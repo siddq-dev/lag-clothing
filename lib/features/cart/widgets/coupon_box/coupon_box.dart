@@ -14,8 +14,7 @@ class CouponBox extends StatefulWidget {
 }
 
 class _CouponBoxState extends State<CouponBox> {
-  final TextEditingController _controller =
-      TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void dispose() {
@@ -24,48 +23,35 @@ class _CouponBoxState extends State<CouponBox> {
   }
 
   Future<void> _applyCoupon() async {
-    final couponProvider =
-        context.read<CouponProvider>();
+    final couponProvider = context.read<CouponProvider>();
 
-    final cartProvider =
-        context.read<CartProvider>();
+    final cartProvider = context.read<CartProvider>();
 
     final subtotal = cartProvider.subtotal;
 
-    
+    final productIds = cartProvider.items.map((e) => e.productId).toList();
 
-    final productIds = cartProvider.items
-        .map((e) => e.productId)
-        .toList();
-
-    final success =
-   await couponProvider.applyCoupon(
-  code: _controller.text.trim(),
-  subtotal: subtotal,
-  productIds: productIds,
-);
+    final success = await couponProvider.applyCoupon(
+      code: _controller.text.trim(),
+      subtotal: subtotal,
+      productIds: productIds,
+    );
 
     if (!mounted) return;
 
     if (success) {
-      context.read<CartProvider>().applyDiscount(
-      couponProvider.discount,
-);
+      context.read<CartProvider>().applyDiscount(couponProvider.discount);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.green,
-          content: Text(
-            "Coupon Applied (${couponProvider.couponCode})",
-          ),
+          content: Text("Coupon Applied (${couponProvider.couponCode})"),
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red,
-          content: Text(
-            couponProvider.error ?? "Invalid Coupon",
-          ),
+          content: Text(couponProvider.error ?? "Invalid Coupon"),
         ),
       );
     }
@@ -73,41 +59,30 @@ class _CouponBoxState extends State<CouponBox> {
 
   @override
   Widget build(BuildContext context) {
-    final couponProvider =
-        context.watch<CouponProvider>();
+    final couponProvider = context.watch<CouponProvider>();
 
     return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (couponProvider.coupon != null)
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.green.withOpacity(.08),
-              borderRadius:
-                  BorderRadius.circular(12),
-              border: Border.all(
-                color: Colors.green,
-              ),
+              color: Colors.green.withValues(alpha: .08),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.green),
             ),
             child: Row(
               children: [
-                const Icon(
-                  Icons.verified,
-                  color: Colors.green,
-                ),
+                const Icon(Icons.verified, color: Colors.green),
 
                 const SizedBox(width: 10),
 
                 Expanded(
                   child: Text(
                     couponProvider.couponCode,
-                    style: const TextStyle(
-                      fontWeight:
-                          FontWeight.bold,
-                    ),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
 
@@ -115,8 +90,7 @@ class _CouponBoxState extends State<CouponBox> {
                   "- ₹${couponProvider.discount.toStringAsFixed(0)}",
                   style: const TextStyle(
                     color: Colors.green,
-                    fontWeight:
-                        FontWeight.bold,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
 
@@ -139,41 +113,29 @@ class _CouponBoxState extends State<CouponBox> {
               Expanded(
                 child: TextField(
                   controller: _controller,
-                  decoration:
-                      const InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: "Enter Coupon Code",
                   ),
                 ),
               ),
 
-              const SizedBox(
-                width: AppSpacing.md,
-              ),
+              const SizedBox(width: AppSpacing.md),
 
               ElevatedButton(
-                onPressed:
-                    couponProvider.isLoading
-                        ? null
-                        : _applyCoupon,
-                style:
-                    ElevatedButton.styleFrom(
-                  backgroundColor:
-                      AppColors.primary,
+                onPressed: couponProvider.isLoading ? null : _applyCoupon,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
                 ),
-                child:
-                    couponProvider.isLoading
-                        ? const SizedBox(
-                            height: 18,
-                            width: 18,
-                            child:
-                                CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text(
-                            "Apply",
-                          ),
+                child: couponProvider.isLoading
+                    ? const SizedBox(
+                        height: 18,
+                        width: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text("Apply"),
               ),
             ],
           ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../layout/admin_layout.dart';
 import '../../../../routes/app_routes.dart';
@@ -12,34 +11,26 @@ class CustomerManagementPage extends StatefulWidget {
   const CustomerManagementPage({super.key});
 
   @override
-  State<CustomerManagementPage> createState() =>
-      _CustomerManagementPageState();
+  State<CustomerManagementPage> createState() => _CustomerManagementPageState();
 }
 
-class _CustomerManagementPageState
-    extends State<CustomerManagementPage> {
-  final TextEditingController _searchController =
-      TextEditingController();
+class _CustomerManagementPageState extends State<CustomerManagementPage> {
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
     Future.microtask(() {
-      context
-          .read<CustomerManagementProvider>()
-          .listenCustomers();
+      context.read<CustomerManagementProvider>().listenCustomers();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider =
-        context.watch<CustomerManagementProvider>();
+    final provider = context.watch<CustomerManagementProvider>();
 
-    final customers = provider.searchCustomers(
-      _searchController.text,
-    );
+    final customers = provider.searchCustomers(_searchController.text);
 
     return AdminLayout(
       title: 'Customer Management',
@@ -47,30 +38,23 @@ class _CustomerManagementPageState
       child: Padding(
         padding: const EdgeInsets.all(30),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               "Customer Management",
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 10),
 
-            const Text(
-              "Manage customer accounts and orders.",
-            ),
+            const Text("Manage customer accounts and orders."),
 
             const SizedBox(height: 30),
 
             TextField(
               controller: _searchController,
               decoration: const InputDecoration(
-                hintText:
-                    "Search customer...",
+                hintText: "Search customer...",
                 prefixIcon: Icon(Icons.search),
               ),
               onChanged: (_) {
@@ -82,13 +66,8 @@ class _CustomerManagementPageState
 
             Expanded(
               child: provider.isLoading
-                  ? const Center(
-                      child:
-                          CircularProgressIndicator(),
-                    )
-                  : CustomerTable(
-                      customers: customers,
-                    ),
+                  ? const Center(child: CircularProgressIndicator())
+                  : CustomerTable(customers: customers),
             ),
           ],
         ),

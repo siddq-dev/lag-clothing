@@ -2,60 +2,47 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../models/product_model.dart';
 
-import '../repositories/product_repository.dart';
-import '../../../../models/product_model.dart';
-
 class ProductManagementRepository {
   ProductManagementRepository._();
 
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static CollectionReference<Map<String, dynamic>>
-      get _products =>
-          _firestore.collection("products");
+  static CollectionReference<Map<String, dynamic>> get _products =>
+      _firestore.collection("products");
 
   //==================================================
   // Create Product
   //==================================================
 
- static Future<ProductModel> createProduct(
-  ProductModel product,
-) async {
-  final doc = _products.doc();
+  static Future<ProductModel> createProduct(ProductModel product) async {
+    final doc = _products.doc();
 
-  final newProduct = product.copyWith(
-    id: doc.id,
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
-  );
+    final newProduct = product.copyWith(
+      id: doc.id,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    );
 
-  await doc.set(newProduct.toMap());
+    await doc.set(newProduct.toMap());
 
-  return newProduct;
-}
+    return newProduct;
+  }
 
   //==================================================
   // Update Product
   //==================================================
 
-  static Future<void> updateProduct(
-    ProductModel product,
-  ) async {
-    await _products.doc(product.id).update(
-          product.copyWith(
-            updatedAt: Timestamp.now(),
-          ).toMap(),
-        );
+  static Future<void> updateProduct(ProductModel product) async {
+    await _products
+        .doc(product.id)
+        .update(product.copyWith(updatedAt: Timestamp.now()).toMap());
   }
 
   //==================================================
   // Delete Product
   //==================================================
 
-  static Future<void> deleteProduct(
-    String productId,
-  ) async {
+  static Future<void> deleteProduct(String productId) async {
     await _products.doc(productId).delete();
   }
 
@@ -63,35 +50,22 @@ class ProductManagementRepository {
   // Recently Added Products
   //==================================================
 
-  static Stream<List<ProductModel>>
-      streamRecentProducts() {
+  static Stream<List<ProductModel>> streamRecentProducts() {
     return _products
-        .orderBy(
-          "createdAt",
-          descending: true,
-        )
+        .orderBy("createdAt", descending: true)
         .limit(50)
         .snapshots()
         .map(
-          (snapshot) => snapshot.docs
-              .map(
-                (e) => ProductModel.fromMap(
-                  e.data(),
-                ),
-              )
-              .toList(),
+          (snapshot) =>
+              snapshot.docs.map((e) => ProductModel.fromMap(e.data())).toList(),
         );
   }
-
-
-
 
   //==================================================
   // Dashboard Statistics
   //==================================================
 
-  static Future<Map<String, int>>
-      getStatistics() async {
+  static Future<Map<String, int>> getStatistics() async {
     final snapshot = await _products.get();
 
     int active = 0;
@@ -113,7 +87,4 @@ class ProductManagementRepository {
       "inactive": inactive,
     };
   }
-
-
-  
 }

@@ -20,23 +20,19 @@ class AdminProductSort extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider =
-        context.watch<AdminProductFilterProvider>();
+    final provider = context.watch<AdminProductFilterProvider>();
 
     return SizedBox(
       width: 220,
       child: DropdownButtonFormField<String>(
-        value: provider.sortBy,
+        initialValue: provider.sortBy,
         decoration: const InputDecoration(
           labelText: "Sort By",
           prefixIcon: Icon(Icons.sort),
           border: OutlineInputBorder(),
         ),
         items: sortOptions.map((option) {
-          return DropdownMenuItem(
-            value: option,
-            child: Text(option),
-          );
+          return DropdownMenuItem(value: option, child: Text(option));
         }).toList(),
         onChanged: (value) {
           if (value != null) {

@@ -28,15 +28,13 @@ class ReviewsPage extends StatelessWidget {
         "name": "David Miller",
         "rating": 4,
         "date": "18 Jul 2026",
-        "review":
-            "Good fitting jersey. Printing quality is very nice.",
+        "review": "Good fitting jersey. Printing quality is very nice.",
       },
       {
         "name": "Alex Johnson",
         "rating": 5,
         "date": "14 Jul 2026",
-        "review":
-            "Absolutely loved it. Will definitely buy again.",
+        "review": "Absolutely loved it. Will definitely buy again.",
       },
     ];
 
@@ -47,31 +45,23 @@ class ReviewsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const ReviewHeader(),
 
-            const SizedBox(
-              height: AppSpacing.xxxl,
-            ),
+            const SizedBox(height: AppSpacing.xxxl),
 
             const RatingSummary(),
 
-            const SizedBox(
-              height: AppSpacing.xxxl,
-            ),
+            const SizedBox(height: AppSpacing.xxxl),
 
             const WriteReviewButton(),
 
-            const SizedBox(
-              height: AppSpacing.xxxl,
-            ),
+            const SizedBox(height: AppSpacing.xxxl),
 
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: reviews.length,
-              separatorBuilder: (_, __) =>
-                  const SizedBox(height: 20),
+              separatorBuilder: (_, _) => const SizedBox(height: 20),
               itemBuilder: (context, index) {
                 final review = reviews[index];
 
@@ -83,7 +73,6 @@ class ReviewsPage extends StatelessWidget {
                 );
               },
             ),
-
           ],
         ),
       ),

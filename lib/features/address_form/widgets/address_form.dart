@@ -6,10 +6,7 @@ import 'address_type_selector.dart';
 import 'saved_address_button.dart';
 
 class AddressForm extends StatefulWidget {
-  const AddressForm({
-    super.key,
-    this.isEditing = false,
-  });
+  const AddressForm({super.key, this.isEditing = false});
 
   final bool isEditing;
 
@@ -51,11 +48,7 @@ class _AddressFormState extends State<AddressForm> {
       key: _formKey,
       child: Column(
         children: [
-
-          _buildField(
-            controller: fullNameController,
-            label: "Full Name",
-          ),
+          _buildField(controller: fullNameController, label: "Full Name"),
 
           const SizedBox(height: AppSpacing.lg),
 
@@ -67,40 +60,26 @@ class _AddressFormState extends State<AddressForm> {
 
           const SizedBox(height: AppSpacing.lg),
 
-          _buildField(
-            controller: address1Controller,
-            label: "Address Line 1",
-          ),
+          _buildField(controller: address1Controller, label: "Address Line 1"),
 
           const SizedBox(height: AppSpacing.lg),
 
-          _buildField(
-            controller: address2Controller,
-            label: "Address Line 2",
-          ),
+          _buildField(controller: address2Controller, label: "Address Line 2"),
 
           const SizedBox(height: AppSpacing.lg),
 
-          _buildField(
-            controller: cityController,
-            label: "City",
-          ),
+          _buildField(controller: cityController, label: "City"),
 
           const SizedBox(height: AppSpacing.lg),
 
           DropdownButtonFormField<String>(
-            value: selectedState,
+            initialValue: selectedState,
             decoration: const InputDecoration(
               labelText: "State",
               border: OutlineInputBorder(),
             ),
             items: states
-                .map(
-                  (e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e),
-                  ),
-                )
+                .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                 .toList(),
             onChanged: (value) {
               setState(() {
@@ -120,16 +99,13 @@ class _AddressFormState extends State<AddressForm> {
           const SizedBox(height: AppSpacing.lg),
 
           DropdownButtonFormField<String>(
-            value: selectedCountry,
+            initialValue: selectedCountry,
             decoration: const InputDecoration(
               labelText: "Country",
               border: OutlineInputBorder(),
             ),
             items: const [
-              DropdownMenuItem(
-                value: "India",
-                child: Text("India"),
-              ),
+              DropdownMenuItem(value: "India", child: Text("India")),
             ],
             onChanged: (value) {
               setState(() {
@@ -175,7 +151,6 @@ class _AddressFormState extends State<AddressForm> {
               }
             },
           ),
-
         ],
       ),
     );

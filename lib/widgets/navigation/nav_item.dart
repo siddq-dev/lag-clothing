@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../themes/app_colors.dart';
 import '../../themes/app_text_style.dart';
 
 class NavItem extends StatelessWidget {
@@ -21,10 +20,7 @@ class NavItem extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(6),
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 8,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Text(
           title,
           style: isSelected

@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class OrderItemModel {
   final String productId;
   final String productName;
@@ -39,9 +37,7 @@ class OrderItemModel {
     };
   }
 
-  factory OrderItemModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory OrderItemModel.fromMap(Map<String, dynamic> map) {
     return OrderItemModel(
       productId: map['productId'] ?? '',
       productName: map['productName'] ?? '',

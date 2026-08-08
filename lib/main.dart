@@ -23,41 +23,34 @@ import 'providers/customer_management_provider.dart';
 import 'providers/analytics_provider.dart';
 import '/services/analytics_lifecycle_service.dart';
 import 'providers/product_management_provider.dart';
-import 'providers/shop_provider.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  WidgetsBinding.instance.addObserver(
-  AnalyticsLifecycleService(),
-);
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-);
+  WidgetsBinding.instance.addObserver(AnalyticsLifecycleService());
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(
       providers: [
-         ChangeNotifierProvider(create: (_) => AuthProvider(),),
-        ChangeNotifierProvider(create: (_) => WishlistProvider(), ),
-        ChangeNotifierProvider(create: (_) => CustomerProvider(), ),
-        ChangeNotifierProvider(create: (_) => AddressProvider(), ),
-        ChangeNotifierProvider(create: (_) => PaymentMethodProvider(), ),
-        ChangeNotifierProvider(create: (_) => NotificationProvider(), ),
-        ChangeNotifierProvider(create: (_) => AccountSettingsProvider(), ),
-        ChangeNotifierProvider(create: (_) => OrderProvider(), ),
-        ChangeNotifierProvider(create: (_) => ProductProvider(), ),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => WishlistProvider()),
+        ChangeNotifierProvider(create: (_) => CustomerProvider()),
+        ChangeNotifierProvider(create: (_) => AddressProvider()),
+        ChangeNotifierProvider(create: (_) => PaymentMethodProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => AccountSettingsProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => AdminManagementProvider()),
         ChangeNotifierProvider(create: (_) => AdminProductProvider()),
         ChangeNotifierProvider(create: (_) => AdminOrderFilterProvider()),
-        ChangeNotifierProvider(create: (_) => CouponProvider(),),
-         ChangeNotifierProvider(create: (_) => CustomerManagementProvider(),),
-        ChangeNotifierProvider(create: (_) => AnalyticsProvider(),),
-        ChangeNotifierProvider(create: (_) => InventoryProvider(),),
-        ChangeNotifierProvider(create: (_) => ProductManagementProvider(),),
-        ChangeNotifierProvider(create:  (_) => ShopProvider(),),
-
-
+        ChangeNotifierProvider(create: (_) => CouponProvider()),
+        ChangeNotifierProvider(create: (_) => CustomerManagementProvider()),
+        ChangeNotifierProvider(create: (_) => AnalyticsProvider()),
+        ChangeNotifierProvider(create: (_) => InventoryProvider()),
+        ChangeNotifierProvider(create: (_) => ProductManagementProvider()),
+        ChangeNotifierProvider(create: (_) => ShopProvider()),
       ],
       child: const LagClothingApp(),
     ),

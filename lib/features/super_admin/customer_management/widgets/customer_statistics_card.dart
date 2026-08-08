@@ -54,12 +54,7 @@ class CustomerStatisticsCard extends StatelessWidget {
         Expanded(
           child: _card(
             "Last Order",
-            lastOrder == null
-                ? "-"
-                : lastOrder!
-                    .toString()
-                    .split(" ")
-                    .first,
+            lastOrder == null ? "-" : lastOrder!.toString().split(" ").first,
             Icons.history,
             Colors.purple,
           ),
@@ -68,49 +63,29 @@ class CustomerStatisticsCard extends StatelessWidget {
     );
   }
 
-  Widget _card(
-    String title,
-    String value,
-    IconData icon,
-    Color color,
-  ) {
+  Widget _card(String title, String value, IconData icon, Color color) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
-        padding:
-            const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             CircleAvatar(
-              backgroundColor:
-                  color.withOpacity(.15),
-              child: Icon(
-                icon,
-                color: color,
-              ),
+              backgroundColor: color.withValues(alpha: .15),
+              child: Icon(icon, color: color),
             ),
 
             const SizedBox(height: 15),
 
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight:
-                    FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 8),
 
-            Text(
-              title,
-              textAlign: TextAlign.center,
-            ),
+            Text(title, textAlign: TextAlign.center),
           ],
         ),
       ),

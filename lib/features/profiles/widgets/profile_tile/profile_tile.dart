@@ -29,25 +29,18 @@ class ProfileTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.border,
-          ),
+          border: Border.all(color: AppColors.border),
         ),
         child: Row(
           children: [
-
             Container(
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(.15),
+                color: AppColors.primary.withValues(alpha: .15),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon,
-                color: AppColors.primary,
-                size: 26,
-              ),
+              child: Icon(icon, color: AppColors.primary, size: 26),
             ),
 
             const SizedBox(width: 18),
@@ -56,11 +49,7 @@ class ProfileTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
-                  Text(
-                    title,
-                    style: AppTextStyles.heading3,
-                  ),
+                  Text(title, style: AppTextStyles.heading3),
 
                   const SizedBox(height: 4),
 
@@ -70,7 +59,6 @@ class ProfileTile extends StatelessWidget {
                       color: Colors.grey.shade400,
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -80,7 +68,6 @@ class ProfileTile extends StatelessWidget {
               color: Colors.grey,
               size: 18,
             ),
-
           ],
         ),
       ),

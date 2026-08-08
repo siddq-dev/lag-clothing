@@ -7,10 +7,7 @@ import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
 
 class ShopProductCard extends StatelessWidget {
-  const ShopProductCard({
-    super.key,
-    required this.product,
-  });
+  const ShopProductCard({super.key, required this.product});
 
   final ProductModel product;
 
@@ -19,17 +16,13 @@ class ShopProductCard extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(18),
       onTap: () {
-        context.go(
-          "/product/${product.id}",
-        );
+        context.go("/product/${product.id}");
       },
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.border,
-          ),
+          border: Border.all(color: AppColors.border),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,21 +41,13 @@ class ShopProductCard extends StatelessWidget {
                           ? Image.network(
                               product.images.first.imageUrl,
                               fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) {
+                              errorBuilder: (_, _, _) {
                                 return const Center(
-                                  child: Icon(
-                                    Icons.image,
-                                    size: 50,
-                                  ),
+                                  child: Icon(Icons.image, size: 50),
                                 );
                               },
                             )
-                          : const Center(
-                              child: Icon(
-                                Icons.image,
-                                size: 50,
-                              ),
-                            ),
+                          : const Center(child: Icon(Icons.image, size: 50)),
                     ),
                   ),
 
@@ -72,7 +57,7 @@ class ShopProductCard extends StatelessWidget {
                     right: 12,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(.55),
+                        color: Colors.black.withValues(alpha: .55),
                         shape: BoxShape.circle,
                       ),
                       child: IconButton(
@@ -94,8 +79,7 @@ class ShopProductCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     product.brand,
@@ -117,11 +101,7 @@ class ShopProductCard extends StatelessWidget {
 
                   Row(
                     children: [
-                      const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                        size: 18,
-                      ),
+                      const Icon(Icons.star, color: Colors.amber, size: 18),
 
                       const SizedBox(width: 4),
 
@@ -149,8 +129,7 @@ class ShopProductCard extends StatelessWidget {
                       child: Text(
                         "₹${product.price.toStringAsFixed(0)}",
                         style: const TextStyle(
-                          decoration:
-                              TextDecoration.lineThrough,
+                          decoration: TextDecoration.lineThrough,
                           color: Colors.grey,
                         ),
                       ),
@@ -166,23 +145,14 @@ class ShopProductCard extends StatelessWidget {
                             context.go(AppRouter.cart);
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                AppColors.primary,
-                            foregroundColor:
-                                Colors.white,
-                            padding:
-                                const EdgeInsets.symmetric(
-                              vertical: 14,
-                            ),
-                            shape:
-                                RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(10),
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          child: const Text(
-                            "Add to Cart",
-                          ),
+                          child: const Text("Add to Cart"),
                         ),
                       ),
 
@@ -191,29 +161,17 @@ class ShopProductCard extends StatelessWidget {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
-                            context.go(
-                                AppRouter.checkout);
+                            context.go(AppRouter.checkout);
                           },
-                          style:
-                              OutlinedButton.styleFrom(
-                            foregroundColor:
-                                AppColors.primary,
-                            side: BorderSide(
-                              color: AppColors.primary,
-                            ),
-                            padding:
-                                const EdgeInsets.symmetric(
-                              vertical: 14,
-                            ),
-                            shape:
-                                RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(10),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.primary,
+                            side: BorderSide(color: AppColors.primary),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          child: const Text(
-                            "Buy Now",
-                          ),
+                          child: const Text("Buy Now"),
                         ),
                       ),
                     ],
