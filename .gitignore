@@ -39,6 +39,9 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
+# Local Oracle JDK bundled inside Android folder
+android/oracleJdk-26/
+
 # Android Studio will place build artifacts here
 /android/app/debug
 /android/app/profile
