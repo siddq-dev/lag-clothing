@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'package:lag_clothing/repositories/product_repository.dart';
 
 import '../../../../models/product_model.dart';
@@ -16,6 +17,10 @@ import '../../../../models/product_seo_model.dart';
 import '../services/stock_update_service.dart';
 
 class ProductManagementProvider extends ChangeNotifier {
+  //==========================================================
+  // SAME STOCK FOR ALL
+  //==========================================================
+
   bool _sameStockForAll = false;
 
   bool get sameStockForAll => _sameStockForAll;
@@ -57,23 +62,33 @@ class ProductManagementProvider extends ChangeNotifier {
   }
 
   //==========================================================
-  // Product Form
+  // PRODUCT FORM
   //==========================================================
 
   ProductFormModel _form = ProductFormModel();
 
   ProductFormModel get form => _form;
 
-  ///--------------------------------------------------
-  // Color Variants
-  //--------------------------------------------------
+  //==========================================================
+  // COLOR VARIANTS
+  //==========================================================
 
   final List<ProductColorVariantModel> _colorVariants = [];
 
   List<ProductColorVariantModel> get colorVariants => _colorVariants;
 
   //==========================================================
-  // Basic Information
+  // EDITING
+  //==========================================================
+
+  ProductModel? _editingProduct;
+
+  bool get isEditing => _editingProduct != null;
+
+  ProductModel? get editingProduct => _editingProduct;
+
+  //==========================================================
+  // BASIC INFORMATION
   //==========================================================
 
   void updateName(String value) {
@@ -101,18 +116,8 @@ class ProductManagementProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //--------------------------------------------------
-  // Editing
-  //--------------------------------------------------
-
-  ProductModel? _editingProduct;
-
-  bool get isEditing => _editingProduct != null;
-
-  ProductModel? get editingProduct => _editingProduct;
-
   //==========================================================
-  // Pricing
+  // PRICING
   //==========================================================
 
   void updatePrice(String value) {
@@ -126,7 +131,7 @@ class ProductManagementProvider extends ChangeNotifier {
   }
 
   //==========================================================
-  // Inventory
+  // INVENTORY
   //==========================================================
 
   void updateStock(String value) {
@@ -139,7 +144,7 @@ class ProductManagementProvider extends ChangeNotifier {
   }
 
   //==========================================================
-  // Flags
+  // FLAGS
   //==========================================================
 
   void updateFeatured(bool value) {
@@ -209,7 +214,84 @@ class ProductManagementProvider extends ChangeNotifier {
   }
 
   //==========================================================
-  // Reset Form
+  // IMAGES
+  //==========================================================
+
+  static const int maxProductImages = 5;
+  static const int minProductImages = 1;
+
+  /// Add an uploaded image to the current product form.
+  ///
+  /// The actual Firebase Storage upload happens in
+  /// ImageUploadSection.
+  void addImage(ProductImageModel image) {
+    if (_form.images.length >= maxProductImages) {
+      _error = "A maximum of $maxProductImages product images is allowed.";
+      notifyListeners();
+      return;
+    }
+
+    final imageId = image.id.trim().isEmpty
+        ? DateTime.now().microsecondsSinceEpoch.toString()
+        : image.id;
+
+    final isFirstImage = _form.images.isEmpty;
+
+    final newImage = image.copyWith(
+      id: imageId,
+      isPrimary: isFirstImage ? true : image.isPrimary,
+    );
+
+    _form.images.add(newImage);
+
+    _error = null;
+
+    debugPrint("Product image added: ${newImage.id}");
+
+    debugPrint("Image URL: ${newImage.imageUrl}");
+
+    debugPrint("Total product images: ${_form.images.length}");
+
+    notifyListeners();
+  }
+
+  /// Remove an image from the current form.
+  ///
+  /// Firebase Storage deletion is intentionally not performed
+  /// here because the provider only manages product state.
+  void removeImage(ProductImageModel image) {
+    _form.images.removeWhere((item) => item.id == image.id);
+
+    // If the removed image was primary,
+    // make the first remaining image primary.
+    if (_form.images.isNotEmpty) {
+      bool hasPrimary = _form.images.any((image) => image.isPrimary);
+
+      if (!hasPrimary) {
+        _form.images[0] = _form.images[0].copyWith(isPrimary: true);
+      }
+    }
+
+    _error = null;
+
+    debugPrint("Product image removed: ${image.id}");
+
+    debugPrint("Remaining images: ${_form.images.length}");
+
+    notifyListeners();
+  }
+
+  /// Makes a selected image the primary product image.
+  void setPrimaryImage(ProductImageModel image) {
+    _form.images = _form.images.map((item) {
+      return item.copyWith(isPrimary: item.id == image.id);
+    }).toList();
+
+    notifyListeners();
+  }
+
+  //==========================================================
+  // RESET FORM
   //==========================================================
 
   void resetForm() {
@@ -223,44 +305,28 @@ class ProductManagementProvider extends ChangeNotifier {
 
     _sameStockForAll = false;
 
+    _error = null;
+
     notifyListeners();
   }
 
-  //--------------------------------------------------
-  // Products
-  //--------------------------------------------------
+  //==========================================================
+  // PRODUCTS
+  //==========================================================
 
   List<ProductModel> _products = [];
 
   List<ProductModel> get products => _products;
 
-  //======================================================
-  // Images
-  //======================================================
-
-  void addImage(ProductImageModel image) {
-    _form.images.add(image);
-    notifyListeners();
-  }
-
-  void removeImage(ProductImageModel image) {
-    _form.images.remove(image);
-    notifyListeners();
-  }
-
-  //======================================================
-  // Update Variant
-  //======================================================
-
-  //--------------------------------------------------
-  // product Sizes
-  //---------------------------------------------------
-
-  //--------------------------------------------------
-  // Available Sizes
-  //--------------------------------------------------
+  //==========================================================
+  // AVAILABLE SIZES
+  //==========================================================
 
   final List<String> availableSizes = ["XS", "S", "M", "L", "XL", "XXL", "3XL"];
+
+  //==========================================================
+  // RECALCULATE VARIANTS
+  //==========================================================
 
   void _recalculateVariants() {
     _form.variants.clear();
@@ -271,36 +337,38 @@ class ProductManagementProvider extends ChangeNotifier {
 
     _form.stock = totalStock;
   }
-  //--------------------------------------------------
-  // Statistics
-  //--------------------------------------------------
+
+  //==========================================================
+  // STATISTICS
+  //==========================================================
 
   int totalProducts = 0;
   int activeProducts = 0;
   int inactiveProducts = 0;
 
-  //--------------------------------------------------
-  // Loading
-  //--------------------------------------------------
+  //==========================================================
+  // LOADING
+  //==========================================================
 
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
 
-  //--------------------------------------------------
-  // Error
-  //--------------------------------------------------
+  //==========================================================
+  // ERROR
+  //==========================================================
 
   String? _error;
 
   String? get error => _error;
 
-  //--------------------------------------------------
-  // Listen Products
-  //--------------------------------------------------
+  //==========================================================
+  // LISTEN PRODUCTS
+  //==========================================================
 
   void listenProducts() {
     _isLoading = true;
+    _error = null;
 
     notifyListeners();
 
@@ -322,33 +390,52 @@ class ProductManagementProvider extends ChangeNotifier {
     );
   }
 
-  //--------------------------------------------------
-  // Dashboard Statistics
-  //--------------------------------------------------
+  //==========================================================
+  // DASHBOARD STATISTICS
+  //==========================================================
 
   Future<void> loadStatistics() async {
-    final stats = await ProductManagementRepository.getStatistics();
+    try {
+      final stats = await ProductManagementRepository.getStatistics();
 
-    totalProducts = stats["total"] ?? 0;
+      totalProducts = stats["total"] ?? 0;
 
-    activeProducts = stats["active"] ?? 0;
+      activeProducts = stats["active"] ?? 0;
 
-    inactiveProducts = stats["inactive"] ?? 0;
+      inactiveProducts = stats["inactive"] ?? 0;
 
-    notifyListeners();
+      notifyListeners();
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+    }
   }
 
-  //--------------------------------------------------
-  // Delete Product
-  //--------------------------------------------------
+  //==========================================================
+  // DELETE PRODUCT
+  //==========================================================
 
   Future<void> deleteProduct(String productId) async {
-    await ProductManagementRepository.deleteProduct(productId);
+    try {
+      await ProductManagementRepository.deleteProduct(productId);
+
+      _error = null;
+    } catch (e) {
+      _error = e.toString();
+      rethrow;
+    } finally {
+      notifyListeners();
+    }
   }
+
+  //==========================================================
+  // LOAD PRODUCT FOR EDITING
+  //==========================================================
 
   Future<void> loadProduct(String productId) async {
     _isLoading = true;
     _error = null;
+
     notifyListeners();
 
     try {
@@ -360,52 +447,77 @@ class ProductManagementProvider extends ChangeNotifier {
 
       _editingProduct = product;
 
-      // Basic Information
+      //======================================================
+      // BASIC INFORMATION
+      //======================================================
+
       _form.name = product.name;
-      debugPrint("======== LOADED PRODUCT ========");
-      debugPrint(_form.name);
-      debugPrint(_form.description);
-      debugPrint(_form.brand);
-      debugPrint(_form.category);
-      debugPrint(_form.subCategory);
-      debugPrint(_form.price.toString());
-      debugPrint(_form.salePrice.toString());
-      debugPrint(_form.stock.toString());
-      debugPrint(_form.featured.toString());
-      debugPrint(_form.bestSeller.toString());
-      debugPrint(_form.newArrival.toString());
-      debugPrint(_form.status.toString());
-      debugPrint(_form.images.length.toString());
-      debugPrint(_form.variants.length.toString());
       _form.description = product.description;
       _form.brand = product.brand;
       _form.category = product.category;
       _form.subCategory = product.subCategory;
 
-      // Pricing
+      //======================================================
+      // PRICING
+      //======================================================
+
       _form.price = product.price;
       _form.salePrice = product.salePrice;
 
-      // Inventory
+      //======================================================
+      // INVENTORY
+      //======================================================
+
       _form.stock = product.stock;
 
-      // Flags
+      //======================================================
+      // FLAGS
+      //======================================================
+
       _form.featured = product.featured;
       _form.bestSeller = product.bestSeller;
       _form.newArrival = product.newArrival;
       _form.status = product.status;
 
-      // Images
+      //======================================================
+      // IMAGES
+      //
+      // IMPORTANT:
+      // Existing Firestore images are copied into the form.
+      // Therefore Edit Product displays the existing images.
+      //======================================================
+
       _form.images = List<ProductImageModel>.from(product.images);
+
+      debugPrint("======== PRODUCT IMAGES LOADED ========");
+
+      debugPrint("Product ID: ${product.id}");
+
+      debugPrint("Image count: ${_form.images.length}");
+
+      for (final image in _form.images) {
+        debugPrint("Image ID: ${image.id}");
+
+        debugPrint("Image URL: ${image.imageUrl}");
+
+        debugPrint("Primary: ${image.isPrimary}");
+      }
+
+      //======================================================
+      // VARIANTS
+      //======================================================
 
       _form.variants = List<ProductVariantModel>.from(product.variants);
 
-      // Build Color Groups
+      //======================================================
+      // BUILD COLOR GROUPS
+      //======================================================
+
       _colorVariants.clear();
 
       for (final variant in product.variants) {
         final index = _colorVariants.indexWhere(
-          (g) => g.color == variant.color,
+          (group) => group.color == variant.color,
         );
 
         if (index == -1) {
@@ -421,7 +533,10 @@ class ProductManagementProvider extends ChangeNotifier {
         }
       }
 
+      //======================================================
       // SEO
+      //======================================================
+
       _form.seo = product.seo;
 
       notifyListeners();
@@ -429,14 +544,23 @@ class ProductManagementProvider extends ChangeNotifier {
       _error = e.toString();
     } finally {
       _isLoading = false;
+
       notifyListeners();
     }
   }
+
+  //==========================================================
+  // CLEAR EDITING
+  //==========================================================
 
   void clearEditing() {
     _editingProduct = null;
     resetForm();
   }
+
+  //==========================================================
+  // COLOR VARIANTS
+  //==========================================================
 
   void addColorVariant() {
     _colorVariants.add(ProductColorVariantModel(color: "", variants: []));
@@ -464,11 +588,17 @@ class ProductManagementProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //==========================================================
+  // TOGGLE SIZE
+  //==========================================================
+
   void toggleSizeForColor(ProductColorVariantModel group, String size) {
     final groupIndex = _colorVariants.indexOf(group);
 
     debugPrint("Group Index = $groupIndex");
+
     debugPrint("Color = ${group.color}");
+
     debugPrint("Color Variants Count = ${_colorVariants.length}");
 
     if (groupIndex == -1) return;
@@ -502,6 +632,10 @@ class ProductManagementProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //==========================================================
+  // UPDATE STOCK FOR COLOR/SIZE
+  //==========================================================
+
   void updateStockForColorSize(
     ProductColorVariantModel group,
     ProductVariantModel variant,
@@ -531,6 +665,10 @@ class ProductManagementProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //==========================================================
+  // UPDATE SKU
+  //==========================================================
+
   void updateSkuForColorSize(
     ProductColorVariantModel group,
     ProductVariantModel variant,
@@ -554,22 +692,36 @@ class ProductManagementProvider extends ChangeNotifier {
 
     notifyListeners();
   }
-  //--------------------------------------------------
-  // Refresh
-  //--------------------------------------------------
+
+  //==========================================================
+  // REFRESH
+  //==========================================================
 
   Future<void> refresh() async {
     await loadStatistics();
   }
 
+  //==========================================================
+  // PUBLISH / UPDATE PRODUCT
+  //==========================================================
+
   Future<void> publishProduct() async {
     _recalculateVariants();
+
     _form.stock = totalStock;
 
-    debugPrint("========= VARIANTS =========");
+    debugPrint("========= PUBLISH PRODUCT =========");
 
-    for (final v in _form.variants) {
-      debugPrint("${v.color} ${v.size} | Stock: ${v.stock} | SKU: ${v.sku}");
+    debugPrint("Product name: ${_form.name}");
+
+    debugPrint("Image count: ${_form.images.length}");
+
+    for (final image in _form.images) {
+      debugPrint("Image ID: ${image.id}");
+
+      debugPrint("Image URL: ${image.imageUrl}");
+
+      debugPrint("Primary: ${image.isPrimary}");
     }
 
     debugPrint("Total Stock = $totalStock");
@@ -577,11 +729,12 @@ class ProductManagementProvider extends ChangeNotifier {
     try {
       _isLoading = true;
       _error = null;
+
       notifyListeners();
 
-      //--------------------------------------------------
-      // Validation
-      //--------------------------------------------------
+      //======================================================
+      // VALIDATION
+      //======================================================
 
       if (_form.name.trim().isEmpty) {
         throw Exception("Product name is required.");
@@ -595,17 +748,33 @@ class ProductManagementProvider extends ChangeNotifier {
         throw Exception("Price must be greater than zero.");
       }
 
-      if (_form.images.isEmpty) {
+      if (_form.images.length < minProductImages) {
         throw Exception("At least one product image is required.");
       }
 
-      if (_form.images.length > 5) {
-        throw Exception("A maximum of 5 product images is allowed.");
+      if (_form.images.length > maxProductImages) {
+        throw Exception(
+          "A maximum of $maxProductImages product images is allowed.",
+        );
       }
 
-      //--------------------------------------------------
-      // Create Product Model
-      //--------------------------------------------------
+      //======================================================
+      // MAKE SURE THERE IS ONE PRIMARY IMAGE
+      //======================================================
+
+      if (_form.images.isNotEmpty) {
+        final primaryCount = _form.images
+            .where((image) => image.isPrimary)
+            .length;
+
+        if (primaryCount == 0) {
+          _form.images[0] = _form.images[0].copyWith(isPrimary: true);
+        }
+      }
+
+      //======================================================
+      // CREATE PRODUCT MODEL
+      //======================================================
 
       final product = ProductModel(
         id: "",
@@ -623,7 +792,7 @@ class ProductManagementProvider extends ChangeNotifier {
         bestSeller: _form.bestSeller,
         newArrival: _form.newArrival,
         status: _form.status,
-        images: _form.images,
+        images: List<ProductImageModel>.from(_form.images),
         variants: _form.variants.map((e) => e.copyWith()).toList(),
         seo: _form.seo,
         createdAt: null,
@@ -632,9 +801,9 @@ class ProductManagementProvider extends ChangeNotifier {
 
       ProductModel savedProduct;
 
-      //--------------------------------------------------
-      // UPDATE PRODUCT
-      //--------------------------------------------------
+      //======================================================
+      // UPDATE EXISTING PRODUCT
+      //======================================================
 
       if (isEditing) {
         savedProduct = _editingProduct!.copyWith(
@@ -650,17 +819,22 @@ class ProductManagementProvider extends ChangeNotifier {
           bestSeller: _form.bestSeller,
           newArrival: _form.newArrival,
           status: _form.status,
-          images: _form.images,
+
+          // IMPORTANT:
+          // Save current images to Firestore.
+          images: List<ProductImageModel>.from(_form.images),
+
           variants: List<ProductVariantModel>.from(_form.variants),
+
           seo: _form.seo,
           updatedAt: Timestamp.now(),
         );
 
         await ProductManagementRepository.updateProduct(savedProduct);
       }
-      //--------------------------------------------------
-      // CREATE PRODUCT
-      //--------------------------------------------------
+      //======================================================
+      // CREATE NEW PRODUCT
+      //======================================================
       else {
         savedProduct = await ProductManagementRepository.createProduct(product);
 
@@ -675,16 +849,26 @@ class ProductManagementProvider extends ChangeNotifier {
         );
       }
 
-      //--------------------------------------------------
-      // Refresh Dashboard
-      //--------------------------------------------------
+      //======================================================
+      // REFRESH DASHBOARD
+      //======================================================
 
       await loadStatistics();
+
       listenProducts();
+
+      debugPrint("Product saved successfully.");
+
+      debugPrint("Saved product ID: ${savedProduct.id}");
+
+      debugPrint("Saved image count: ${savedProduct.images.length}");
     } catch (e) {
       _error = e.toString();
+
+      debugPrint("PUBLISH PRODUCT ERROR: $_error");
     } finally {
       _isLoading = false;
+
       notifyListeners();
     }
   }

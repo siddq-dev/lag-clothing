@@ -15,7 +15,12 @@ class ProductTableRow extends DataRow {
                borderRadius: BorderRadius.circular(8),
                child: product.images.isNotEmpty
                    ? Image.network(
-                       product.images.first.imageUrl,
+                       product.images
+                           .firstWhere(
+                             (img) => img.isPrimary,
+                             orElse: () => product.images.first,
+                           )
+                           .imageUrl,
                        width: 50,
                        height: 50,
                        fit: BoxFit.cover,

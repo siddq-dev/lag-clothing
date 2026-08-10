@@ -33,9 +33,9 @@ class ProductManagementRepository {
   //==================================================
 
   static Future<void> updateProduct(ProductModel product) async {
-    await _products
-        .doc(product.id)
-        .update(product.copyWith(updatedAt: Timestamp.now()).toMap());
+    final updatedProduct = product.copyWith(updatedAt: Timestamp.now());
+
+    await _products.doc(product.id).update(updatedProduct.toMap());
   }
 
   //==================================================

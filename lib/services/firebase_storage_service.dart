@@ -6,28 +6,47 @@ class FirebaseStorageService {
 
   static final FirebaseStorage _storage = FirebaseStorage.instance;
 
+  static const int maxImageSize = 2 * 1024 * 1024;
+
+  static const List<String> allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+
   //==========================================================
   // Upload Product Image
   //==========================================================
 
   static Future<String> uploadProductImage(XFile image) async {
     try {
+      final extension = image.name.split('.').last.toLowerCase();
+
+      if (!allowedExtensions.contains(extension)) {
+        throw Exception(
+          "Unsupported image type. Please use JPG, JPEG, PNG, or WEBP.",
+        );
+      }
+
       final bytes = await image.readAsBytes();
 
-      final fileName = "${DateTime.now().millisecondsSinceEpoch}_${image.name}";
+      if (bytes.length > maxImageSize) {
+        throw Exception("Image size must not exceed 2 MB.");
+      }
+
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+      final fileName = "${timestamp}_${image.name}";
 
       final ref = _storage.ref().child("products").child(fileName);
 
-      final uploadTask = await ref.putData(
-        bytes,
-        SettableMetadata(contentType: image.mimeType),
+      final metadata = SettableMetadata(
+        contentType: image.mimeType ?? _getMimeType(extension),
       );
 
-      final downloadUrl = await uploadTask.ref.getDownloadURL();
+      final uploadTask = await ref.putData(bytes, metadata);
 
-      return downloadUrl;
+      return await uploadTask.ref.getDownloadURL();
+    } on FirebaseException catch (e) {
+      throw Exception("Firebase Storage error: ${e.message ?? e.code}");
     } catch (e) {
-      throw Exception("Failed to upload product image: $e");
+      throw Exception(e.toString().replaceFirst("Exception: ", ""));
     }
   }
 
@@ -56,8 +75,8 @@ class FirebaseStorageService {
       final ref = _storage.refFromURL(imageUrl);
 
       await ref.delete();
-    } catch (e) {
-      throw Exception("Failed to delete image: $e");
+    } on FirebaseException catch (e) {
+      throw Exception("Failed to delete image: ${e.message ?? e.code}");
     }
   }
 
@@ -74,7 +93,28 @@ class FirebaseStorageService {
 
       return await uploadProductImage(newImage);
     } catch (e) {
-      throw Exception("Failed to replace image: $e");
+      throw Exception(e.toString().replaceFirst("Exception: ", ""));
+    }
+  }
+
+  //==========================================================
+  // MIME Type
+  //==========================================================
+
+  static String _getMimeType(String extension) {
+    switch (extension) {
+      case 'jpg':
+      case 'jpeg':
+        return 'image/jpeg';
+
+      case 'png':
+        return 'image/png';
+
+      case 'webp':
+        return 'image/webp';
+
+      default:
+        return 'application/octet-stream';
     }
   }
 }
