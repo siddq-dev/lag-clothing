@@ -46,3 +46,7 @@ android/oracleJdk-26/
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Local bundled JDK
+android/oracleJdk-26/
+android/oracleJdk-26/
