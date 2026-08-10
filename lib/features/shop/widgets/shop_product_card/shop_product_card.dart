@@ -13,10 +13,18 @@ class ShopProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = product.images.isNotEmpty
+        ? product.images.first.imageUrl
+        : '';
+
+    final displayPrice = product.salePrice > 0
+        ? product.salePrice
+        : product.price;
+
     return InkWell(
       borderRadius: BorderRadius.circular(18),
       onTap: () {
-        context.go("/product/${product.id}");
+        context.go('/product/${product.id}');
       },
       child: Container(
         decoration: BoxDecoration(
@@ -27,7 +35,9 @@ class ShopProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// Image
+            // ==================================================
+            // IMAGE
+            // ==================================================
             Expanded(
               flex: 6,
               child: Stack(
@@ -37,21 +47,36 @@ class ShopProductCard extends StatelessWidget {
                       borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(18),
                       ),
-                      child: product.images.isNotEmpty
+                      child: imageUrl.isNotEmpty
                           ? Image.network(
-                              product.images.first.imageUrl,
+                              imageUrl,
                               fit: BoxFit.cover,
-                              errorBuilder: (_, _, _) {
+                              width: double.infinity,
+                              height: double.infinity,
+
+                              errorBuilder: (context, error, stackTrace) {
                                 return const Center(
-                                  child: Icon(Icons.image, size: 50),
+                                  child: Icon(
+                                    Icons.image_outlined,
+                                    size: 50,
+                                    color: Colors.grey,
+                                  ),
                                 );
                               },
                             )
-                          : const Center(child: Icon(Icons.image, size: 50)),
+                          : const Center(
+                              child: Icon(
+                                Icons.image_outlined,
+                                size: 50,
+                                color: Colors.grey,
+                              ),
+                            ),
                     ),
                   ),
 
-                  /// Wishlist
+                  // ==================================================
+                  // WISHLIST
+                  // ==================================================
                   Positioned(
                     top: 12,
                     right: 12,
@@ -75,7 +100,9 @@ class ShopProductCard extends StatelessWidget {
               ),
             ),
 
-            /// Details
+            // ==================================================
+            // DETAILS
+            // ==================================================
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -113,9 +140,7 @@ class ShopProductCard extends StatelessWidget {
                       const Spacer(),
 
                       Text(
-                        product.salePrice > 0
-                            ? "₹${product.salePrice.toStringAsFixed(0)}"
-                            : "₹${product.price.toStringAsFixed(0)}",
+                        '₹${displayPrice.toStringAsFixed(0)}',
                         style: AppTextStyles.heading3.copyWith(
                           color: AppColors.primary,
                         ),
@@ -127,7 +152,7 @@ class ShopProductCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 4),
                       child: Text(
-                        "₹${product.price.toStringAsFixed(0)}",
+                        '₹${product.price.toStringAsFixed(0)}',
                         style: const TextStyle(
                           decoration: TextDecoration.lineThrough,
                           color: Colors.grey,
@@ -141,9 +166,11 @@ class ShopProductCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
-                            context.go(AppRouter.cart);
-                          },
+                          onPressed: product.stock > 0
+                              ? () {
+                                  context.go(AppRouter.cart);
+                                }
+                              : null,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
                             foregroundColor: Colors.white,
@@ -152,7 +179,9 @@ class ShopProductCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          child: const Text("Add to Cart"),
+                          child: Text(
+                            product.stock > 0 ? 'Add to Cart' : 'Out of Stock',
+                          ),
                         ),
                       ),
 
@@ -160,9 +189,11 @@ class ShopProductCard extends StatelessWidget {
 
                       Expanded(
                         child: OutlinedButton(
-                          onPressed: () {
-                            context.go(AppRouter.checkout);
-                          },
+                          onPressed: product.stock > 0
+                              ? () {
+                                  context.go(AppRouter.checkout);
+                                }
+                              : null,
                           style: OutlinedButton.styleFrom(
                             foregroundColor: AppColors.primary,
                             side: BorderSide(color: AppColors.primary),
@@ -171,7 +202,7 @@ class ShopProductCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          child: const Text("Buy Now"),
+                          child: const Text('Buy Now'),
                         ),
                       ),
                     ],

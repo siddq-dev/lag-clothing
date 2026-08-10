@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 
 import '../models/product_model.dart';
 import '../repositories/shop_repository.dart';
@@ -6,19 +8,43 @@ import '../repositories/shop_repository.dart';
 class ShopProvider extends ChangeNotifier {
   final ShopRepository _repository = ShopRepository();
 
+  //==================================================
+  // DATA
+  //==================================================
+
   List<ProductModel> _products = [];
+
   List<ProductModel> _filteredProducts = [];
 
+  StreamSubscription<List<ProductModel>>? _productsSubscription;
+
+  //==================================================
+  // STATE
+  //==================================================
+
   bool _loading = false;
+
   String? _error;
 
-  String _search = "";
+  String _search = '';
+
+  //==================================================
+  // FILTERS
+  //==================================================
 
   final Set<String> selectedCategories = {};
+
   final Set<String> selectedBrands = {};
+
   final Set<String> selectedSizes = {};
+
   final Set<String> selectedPrices = {};
+
   final Set<String> selectedAvailability = {};
+
+  //==================================================
+  // GETTERS
+  //==================================================
 
   bool get isLoading => _loading;
 
@@ -26,43 +52,65 @@ class ShopProvider extends ChangeNotifier {
 
   List<ProductModel> get products => _filteredProducts;
 
-  Future<void> loadProducts() async {
-  print("ShopProvider.loadProducts() called");
+  List<ProductModel> get allProducts => _products;
 
-  _loading = true;
-  _error = null;
-  notifyListeners();
+  //==================================================
+  // LOAD PRODUCTS
+  //==================================================
 
-  try {
-    _products = await _repository.getProducts();
+  void loadProducts() {
+    print('======================================');
+    print('ShopProvider.loadProducts()');
+    print('======================================');
 
-    print("Products loaded: ${_products.length}");
+    _loading = true;
+    _error = null;
 
-    _filteredProducts = List.from(_products);
-  } catch (e, stack) {
-    print("ERROR: $e");
-    print(stack);
+    notifyListeners();
 
-    _error = e.toString();
+    _productsSubscription?.cancel();
+
+    _productsSubscription = _repository.streamProducts().listen(
+      (products) {
+        print('ShopProvider received ${products.length} products');
+
+        _products = products;
+
+        _applyFilters();
+
+        _loading = false;
+        _error = null;
+
+        notifyListeners();
+      },
+      onError: (error, stackTrace) {
+        print('======================================');
+        print('SHOP PROVIDER ERROR');
+        print(error);
+        print(stackTrace);
+        print('======================================');
+
+        _loading = false;
+        _error = error.toString();
+
+        notifyListeners();
+      },
+    );
   }
 
-  _loading = false;
-  notifyListeners();
-}
-
-  //---------------------------------------
-  // Search
-  //---------------------------------------
+  //==================================================
+  // SEARCH
+  //==================================================
 
   void updateSearch(String value) {
-    _search = value.toLowerCase();
+    _search = value.trim().toLowerCase();
 
     _applyFilters();
   }
 
-  //---------------------------------------
-  // Category
-  //---------------------------------------
+  //==================================================
+  // CATEGORY
+  //==================================================
 
   void toggleCategory(String value) {
     if (selectedCategories.contains(value)) {
@@ -74,9 +122,9 @@ class ShopProvider extends ChangeNotifier {
     _applyFilters();
   }
 
-  //---------------------------------------
-  // Brand
-  //---------------------------------------
+  //==================================================
+  // BRAND
+  //==================================================
 
   void toggleBrand(String value) {
     if (selectedBrands.contains(value)) {
@@ -88,9 +136,9 @@ class ShopProvider extends ChangeNotifier {
     _applyFilters();
   }
 
-  //---------------------------------------
-  // Size
-  //---------------------------------------
+  //==================================================
+  // SIZE
+  //==================================================
 
   void toggleSize(String value) {
     if (selectedSizes.contains(value)) {
@@ -102,9 +150,9 @@ class ShopProvider extends ChangeNotifier {
     _applyFilters();
   }
 
-  //---------------------------------------
-  // Price
-  //---------------------------------------
+  //==================================================
+  // PRICE
+  //==================================================
 
   void togglePrice(String value) {
     if (selectedPrices.contains(value)) {
@@ -116,9 +164,9 @@ class ShopProvider extends ChangeNotifier {
     _applyFilters();
   }
 
-  //---------------------------------------
-  // Availability
-  //---------------------------------------
+  //==================================================
+  // AVAILABILITY
+  //==================================================
 
   void toggleAvailability(String value) {
     if (selectedAvailability.contains(value)) {
@@ -130,12 +178,12 @@ class ShopProvider extends ChangeNotifier {
     _applyFilters();
   }
 
-  //---------------------------------------
-  // Clear
-  //---------------------------------------
+  //==================================================
+  // CLEAR FILTERS
+  //==================================================
 
   void clearFilters() {
-    _search = "";
+    _search = '';
 
     selectedCategories.clear();
     selectedBrands.clear();
@@ -146,104 +194,144 @@ class ShopProvider extends ChangeNotifier {
     _applyFilters();
   }
 
-  //---------------------------------------
-  // Filter Logic
-  //---------------------------------------
+  //==================================================
+  // FILTER LOGIC
+  //==================================================
 
   void _applyFilters() {
-    _filteredProducts = _products.where((product) {
-      if (_search.isNotEmpty) {
+    Iterable<ProductModel> result = _products;
+
+    // SEARCH
+    if (_search.isNotEmpty) {
+      result = result.where((product) {
         final text =
-            "${product.name} ${product.brand} ${product.category}"
+            '${product.name} '
+                    '${product.brand} '
+                    '${product.category} '
+                    '${product.subCategory}'
                 .toLowerCase();
 
-        if (!text.contains(_search)) {
-          return false;
+        return text.contains(_search);
+      });
+    }
+
+    // CATEGORY
+    if (selectedCategories.isNotEmpty) {
+      result = result.where(
+        (product) => selectedCategories.contains(product.category),
+      );
+    }
+
+    // BRAND
+    if (selectedBrands.isNotEmpty) {
+      result = result.where(
+        (product) => selectedBrands.contains(product.brand),
+      );
+    }
+
+    // SIZE
+    if (selectedSizes.isNotEmpty) {
+      result = result.where((product) {
+        return product.variants.any(
+          (variant) => selectedSizes.contains(variant.size),
+        );
+      });
+    }
+
+    // AVAILABILITY
+    if (selectedAvailability.isNotEmpty) {
+      result = result.where((product) {
+        bool matches = false;
+
+        if (selectedAvailability.contains('In Stock') && product.stock > 0) {
+          matches = true;
         }
-      }
 
-      if (selectedCategories.isNotEmpty &&
-          !selectedCategories.contains(product.category)) {
-        return false;
-      }
-
-      if (selectedBrands.isNotEmpty &&
-          !selectedBrands.contains(product.brand)) {
-        return false;
-      }
-
-      if (selectedSizes.isNotEmpty) {
-        final sizes = product.variants
-            .map((e) => e.size)
-            .toSet();
-
-        if (!sizes.any(selectedSizes.contains)) {
-          return false;
+        if (selectedAvailability.contains('Out of Stock') &&
+            product.stock <= 0) {
+          matches = true;
         }
-      }
 
-      if (selectedAvailability.contains("In Stock") &&
-          product.stock <= 0) {
-        return false;
-      }
+        return matches;
+      });
+    }
 
-      if (selectedAvailability.contains("Out of Stock") &&
-          product.stock > 0) {
-        return false;
-      }
-
-      if (selectedPrices.isNotEmpty) {
-        bool matched = false;
+    // PRICE
+    if (selectedPrices.isNotEmpty) {
+      result = result.where((product) {
+        final price = product.salePrice > 0 ? product.salePrice : product.price;
 
         for (final range in selectedPrices) {
           switch (range) {
-            case "₹500 - ₹1000":
-              matched |= product.price >= 500 &&
-                  product.price <= 1000;
+            case '₹500 - ₹1000':
+              if (price >= 500 && price <= 1000) {
+                return true;
+              }
               break;
 
-            case "₹1000 - ₹1500":
-              matched |= product.price >= 1000 &&
-                  product.price <= 1500;
+            case '₹1000 - ₹1500':
+              if (price >= 1000 && price <= 1500) {
+                return true;
+              }
               break;
 
-            case "₹1500 - ₹2000":
-              matched |= product.price >= 1500 &&
-                  product.price <= 2000;
+            case '₹1500 - ₹2000':
+              if (price >= 1500 && price <= 2000) {
+                return true;
+              }
               break;
 
-            case "₹2000+":
-              matched |= product.price >= 2000;
+            case '₹2000+':
+              if (price >= 2000) {
+                return true;
+              }
               break;
           }
         }
 
-        if (!matched) {
-          return false;
-        }
-      }
+        return false;
+      });
+    }
 
-      return true;
-    }).toList();
+    _filteredProducts = result.toList();
 
     notifyListeners();
   }
 
-  //---------------------------------------
-  // Dynamic Filters
-  //---------------------------------------
+  //==================================================
+  // DYNAMIC CATEGORIES
+  //==================================================
 
-  List<String> get categories =>
-      _products
-          .map((e) => e.category)
-          .toSet()
-          .toList()
-        ..sort();
+  List<String> get categories {
+    return _products
+        .map((product) => product.category)
+        .where((category) => category.isNotEmpty)
+        .toSet()
+        .toList()
+      ..sort();
+  }
 
-  List<String> get brands =>
-      _products
-          .map((e) => e.brand)
-          .toSet()
-          .toList()
-        ..sort();
+  //==================================================
+  // DYNAMIC BRANDS
+  //==================================================
+
+  List<String> get brands {
+    return _products
+        .map((product) => product.brand)
+        .where((brand) => brand.isNotEmpty)
+        .toSet()
+        .toList()
+      ..sort();
+  }
+
+  //==================================================
+  // DISPOSE
+  //==================================================
+
+  @override
+  void dispose() {
+    _productsSubscription?.cancel();
+
+    super.dispose();
+  }
 }

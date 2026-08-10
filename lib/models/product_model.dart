@@ -6,43 +6,24 @@ import 'product_variant_model.dart';
 
 class ProductModel {
   final String id;
-
   final String name;
-
   final String description;
-
   final String brand;
-
   final String category;
-
   final String subCategory;
-
   final double price;
-
   final double salePrice;
-
   final int stock;
-
   final double rating;
-
   final int reviewCount;
-
   final bool featured;
-
   final bool bestSeller;
-
   final bool newArrival;
-
   final bool status;
-
   final List<ProductImageModel> images;
-
   final List<ProductVariantModel> variants;
-
   final ProductSeoModel seo;
-
   final Timestamp? createdAt;
-
   final Timestamp? updatedAt;
 
   const ProductModel({
@@ -85,51 +66,64 @@ class ProductModel {
       'bestSeller': bestSeller,
       'newArrival': newArrival,
       'status': status,
-      'images':
-          images.map((e) => e.toMap()).toList(),
-      'variants':
-          variants.map((e) => e.toMap()).toList(),
+      'images': images.map((e) => e.toMap()).toList(),
+      'variants': variants.map((e) => e.toMap()).toList(),
       'seo': seo.toMap(),
       'createdAt': createdAt,
       'updatedAt': updatedAt,
     };
   }
 
-  factory ProductModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory ProductModel.fromMap(Map<String, dynamic> map, {String? documentId}) {
     return ProductModel(
-      id: map['id'] ?? '',
-      name: map['name'] ?? '',
-      description: map['description'] ?? '',
-      brand: map['brand'] ?? '',
-      category: map['category'] ?? '',
-      subCategory: map['subCategory'] ?? '',
-      price: (map['price'] ?? 0).toDouble(),
-      salePrice:
-          (map['salePrice'] ?? 0).toDouble(),
-      stock: map['stock'] ?? 0,
-      rating: (map['rating'] ?? 0).toDouble(),
-      reviewCount: map['reviewCount'] ?? 0,
-      featured: map['featured'] ?? false,
-      bestSeller: map['bestSeller'] ?? false,
-      newArrival: map['newArrival'] ?? false,
-      status: map['status'] ?? true,
-      images: (map['images'] as List<dynamic>? ?? [])
-          .map((e) => ProductImageModel.fromMap(e))
-          .toList(),
-      variants:
-          (map['variants'] as List<dynamic>? ?? [])
-              .map(
-                (e) =>
-                    ProductVariantModel.fromMap(e),
-              )
-              .toList(),
+      // Use Firestore document ID if the stored id is empty.
+      id: (map['id'] ?? '').toString().isNotEmpty
+          ? map['id'].toString()
+          : (documentId ?? ''),
+
+      name: (map['name'] ?? '').toString(),
+
+      description: (map['description'] ?? '').toString(),
+
+      brand: (map['brand'] ?? '').toString(),
+
+      category: (map['category'] ?? '').toString(),
+
+      subCategory: (map['subCategory'] ?? '').toString(),
+
+      price: _toDouble(map['price']),
+
+      salePrice: _toDouble(map['salePrice']),
+
+      stock: _toInt(map['stock']),
+
+      rating: _toDouble(map['rating']),
+
+      reviewCount: _toInt(map['reviewCount']),
+
+      featured: _toBool(map['featured']),
+
+      bestSeller: _toBool(map['bestSeller']),
+
+      newArrival: _toBool(map['newArrival']),
+
+      status: map['status'] == null ? true : _toBool(map['status']),
+
+      images: _parseImages(map['images']),
+
+      variants: _parseVariants(map['variants']),
+
       seo: ProductSeoModel.fromMap(
-        map['seo'] ?? {},
+        map['seo'] is Map ? Map<String, dynamic>.from(map['seo']) : {},
       ),
-      createdAt: map['createdAt'],
-      updatedAt: map['updatedAt'],
+
+      createdAt: map['createdAt'] is Timestamp
+          ? map['createdAt'] as Timestamp
+          : null,
+
+      updatedAt: map['updatedAt'] is Timestamp
+          ? map['updatedAt'] as Timestamp
+          : null,
     );
   }
 
@@ -158,23 +152,18 @@ class ProductModel {
     return ProductModel(
       id: id ?? this.id,
       name: name ?? this.name,
-      description:
-          description ?? this.description,
+      description: description ?? this.description,
       brand: brand ?? this.brand,
       category: category ?? this.category,
-      subCategory:
-          subCategory ?? this.subCategory,
+      subCategory: subCategory ?? this.subCategory,
       price: price ?? this.price,
       salePrice: salePrice ?? this.salePrice,
       stock: stock ?? this.stock,
       rating: rating ?? this.rating,
-      reviewCount:
-          reviewCount ?? this.reviewCount,
+      reviewCount: reviewCount ?? this.reviewCount,
       featured: featured ?? this.featured,
-      bestSeller:
-          bestSeller ?? this.bestSeller,
-      newArrival:
-          newArrival ?? this.newArrival,
+      bestSeller: bestSeller ?? this.bestSeller,
+      newArrival: newArrival ?? this.newArrival,
       status: status ?? this.status,
       images: images ?? this.images,
       variants: variants ?? this.variants,
@@ -182,5 +171,59 @@ class ProductModel {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
+  }
+
+  static double _toDouble(dynamic value) {
+    if (value is num) {
+      return value.toDouble();
+    }
+
+    return double.tryParse(value?.toString() ?? '') ?? 0.0;
+  }
+
+  static int _toInt(dynamic value) {
+    if (value is num) {
+      return value.toInt();
+    }
+
+    return int.tryParse(value?.toString() ?? '') ?? 0;
+  }
+
+  static bool _toBool(dynamic value) {
+    if (value is bool) {
+      return value;
+    }
+
+    if (value is String) {
+      return value.toLowerCase() == 'true';
+    }
+
+    if (value is num) {
+      return value != 0;
+    }
+
+    return false;
+  }
+
+  static List<ProductImageModel> _parseImages(dynamic value) {
+    if (value is! List) {
+      return [];
+    }
+
+    return value
+        .whereType<Map>()
+        .map((e) => ProductImageModel.fromMap(Map<String, dynamic>.from(e)))
+        .toList();
+  }
+
+  static List<ProductVariantModel> _parseVariants(dynamic value) {
+    if (value is! List) {
+      return [];
+    }
+
+    return value
+        .whereType<Map>()
+        .map((e) => ProductVariantModel.fromMap(Map<String, dynamic>.from(e)))
+        .toList();
   }
 }

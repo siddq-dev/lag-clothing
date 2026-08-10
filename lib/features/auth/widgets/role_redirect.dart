@@ -10,8 +10,7 @@ class RoleRedirect extends StatefulWidget {
   const RoleRedirect({super.key});
 
   @override
-  State<RoleRedirect> createState() =>
-      _RoleRedirectState();
+  State<RoleRedirect> createState() => _RoleRedirectState();
 }
 
 class _RoleRedirectState extends State<RoleRedirect> {
@@ -20,8 +19,7 @@ class _RoleRedirectState extends State<RoleRedirect> {
     super.initState();
 
     Future.microtask(() {
-      final auth =
-          context.read<AuthProvider>();
+      final auth = context.read<AuthProvider>();
 
       final user = auth.currentUser;
 
@@ -30,28 +28,24 @@ class _RoleRedirectState extends State<RoleRedirect> {
         return;
       }
 
-     switch (user.role) {
-  case UserRole.customer:
-    context.go(AppRouter.home);
-    break;
+      switch (user.role) {
+        case UserRole.customer:
+          context.go(AppRouter.profile);
+          break;
 
-  case UserRole.admin:
-    context.go(AppRouter.adminDashboard);
-    break;
+        case UserRole.admin:
+          context.go(AppRouter.adminDashboard);
+          break;
 
-  case UserRole.superAdmin:
-    context.go(AppRouter.superAdminDashboard);
-    break;
-}
+        case UserRole.superAdmin:
+          context.go(AppRouter.superAdminDashboard);
+          break;
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }
