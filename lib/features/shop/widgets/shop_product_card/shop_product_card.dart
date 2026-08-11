@@ -21,39 +21,58 @@ class ShopProductCard extends StatelessWidget {
         ? product.salePrice
         : product.price;
 
-    return InkWell(
-      borderRadius: BorderRadius.circular(18),
-      onTap: () {
-        context.go('/product/${product.id}');
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: AppColors.border),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ==================================================
-            // IMAGE
-            // ==================================================
-            Expanded(
-              flex: 6,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(18),
-                      ),
+    // --------------------------------------------------
+    // Navigate to Product Details
+    // --------------------------------------------------
+
+    void openProductDetails() {
+      context.go('/product/${product.id}');
+    }
+
+    // --------------------------------------------------
+    // Available Sizes
+    // --------------------------------------------------
+
+    final availableSizes = product.variants
+        .where((variant) => variant.available)
+        .map((variant) => variant.size.trim())
+        .where((size) => size.isNotEmpty)
+        .toSet()
+        .toList();
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ==================================================
+          // PRODUCT IMAGE
+          // ==================================================
+          Expanded(
+            flex: 6,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(18),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        context.go(
+                          '${AppRouter.shopProductDetails}/${product.id}',
+                        );
+                      },
                       child: imageUrl.isNotEmpty
                           ? Image.network(
                               imageUrl,
                               fit: BoxFit.cover,
                               width: double.infinity,
                               height: double.infinity,
-
                               errorBuilder: (context, error, stackTrace) {
                                 return const Center(
                                   child: Icon(
@@ -73,41 +92,47 @@ class ShopProductCard extends StatelessWidget {
                             ),
                     ),
                   ),
+                ),
 
-                  // ==================================================
-                  // WISHLIST
-                  // ==================================================
-                  Positioned(
-                    top: 12,
-                    right: 12,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: .55),
-                        shape: BoxShape.circle,
+                // ==================================================
+                // WISHLIST
+                // ==================================================
+                Positioned(
+                  top: 12,
+                  right: 12,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: .55),
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.favorite_border,
+                        color: Colors.white,
                       ),
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.favorite_border,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          context.go(AppRouter.wishlist);
-                        },
-                      ),
+                      onPressed: () {
+                        context.go(AppRouter.wishlist);
+                      },
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+          ),
 
-            // ==================================================
-            // DETAILS
-            // ==================================================
-            Padding(
+          // ==================================================
+          // PRODUCT INFORMATION
+          // ==================================================
+          InkWell(
+            onTap: openProductDetails,
+            child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // --------------------------------------------------
+                  // BRAND
+                  // --------------------------------------------------
                   Text(
                     product.brand,
                     maxLines: 1,
@@ -117,6 +142,9 @@ class ShopProductCard extends StatelessWidget {
 
                   const SizedBox(height: 4),
 
+                  // --------------------------------------------------
+                  // PRODUCT NAME
+                  // --------------------------------------------------
                   Text(
                     product.name,
                     maxLines: 2,
@@ -126,6 +154,9 @@ class ShopProductCard extends StatelessWidget {
 
                   const SizedBox(height: 8),
 
+                  // --------------------------------------------------
+                  // RATING + PRICE
+                  // --------------------------------------------------
                   Row(
                     children: [
                       const Icon(Icons.star, color: Colors.amber, size: 18),
@@ -148,6 +179,9 @@ class ShopProductCard extends StatelessWidget {
                     ],
                   ),
 
+                  // --------------------------------------------------
+                  // OLD PRICE
+                  // --------------------------------------------------
                   if (product.salePrice > 0)
                     Padding(
                       padding: const EdgeInsets.only(top: 4),
@@ -160,15 +194,64 @@ class ShopProductCard extends StatelessWidget {
                       ),
                     ),
 
+                  // --------------------------------------------------
+                  // AVAILABLE SIZES
+                  // --------------------------------------------------
+                  if (availableSizes.isNotEmpty) ...[
+                    const SizedBox(height: 14),
+
+                    const Text(
+                      'Available Sizes',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: availableSizes.map((size) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColors.border),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            size,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+
                   const SizedBox(height: 18),
 
+                  // ==================================================
+                  // ACTION BUTTONS
+                  // ==================================================
                   Row(
                     children: [
+                      // ------------------------------------------------
+                      // ADD TO CART
+                      // ------------------------------------------------
                       Expanded(
                         child: ElevatedButton(
                           onPressed: product.stock > 0
                               ? () {
-                                  context.go(AppRouter.cart);
+                                  // Product details page handles
+                                  // size selection before cart.
+                                  openProductDetails();
                                 }
                               : null,
                           style: ElevatedButton.styleFrom(
@@ -187,11 +270,16 @@ class ShopProductCard extends StatelessWidget {
 
                       const SizedBox(width: 10),
 
+                      // ------------------------------------------------
+                      // BUY NOW
+                      // ------------------------------------------------
                       Expanded(
                         child: OutlinedButton(
                           onPressed: product.stock > 0
                               ? () {
-                                  context.go(AppRouter.checkout);
+                                  // Product details page handles
+                                  // size selection before checkout.
+                                  openProductDetails();
                                 }
                               : null,
                           style: OutlinedButton.styleFrom(
@@ -210,8 +298,8 @@ class ShopProductCard extends StatelessWidget {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

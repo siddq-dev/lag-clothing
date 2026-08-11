@@ -60,7 +60,10 @@ import '../features/super_admin/analytics/pages/analytics_dashboard_page.dart';
 import '../features/inventory/pages/inventory_dashboard_page.dart';
 import 'package:lag_clothing/features/super_admin/product_management/pages/product_management_page.dart';
 import '../features/super_admin/product_management/pages/add_product_page.dart';
-import '../features/super_admin/product_management/pages/product_details_page.dart';
+import '../features/super_admin/product_management/pages/product_details_page.dart'
+    as admin_product_details;
+import '../features/shop/page/product_details_page.dart'
+    as shop_product_details;
 
 class AppRouter {
   AppRouter._();
@@ -204,6 +207,12 @@ class AppRouter {
   static const String inventory = '/admin/inventory';
 
   // ==========================
+  // Customer Product
+  // ==========================
+
+  static const String shopProductDetails = '/product';
+
+  // ==========================
   // goroutes
   // ==========================
 
@@ -220,11 +229,6 @@ class AppRouter {
       GoRoute(path: contact, builder: (context, state) => const ContactPage()),
 
       GoRoute(path: cart, builder: (context, state) => const CartPage()),
-
-      GoRoute(
-        path: checkout,
-        builder: (context, state) => const CheckoutPage(),
-      ),
 
       GoRoute(path: login, builder: (context, state) => const LoginPage()),
 
@@ -474,7 +478,7 @@ class AppRouter {
         builder: (context, state) {
           final id = state.pathParameters['id']!;
 
-          return ProductDetailsPage(productId: id);
+          return admin_product_details.ProductDetailsPage(productId: id);
         },
       ),
 
@@ -551,6 +555,15 @@ class AppRouter {
       GoRoute(
         path: AppRouter.orders,
         builder: (context, state) => const OrdersPage(),
+      ),
+
+      GoRoute(
+        path: '${AppRouter.shopProductDetails}/:productId',
+        builder: (context, state) {
+          final productId = state.pathParameters['productId']!;
+
+          return shop_product_details.ProductDetailsPage(productId: productId);
+        },
       ),
     ],
   );
