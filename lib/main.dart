@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:lag_clothing/providers/auth_provider.dart';
 import 'package:lag_clothing/providers/inventory_provider.dart';
 import 'package:lag_clothing/providers/shop_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 
 import 'firebase_options.dart';
 import 'app.dart';
@@ -31,11 +34,20 @@ void main() async {
   WidgetsBinding.instance.addObserver(AnalyticsLifecycleService());
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // ============================================================
+  // CURRENT USER
+  // ============================================================
+
+  final User? currentUser = FirebaseAuth.instance.currentUser;
+  final String customerId = currentUser?.uid ?? '';
+
+  debugPrint('MAIN: Firebase customer ID = $customerId');
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => WishlistProvider()),
         ChangeNotifierProvider(create: (_) => CustomerProvider()),
         ChangeNotifierProvider(create: (_) => AddressProvider()),
         ChangeNotifierProvider(create: (_) => PaymentMethodProvider()),
@@ -53,6 +65,18 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ProductManagementProvider()),
         ChangeNotifierProvider(create: (_) => ShopProvider()),
         ChangeNotifierProvider(create: (_) => CheckoutProvider()),
+
+        // ========================================================
+        // WISHLIST
+        // Seeded with the real signed-in user's UID, and kept in
+        // sync automatically whenever auth state changes (login/
+        // logout), so the wishlist never gets stuck showing the
+        // wrong (or empty) customer's data.
+        // ========================================================
+        ChangeNotifierProvider(
+          create: (_) =>
+              WishlistProvider(customerId: customerId)..loadWishlist(),
+        ),
       ],
       child: const LagClothingApp(),
     ),

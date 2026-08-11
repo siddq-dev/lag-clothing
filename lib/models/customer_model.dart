@@ -9,7 +9,7 @@ class CustomerModel {
   final String role;
 
   final List<dynamic> addresses;
-  final List<dynamic> wishlist;
+  final List<Map<String, dynamic>> wishlist;
   final List<dynamic> orders;
 
   final DateTime createdAt;
@@ -51,17 +51,13 @@ class CustomerModel {
       photoUrl: map['photoUrl'] ?? '',
       role: map['role'] ?? 'customer',
 
-      addresses: List<dynamic>.from(
-        map['addresses'] ?? [],
+      addresses: List<dynamic>.from(map['addresses'] ?? []),
+
+      wishlist: List<Map<String, dynamic>>.from(
+        (map['wishlist'] ?? []).map((item) => Map<String, dynamic>.from(item)),
       ),
 
-      wishlist: List<dynamic>.from(
-        map['wishlist'] ?? [],
-      ),
-
-      orders: List<dynamic>.from(
-        map['orders'] ?? [],
-      ),
+      orders: List<dynamic>.from(map['orders'] ?? []),
 
       createdAt: map['createdAt'] != null
           ? (map['createdAt'] as Timestamp).toDate()
@@ -77,7 +73,7 @@ class CustomerModel {
     String? photoUrl,
     String? role,
     List<dynamic>? addresses,
-    List<dynamic>? wishlist,
+    List<Map<String, dynamic>>? wishlist,
     List<dynamic>? orders,
     DateTime? createdAt,
   }) {

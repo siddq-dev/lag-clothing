@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../models/product_model.dart';
+import '../../../../models/wishlist_items.dart';
+import '../../../../providers/wishlist_provider.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
@@ -39,6 +42,90 @@ class ShopProductCard extends StatelessWidget {
         .where((size) => size.isNotEmpty)
         .toSet()
         .toList();
+
+    // --------------------------------------------------
+    // Wishlist state for this product (no size/color
+    // picker on the card, so we key on productId only
+    // using the default/first available size).
+    // --------------------------------------------------
+
+    final defaultSize = availableSizes.isNotEmpty ? availableSizes.first : '';
+
+    final wishlistProvider = context.watch<WishlistProvider>();
+
+    final isWishlisted = wishlistProvider.containsVariant(
+      productId: product.id,
+      size: defaultSize,
+      color: '',
+    );
+
+    // --------------------------------------------------
+    // Toggle Wishlist
+    // --------------------------------------------------
+
+    Future<void> toggleWishlist() async {
+      if (!wishlistProvider.hasCustomer) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please login to use your wishlist.'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        return;
+      }
+
+      if (isWishlisted) {
+        final existing = wishlistProvider.items.firstWhere(
+          (item) =>
+              item.productId == product.id &&
+              item.size == defaultSize &&
+              item.color == '',
+        );
+
+        final success = await context.read<WishlistProvider>().removeItem(
+          existing.id,
+        );
+
+        if (!context.mounted) return;
+
+        if (success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${product.name} removed from wishlist'),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+        return;
+      }
+
+      final success = await context.read<WishlistProvider>().addItem(
+        WishlistItem(
+          id: '',
+          productId: product.id,
+          name: product.name,
+          category: product.brand,
+          imageUrl: imageUrl,
+          size: defaultSize,
+          color: '',
+          quantity: 1,
+          price: displayPrice,
+        ),
+      );
+
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            success
+                ? '${product.name} added to wishlist'
+                : wishlistProvider.error ?? 'Failed to add to wishlist',
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -106,13 +193,11 @@ class ShopProductCard extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
-                      icon: const Icon(
-                        Icons.favorite_border,
-                        color: Colors.white,
+                      icon: Icon(
+                        isWishlisted ? Icons.favorite : Icons.favorite_border,
+                        color: isWishlisted ? Colors.red : Colors.white,
                       ),
-                      onPressed: () {
-                        context.go(AppRouter.wishlist);
-                      },
+                      onPressed: toggleWishlist,
                     ),
                   ),
                 ),

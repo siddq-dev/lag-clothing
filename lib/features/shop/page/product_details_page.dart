@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../layout/website_layout.dart';
+import '../../../models/wishlist_items.dart';
 import '../../../providers/product_details_provider.dart';
+import '../../../providers/wishlist_provider.dart';
 import '../../../routes/app_routes.dart';
 import '../../../themes/app_colors.dart';
 
@@ -94,10 +96,12 @@ class _ProductDetailsContent extends StatelessWidget {
                     child: const Text('Shop'),
                   ),
                   const Icon(Icons.chevron_right, size: 18),
-                  Text(
-                    product.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  Expanded(
+                    child: Text(
+                      product.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
               ),
@@ -164,6 +168,10 @@ class _ProductDetailsContent extends StatelessWidget {
     );
   }
 }
+
+// ================================================================
+// PRODUCT IMAGES
+// ================================================================
 
 class _ProductImages extends StatefulWidget {
   const _ProductImages({required this.product});
@@ -254,6 +262,12 @@ class _ProductImagesState extends State<_ProductImages> {
                     child: Image.network(
                       images[index].imageUrl,
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(
+                          Icons.broken_image_outlined,
+                          color: Colors.grey,
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -265,6 +279,10 @@ class _ProductImagesState extends State<_ProductImages> {
     );
   }
 }
+
+// ================================================================
+// PRODUCT INFORMATION
+// ================================================================
 
 class _ProductInformation extends StatelessWidget {
   const _ProductInformation({
@@ -282,6 +300,9 @@ class _ProductInformation extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // ==========================================================
+        // BRAND
+        // ==========================================================
         Text(
           product.brand,
           style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
@@ -289,6 +310,9 @@ class _ProductInformation extends StatelessWidget {
 
         const SizedBox(height: 10),
 
+        // ==========================================================
+        // PRODUCT NAME
+        // ==========================================================
         Text(
           product.name,
           style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
@@ -296,6 +320,9 @@ class _ProductInformation extends StatelessWidget {
 
         const SizedBox(height: 15),
 
+        // ==========================================================
+        // RATING
+        // ==========================================================
         Row(
           children: [
             const Icon(Icons.star, color: Colors.amber, size: 21),
@@ -314,6 +341,9 @@ class _ProductInformation extends StatelessWidget {
 
         const SizedBox(height: 25),
 
+        // ==========================================================
+        // PRICE
+        // ==========================================================
         Row(
           children: [
             Text(
@@ -324,7 +354,6 @@ class _ProductInformation extends StatelessWidget {
                 color: AppColors.primary,
               ),
             ),
-
             if (product.salePrice > 0) ...[
               const SizedBox(width: 12),
               Text(
@@ -341,9 +370,9 @@ class _ProductInformation extends StatelessWidget {
 
         const SizedBox(height: 30),
 
-        // ========================================================
-        // SIZES
-        // ========================================================
+        // ==========================================================
+        // SIZE
+        // ==========================================================
         if (provider.availableSizes.isNotEmpty) ...[
           const Text(
             'Size',
@@ -369,9 +398,9 @@ class _ProductInformation extends StatelessWidget {
           const SizedBox(height: 25),
         ],
 
-        // ========================================================
-        // COLORS
-        // ========================================================
+        // ==========================================================
+        // COLOR
+        // ==========================================================
         if (provider.availableColors.isNotEmpty) ...[
           const Text(
             'Color',
@@ -382,6 +411,7 @@ class _ProductInformation extends StatelessWidget {
 
           Wrap(
             spacing: 10,
+            runSpacing: 10,
             children: provider.availableColors.map((color) {
               return ChoiceChip(
                 label: Text(color),
@@ -396,9 +426,9 @@ class _ProductInformation extends StatelessWidget {
           const SizedBox(height: 25),
         ],
 
-        // ========================================================
+        // ==========================================================
         // QUANTITY
-        // ========================================================
+        // ==========================================================
         const Text(
           'Quantity',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -433,29 +463,29 @@ class _ProductInformation extends StatelessWidget {
 
         const SizedBox(height: 30),
 
-        // ========================================================
-        // ACTIONS
-        // ========================================================
+        // ==========================================================
+        // ACTION BUTTONS
+        // ==========================================================
         Row(
           children: [
+            // ======================================================
+            // ADD TO CART
+            // ======================================================
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
                   final error = provider.validateSelection();
 
                   if (error != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(error),
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
+                    _showSnackBar(context, error);
                     return;
                   }
 
-                  // TODO:
-                  // Add product + selected variant
-                  // + quantity to cart.
+                  // Cart integration will use:
+                  // product
+                  // selectedSize
+                  // selectedColor
+                  // quantity
 
                   context.go(AppRouter.cart);
                 },
@@ -470,8 +500,11 @@ class _ProductInformation extends StatelessWidget {
 
             const SizedBox(width: 12),
 
+            // ======================================================
+            // WISHLIST
+            // ======================================================
             IconButton(
-              onPressed: () {
+              onPressed: () async {
                 final error = provider.validateSelection();
 
                 if (error != null) {
@@ -484,9 +517,45 @@ class _ProductInformation extends StatelessWidget {
                   return;
                 }
 
-                // TODO:
-                // Add product + selected variant
-                // to wishlist.
+                final product = provider.product!;
+
+                final wishlistItem = WishlistItem(
+                  id: product.id, // productId is the unique wishlist id
+                  productId: product.id,
+                  name: product.name,
+                  category: product.category,
+                  imageUrl: product.images.isNotEmpty
+                      ? product.images.first.imageUrl
+                      : '',
+                  size: provider.selectedSize!,
+                  color: provider.selectedColor ?? '',
+                  quantity: provider.quantity,
+                  price: product.salePrice > 0
+                      ? product.salePrice
+                      : product.price,
+                );
+
+                final wishlistProvider = context.read<WishlistProvider>();
+
+                final success = await wishlistProvider.addItem(wishlistItem);
+
+                if (!context.mounted) return;
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      success
+                          ? 'Added to Wishlist'
+                          : (wishlistProvider.error ??
+                                'Failed to add to wishlist'),
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+
+                if (success) {
+                  context.go(AppRouter.wishlist);
+                }
               },
               icon: const Icon(Icons.favorite_border),
             ),
@@ -495,6 +564,9 @@ class _ProductInformation extends StatelessWidget {
 
         const SizedBox(height: 12),
 
+        // ==========================================================
+        // BUY NOW
+        // ==========================================================
         SizedBox(
           width: double.infinity,
           child: OutlinedButton(
@@ -502,12 +574,7 @@ class _ProductInformation extends StatelessWidget {
               final error = provider.validateSelection();
 
               if (error != null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(error),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
+                _showSnackBar(context, error);
                 return;
               }
 
@@ -522,7 +589,17 @@ class _ProductInformation extends StatelessWidget {
       ],
     );
   }
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), behavior: SnackBarBehavior.floating),
+    );
+  }
 }
+
+// ================================================================
+// DESCRIPTION
+// ================================================================
 
 class _ProductDescription extends StatelessWidget {
   const _ProductDescription({required this.description});
@@ -553,6 +630,10 @@ class _ProductDescription extends StatelessWidget {
     );
   }
 }
+
+// ================================================================
+// PRODUCT META
+// ================================================================
 
 class _ProductMeta extends StatelessWidget {
   const _ProductMeta({
@@ -587,6 +668,10 @@ class _ProductMeta extends StatelessWidget {
   }
 }
 
+// ================================================================
+// META ROW
+// ================================================================
+
 class _MetaRow extends StatelessWidget {
   const _MetaRow({required this.label, required this.value});
 
@@ -612,6 +697,10 @@ class _MetaRow extends StatelessWidget {
     );
   }
 }
+
+// ================================================================
+// REVIEWS
+// ================================================================
 
 class _ProductReviews extends StatelessWidget {
   const _ProductReviews({required this.rating, required this.reviewCount});
