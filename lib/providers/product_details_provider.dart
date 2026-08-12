@@ -21,6 +21,10 @@ class ProductDetailsProvider extends ChangeNotifier {
 
   int _quantity = 1;
 
+  // ============================================================
+  // GETTERS
+  // ============================================================
+
   ProductModel? get product => _product;
 
   bool get isLoading => _loading;
@@ -47,56 +51,88 @@ class ProductDetailsProvider extends ChangeNotifier {
       final product = await _repository.getProduct(productId);
 
       if (product == null) {
-        _error = 'Product not found.';
         _product = null;
+        _error = 'Product not found.';
       } else {
         _product = product;
 
         _initializeSelections(product);
       }
     } catch (e) {
-      _error = e.toString();
       _product = null;
+      _error = e.toString();
+    } finally {
+      _loading = false;
+
+      notifyListeners();
     }
-
-    _loading = false;
-
-    notifyListeners();
   }
 
   // ============================================================
-  // INITIALIZE VARIANT SELECTION
+  // AVAILABLE VARIANTS
+  // ============================================================
+
+  List<ProductVariantModel> get _availableVariants {
+    if (_product == null) {
+      return [];
+    }
+
+    return _product!.variants.where((variant) {
+      return variant.available && variant.stock > 0;
+    }).toList();
+  }
+
+  // ============================================================
+  // INITIALIZE SELECTIONS
   // ============================================================
 
   void _initializeSelections(ProductModel product) {
-    final availableVariants = product.variants
-        .where((variant) => variant.available && variant.stock > 0)
-        .toList();
+    _selectedSize = null;
+    _selectedColor = null;
+    _quantity = 1;
 
-    if (availableVariants.isEmpty) {
-      _selectedSize = null;
-      _selectedColor = null;
+    final variants = product.variants.where((variant) {
+      return variant.available && variant.stock > 0;
+    }).toList();
+
+    if (variants.isEmpty) {
       return;
     }
 
-    final sizes = availableVariants
-        .map((variant) => variant.size)
-        .where((size) => size.trim().isNotEmpty)
+    final sizes = variants
+        .map((variant) => variant.size.trim())
+        .where((size) => size.isNotEmpty)
         .toSet()
         .toList();
 
+    final colors = variants
+        .map((variant) => variant.color.trim())
+        .where((color) => color.isNotEmpty)
+        .toSet()
+        .toList();
+
+    // If there is only one possible size, select it automatically.
     if (sizes.length == 1) {
       _selectedSize = sizes.first;
     }
 
-    final colors = availableVariants
-        .map((variant) => variant.color)
-        .where((color) => color.trim().isNotEmpty)
-        .toSet()
-        .toList();
-
+    // If there is only one possible color, select it automatically.
     if (colors.length == 1) {
       _selectedColor = colors.first;
+    }
+
+    // If both dimensions have been automatically selected,
+    // make sure the combination actually exists.
+    final variant = selectedVariant;
+
+    if (variant == null) {
+      if (sizes.length == 1) {
+        _selectedSize = null;
+      }
+
+      if (colors.length == 1) {
+        _selectedColor = null;
+      }
     }
   }
 
@@ -105,18 +141,9 @@ class ProductDetailsProvider extends ChangeNotifier {
   // ============================================================
 
   List<String> get availableSizes {
-    if (_product == null) {
-      return [];
-    }
-
-    return _product!.variants
-        .where(
-          (variant) =>
-              variant.available &&
-              variant.stock > 0 &&
-              variant.size.trim().isNotEmpty,
-        )
+    return _availableVariants
         .map((variant) => variant.size.trim())
+        .where((size) => size.isNotEmpty)
         .toSet()
         .toList();
   }
@@ -126,18 +153,9 @@ class ProductDetailsProvider extends ChangeNotifier {
   // ============================================================
 
   List<String> get availableColors {
-    if (_product == null) {
-      return [];
-    }
-
-    return _product!.variants
-        .where(
-          (variant) =>
-              variant.available &&
-              variant.stock > 0 &&
-              variant.color.trim().isNotEmpty,
-        )
+    return _availableVariants
         .map((variant) => variant.color.trim())
+        .where((color) => color.isNotEmpty)
         .toSet()
         .toList();
   }
@@ -147,7 +165,16 @@ class ProductDetailsProvider extends ChangeNotifier {
   // ============================================================
 
   void selectSize(String size) {
-    _selectedSize = size;
+    final normalizedSize = size.trim();
+
+    if (normalizedSize.isEmpty) {
+      return;
+    }
+
+    _selectedSize = normalizedSize;
+
+    // Reset quantity whenever the variant changes.
+    _quantity = 1;
 
     notifyListeners();
   }
@@ -157,7 +184,16 @@ class ProductDetailsProvider extends ChangeNotifier {
   // ============================================================
 
   void selectColor(String color) {
-    _selectedColor = color;
+    final normalizedColor = color.trim();
+
+    if (normalizedColor.isEmpty) {
+      return;
+    }
+
+    _selectedColor = normalizedColor;
+
+    // Reset quantity whenever the variant changes.
+    _quantity = 1;
 
     notifyListeners();
   }
@@ -171,19 +207,51 @@ class ProductDetailsProvider extends ChangeNotifier {
       return null;
     }
 
-    try {
-      return _product!.variants.firstWhere((variant) {
-        final sizeMatches =
-            _selectedSize == null || variant.size == _selectedSize;
+    final selectedSize = _selectedSize?.trim();
+    final selectedColor = _selectedColor?.trim();
 
-        final colorMatches =
-            _selectedColor == null || variant.color == _selectedColor;
+    final variants = _product!.variants.where((variant) {
+      if (!variant.available || variant.stock <= 0) {
+        return false;
+      }
 
-        return sizeMatches && colorMatches;
-      });
-    } catch (_) {
+      final sizeMatches =
+          selectedSize == null ||
+          selectedSize.isEmpty ||
+          variant.size.trim() == selectedSize;
+
+      final colorMatches =
+          selectedColor == null ||
+          selectedColor.isEmpty ||
+          variant.color.trim() == selectedColor;
+
+      return sizeMatches && colorMatches;
+    }).toList();
+
+    if (variants.isEmpty) {
       return null;
     }
+
+    // If both size and color are required, only return
+    // the exact combination.
+    if (availableSizes.isNotEmpty &&
+        availableColors.isNotEmpty &&
+        (selectedSize == null ||
+            selectedSize.isEmpty ||
+            selectedColor == null ||
+            selectedColor.isEmpty)) {
+      return null;
+    }
+
+    return variants.first;
+  }
+
+  // ============================================================
+  // SELECTED VARIANT STOCK
+  // ============================================================
+
+  int get selectedVariantStock {
+    return selectedVariant?.stock ?? 0;
   }
 
   // ============================================================
@@ -193,23 +261,39 @@ class ProductDetailsProvider extends ChangeNotifier {
   void increaseQuantity() {
     final variant = selectedVariant;
 
-    if (variant != null && _quantity < variant.stock) {
-      _quantity++;
-      notifyListeners();
+    if (variant == null) {
       return;
     }
 
-    if (variant == null) {
+    if (_quantity < variant.stock) {
       _quantity++;
+
       notifyListeners();
     }
   }
 
   void decreaseQuantity() {
-    if (_quantity > 1) {
-      _quantity--;
-      notifyListeners();
+    if (_quantity <= 1) {
+      return;
     }
+
+    _quantity--;
+
+    notifyListeners();
+  }
+
+  void setQuantity(int value) {
+    final variant = selectedVariant;
+
+    if (value < 1) {
+      _quantity = 1;
+    } else if (variant != null && value > variant.stock) {
+      _quantity = variant.stock;
+    } else {
+      _quantity = value;
+    }
+
+    notifyListeners();
   }
 
   // ============================================================
@@ -221,22 +305,54 @@ class ProductDetailsProvider extends ChangeNotifier {
       return 'Product not found.';
     }
 
-    if (availableSizes.isNotEmpty && _selectedSize == null) {
-      return 'Please select a size.';
+    // ----------------------------------------------------------
+    // SIZE REQUIRED
+    // ----------------------------------------------------------
+
+    if (availableSizes.isNotEmpty) {
+      if (_selectedSize == null || _selectedSize!.trim().isEmpty) {
+        return 'Please select a size.';
+      }
     }
 
-    if (availableColors.isNotEmpty && _selectedColor == null) {
-      return 'Please select a color.';
+    // ----------------------------------------------------------
+    // COLOR REQUIRED
+    // ----------------------------------------------------------
+
+    if (availableColors.isNotEmpty) {
+      if (_selectedColor == null || _selectedColor!.trim().isEmpty) {
+        return 'Please select a color.';
+      }
     }
+
+    // ----------------------------------------------------------
+    // EXACT VARIANT
+    // ----------------------------------------------------------
 
     final variant = selectedVariant;
 
-    if (variant != null && (!variant.available || variant.stock <= 0)) {
+    if (variant == null) {
+      return 'The selected size and color combination is unavailable.';
+    }
+
+    // ----------------------------------------------------------
+    // AVAILABILITY
+    // ----------------------------------------------------------
+
+    if (!variant.available || variant.stock <= 0) {
       return 'Selected variant is out of stock.';
     }
 
-    if (variant != null && _quantity > variant.stock) {
-      return 'Only ${variant.stock} items are available.';
+    // ----------------------------------------------------------
+    // QUANTITY
+    // ----------------------------------------------------------
+
+    if (_quantity < 1) {
+      return 'Quantity must be at least 1.';
+    }
+
+    if (_quantity > variant.stock) {
+      return 'Only ${variant.stock} item(s) available for this size and color.';
     }
 
     return null;

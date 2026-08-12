@@ -6,129 +6,263 @@ import '../models/cart_item_model.dart';
 class CartRepository {
   CartRepository._();
 
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static final FirebaseAuth _auth =
-      FirebaseAuth.instance;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  static String get _uid =>
-      _auth.currentUser!.uid;
+  // ============================================================
+  // CURRENT USER
+  // ============================================================
 
-  static CollectionReference<Map<String, dynamic>>
-      get _cartCollection => _firestore
-          .collection('cart')
-          .doc(_uid)
-          .collection('items');
+  static User get _currentUser {
+    final user = _auth.currentUser;
 
-  //==================================================
-  // Add Item
-  //==================================================
+    if (user == null) {
+      throw StateError('Please login to use the cart.');
+    }
 
-  static Future<void> addToCart(
-    CartItemModel item,
-  ) async {
-    final doc = _cartCollection.doc(item.productId);
+    return user;
+  }
 
-    final snapshot = await doc.get();
+  static String get _uid => _currentUser.uid;
 
-    if (snapshot.exists) {
-      final data = snapshot.data()!;
+  // ============================================================
+  // CART COLLECTION
+  //
+  // cart
+  //   └── USER_UID
+  //       └── items
+  //           ├── product__m__black
+  //           ├── product__l__black
+  //           └── product__m__white
+  //
+  // Each size + color combination is a separate cart item.
+  // ============================================================
 
-      final quantity =
-          (data['quantity'] ?? 1) + item.quantity;
+  static CollectionReference<Map<String, dynamic>> get _cartCollection {
+    return _firestore.collection('cart').doc(_uid).collection('items');
+  }
 
-      await doc.update({
-        'quantity': quantity,
-      });
-    } else {
-      await doc.set(
-        item
-            .copyWith(
-              id: item.productId,
-              addedAt: Timestamp.now(),
-            )
-            .toMap(),
+  // ============================================================
+  // CREATE VARIANT DOCUMENT ID
+  // ============================================================
+
+  static String _variantId({
+    required String productId,
+    required String size,
+    required String color,
+  }) {
+    final normalizedProduct = productId.trim();
+
+    final normalizedSize = size.trim().toLowerCase();
+
+    final normalizedColor = color.trim().toLowerCase();
+
+    final raw = '${normalizedProduct}__${normalizedSize}__${normalizedColor}';
+
+    return raw
+        .replaceAll('/', '_')
+        .replaceAll('\\', '_')
+        .replaceAll('#', '_')
+        .replaceAll('[', '_')
+        .replaceAll(']', '_')
+        .replaceAll('.', '_')
+        .replaceAll(' ', '_');
+  }
+
+  // ============================================================
+  // ADD TO CART
+  // ============================================================
+
+  static Future<void> addToCart(CartItemModel item) async {
+    // ----------------------------------------------------------
+    // VALIDATION
+    // ----------------------------------------------------------
+
+    if (item.productId.trim().isEmpty) {
+      throw StateError('Invalid product.');
+    }
+
+    if (item.size.trim().isEmpty) {
+      throw StateError('Please select a size.');
+    }
+
+    if (item.color.trim().isEmpty) {
+      throw StateError('Please select a color.');
+    }
+
+    if (item.quantity <= 0) {
+      throw StateError('Quantity must be greater than zero.');
+    }
+
+    if (!item.isAvailable) {
+      throw StateError('Selected variant is unavailable.');
+    }
+
+    if (item.availableStock != null && item.quantity > item.availableStock!) {
+      throw StateError(
+        'Only ${item.availableStock} item(s) are available for the selected variant.',
       );
     }
-  }
 
-  //==================================================
-  // Fetch Cart
-  //==================================================
+    // ----------------------------------------------------------
+    // EXACT VARIANT ID
+    // ----------------------------------------------------------
 
-  static Future<List<CartItemModel>>
-      getCartItems() async {
-    final snapshot = await _cartCollection.get();
+    final size = item.size.trim();
+    final color = item.color.trim();
 
-    return snapshot.docs
-        .map(
-          (doc) => CartItemModel.fromMap(
-            doc.id,
-            doc.data(),
-          ),
-        )
-        .toList();
-  }
+    final documentId = _variantId(
+      productId: item.productId,
+      size: size,
+      color: color,
+    );
 
-  //==================================================
-  // Stream Cart
-  //==================================================
+    final doc = _cartCollection.doc(documentId);
 
-  static Stream<List<CartItemModel>>
-      streamCart() {
-    return _cartCollection
-        .snapshots()
-        .map(
-          (snapshot) => snapshot.docs
-              .map(
-                (doc) =>
-                    CartItemModel.fromMap(
-                  doc.id,
-                  doc.data(),
-                ),
-              )
-              .toList(),
-        );
-  }
+    // ----------------------------------------------------------
+    // TRANSACTION
+    // ----------------------------------------------------------
 
-  //==================================================
-  // Update Quantity
-  //==================================================
+    await _firestore.runTransaction((transaction) async {
+      final snapshot = await transaction.get(doc);
 
-  static Future<void> updateQuantity(
-    String productId,
-    int quantity,
-  ) async {
-    if (quantity <= 0) {
-      await removeItem(productId);
-      return;
-    }
+      if (snapshot.exists) {
+        final data = snapshot.data() ?? {};
 
-    await _cartCollection.doc(productId).update({
-      'quantity': quantity,
+        final existingQuantity = (data['quantity'] as num?)?.toInt() ?? 0;
+
+        final newQuantity = existingQuantity + item.quantity;
+
+        // ----------------------------------------------------
+        // CHECK STOCK FOR COMBINED QUANTITY
+        // ----------------------------------------------------
+
+        if (item.availableStock != null && newQuantity > item.availableStock!) {
+          throw StateError(
+            'Only ${item.availableStock} item(s) are available for this variant. '
+            'You already have $existingQuantity in your cart.',
+          );
+        }
+
+        transaction.update(doc, {
+          'productId': item.productId,
+          'productName': item.productName,
+          'productImage': item.productImage,
+          'price': item.price,
+          'quantity': newQuantity,
+          'size': size,
+          'color': color,
+          'availableStock': item.availableStock,
+          'isAvailable': item.isAvailable,
+        });
+      } else {
+        transaction.set(doc, {
+          'productId': item.productId,
+          'productName': item.productName,
+          'productImage': item.productImage,
+          'price': item.price,
+          'quantity': item.quantity,
+          'size': size,
+          'color': color,
+          'availableStock': item.availableStock,
+          'isAvailable': item.isAvailable,
+          'addedAt': Timestamp.now(),
+        });
+      }
     });
   }
 
-  //==================================================
-  // Remove Item
-  //==================================================
+  // ============================================================
+  // GET CART
+  // ============================================================
 
-  static Future<void> removeItem(
-    String productId,
-  ) async {
-    await _cartCollection.doc(productId).delete();
+  static Future<List<CartItemModel>> getCartItems() async {
+    final snapshot = await _cartCollection.get();
+
+    return snapshot.docs.map((doc) {
+      return CartItemModel.fromMap(doc.id, doc.data());
+    }).toList();
   }
 
-  //==================================================
-  // Clear Cart
-  //==================================================
+  // ============================================================
+  // STREAM CART
+  // ============================================================
+
+  static Stream<List<CartItemModel>> streamCart() {
+    return _cartCollection.orderBy('addedAt', descending: true).snapshots().map(
+      (snapshot) {
+        return snapshot.docs.map((doc) {
+          return CartItemModel.fromMap(doc.id, doc.data());
+        }).toList();
+      },
+    );
+  }
+
+  // ============================================================
+  // UPDATE QUANTITY
+  // ============================================================
+
+  static Future<void> updateQuantity(String itemId, int quantity) async {
+    if (quantity <= 0) {
+      await removeItem(itemId);
+      return;
+    }
+
+    final doc = _cartCollection.doc(itemId);
+
+    final snapshot = await doc.get();
+
+    if (!snapshot.exists) {
+      throw StateError('Cart item no longer exists.');
+    }
+
+    final data = snapshot.data() ?? {};
+
+    final isAvailable = data['isAvailable'] is bool
+        ? data['isAvailable'] as bool
+        : true;
+
+    final availableStock = (data['availableStock'] as num?)?.toInt();
+
+    if (!isAvailable) {
+      throw StateError('This product variant is no longer available.');
+    }
+
+    if (availableStock != null && quantity > availableStock) {
+      throw StateError(
+        'Only $availableStock item(s) are available for this variant.',
+      );
+    }
+
+    await doc.update({'quantity': quantity});
+  }
+
+  // ============================================================
+  // REMOVE ITEM
+  // ============================================================
+
+  static Future<void> removeItem(String itemId) async {
+    await _cartCollection.doc(itemId).delete();
+  }
+
+  // ============================================================
+  // CLEAR CART
+  // ============================================================
 
   static Future<void> clearCart() async {
     final snapshot = await _cartCollection.get();
 
-    for (final doc in snapshot.docs) {
-      await doc.reference.delete();
+    if (snapshot.docs.isEmpty) {
+      return;
     }
+
+    final batch = _firestore.batch();
+
+    for (final doc in snapshot.docs) {
+      batch.delete(doc.reference);
+    }
+
+    await batch.commit();
   }
 }

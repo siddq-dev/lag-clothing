@@ -27,6 +27,7 @@ import 'providers/analytics_provider.dart';
 import '/services/analytics_lifecycle_service.dart';
 import 'providers/product_management_provider.dart';
 import 'providers/checkout_provider.dart';
+import 'providers/cart_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,6 +66,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ProductManagementProvider()),
         ChangeNotifierProvider(create: (_) => ShopProvider()),
         ChangeNotifierProvider(create: (_) => CheckoutProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
 
         // ========================================================
         // WISHLIST

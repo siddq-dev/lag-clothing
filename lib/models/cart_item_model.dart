@@ -4,18 +4,23 @@ class CartItemModel {
   final String id;
 
   final String productId;
-
   final String productName;
-
   final String productImage;
 
   final double price;
-
   final int quantity;
 
   final String size;
-
   final String color;
+
+  /// Current stock of the exact selected size + color variant.
+  ///
+  /// This is nullable because older cart documents may not contain
+  /// stock information yet.
+  final int? availableStock;
+
+  /// Whether the exact selected variant is currently available.
+  final bool isAvailable;
 
   final Timestamp? addedAt;
 
@@ -28,10 +33,44 @@ class CartItemModel {
     required this.quantity,
     required this.size,
     required this.color,
+    this.availableStock,
+    this.isAvailable = true,
     this.addedAt,
   });
 
+  // ============================================================
+  // TOTAL
+  // ============================================================
+
   double get total => price * quantity;
+
+  // ============================================================
+  // STOCK VALIDATION
+  // ============================================================
+
+  bool get quantityExceedsStock {
+    if (availableStock == null) {
+      return false;
+    }
+
+    return quantity > availableStock!;
+  }
+
+  bool get canIncreaseQuantity {
+    if (!isAvailable) {
+      return false;
+    }
+
+    if (availableStock == null) {
+      return true;
+    }
+
+    return quantity < availableStock!;
+  }
+
+  // ============================================================
+  // FIRESTORE MAP
+  // ============================================================
 
   Map<String, dynamic> toMap() {
     return {
@@ -42,26 +81,37 @@ class CartItemModel {
       'quantity': quantity,
       'size': size,
       'color': color,
+      'availableStock': availableStock,
+      'isAvailable': isAvailable,
       'addedAt': addedAt,
     };
   }
 
-  factory CartItemModel.fromMap(
-    String id,
-    Map<String, dynamic> map,
-  ) {
+  // ============================================================
+  // FROM FIRESTORE
+  // ============================================================
+
+  factory CartItemModel.fromMap(String id, Map<String, dynamic> map) {
     return CartItemModel(
       id: id,
-      productId: map['productId'] ?? '',
-      productName: map['productName'] ?? '',
-      productImage: map['productImage'] ?? '',
-      price: (map['price'] ?? 0).toDouble(),
-      quantity: map['quantity'] ?? 1,
-      size: map['size'] ?? '',
-      color: map['color'] ?? '',
-      addedAt: map['addedAt'],
+      productId: map['productId']?.toString() ?? '',
+      productName: map['productName']?.toString() ?? '',
+      productImage: map['productImage']?.toString() ?? '',
+      price: (map['price'] as num?)?.toDouble() ?? 0.0,
+      quantity: (map['quantity'] as num?)?.toInt() ?? 1,
+      size: map['size']?.toString() ?? '',
+      color: map['color']?.toString() ?? '',
+      availableStock: (map['availableStock'] as num?)?.toInt(),
+      isAvailable: map['isAvailable'] is bool
+          ? map['isAvailable'] as bool
+          : true,
+      addedAt: map['addedAt'] is Timestamp ? map['addedAt'] as Timestamp : null,
     );
   }
+
+  // ============================================================
+  // COPY WITH
+  // ============================================================
 
   CartItemModel copyWith({
     String? id,
@@ -72,6 +122,8 @@ class CartItemModel {
     int? quantity,
     String? size,
     String? color,
+    int? availableStock,
+    bool? isAvailable,
     Timestamp? addedAt,
   }) {
     return CartItemModel(
@@ -83,6 +135,8 @@ class CartItemModel {
       quantity: quantity ?? this.quantity,
       size: size ?? this.size,
       color: color ?? this.color,
+      availableStock: availableStock ?? this.availableStock,
+      isAvailable: isAvailable ?? this.isAvailable,
       addedAt: addedAt ?? this.addedAt,
     );
   }

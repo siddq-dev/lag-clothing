@@ -16,16 +16,16 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ------------------------------------------------------------
+    // WebsiteLayout uses its default `scrollable: true`, exactly
+    // like every other page (e.g. product details). The whole
+    // page — header, cart body, and Footer — scrolls together,
+    // so Footer always sits naturally after the cart content
+    // instead of being squeezed into a fixed leftover height.
+    // ------------------------------------------------------------
     return const WebsiteLayout(
       currentRoute: AppRouter.cart,
-      child: Column(
-        children: [
-          CartHeader(),
-          Expanded(
-            child: _CartBody(),
-          ),
-        ],
-      ),
+      child: Column(children: [CartHeader(), _CartBody()]),
     );
   }
 }
@@ -42,7 +42,9 @@ class _CartBodyState extends State<_CartBody> {
   void initState() {
     super.initState();
 
-    Future.microtask(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
       context.read<CartProvider>().listenCart();
     });
   }
@@ -50,48 +52,70 @@ class _CartBodyState extends State<_CartBody> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<CartProvider>();
+
     final cartItems = provider.items;
 
+    // ------------------------------------------------------------
+    // A finite height (instead of Expanded) for the loading/error/
+    // empty states, so they still look centered on screen without
+    // requiring an unbounded-height ancestor to provide flex space.
+    // ------------------------------------------------------------
+    final centeredHeight = MediaQuery.sizeOf(context).height * 0.6;
+
     if (provider.isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
+      return SizedBox(
+        height: centeredHeight,
+        child: const Center(child: CircularProgressIndicator()),
       );
     }
 
-    if (provider.error != null) {
-      return Center(
-        child: Text(provider.error!),
+    if (provider.error != null && cartItems.isEmpty) {
+      return SizedBox(
+        height: centeredHeight,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(30),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.error_outline, color: Colors.red, size: 50),
+                const SizedBox(height: 15),
+                Text(provider.error!, textAlign: TextAlign.center),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: provider.listenCart,
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+        ),
       );
     }
 
     if (cartItems.isEmpty) {
-      return const EmptyCart();
+      return SizedBox(height: centeredHeight, child: const EmptyCart());
     }
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 40,
-      ),
+    // ------------------------------------------------------------
+    // Items exist — no need for its own SingleChildScrollView,
+    // since the whole page (via WebsiteLayout) already scrolls.
+    // ------------------------------------------------------------
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 40),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //--------------------------------------------------
-          // LEFT SIDE
-          //--------------------------------------------------
-
           Expanded(
             flex: 7,
             child: Column(
               children: [
-                ...cartItems.map(
-                  (item) => Padding(
+                ...cartItems.map((item) {
+                  return Padding(
                     padding: const EdgeInsets.only(bottom: 20),
-                    child: CartItem(
-                      item: item,
-                    ),
-                  ),
-                ),
+                    child: CartItem(item: item),
+                  );
+                }),
 
                 const SizedBox(height: 30),
 
@@ -102,9 +126,7 @@ class _CartBodyState extends State<_CartBody> {
                       context.go(AppRouter.shop);
                     },
                     icon: const Icon(Icons.arrow_back),
-                    label: const Text(
-                      "Continue Shopping",
-                    ),
+                    label: const Text('Continue Shopping'),
                   ),
                 ),
               ],
@@ -112,10 +134,6 @@ class _CartBodyState extends State<_CartBody> {
           ),
 
           const SizedBox(width: 40),
-
-          //--------------------------------------------------
-          // RIGHT SIDE
-          //--------------------------------------------------
 
           Expanded(
             flex: 3,
