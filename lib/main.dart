@@ -70,17 +70,54 @@ void main() async {
 
         // ========================================================
         // WISHLIST
-        // Seeded with the real signed-in user's UID, and kept in
-        // sync automatically whenever auth state changes (login/
-        // logout), so the wishlist never gets stuck showing the
-        // wrong (or empty) customer's data.
+        // Seeded with whatever UID is available at cold start
+        // (may be empty if the app launches signed out). The
+        // _AuthSync wrapper below keeps this in sync afterward,
+        // whenever the user logs in or out later in the session.
         // ========================================================
         ChangeNotifierProvider(
           create: (_) =>
               WishlistProvider(customerId: customerId)..loadWishlist(),
         ),
       ],
-      child: const LagClothingApp(),
+
+      // ------------------------------------------------------------
+      // _AuthSync listens to Firebase's live auth state and calls
+      // WishlistProvider.setCustomerId(...) whenever the user logs
+      // in or out. The cold-start UID above only covers the very
+      // first frame the app renders — without this listener, a
+      // login that happens after launch never reaches
+      // WishlistProvider, which is why "Please login to view your
+      // wishlist" kept showing even right after signing in.
+      // ------------------------------------------------------------
+      child: const _AuthSync(child: LagClothingApp()),
     ),
   );
+}
+
+class _AuthSync extends StatefulWidget {
+  const _AuthSync({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_AuthSync> createState() => _AuthSyncState();
+}
+
+class _AuthSyncState extends State<_AuthSync> {
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseAuth.instance.authStateChanges().listen((user) {
+      if (!mounted) return;
+
+      context.read<WishlistProvider>().setCustomerId(user?.uid ?? '');
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
 }

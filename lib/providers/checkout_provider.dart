@@ -12,17 +12,18 @@ class CheckoutProvider extends ChangeNotifier {
 
   CheckoutModel? _checkout;
 
+  bool _isLoading = false;
+  String? _error;
+
   CheckoutModel? get checkout => _checkout;
 
-  bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  String? _error;
   String? get error => _error;
 
-  //----------------------------------------------------------
-  // Initialize Checkout
-  //----------------------------------------------------------
+  // ============================================================
+  // INITIALIZE
+  // ============================================================
 
   Future<void> initialize() async {
     _isLoading = true;
@@ -31,166 +32,325 @@ class CheckoutProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final address = await _repository.getDefaultAddress();
-
       final cartItems = await _repository.getCartItems();
+
+      if (cartItems.isEmpty) {
+        _checkout = const CheckoutModel(
+          shippingAddress: null,
+          billingAddress: null,
+          cartItems: [],
+          coupon: null,
+          paymentMethod: null,
+          subtotal: 0,
+          tax: 0,
+          discount: 0,
+          grandTotal: 0,
+        );
+
+        return;
+      }
 
       final subtotal = cartItems.fold<double>(
         0,
         (sum, item) => sum + item.total,
       );
 
-      final shipping = cartItems.isEmpty ? 0.0 : 100.0;
+      const taxRate = 0.05;
 
-      final tax = subtotal * 0.05;
+      final tax = subtotal * taxRate;
+
+      const discount = 0.0;
+
+      final grandTotal = subtotal + tax - discount;
 
       _checkout = CheckoutModel(
-        selectedAddress: address,
-        cartItems: cartItems,
+        shippingAddress: null,
+        billingAddress: null,
+        cartItems: List.unmodifiable(cartItems),
         coupon: null,
-        shippingMethod: "standard",
-        paymentMethod: "card",
+        paymentMethod: null,
         subtotal: subtotal,
-        shippingCharge: shipping,
         tax: tax,
-        discount: 0,
-        grandTotal: subtotal + shipping + tax,
+        discount: discount,
+        grandTotal: grandTotal,
       );
     } catch (e) {
       _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // ============================================================
+  // SHIPPING ADDRESS
+  // ============================================================
+
+  void setShippingAddress(AddressModel address) {
+    if (_checkout == null) {
+      return;
     }
 
-    _isLoading = false;
-
-    notifyListeners();
-  }
-
-  //----------------------------------------------------------
-  // Address
-  //----------------------------------------------------------
-
-  void selectAddress(AddressModel address) {
-    _checkout = _checkout?.copyWith(selectedAddress: address);
-
-    notifyListeners();
-  }
-
-  //----------------------------------------------------------
-  // Shipping
-  //----------------------------------------------------------
-
-  void selectShipping(String method, double charge) {
-    if (_checkout == null) return;
-
-    _checkout = _checkout!.copyWith(
-      shippingMethod: method,
-      shippingCharge: charge,
-      grandTotal:
-          _checkout!.subtotal + charge + _checkout!.tax - _checkout!.discount,
+    final normalizedAddress = address.copyWith(
+      purpose: AddressPurpose.shipping,
+      isDefault: false,
     );
 
+    _checkout = _checkout!.copyWith(shippingAddress: normalizedAddress);
+
+    _error = null;
+
     notifyListeners();
   }
 
-  //----------------------------------------------------------
-  // Payment
-  //----------------------------------------------------------
+  // ============================================================
+  // BILLING ADDRESS
+  // ============================================================
+
+  void setBillingAddress(AddressModel address) {
+    if (_checkout == null) {
+      return;
+    }
+
+    final normalizedAddress = address.copyWith(
+      purpose: AddressPurpose.billing,
+      isDefault: false,
+    );
+
+    _checkout = _checkout!.copyWith(billingAddress: normalizedAddress);
+
+    _error = null;
+
+    notifyListeners();
+  }
+
+  // ============================================================
+  // CLEAR SHIPPING
+  // ============================================================
+
+  void clearShippingAddress() {
+    if (_checkout == null) {
+      return;
+    }
+
+    _checkout = _checkout!.copyWith(clearShippingAddress: true);
+
+    notifyListeners();
+  }
+
+  // ============================================================
+  // CLEAR BILLING
+  // ============================================================
+
+  void clearBillingAddress() {
+    if (_checkout == null) {
+      return;
+    }
+
+    _checkout = _checkout!.copyWith(clearBillingAddress: true);
+
+    notifyListeners();
+  }
+
+  // ============================================================
+  // PAYMENT
+  // ============================================================
 
   void selectPayment(String payment) {
-    if (_checkout == null) return;
+    if (_checkout == null) {
+      return;
+    }
 
-    _checkout = _checkout!.copyWith(paymentMethod: payment);
+    final value = payment.trim();
+
+    if (value.isEmpty) {
+      return;
+    }
+
+    _checkout = _checkout!.copyWith(paymentMethod: value);
+
+    _error = null;
 
     notifyListeners();
   }
 
-  //----------------------------------------------------------
-  // Coupon
-  //----------------------------------------------------------
+  // ============================================================
+  // DISCOUNT
+  // ============================================================
 
   void applyDiscount(double discount) {
-    if (_checkout == null) return;
+    if (_checkout == null) {
+      return;
+    }
+
+    final safeDiscount = discount.clamp(
+      0.0,
+      _checkout!.subtotal + _checkout!.tax,
+    );
+
+    final grandTotal = _checkout!.subtotal + _checkout!.tax - safeDiscount;
 
     _checkout = _checkout!.copyWith(
-      discount: discount,
-      grandTotal:
-          _checkout!.subtotal +
-          _checkout!.shippingCharge +
-          _checkout!.tax -
-          discount,
+      discount: safeDiscount,
+      grandTotal: grandTotal < 0 ? 0.0 : grandTotal,
     );
 
     notifyListeners();
   }
 
-  //----------------------------------------------------------
-  // Place Order
-  //----------------------------------------------------------
+  // ============================================================
+  // VALIDATE CHECKOUT
+  // ============================================================
 
-  Future<bool> placeOrder() async {
-    if (_checkout == null) {
+  bool validateCheckout() {
+    final currentCheckout = _checkout;
+
+    if (currentCheckout == null) {
+      _error = 'Checkout is unavailable.';
+      notifyListeners();
       return false;
     }
 
+    if (!currentCheckout.hasProducts) {
+      _error = 'Your cart is empty.';
+      notifyListeners();
+      return false;
+    }
+
+    if (!currentCheckout.hasShippingAddress) {
+      _error = 'Please complete the shipping address.';
+      notifyListeners();
+      return false;
+    }
+
+    if (!currentCheckout.hasBillingAddress) {
+      _error = 'Please complete the billing address.';
+      notifyListeners();
+      return false;
+    }
+
+    if (!currentCheckout.hasPaymentMethod) {
+      _error = 'Please select a payment method.';
+      notifyListeners();
+      return false;
+    }
+
+    return true;
+  }
+
+  // ============================================================
+  // PLACE ORDER
+  // ============================================================
+
+  Future<bool> placeOrder() async {
+    if (!validateCheckout()) {
+      return false;
+    }
+
+    final currentCheckout = _checkout;
+
+    if (currentCheckout == null) {
+      return false;
+    }
+
+    _isLoading = true;
+    _error = null;
+
+    notifyListeners();
+
     try {
-      final validStock = await _repository.validateInventory(
-        _checkout!.cartItems,
-      );
-
-      if (!validStock) {
-        _error = "Some items are out of stock.";
-
-        notifyListeners();
-
-        return false;
-      }
-
-      final validPrices = await _repository.validatePrices(
-        _checkout!.cartItems,
-      );
-
-      if (!validPrices) {
-        _error = "Prices changed. Please refresh cart.";
-
-        notifyListeners();
-
-        return false;
-      }
-
       final orderNumber = _repository.generateOrderNumber();
 
       final trackingId = _repository.generateTrackingId();
 
+      final orderData = {
+        // --------------------------------------------------------
+        // USER
+        // --------------------------------------------------------
+
+        // userId is added by CheckoutRepository.
+        // Do not duplicate it here.
+
+        // --------------------------------------------------------
+        // ORDER IDENTIFIERS
+        // --------------------------------------------------------
+        'orderNumber': orderNumber,
+        'trackingId': trackingId,
+
+        // --------------------------------------------------------
+        // ADDRESSES
+        // --------------------------------------------------------
+        'shippingAddress': currentCheckout.shippingAddress!.toMap(),
+
+        'billingAddress': currentCheckout.billingAddress!.toMap(),
+
+        // --------------------------------------------------------
+        // ITEMS
+        // --------------------------------------------------------
+        'items': currentCheckout.cartItems.map((item) => item.toMap()).toList(),
+
+        // --------------------------------------------------------
+        // PAYMENT
+        // --------------------------------------------------------
+        'paymentMethod': currentCheckout.paymentMethod,
+
+        // --------------------------------------------------------
+        // TOTALS
+        // --------------------------------------------------------
+        'subtotal': currentCheckout.subtotal,
+
+        'tax': currentCheckout.tax,
+
+        'discount': currentCheckout.discount,
+
+        'grandTotal': currentCheckout.grandTotal,
+
+        // --------------------------------------------------------
+        // STATUS
+        // --------------------------------------------------------
+        'orderStatus': 'pending',
+
+        'paymentStatus': 'pending',
+      };
+
+      // ----------------------------------------------------------
+      // CREATE ORDER + VALIDATE PRICE/STOCK + UPDATE INVENTORY
+      // ----------------------------------------------------------
+
       await _repository.createOrder(
-        orderData: {
-          "orderNumber": orderNumber,
-          "trackingId": trackingId,
-          "address": _checkout!.selectedAddress?.toMap(),
-          "items": _checkout!.cartItems.map((e) => e.toMap()).toList(),
-          "paymentMethod": _checkout!.paymentMethod,
-          "shippingMethod": _checkout!.shippingMethod,
-          "subtotal": _checkout!.subtotal,
-          "shipping": _checkout!.shippingCharge,
-          "tax": _checkout!.tax,
-          "discount": _checkout!.discount,
-          "grandTotal": _checkout!.grandTotal,
-          "orderStatus": "pending",
-          "paymentStatus": "pending",
-          "createdAt": DateTime.now(),
-        },
+        orderData: orderData,
+        items: currentCheckout.cartItems,
       );
 
-      await _repository.updateInventory(_checkout!.cartItems);
+      // ----------------------------------------------------------
+      // CLEAR CART ONLY AFTER SUCCESSFUL ORDER TRANSACTION
+      // ----------------------------------------------------------
 
       await _repository.clearCart();
+
+      // ----------------------------------------------------------
+      // CLEAR LOCAL CHECKOUT
+      // ----------------------------------------------------------
+
+      _checkout = null;
 
       return true;
     } catch (e) {
       _error = e.toString();
 
-      notifyListeners();
-
       return false;
+    } finally {
+      _isLoading = false;
+
+      notifyListeners();
     }
+  }
+
+  // ============================================================
+  // REFRESH
+  // ============================================================
+
+  Future<void> refresh() async {
+    await initialize();
   }
 }

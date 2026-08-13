@@ -4,10 +4,11 @@ import '../models/wishlist_items.dart';
 import '../repositories/wishlist_repository.dart';
 
 class WishlistProvider extends ChangeNotifier {
-  WishlistProvider({required this.customerId, WishlistRepository? repository})
-    : _repository = repository ?? WishlistRepository();
+  WishlistProvider({String? customerId, WishlistRepository? repository})
+    : _customerId = customerId ?? '',
+      _repository = repository ?? WishlistRepository();
 
-  final String customerId;
+  String _customerId;
   final WishlistRepository _repository;
 
   final List<WishlistItem> _items = [];
@@ -15,6 +16,8 @@ class WishlistProvider extends ChangeNotifier {
   bool _isLoading = false;
   bool _isSaving = false;
   String? _error;
+
+  String get customerId => _customerId;
 
   List<WishlistItem> get items => List.unmodifiable(_items);
 
@@ -26,7 +29,42 @@ class WishlistProvider extends ChangeNotifier {
 
   String? get error => _error;
 
-  bool get hasCustomer => customerId.trim().isNotEmpty;
+  bool get hasCustomer => _customerId.trim().isNotEmpty;
+
+  // ============================================================
+  // SET CUSTOMER ID
+  //
+  // Called whenever Firebase's auth state changes (login/logout),
+  // so the wishlist always reflects whoever is actually signed in
+  // right now instead of whoever was signed in when the app first
+  // launched.
+  // ============================================================
+
+  Future<void> setCustomerId(String uid) async {
+    final newCustomerId = uid.trim();
+
+    // Same user — nothing to do.
+    if (_customerId == newCustomerId) {
+      return;
+    }
+
+    _customerId = newCustomerId;
+
+    // Always clear the previous user's local wishlist first.
+    _items.clear();
+    _error = null;
+
+    notifyListeners();
+
+    if (_customerId.isEmpty) {
+      debugPrint('WISHLIST: User logged out. Wishlist cleared.');
+      return;
+    }
+
+    debugPrint('WISHLIST: Customer changed to $_customerId');
+
+    await loadWishlist();
+  }
 
   Future<void> loadWishlist() async {
     if (!hasCustomer) {
@@ -45,9 +83,9 @@ class WishlistProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      debugPrint('WISHLIST: Loading for customer $customerId');
+      debugPrint('WISHLIST: Loading for customer $_customerId');
 
-      final data = await _repository.getWishlist(customerId);
+      final data = await _repository.getWishlist(_customerId);
 
       final loadedItems = <WishlistItem>[];
 
@@ -107,7 +145,7 @@ class WishlistProvider extends ChangeNotifier {
 
       notifyListeners();
 
-      await _repository.addItem(customerId: customerId, item: item.toMap());
+      await _repository.addItem(customerId: _customerId, item: item.toMap());
 
       debugPrint('WISHLIST: Item saved successfully.');
 
@@ -146,7 +184,7 @@ class WishlistProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await _repository.removeItem(customerId: customerId, itemId: itemId);
+      await _repository.removeItem(customerId: _customerId, itemId: itemId);
 
       return true;
     } catch (e, stackTrace) {
@@ -191,7 +229,7 @@ class WishlistProvider extends ChangeNotifier {
 
     try {
       await _repository.updateQuantity(
-        customerId: customerId,
+        customerId: _customerId,
         itemId: itemId,
         quantity: quantity,
       );
@@ -275,7 +313,7 @@ class WishlistProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await _repository.clearWishlist(customerId);
+      await _repository.clearWishlist(_customerId);
 
       return true;
     } catch (e, stackTrace) {

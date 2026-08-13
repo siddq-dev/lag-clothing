@@ -32,6 +32,11 @@ class PreviousOrderTile extends StatelessWidget {
 
       case OrderStatus.returned:
         return Colors.brown;
+
+      case OrderStatus.refundRequested:
+        return Colors.amber;
+      case OrderStatus.exchangeRequested:
+        return Colors.pink;
     }
   }
 

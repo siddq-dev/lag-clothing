@@ -22,6 +22,40 @@ class _UpdateOrderStatusCardState extends State<UpdateOrderStatusCard> {
     selectedStatus = widget.order.orderStatus;
   }
 
+  String _statusLabel(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.placed:
+        return 'Order Placed';
+
+      case OrderStatus.confirmed:
+        return 'Confirmed';
+
+      case OrderStatus.packed:
+        return 'Packed';
+
+      case OrderStatus.shipped:
+        return 'Shipped';
+
+      case OrderStatus.outForDelivery:
+        return 'Out For Delivery';
+
+      case OrderStatus.delivered:
+        return 'Delivered';
+
+      case OrderStatus.cancelled:
+        return 'Cancelled';
+
+      case OrderStatus.refundRequested:
+        return 'Refund Requested';
+
+      case OrderStatus.exchangeRequested:
+        return 'Exchange Requested';
+
+      case OrderStatus.returned:
+        return 'Returned';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<OrderProvider>();
@@ -33,8 +67,15 @@ class _UpdateOrderStatusCardState extends State<UpdateOrderStatusCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Update Order Status",
+              'Update Order Status',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 8),
+
+            Text(
+              'Current status: ${_statusLabel(widget.order.orderStatus)}',
+              style: TextStyle(color: Colors.grey.shade700),
             ),
 
             const SizedBox(height: 20),
@@ -44,25 +85,27 @@ class _UpdateOrderStatusCardState extends State<UpdateOrderStatusCard> {
 
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: "Order Status",
+                labelText: 'Order Status',
               ),
 
               items: OrderStatus.values
                   .map(
-                    (status) => DropdownMenuItem(
+                    (status) => DropdownMenuItem<OrderStatus>(
                       value: status,
-                      child: Text(status.name),
+                      child: Text(_statusLabel(status)),
                     ),
                   )
                   .toList(),
 
-              onChanged: (value) {
-                if (value == null) return;
+              onChanged: provider.isLoading
+                  ? null
+                  : (value) {
+                      if (value == null) return;
 
-                setState(() {
-                  selectedStatus = value;
-                });
-              },
+                      setState(() {
+                        selectedStatus = value;
+                      });
+                    },
             ),
 
             const SizedBox(height: 20),
@@ -81,7 +124,7 @@ class _UpdateOrderStatusCardState extends State<UpdateOrderStatusCard> {
                           color: Colors.white,
                         ),
                       )
-                    : const Text("Update Status"),
+                    : const Text('Update Status'),
 
                 onPressed: provider.isLoading
                     ? null
@@ -95,9 +138,10 @@ class _UpdateOrderStatusCardState extends State<UpdateOrderStatusCard> {
                           if (!context.mounted) return;
 
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                            SnackBar(
                               content: Text(
-                                "Order status updated successfully",
+                                'Order status changed to '
+                                '${_statusLabel(selectedStatus)}',
                               ),
                             ),
                           );

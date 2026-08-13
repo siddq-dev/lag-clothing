@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lag_clothing/features/orders/order_page.dart';
 import 'package:lag_clothing/features/saved_address/page/add_address_page.dart';
 import 'package:lag_clothing/models/customer_admin_model.dart';
+import 'package:lag_clothing/models/order_model.dart';
 import 'package:lag_clothing/routes/router_observer.dart';
 
 import '../features/about/pages/about_page.dart';
@@ -64,6 +65,7 @@ import '../features/super_admin/product_management/pages/product_details_page.da
     as admin_product_details;
 import '../features/shop/page/product_details_page.dart'
     as shop_product_details;
+import '../features/cart/pages/cart_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -346,7 +348,11 @@ class AppRouter {
 
       GoRoute(
         path: orderDetails,
-        builder: (context, state) => const OrderDetailsPage(),
+        builder: (context, state) {
+          final order = state.extra as OrderModel;
+
+          return OrderDetailsPage(order: order);
+        },
       ),
 
       GoRoute(
