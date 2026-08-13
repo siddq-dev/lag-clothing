@@ -392,7 +392,16 @@ class CheckoutRepository {
               final currentVariantStock =
                   (variant['stock'] as num?)?.toInt() ?? 0;
 
-              variant['stock'] = currentVariantStock - item.quantity;
+              final newVariantStock = currentVariantStock - item.quantity;
+
+              variant['stock'] = newVariantStock;
+
+              // Keep 'available' consistent with the new stock,
+              // same rule already used by the admin form
+              // (stock > 0 => available). Without this, a
+              // variant that just sold out would still read as
+              // available until someone manually re-saved it.
+              variant['available'] = newVariantStock > 0;
             }
 
             return variant;
