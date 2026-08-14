@@ -94,9 +94,11 @@ class _CartBodyState extends State<_CartBody> {
     }
 
     if (cartItems.isEmpty) {
-      return SizedBox(height: centeredHeight, child: const EmptyCart());
+      return ConstrainedBox(
+        constraints: BoxConstraints(minHeight: centeredHeight),
+        child: const EmptyCart(),
+      );
     }
-
     // ------------------------------------------------------------
     // Items exist — no need for its own SingleChildScrollView,
     // since the whole page (via WebsiteLayout) already scrolls.

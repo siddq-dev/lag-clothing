@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../repositories/auth_repository.dart';
 import '../../../../providers/auth_provider.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../services/google_auth_service.dart';
@@ -20,11 +21,9 @@ class _LoginFormState extends State<LoginForm> {
   bool _rememberMe = false;
   bool isLoading = false;
 
-  final TextEditingController _userController =
-      TextEditingController();
+  final TextEditingController _userController = TextEditingController();
 
-  final TextEditingController _passwordController =
-      TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
@@ -37,11 +36,7 @@ class _LoginFormState extends State<LoginForm> {
     if (_userController.text.trim().isEmpty ||
         _passwordController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Please enter email and password.",
-          ),
-        ),
+        const SnackBar(content: Text("Please enter email and password.")),
       );
       return;
     }
@@ -50,11 +45,10 @@ class _LoginFormState extends State<LoginForm> {
       isLoading = true;
     });
 
-    final success =
-        await context.read<AuthProvider>().login(
-              email: _userController.text.trim(),
-              password: _passwordController.text.trim(),
-            );
+    final success = await context.read<AuthProvider>().login(
+      email: _userController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
 
     if (!mounted) return;
 
@@ -67,10 +61,7 @@ class _LoginFormState extends State<LoginForm> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            context.read<AuthProvider>().error ??
-                "Login Failed",
-          ),
+          content: Text(context.read<AuthProvider>().error ?? "Login Failed"),
         ),
       );
     }
@@ -82,24 +73,33 @@ class _LoginFormState extends State<LoginForm> {
         isLoading = true;
       });
 
-      final credential =
-          await GoogleAuthService.signInWithGoogle();
+      final credential = await GoogleAuthService.signInWithGoogle();
 
       if (!mounted) return;
 
       if (credential != null) {
+        final firebaseUser = credential.user;
+
+        if (firebaseUser != null) {
+          final user = await AuthRepository.getUser(firebaseUser.uid);
+
+          if (!mounted) return;
+
+          if (user != null) {
+            context.read<AuthProvider>().setCurrentUser(user);
+          }
+        }
+
+        if (!mounted) return;
+
         context.go(AppRouter.roleRedirect);
       }
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.toString(),
-          ),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
       if (mounted) {
         setState(() {
@@ -115,22 +115,13 @@ class _LoginFormState extends State<LoginForm> {
       color: AppColors.background,
       child: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 50,
-            vertical: 40,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 40),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 420,
-            ),
+            constraints: const BoxConstraints(maxWidth: 420),
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Sign In",
-                  style: AppTextStyles.heading2,
-                ),
+                Text("Sign In", style: AppTextStyles.heading2),
 
                 const SizedBox(height: 12),
 
@@ -149,11 +140,9 @@ class _LoginFormState extends State<LoginForm> {
                   controller: _userController,
                   decoration: InputDecoration(
                     hintText: "Enter your email",
-                    prefixIcon:
-                        const Icon(Icons.person_outline),
+                    prefixIcon: const Icon(Icons.person_outline),
                     border: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                 ),
@@ -168,15 +157,12 @@ class _LoginFormState extends State<LoginForm> {
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
-                    hintText:
-                        "Enter your password",
-                    prefixIcon:
-                        const Icon(Icons.lock_outline),
+                    hintText: "Enter your password",
+                    prefixIcon: const Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       onPressed: () {
                         setState(() {
-                          _obscurePassword =
-                              !_obscurePassword;
+                          _obscurePassword = !_obscurePassword;
                         });
                       },
                       icon: Icon(
@@ -186,8 +172,7 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                     ),
                     border: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                 ),
@@ -198,12 +183,10 @@ class _LoginFormState extends State<LoginForm> {
                   children: [
                     Checkbox(
                       value: _rememberMe,
-                      activeColor:
-                          AppColors.primary,
+                      activeColor: AppColors.primary,
                       onChanged: (value) {
                         setState(() {
-                          _rememberMe =
-                              value ?? false;
+                          _rememberMe = value ?? false;
                         });
                       },
                     ),
@@ -211,13 +194,9 @@ class _LoginFormState extends State<LoginForm> {
                     const Spacer(),
                     TextButton(
                       onPressed: () {
-                        context.go(
-                          AppRouter.forgotPassword,
-                        );
+                        context.go(AppRouter.forgotPassword);
                       },
-                      child: const Text(
-                        "Forgot Password?",
-                      ),
+                      child: const Text("Forgot Password?"),
                     ),
                   ],
                 ),
@@ -228,21 +207,16 @@ class _LoginFormState extends State<LoginForm> {
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton(
-                    onPressed:
-                        isLoading ? null : login,
-                    style:
-                        ElevatedButton.styleFrom(
-                      backgroundColor:
-                          AppColors.primary,
-                      foregroundColor:
-                          Colors.white,
+                    onPressed: isLoading ? null : login,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
                     ),
                     child: isLoading
                         ? const SizedBox(
                             height: 22,
                             width: 22,
-                            child:
-                                CircularProgressIndicator(
+                            child: CircularProgressIndicator(
                               strokeWidth: 2,
                               color: Colors.white,
                             ),
@@ -251,8 +225,7 @@ class _LoginFormState extends State<LoginForm> {
                             "LOGIN",
                             style: TextStyle(
                               fontSize: 18,
-                              fontWeight:
-                                  FontWeight.bold,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                   ),
@@ -264,9 +237,7 @@ class _LoginFormState extends State<LoginForm> {
                   children: const [
                     Expanded(child: Divider()),
                     Padding(
-                      padding:
-                          EdgeInsets.symmetric(
-                              horizontal: 12),
+                      padding: EdgeInsets.symmetric(horizontal: 12),
                       child: Text("OR"),
                     ),
                     Expanded(child: Divider()),
@@ -279,14 +250,9 @@ class _LoginFormState extends State<LoginForm> {
                   width: double.infinity,
                   height: 55,
                   child: OutlinedButton.icon(
-                    onPressed:
-                        isLoading ? null : googleLogin,
-                    icon: const Icon(
-                      Icons.g_mobiledata,
-                    ),
-                    label: const Text(
-                      "Continue with Google",
-                    ),
+                    onPressed: isLoading ? null : googleLogin,
+                    icon: const Icon(Icons.g_mobiledata),
+                    label: const Text("Continue with Google"),
                   ),
                 ),
 
@@ -297,11 +263,8 @@ class _LoginFormState extends State<LoginForm> {
                   height: 55,
                   child: OutlinedButton.icon(
                     onPressed: () {},
-                    icon:
-                        const Icon(Icons.apple),
-                    label: const Text(
-                      "Continue with Apple",
-                    ),
+                    icon: const Icon(Icons.apple),
+                    label: const Text("Continue with Apple"),
                   ),
                 ),
 
@@ -309,21 +272,14 @@ class _LoginFormState extends State<LoginForm> {
 
                 Center(
                   child: Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        "Don't have an account?",
-                      ),
+                      const Text("Don't have an account?"),
                       TextButton(
                         onPressed: () {
-                          context.go(
-                            AppRouter.register,
-                          );
+                          context.go(AppRouter.register);
                         },
-                        child: const Text(
-                          "Create Account",
-                        ),
+                        child: const Text("Create Account"),
                       ),
                     ],
                   ),

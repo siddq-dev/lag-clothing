@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'admin_permission_model.dart';
 
-enum UserRole {
-  customer,
-  admin,
-  superAdmin,
-}
+enum UserRole { customer, admin, superAdmin }
 
 class UserModel {
   final String uid;
@@ -52,36 +48,28 @@ class UserModel {
     };
   }
 
-  factory UserModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       uid: map["uid"] ?? "",
-      name: map["name"] ?? "",
+      name: map["name"] ?? map["fullName"] ?? "",
       email: map["email"] ?? "",
       phone: map["phone"] ?? "",
-      role: _parseRole(
-        map["role"],
-      ),
+      role: _parseRole(map["role"]),
       status: map["status"] ?? true,
-      permissions: AdminPermissionModel.fromMap(
-  map['permissions'],
-),
+      permissions: AdminPermissionModel.fromMap(map['permissions']),
       createdAt: map["createdAt"],
       lastLogin: map["lastLogin"],
     );
   }
 
-  static UserRole _parseRole(
-    String? role,
-  ) {
+  static UserRole _parseRole(String? role) {
     switch (role) {
       case "admin":
         return UserRole.admin;
 
-     case "superAdmin":
-    case "super_admin":
-      return UserRole.superAdmin;
+      case "superAdmin":
+      case "super_admin":
+        return UserRole.superAdmin;
 
       default:
         return UserRole.customer;

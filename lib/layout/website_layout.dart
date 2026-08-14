@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/auth_provider.dart';
 import '../routes/app_routes.dart';
 import '../themes/app_colors.dart';
 import '../widgets/footers/footer.dart';
@@ -20,6 +22,9 @@ class WebsiteLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthProvider>();
+    final currentUser = authProvider.currentUser;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -28,40 +33,45 @@ class WebsiteLayout extends StatelessWidget {
             WebsiteNavigationBar(
               selectedItem: currentRoute,
 
-              // ✅ Main Navigation
+              // Logged-in user
+              currentUser: currentUser,
+
+              // Main Navigation
               onMenuSelected: (route) {
                 context.go(route);
               },
 
-              // ✅ Search (temporary)
+              // Search
               onSearch: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Search page coming soon'),
-                  ),
+                  const SnackBar(content: Text('Search page coming soon')),
                 );
               },
 
-              // ✅ Cart
+              // Wishlist
+              onWishlist: () {
+                context.go(AppRouter.wishlist);
+              },
+
+              // Cart
               onCart: () {
                 context.go(AppRouter.cart);
               },
 
-              // ✅ Profile/Login
+              // Sign In / Profile
               onSignIn: () {
-                context.go(AppRouter.login);
+                if (currentUser != null) {
+                  context.go(AppRouter.profile);
+                } else {
+                  context.go(AppRouter.login);
+                }
               },
             ),
 
             Expanded(
               child: scrollable
                   ? SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          child,
-                          const Footer(),
-                        ],
-                      ),
+                      child: Column(children: [child, const Footer()]),
                     )
                   : Column(
                       children: [
