@@ -55,7 +55,9 @@ void main() async {
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
         ChangeNotifierProvider(create: (_) => AccountSettingsProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
-        ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(
+          create: (_) => ProductProvider()..loadHomeProducts(),
+        ),
         ChangeNotifierProvider(create: (_) => AdminManagementProvider()),
         ChangeNotifierProvider(create: (_) => AdminProductProvider()),
         ChangeNotifierProvider(create: (_) => AdminOrderFilterProvider()),

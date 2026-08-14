@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/constants/section_sizes.dart';
-import '../../../../models/feature_product_model.dart';
+import '../../../../providers/product_provider.dart';
+import '../../../../routes/app_routes.dart';
 import '../../../../themes/app_text_style.dart';
 import '../../../../widgets/products/product_card.dart';
 
@@ -10,18 +13,16 @@ class FeaturedCollection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<ProductProvider>();
+
+    final products = provider.featuredProducts;
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 80,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 80),
       child: Column(
         children: [
-          const Text(
-            'Featured Collection',
-            style: AppTextStyles.sectionTitle,
-          ),
+          const Text('Featured Collection', style: AppTextStyles.sectionTitle),
 
           const SizedBox(height: 16),
 
@@ -33,42 +34,45 @@ class FeaturedCollection extends StatelessWidget {
 
           const SizedBox(height: 50),
 
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: featuredProducts.length,
-            gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              crossAxisSpacing: 24,
-              mainAxisSpacing: 24,
-              childAspectRatio: 0.58,
-            ),
-            itemBuilder: (context, index) {
-              final product = featuredProducts[index];
+          if (provider.loading && products.isEmpty)
+            const SizedBox(
+              height: 300,
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else if (products.isEmpty)
+            const SizedBox(
+              height: 200,
+              child: Center(child: Text('No featured products available.')),
+            )
+          else
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: products.length > 4 ? 4 : products.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                crossAxisSpacing: 24,
+                mainAxisSpacing: 24,
+                childAspectRatio: 0.72,
+              ),
+              itemBuilder: (context, index) {
+                final product = products[index];
 
-              return SizedBox(
-                height: SectionSizes.productCardHeight,
-                child: ProductCard(
+                return ProductCard(
                   product: product,
-
                   onTap: () {
-                    // TODO:
-                    // Product Details Page
+                    context.go('${AppRouter.shopProductDetails}/${product.id}');
                   },
+                );
+              },
+            ),
+          const SizedBox(height: 35),
 
-                  onAddToCart: () {
-                    // TODO:
-                    // Add to Cart
-                  },
-
-                  onWishlist: () {
-                    // TODO:
-                    // Wishlist
-                  },
-                ),
-              );
+          OutlinedButton(
+            onPressed: () {
+              context.go(AppRouter.shop);
             },
+            child: const Text('View More'),
           ),
         ],
       ),

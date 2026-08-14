@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-import '../../../../models/feature_product_model.dart';
+import '../../../../providers/product_provider.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
@@ -12,18 +13,16 @@ class NewArrivals extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<ProductProvider>();
+
+    final products = provider.newArrivals;
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 80,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 80),
       child: Column(
         children: [
-          const Text(
-            'New Arrivals',
-            style: AppTextStyles.sectionTitle,
-          ),
+          const Text('New Arrivals', style: AppTextStyles.sectionTitle),
 
           const SizedBox(height: 16),
 
@@ -35,63 +34,45 @@ class NewArrivals extends StatelessWidget {
 
           const SizedBox(height: 50),
 
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: newArrivalProducts.length,
-            gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              crossAxisSpacing: 24,
-              mainAxisSpacing: 24,
-              childAspectRatio: 0.48,
+          if (provider.loading && products.isEmpty)
+            const SizedBox(
+              height: 300,
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else if (products.isEmpty)
+            const SizedBox(
+              height: 200,
+              child: Center(child: Text('No new arrivals available.')),
+            )
+          else
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: products.length > 4 ? 4 : products.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                crossAxisSpacing: 24,
+                mainAxisSpacing: 24,
+                childAspectRatio: 0.72,
+              ),
+              itemBuilder: (context, index) {
+                final product = products[index];
+
+                return ProductCard(
+                  product: product,
+                  onTap: () {
+                    context.go('${AppRouter.shopProductDetails}/${product.id}');
+                  },
+                );
+              },
             ),
-            itemBuilder: (context, index) {
-              final product = newArrivalProducts[index];
+          const SizedBox(height: 35),
 
-              return Column(
-                children: [
-                  Expanded(
-                    child: ProductCard(
-                      product: product,
-
-                      onTap: () {},
-
-                      onAddToCart: () {
-                        context.go(AppRouter.cart);
-                      },
-
-                      onWishlist: () {
-                        context.go(AppRouter.wishlist);
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        context.go(AppRouter.shop);
-                      },
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.primary,
-                        side: const BorderSide(
-                          color: AppColors.primary,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 14,
-                        ),
-                      ),
-                      child: const Text(
-                        "Explore More",
-                      ),
-                    ),
-                  ),
-                ],
-              );
+          OutlinedButton(
+            onPressed: () {
+              context.go(AppRouter.shop);
             },
+            child: const Text('View More'),
           ),
         ],
       ),

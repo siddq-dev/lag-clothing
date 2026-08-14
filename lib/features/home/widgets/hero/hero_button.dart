@@ -10,11 +10,13 @@ class HeroButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Wrap(
+      spacing: 14,
+      runSpacing: 12,
       children: [
-        // ===========================
-        // Shop Now Button
-        // ===========================
+        // ============================================================
+        // SHOP NOW
+        // ============================================================
         ElevatedButton(
           onPressed: () {
             context.go(AppRouter.shop);
@@ -22,48 +24,33 @@ class HeroButtons extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
             foregroundColor: AppColors.white,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 28,
-              vertical: 18,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 18),
+            elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-          child: const Text(
-            'Shop Now',
-            style: AppTextStyles.button,
-          ),
+          child: const Text('Shop Now', style: AppTextStyles.button),
         ),
 
-        const SizedBox(width: 16),
-
-        // ===========================
-        // Explore Collection Button
-        // ===========================
+        // ============================================================
+        // EXPLORE COLLECTION
+        // ============================================================
         OutlinedButton(
           onPressed: () {
             context.go(AppRouter.shop);
           },
           style: OutlinedButton.styleFrom(
-            foregroundColor: AppColors.primary,
-            side: const BorderSide(
-              color: AppColors.primary,
-              width: 2,
-            ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 28,
-              vertical: 18,
-            ),
+            foregroundColor: Colors.white,
+            side: const BorderSide(color: Colors.white, width: 1.5),
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 18),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
           ),
           child: const Text(
             'Explore Collection',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
           ),
         ),
       ],
