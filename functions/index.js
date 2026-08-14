@@ -835,3 +835,469 @@ exports.sendOrderConfirmationEmail = onDocumentCreated(
       }
     },
 );
+
+/**
+ * ============================================================
+ * CONTACT FORM -> SEND EMAIL TO LAG CLOTHING
+ * ============================================================
+ *
+ * Called from the Flutter Contact Us form.
+ *
+ * Expected data:
+ *
+ * {
+ *   name: String,
+ *   email: String,
+ *   phone: String,
+ *   message: String,
+ * }
+ *
+ * The customer never receives the Brevo API key.
+ * The API key remains inside Firebase Functions.
+ *
+ * Flow:
+ *
+ * Flutter Contact Form
+ *        ↓
+ * Firebase HTTPS Function
+ *        ↓
+ * Brevo
+ *        ↓
+ * LAG Clothing support email
+ *
+ */
+
+exports.sendContactMessage = onRequest(
+    {
+      secrets: [brevoApiKey],
+      region: "us-central1",
+    },
+    async (req, res) => {
+      /**
+       * --------------------------------------------------------
+       * CORS
+       * --------------------------------------------------------
+       */
+
+      res.set("Access-Control-Allow-Origin", "*");
+      res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+      res.set(
+          "Access-Control-Allow-Headers",
+          "Content-Type",
+      );
+
+      /**
+       * Handle browser preflight request.
+       */
+
+      if (req.method === "OPTIONS") {
+        res.status(204).send("");
+        return;
+      }
+
+      /**
+       * --------------------------------------------------------
+       * ONLY POST REQUESTS
+       * --------------------------------------------------------
+       */
+
+      if (req.method !== "POST") {
+        res.status(405).json({
+          success: false,
+          message: "Method not allowed.",
+        });
+
+        return;
+      }
+
+      try {
+        /**
+         * --------------------------------------------------------
+         * READ REQUEST BODY
+         * --------------------------------------------------------
+         */
+
+        const body = req.body || {};
+
+        const name =
+      body.name != null?
+       body.name.toString().trim(): "";
+
+        const email =
+  body.email != null?
+   body.email.toString().trim(): "";
+
+        const phone =
+  body.phone != null?
+   body.phone.toString().trim(): "";
+
+        const message =
+  body.message != null?
+   body.message.toString().trim(): "";
+
+        /**
+         * --------------------------------------------------------
+         * VALIDATION
+         * --------------------------------------------------------
+         */
+
+        if (!name) {
+          res.status(400).json({
+            success: false,
+            message: "Name is required.",
+          });
+
+          return;
+        }
+
+        if (!email) {
+          res.status(400).json({
+            success: false,
+            message: "Email address is required.",
+          });
+
+          return;
+        }
+
+        if (!message) {
+          res.status(400).json({
+            success: false,
+            message: "Message is required.",
+          });
+
+          return;
+        }
+
+        /**
+         * Basic email validation.
+         */
+
+        const emailRegex =
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+          res.status(400).json({
+            success: false,
+            message: "Please provide a valid email address.",
+          });
+
+          return;
+        }
+
+        /**
+         * --------------------------------------------------------
+         * ESCAPE USER INPUT
+         * --------------------------------------------------------
+         *
+         * Never insert raw user input into HTML.
+         */
+
+        const safeName = escapeHtml(name);
+        const safeEmail = escapeHtml(email);
+        const safePhone = escapeHtml(
+            phone || "Not provided",
+        );
+        const safeMessage = escapeHtml(message)
+            .replace(/\n/g, "<br>");
+
+        /**
+         * --------------------------------------------------------
+         * EMAIL CONFIGURATION
+         * --------------------------------------------------------
+         *
+         * IMPORTANT:
+         *
+         * Keep this as your currently verified Brevo sender
+         * until your LAG Clothing domain email is configured.
+         */
+
+        const sender = {
+          name: "LAG Clothing",
+          email: "mhdsiddq17@gmail.com",
+        };
+
+        /**
+         * --------------------------------------------------------
+         * SUPPORT EMAIL
+         * --------------------------------------------------------
+         *
+         * Change this to the actual LAG Clothing support
+         * email address when ready.
+         *
+         * For now we use the same email destination already
+         * present in your existing Brevo test configuration.
+         */
+
+        const supportEmail =
+          "abualmahdi07@gmail.com";
+
+        /**
+         * --------------------------------------------------------
+         * BUILD EMAIL
+         * --------------------------------------------------------
+         */
+
+        const htmlContent = `
+          <!DOCTYPE html>
+          <html>
+
+            <head>
+              <meta charset="UTF-8">
+              <title>New Contact Message</title>
+            </head>
+
+            <body style="
+              margin: 0;
+              padding: 0;
+              background-color: #f5f5f5;
+              font-family: Arial, Helvetica, sans-serif;
+            ">
+
+              <div style="
+                max-width: 650px;
+                margin: 40px auto;
+                background-color: #ffffff;
+                border-radius: 12px;
+                overflow: hidden;
+              ">
+
+                <!-- HEADER -->
+
+                <div style="
+                  background-color: #111111;
+                  padding: 25px;
+                  text-align: center;
+                ">
+
+                  <h1 style="
+                    margin: 0;
+                    color: #ffffff;
+                    font-size: 28px;
+                  ">
+                    LAG Clothing
+                  </h1>
+
+                </div>
+
+                <!-- CONTENT -->
+
+                <div style="
+                  padding: 30px;
+                ">
+
+                  <h2 style="
+                    margin-top: 0;
+                    color: #111111;
+                  ">
+                    New Contact Form Message
+                  </h2>
+
+                  <p style="
+                    color: #555555;
+                    font-size: 15px;
+                    line-height: 1.6;
+                  ">
+                    A customer has submitted a new message
+                    through the LAG Clothing Contact Us page.
+                  </p>
+
+                  <!-- CUSTOMER DETAILS -->
+
+                  <div style="
+                    margin-top: 25px;
+                    padding: 20px;
+                    background-color: #f7f7f7;
+                    border-radius: 10px;
+                  ">
+
+                    <h3 style="
+                      margin-top: 0;
+                      color: #111111;
+                    ">
+                      Customer Details
+                    </h3>
+
+                    <p style="
+                      margin: 8px 0;
+                      color: #444444;
+                    ">
+                      <strong>Name:</strong>
+                      ${safeName}
+                    </p>
+
+                    <p style="
+                      margin: 8px 0;
+                      color: #444444;
+                    ">
+                      <strong>Email:</strong>
+                      ${safeEmail}
+                    </p>
+
+                    <p style="
+                      margin: 8px 0;
+                      color: #444444;
+                    ">
+                      <strong>Phone:</strong>
+                      ${safePhone}
+                    </p>
+
+                  </div>
+
+                  <!-- MESSAGE -->
+
+                  <div style="
+                    margin-top: 25px;
+                    padding: 20px;
+                    background-color: #ffffff;
+                    border: 1px solid #e5e5e5;
+                    border-radius: 10px;
+                  ">
+
+                    <h3 style="
+                      margin-top: 0;
+                      color: #111111;
+                    ">
+                      Message
+                    </h3>
+
+                    <p style="
+                      margin: 0;
+                      color: #444444;
+                      font-size: 15px;
+                      line-height: 1.7;
+                    ">
+                      ${safeMessage}
+                    </p>
+
+                  </div>
+
+                  <!-- REPLY -->
+
+                  <div style="
+                    margin-top: 25px;
+                    padding: 16px;
+                    background-color: #f5f5f5;
+                    border-radius: 8px;
+                  ">
+
+                    <p style="
+                      margin: 0;
+                      color: #555555;
+                      font-size: 14px;
+                    ">
+                      To reply to this customer, use:
+                      <strong>${safeEmail}</strong>
+                    </p>
+
+                  </div>
+
+                </div>
+
+                <!-- FOOTER -->
+
+                <div style="
+                  padding: 20px;
+                  text-align: center;
+                  background-color: #111111;
+                  color: #aaaaaa;
+                  font-size: 13px;
+                ">
+
+                  LAG Clothing<br>
+                  Contact Us Notification
+
+                </div>
+
+              </div>
+
+            </body>
+
+          </html>
+        `;
+
+        /**
+         * --------------------------------------------------------
+         * SEND THROUGH BREVO
+         * --------------------------------------------------------
+         */
+
+        const client = getBrevoClient();
+
+        const result =
+          await client.transactionalEmails.sendTransacEmail({
+            subject:
+              `LAG Clothing - New Contact Message from ${name}`,
+
+            htmlContent: htmlContent,
+
+            sender: sender,
+
+            to: [
+              {
+                email: supportEmail,
+                name: "LAG Clothing Support",
+              },
+            ],
+
+            /**
+             * Reply directly to the customer.
+             *
+             * When you open the email in your email client
+             * and press Reply, it can reply to the customer.
+             */
+
+            replyTo: {
+              email: email,
+              name: name,
+            },
+          });
+
+        /**
+         * --------------------------------------------------------
+         * LOG SUCCESS
+         * --------------------------------------------------------
+         */
+
+        logger.info(
+            "Contact form email sent successfully",
+            {
+              name: name,
+              email: email,
+              result: result,
+            },
+        );
+
+        /**
+         * --------------------------------------------------------
+         * RESPONSE TO FLUTTER
+         * --------------------------------------------------------
+         */
+
+        res.status(200).json({
+          success: true,
+          message:
+            "Your message has been sent successfully.",
+        });
+      } catch (error) {
+        /**
+         * --------------------------------------------------------
+         * ERROR HANDLING
+         * --------------------------------------------------------
+         */
+
+        logger.error(
+            "Contact form email failed",
+            {
+              error: error.message,
+              stack: error.stack,
+            },
+        );
+
+        res.status(500).json({
+          success: false,
+          message:
+            "Unable to send your message right now. Please try again later.",
+        });
+      }
+    },
+);
