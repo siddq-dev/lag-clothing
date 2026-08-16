@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 
-import '../../models/feature_product_model.dart';
+import '../../models/product_model.dart';
 import '../../themes/app_colors.dart';
-
-import 'add_to_cart_button.dart';
 import 'product_image.dart';
-import 'product_info.dart';
-import 'product_price.dart';
-import 'product_rating.dart';
-import 'wishlist_button.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({
-    super.key,
-    required this.product,
-    required this.onTap,
-    required this.onAddToCart,
-    required this.onWishlist,
-  });
+  const ProductCard({super.key, required this.product, required this.onTap});
 
   final ProductModel product;
-
   final VoidCallback onTap;
-  final VoidCallback onAddToCart;
-  final VoidCallback onWishlist;
+
+  String get primaryImage {
+    final primary = product.images.where((image) => image.isPrimary);
+
+    if (primary.isNotEmpty) {
+      return primary.first.imageUrl;
+    }
+
+    if (product.images.isNotEmpty) {
+      return product.images.first.imageUrl;
+    }
+
+    return '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,62 +33,34 @@ class ProductCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: AppColors.border,
-          ),
+          border: Border.all(color: AppColors.border),
         ),
-      child: Column(
-  children: [
-    Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              ProductImage(
-                image: product.image,
-                isNew: product.isNew,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+                child: ProductImage(image: primaryImage, isNew: false),
               ),
+            ),
 
-              Positioned(
-                top: 0,
-                right: 0,
-                child: WishlistButton(
-                  onPressed: onWishlist,
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                product.name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-
-          ProductInfo(
-            club: product.club,
-            title: product.title,
-          ),
-
-          const SizedBox(height: 16),
-
-          ProductPrice(
-            price: product.price,
-          ),
-
-          const SizedBox(height: 8),
-
-          ProductRating(
-            rating: product.rating,
-          ),
-        ],
-      ),
-    ),
-
-    const SizedBox(height: 16),
-
-    AddToCartButton(
-      onPressed: onAddToCart,
-    ),
-  ],
-)
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,30 +1,77 @@
 import 'package:flutter/material.dart';
 
-class OrderStatusChip extends StatelessWidget {
-  const OrderStatusChip({super.key, required this.status});
+import '/models/order_model.dart';
 
+class OrderStatusChip extends StatelessWidget {
   final String status;
 
-  Color get color {
-    switch (status.toLowerCase()) {
-      case "pending":
-        return Colors.orange;
+  const OrderStatusChip({super.key, required this.status});
 
-      case "confirmed":
+  String _label(String value) {
+    switch (value) {
+      case 'placed':
+        return 'ORDER PLACED';
+
+      case 'confirmed':
+        return 'CONFIRMED';
+
+      case 'packed':
+        return 'PACKED';
+
+      case 'shipped':
+        return 'SHIPPED';
+
+      case 'outForDelivery':
+        return 'OUT FOR DELIVERY';
+
+      case 'delivered':
+        return 'DELIVERED';
+
+      case 'cancelled':
+        return 'CANCELLED';
+
+      case 'refundRequested':
+        return 'REFUND REQUESTED';
+
+      case 'exchangeRequested':
+        return 'EXCHANGE REQUESTED';
+
+      case 'returned':
+        return 'RETURNED';
+
+      default:
+        return value.toUpperCase();
+    }
+  }
+
+  Color _color(String value) {
+    switch (value) {
+      case 'confirmed':
         return Colors.blue;
 
-      case "packed":
-        return Colors.deepPurple;
-
-      case "shipped":
+      case 'packed':
         return Colors.indigo;
 
-      case "delivered":
+      case 'shipped':
+      case 'outForDelivery':
+        return Colors.orange;
+
+      case 'delivered':
         return Colors.green;
 
-      case "cancelled":
+      case 'cancelled':
         return Colors.red;
 
+      case 'refundRequested':
+        return Colors.purple;
+
+      case 'exchangeRequested':
+        return Colors.teal;
+
+      case 'returned':
+        return Colors.deepOrange;
+
+      case 'placed':
       default:
         return Colors.grey;
     }
@@ -32,12 +79,18 @@ class OrderStatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = _color(status);
+
     return Chip(
-      backgroundColor: color.withValues(alpha: .15),
       label: Text(
-        status,
-        style: TextStyle(color: color, fontWeight: FontWeight.bold),
+        _label(status),
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
       ),
+      backgroundColor: color.withValues(alpha: 0.25),
+      side: BorderSide(color: color.withValues(alpha: 0.6)),
     );
   }
 }

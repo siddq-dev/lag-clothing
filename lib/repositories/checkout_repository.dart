@@ -1,96 +1,155 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../models/address_model.dart';
 import '../models/cart_item_model.dart';
-import '../repositories/address_repository.dart';
 import '../repositories/cart_repository.dart';
 
 class CheckoutRepository {
   CheckoutRepository();
 
-  final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  final FirebaseAuth _auth =
-      FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  //----------------------------------------------------------
-  // Current User
-  //----------------------------------------------------------
+  // ============================================================
+  // CURRENT USER
+  // ============================================================
 
-  String get _uid =>
-      _auth.currentUser!.uid;
+  String get _uid {
+    final user = _auth.currentUser;
 
-  //----------------------------------------------------------
-  // Load Default Address
-  //----------------------------------------------------------
+    if (user == null) {
+      throw Exception('User not logged in.');
+    }
 
-Future<AddressModel?> getDefaultAddress() async {
-  return AddressRepository.getDefaultShippingAddress();
-}
+    return user.uid;
+  }
 
-Future<AddressModel?> getBillingAddress() async {
-  return AddressRepository.getDefaultBillingAddress();
-}
-
-  //----------------------------------------------------------
-  // Load Cart
-  //----------------------------------------------------------
+  // ============================================================
+  // CART
+  // ============================================================
 
   Future<List<CartItemModel>> getCartItems() async {
     return CartRepository.getCartItems();
   }
 
-  //----------------------------------------------------------
-  // Validate Inventory
-  //----------------------------------------------------------
+  // ============================================================
+  // INVENTORY VALIDATION
+  // ============================================================
 
-  Future<bool> validateInventory(
-    List<CartItemModel> items,
-  ) async {
+  Future<bool> validateInventory(List<CartItemModel> items) async {
+    if (items.isEmpty) {
+      return false;
+    }
+
     for (final item in items) {
-      final doc = await _firestore
-          .collection("products")
-          .doc(item.productId)
-          .get();
+      final productReference = _firestore
+          .collection('products')
+          .doc(item.productId);
 
-      if (!doc.exists) {
+      final snapshot = await productReference.get();
+
+      if (!snapshot.exists) {
         return false;
       }
 
-      final stock =
-          (doc["stock"] ?? 0) as int;
+      final data = snapshot.data();
+
+      if (data == null) {
+        return false;
+      }
+
+      final stock = (data['stock'] as num?)?.toInt() ?? 0;
 
       if (stock < item.quantity) {
         return false;
       }
+
+      // ----------------------------------------------------------
+      // VALIDATE PRODUCT VARIANT
+      // ----------------------------------------------------------
+
+      final variants = data['variants'];
+
+      if (variants is List) {
+        final matchingVariant = variants.cast<dynamic>().firstWhere((variant) {
+          if (variant is! Map) {
+            return false;
+          }
+
+          final variantSize = (variant['size'] ?? '')
+              .toString()
+              .trim()
+              .toLowerCase();
+
+          final variantColor = (variant['color'] ?? '')
+              .toString()
+              .trim()
+              .toLowerCase();
+
+          final itemSize = item.size.trim().toLowerCase();
+
+          final itemColor = item.color.trim().toLowerCase();
+
+          return variantSize == itemSize && variantColor == itemColor;
+        }, orElse: () => null);
+
+        if (matchingVariant == null) {
+          return false;
+        }
+
+        final variantStock = (matchingVariant['stock'] as num?)?.toInt() ?? 0;
+
+        if (variantStock < item.quantity) {
+          return false;
+        }
+      }
     }
 
     return true;
   }
 
-  //----------------------------------------------------------
-  // Validate Prices
-  //----------------------------------------------------------
+  // ============================================================
+  // PRICE VALIDATION
+  // ============================================================
 
-  Future<bool> validatePrices(
-    List<CartItemModel> items,
-  ) async {
+  Future<bool> validatePrices(List<CartItemModel> items) async {
+    if (items.isEmpty) {
+      return false;
+    }
+
     for (final item in items) {
-      final doc = await _firestore
-          .collection("products")
-          .doc(item.productId)
-          .get();
+      final productReference = _firestore
+          .collection('products')
+          .doc(item.productId);
 
-      if (!doc.exists) {
+      final snapshot = await productReference.get();
+
+      if (!snapshot.exists) {
         return false;
       }
 
-      final latestPrice =
-          (doc["price"] as num).toDouble();
+      final data = snapshot.data();
 
-      if (latestPrice != item.price) {
+      if (data == null) {
+        return false;
+      }
+
+      final regularPrice = (data['price'] as num?)?.toDouble();
+
+      if (regularPrice == null) {
+        return false;
+      }
+
+      // A product on sale is added to the cart at its sale price,
+      // not its regular price.
+      final salePrice = (data['salePrice'] as num?)?.toDouble();
+
+      final effectivePrice = (salePrice != null && salePrice > 0)
+          ? salePrice
+          : regularPrice;
+
+      if ((effectivePrice - item.price).abs() > 0.001) {
         return false;
       }
     }
@@ -98,74 +157,300 @@ Future<AddressModel?> getBillingAddress() async {
     return true;
   }
 
-  //----------------------------------------------------------
-  // Generate Order Number
-  //----------------------------------------------------------
+  // ============================================================
+  // ORDER NUMBER
+  // ============================================================
 
   String generateOrderNumber() {
-    final timestamp =
-        DateTime.now().millisecondsSinceEpoch;
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
 
-    return "LAG$timestamp";
+    return 'LAG$timestamp';
   }
 
-  //----------------------------------------------------------
-  // Generate Tracking ID
-  //----------------------------------------------------------
+  // ============================================================
+  // TRACKING ID
+  // ============================================================
 
   String generateTrackingId() {
-    final timestamp =
-        DateTime.now().millisecondsSinceEpoch;
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
 
-    return "TRK$timestamp";
+    return 'TRK$timestamp';
   }
 
-  //----------------------------------------------------------
-  // Create Order
-  //----------------------------------------------------------
+  // ============================================================
+  // CREATE ORDER + UPDATE PRODUCT + UPDATE VARIANT
+  // ============================================================
 
   Future<String> createOrder({
     required Map<String, dynamic> orderData,
+    required List<CartItemModel> items,
   }) async {
-    final doc =
-        _firestore.collection("orders").doc();
+    final userId = _uid;
 
-    await doc.set(orderData);
+    final orderReference = _firestore.collection('orders').doc();
 
-    return doc.id;
-  }
+    final orderDataToWrite = Map<String, dynamic>.from(orderData);
 
-  //----------------------------------------------------------
-  // Update Inventory
-  //----------------------------------------------------------
+    orderDataToWrite['userId'] = userId;
 
-  Future<void> updateInventory(
-    List<CartItemModel> items,
-  ) async {
-    final batch =
-        _firestore.batch();
+    orderDataToWrite['createdAt'] = FieldValue.serverTimestamp();
 
-    for (final item in items) {
-      final ref = _firestore
-          .collection("products")
-          .doc(item.productId);
+    orderDataToWrite['updatedAt'] = FieldValue.serverTimestamp();
 
-      final snap = await ref.get();
+    // ----------------------------------------------------------
+    // FIRESTORE TRANSACTION
+    // ----------------------------------------------------------
 
-      final stock =
-          (snap["stock"] ?? 0) as int;
+    final failureReason = await _firestore.runTransaction<String?>((
+      transaction,
+    ) async {
+      // ======================================================
+      // STORE PRODUCT SNAPSHOTS
+      // ======================================================
 
-      batch.update(ref, {
-        "stock": stock - item.quantity,
-      });
+      final productSnapshots =
+          <DocumentReference, DocumentSnapshot<Map<String, dynamic>>>{};
+
+      // ======================================================
+      // READ ALL PRODUCTS FIRST
+      // ======================================================
+
+      for (final item in items) {
+        final productReference = _firestore
+            .collection('products')
+            .doc(item.productId);
+
+        final snapshot = await transaction.get(productReference);
+
+        productSnapshots[productReference] = snapshot;
+      }
+
+      // ======================================================
+      // VALIDATE ALL PRODUCTS
+      // ======================================================
+
+      for (final item in items) {
+        final productReference = _firestore
+            .collection('products')
+            .doc(item.productId);
+
+        final snapshot = productSnapshots[productReference];
+
+        if (snapshot == null || !snapshot.exists) {
+          return 'Product ${item.productName} no longer exists.';
+        }
+
+        final data = snapshot.data();
+
+        if (data == null) {
+          return 'Unable to read product ${item.productName}.';
+        }
+
+        // ====================================================
+        // PRODUCT STOCK
+        // ====================================================
+
+        final productStock = (data['stock'] as num?)?.toInt() ?? 0;
+
+        if (productStock < item.quantity) {
+          return 'Insufficient stock for ${item.productName}.';
+        }
+
+        // ====================================================
+        // PRICE VALIDATION
+        // ====================================================
+
+        final regularPrice = (data['price'] as num?)?.toDouble();
+
+        if (regularPrice == null) {
+          return 'Unable to verify price for ${item.productName}.';
+        }
+
+        final salePrice = (data['salePrice'] as num?)?.toDouble();
+
+        final effectivePrice = (salePrice != null && salePrice > 0)
+            ? salePrice
+            : regularPrice;
+
+        if ((effectivePrice - item.price).abs() > 0.001) {
+          return 'Price changed for ${item.productName}.';
+        }
+
+        // ====================================================
+        // PRODUCT VARIANT VALIDATION
+        // ====================================================
+
+        final variants = data['variants'];
+
+        if (variants is List) {
+          Map<String, dynamic>? matchingVariant;
+
+          for (final rawVariant in variants) {
+            if (rawVariant is! Map) {
+              continue;
+            }
+
+            final variant = Map<String, dynamic>.from(rawVariant);
+
+            final variantSize = (variant['size'] ?? '')
+                .toString()
+                .trim()
+                .toLowerCase();
+
+            final variantColor = (variant['color'] ?? '')
+                .toString()
+                .trim()
+                .toLowerCase();
+
+            final itemSize = item.size.trim().toLowerCase();
+
+            final itemColor = item.color.trim().toLowerCase();
+
+            if (variantSize == itemSize && variantColor == itemColor) {
+              matchingVariant = variant;
+              break;
+            }
+          }
+
+          if (matchingVariant == null) {
+            return 'Variant ${item.color} / ${item.size} '
+                'for ${item.productName} no longer exists.';
+          }
+
+          // ==================================================
+          // VARIANT STOCK
+          // ==================================================
+
+          final variantStock = (matchingVariant['stock'] as num?)?.toInt() ?? 0;
+
+          if (variantStock < item.quantity) {
+            return 'Insufficient stock for '
+                '${item.productName} '
+                '(${item.color} / ${item.size}).';
+          }
+        }
+      }
+
+      // ======================================================
+      // UPDATE PRODUCTS + VARIANTS
+      // ======================================================
+
+      for (final item in items) {
+        final productReference = _firestore
+            .collection('products')
+            .doc(item.productId);
+
+        final snapshot = productSnapshots[productReference]!;
+
+        final data = snapshot.data()!;
+
+        // ----------------------------------------------------
+        // CURRENT PRODUCT STOCK
+        // ----------------------------------------------------
+
+        final currentProductStock = (data['stock'] as num?)?.toInt() ?? 0;
+
+        // ----------------------------------------------------
+        // UPDATE VARIANTS ARRAY
+        // ----------------------------------------------------
+
+        final variants = data['variants'];
+
+        List<dynamic>? updatedVariants;
+
+        if (variants is List) {
+          updatedVariants = variants.map((rawVariant) {
+            if (rawVariant is! Map) {
+              return rawVariant;
+            }
+
+            final variant = Map<String, dynamic>.from(rawVariant);
+
+            final variantSize = (variant['size'] ?? '')
+                .toString()
+                .trim()
+                .toLowerCase();
+
+            final variantColor = (variant['color'] ?? '')
+                .toString()
+                .trim()
+                .toLowerCase();
+
+            final itemSize = item.size.trim().toLowerCase();
+
+            final itemColor = item.color.trim().toLowerCase();
+
+            // ------------------------------------------------
+            // MATCH:
+            //
+            // productId = document ID
+            // size      = cart item size
+            // color     = cart item color
+            // ------------------------------------------------
+
+            if (variantSize == itemSize && variantColor == itemColor) {
+              final currentVariantStock =
+                  (variant['stock'] as num?)?.toInt() ?? 0;
+
+              final newVariantStock = currentVariantStock - item.quantity;
+
+              variant['stock'] = newVariantStock;
+
+              // Keep 'available' consistent with the new stock,
+              // same rule already used by the admin form
+              // (stock > 0 => available). Without this, a
+              // variant that just sold out would still read as
+              // available until someone manually re-saved it.
+              variant['available'] = newVariantStock > 0;
+            }
+
+            return variant;
+          }).toList();
+        }
+
+        // ----------------------------------------------------
+        // UPDATE PRODUCT DOCUMENT
+        // ----------------------------------------------------
+
+        final updateData = <String, dynamic>{
+          // Parent product inventory.
+          'stock': currentProductStock - item.quantity,
+
+          'updatedAt': FieldValue.serverTimestamp(),
+        };
+
+        // Only update variants when the product actually
+        // contains a variants array.
+        if (updatedVariants != null) {
+          updateData['variants'] = updatedVariants;
+        }
+
+        transaction.update(productReference, updateData);
+      }
+
+      // ======================================================
+      // CREATE ORDER
+      // ======================================================
+
+      transaction.set(orderReference, orderDataToWrite);
+
+      return null;
+    });
+
+    // ==========================================================
+    // HANDLE TRANSACTION FAILURE
+    // ==========================================================
+
+    if (failureReason != null) {
+      throw Exception(failureReason);
     }
 
-    await batch.commit();
+    return orderReference.id;
   }
 
-  //----------------------------------------------------------
-  // Clear Cart
-  //----------------------------------------------------------
+  // ============================================================
+  // CLEAR CART
+  // ============================================================
 
   Future<void> clearCart() async {
     await CartRepository.clearCart();

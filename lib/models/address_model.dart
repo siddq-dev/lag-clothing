@@ -1,15 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum AddressType {
-  home,
-  work,
-  other,
-}
+enum AddressType { home, work, other }
 
-enum AddressPurpose {
-  shipping,
-  billing,
-}
+enum AddressPurpose { shipping, billing }
 
 class AddressModel {
   final String id;
@@ -76,32 +69,34 @@ class AddressModel {
     };
   }
 
-  factory AddressModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory AddressModel.fromMap(Map<String, dynamic> map) {
     return AddressModel(
-      id: map['id'] ?? '',
-      userId: map['userId'] ?? '',
-      fullName: map['fullName'] ?? '',
-      phone: map['phone'] ?? '',
-      addressLine1: map['addressLine1'] ?? '',
-      addressLine2: map['addressLine2'] ?? '',
-      landmark: map['landmark'] ?? '',
-      city: map['city'] ?? '',
-      state: map['state'] ?? '',
-      pincode: map['pincode'] ?? '',
-      country: map['country'] ?? '',
+      id: map['id']?.toString() ?? '',
+      userId: map['userId']?.toString() ?? '',
+      fullName: map['fullName']?.toString() ?? '',
+      phone: map['phone']?.toString() ?? '',
+      addressLine1: map['addressLine1']?.toString() ?? '',
+      addressLine2: map['addressLine2']?.toString() ?? '',
+      landmark: map['landmark']?.toString() ?? '',
+      city: map['city']?.toString() ?? '',
+      state: map['state']?.toString() ?? '',
+      pincode: map['pincode']?.toString() ?? '',
+      country: map['country']?.toString() ?? '',
       addressType: AddressType.values.firstWhere(
-        (e) => e.name == map['addressType'],
+        (value) => value.name == map['addressType'],
         orElse: () => AddressType.home,
       ),
       purpose: AddressPurpose.values.firstWhere(
-        (e) => e.name == map['purpose'],
+        (value) => value.name == map['purpose'],
         orElse: () => AddressPurpose.shipping,
       ),
-      isDefault: map['isDefault'] ?? false,
-      createdAt: map['createdAt'],
-      updatedAt: map['updatedAt'],
+      isDefault: map['isDefault'] == true,
+      createdAt: map['createdAt'] is Timestamp
+          ? map['createdAt'] as Timestamp
+          : null,
+      updatedAt: map['updatedAt'] is Timestamp
+          ? map['updatedAt'] as Timestamp
+          : null,
     );
   }
 

@@ -27,9 +27,9 @@ class CartItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //--------------------------------------------------
-          // Product Image
-          //--------------------------------------------------
+          // ======================================================
+          // PRODUCT IMAGE
+          // ======================================================
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.network(
@@ -37,7 +37,7 @@ class CartItem extends StatelessWidget {
               width: 130,
               height: 130,
               fit: BoxFit.cover,
-              errorBuilder: (_, _, _) {
+              errorBuilder: (_, __, ___) {
                 return Container(
                   width: 130,
                   height: 130,
@@ -50,30 +50,58 @@ class CartItem extends StatelessWidget {
 
           const SizedBox(width: AppSpacing.lg),
 
-          //--------------------------------------------------
-          // Product Details
-          //--------------------------------------------------
+          // ======================================================
+          // PRODUCT DETAILS
+          // ======================================================
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // --------------------------------------------------
+                // PRODUCT NAME
+                // --------------------------------------------------
                 Text(item.productName, style: AppTextStyles.heading3),
 
                 const SizedBox(height: 10),
 
-                Text("Size : ${item.size}", style: AppTextStyles.bodyMedium),
+                // --------------------------------------------------
+                // SELECTED SIZE
+                // --------------------------------------------------
+                Text(
+                  'Size : ${item.size.trim().isEmpty ? '-' : item.size}',
+                  style: AppTextStyles.bodyMedium,
+                ),
 
                 const SizedBox(height: 6),
 
-                Text("Color : ${item.color}", style: AppTextStyles.bodyMedium),
+                // --------------------------------------------------
+                // SELECTED COLOR
+                // --------------------------------------------------
+                Text(
+                  'Color : ${item.color.trim().isEmpty ? '-' : item.color}',
+                  style: AppTextStyles.bodyMedium,
+                ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
 
+                // --------------------------------------------------
+                // UNIT PRICE
+                // --------------------------------------------------
+                Text(
+                  '₹${item.price.toStringAsFixed(2)} each',
+                  style: TextStyle(color: Colors.grey.shade700, fontSize: 13),
+                ),
+
+                const SizedBox(height: 18),
+
+                // ==================================================
+                // QUANTITY + TOTAL
+                // ==================================================
                 Row(
                   children: [
-                    //--------------------------------------------------
-                    // Quantity Selector
-                    //--------------------------------------------------
+                    // ------------------------------------------------
+                    // QUANTITY CONTROLS
+                    // ------------------------------------------------
                     Container(
                       decoration: BoxDecoration(
                         border: Border.all(color: AppColors.border),
@@ -81,21 +109,59 @@ class CartItem extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
+                          // --------------------------------------------
+                          // DECREASE
+                          // --------------------------------------------
                           IconButton(
-                            onPressed: () async {
-                              await cartProvider.decreaseQuantity(item);
-                            },
+                            tooltip: 'Decrease quantity',
+                            onPressed: item.quantity > 1
+                                ? () async {
+                                    final success = await cartProvider
+                                        .decreaseQuantity(item);
+
+                                    if (!context.mounted) {
+                                      return;
+                                    }
+
+                                    if (!success &&
+                                        cartProvider.error != null) {
+                                      _showMessage(
+                                        context,
+                                        cartProvider.error!,
+                                      );
+                                    }
+                                  }
+                                : null,
                             icon: const Icon(Icons.remove),
                           ),
 
-                          Text(
-                            item.quantity.toString(),
-                            style: AppTextStyles.bodyLarge,
+                          // --------------------------------------------
+                          // QUANTITY
+                          // --------------------------------------------
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(
+                              item.quantity.toString(),
+                              style: AppTextStyles.bodyLarge,
+                            ),
                           ),
 
+                          // --------------------------------------------
+                          // INCREASE
+                          // --------------------------------------------
                           IconButton(
+                            tooltip: 'Increase quantity',
                             onPressed: () async {
-                              await cartProvider.increaseQuantity(item);
+                              final success = await cartProvider
+                                  .increaseQuantity(item);
+
+                              if (!context.mounted) {
+                                return;
+                              }
+
+                              if (!success && cartProvider.error != null) {
+                                _showMessage(context, cartProvider.error!);
+                              }
                             },
                             icon: const Icon(Icons.add),
                           ),
@@ -105,11 +171,11 @@ class CartItem extends StatelessWidget {
 
                     const Spacer(),
 
-                    //--------------------------------------------------
-                    // Price
-                    //--------------------------------------------------
+                    // ------------------------------------------------
+                    // TOTAL
+                    // ------------------------------------------------
                     Text(
-                      "₹${item.total.toStringAsFixed(2)}",
+                      '₹${item.total.toStringAsFixed(2)}',
                       style: AppTextStyles.heading2.copyWith(
                         color: AppColors.primary,
                       ),
@@ -119,22 +185,31 @@ class CartItem extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                //--------------------------------------------------
-                // Remove
-                //--------------------------------------------------
+                // ==================================================
+                // REMOVE
+                // ==================================================
                 TextButton.icon(
                   onPressed: () async {
-                    await cartProvider.removeItem(item.productId);
+                    final success = await cartProvider.removeItem(item.id);
 
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Item removed from cart")),
-                      );
+                    if (!context.mounted) {
+                      return;
                     }
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          success
+                              ? 'Item removed from cart'
+                              : (cartProvider.error ?? 'Failed to remove item'),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
                   },
                   icon: const Icon(Icons.delete_outline, color: Colors.red),
                   label: const Text(
-                    "Remove",
+                    'Remove',
                     style: TextStyle(color: Colors.red),
                   ),
                 ),
@@ -143,6 +218,12 @@ class CartItem extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showMessage(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), behavior: SnackBarBehavior.floating),
     );
   }
 }

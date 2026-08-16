@@ -13,45 +13,34 @@ import '../widgets/product_seo_card.dart';
 import '../widgets/product_status_card.dart';
 import '../widgets/product_action_buttons.dart';
 
-
 class ProductDetailsPage extends StatefulWidget {
   final String productId;
 
-  const ProductDetailsPage({
-    super.key,
-    required this.productId,
-  });
+  const ProductDetailsPage({super.key, required this.productId});
 
   @override
-  State<ProductDetailsPage> createState() =>
-      _ProductDetailsPageState();
+  State<ProductDetailsPage> createState() => _ProductDetailsPageState();
 }
 
-class _ProductDetailsPageState
-    extends State<ProductDetailsPage> {
+class _ProductDetailsPageState extends State<ProductDetailsPage> {
   @override
   void initState() {
     super.initState();
 
     Future.microtask(() {
-      context
-          .read<ProductManagementProvider>()
-          .loadProduct(widget.productId);
+      context.read<ProductManagementProvider>().loadProduct(widget.productId);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider =
-        context.watch<ProductManagementProvider>();
+    final provider = context.watch<ProductManagementProvider>();
 
     if (provider.isLoading) {
       return const AdminLayout(
         title: "Product Details",
-         currentRoute: '/products',
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
+        currentRoute: '/products',
+        child: Center(child: CircularProgressIndicator()),
       );
     }
 
@@ -59,9 +48,7 @@ class _ProductDetailsPageState
       return const AdminLayout(
         title: "Product Details",
         currentRoute: '/products',
-        child: Center(
-          child: Text("Product not found"),
-        ),
+        child: Center(child: Text("Product not found")),
       );
     }
 
@@ -73,16 +60,13 @@ class _ProductDetailsPageState
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ProductGallery(product: product),
 
             const SizedBox(height: 24),
 
-            ProductBasicInformation(
-              product: product,
-            ),
+            ProductBasicInformation(product: product),
 
             const SizedBox(height: 24),
 
@@ -90,23 +74,11 @@ class _ProductDetailsPageState
 
             const SizedBox(height: 20),
 
-ProductInventoryCard(
-  product: product,
-),
-
-
+            ProductInventoryCard(product: product),
 
             const SizedBox(height: 24),
 
-            ProductInventoryCard(
-              product: product,
-            ),
-
-            const SizedBox(height: 24),
-
-            ProductVariantTable(
-              product: product,
-            ),
+            ProductVariantTable(product: product),
 
             const SizedBox(height: 24),
 
@@ -114,15 +86,11 @@ ProductInventoryCard(
 
             const SizedBox(height: 24),
 
-            ProductStatusCard(
-              product: product,
-            ),
+            ProductStatusCard(product: product),
 
             const SizedBox(height: 32),
 
-            ProductActionButtons(
-              product: product,
-            ),
+            ProductActionButtons(product: product),
           ],
         ),
       ),

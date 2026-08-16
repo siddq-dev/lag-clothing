@@ -9,12 +9,14 @@ class OrderSummary extends StatelessWidget {
     super.key,
     required this.subtotal,
     required this.shipping,
+    required this.tax,
     required this.discount,
     required this.total,
   });
 
   final double subtotal;
   final double shipping;
+  final double tax;
   final double discount;
   final double total;
 
@@ -26,74 +28,50 @@ class OrderSummary extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Text(
-            "Order Summary",
-            style: AppTextStyles.heading2,
-          ),
+          Text("Order Summary", style: AppTextStyles.heading2),
 
           const SizedBox(height: AppSpacing.xl),
 
-          _summaryRow(
-            "Subtotal",
-            "₹${subtotal.toStringAsFixed(0)}",
-          ),
+          _summaryRow("Subtotal", "₹${subtotal.toStringAsFixed(0)}"),
 
           const SizedBox(height: 18),
 
           _summaryRow(
             "Shipping",
-            shipping == 0
-                ? "FREE"
-                : "₹${shipping.toStringAsFixed(0)}",
+            shipping == 0 ? "FREE" : "₹${shipping.toStringAsFixed(0)}",
           ),
 
           const SizedBox(height: 18),
 
-          _summaryRow(
-            "Discount",
-            "- ₹${discount.toStringAsFixed(0)}",
-          ),
+          _summaryRow("Tax", tax == 0 ? "₹0.00" : "₹${tax.toStringAsFixed(2)}"),
+
+          const SizedBox(height: 18),
+
+          _summaryRow("Discount", "- ₹${discount.toStringAsFixed(0)}"),
 
           const SizedBox(height: 25),
 
-          Divider(
-            color: AppColors.border,
-          ),
+          Divider(color: AppColors.border),
 
           const SizedBox(height: 25),
 
-          _summaryRow(
-            "Total",
-            "₹${total.toStringAsFixed(0)}",
-            isTotal: true,
-          ),
-
+          _summaryRow("Total", "₹${total.toStringAsFixed(0)}", isTotal: true),
         ],
       ),
     );
   }
 
-  Widget _summaryRow(
-    String title,
-    String value, {
-    bool isTotal = false,
-  }) {
+  Widget _summaryRow(String title, String value, {bool isTotal = false}) {
     return Row(
       children: [
-
         Text(
           title,
-          style: isTotal
-              ? AppTextStyles.heading3
-              : AppTextStyles.bodyLarge,
+          style: isTotal ? AppTextStyles.heading3 : AppTextStyles.bodyLarge,
         ),
 
         const Spacer(),
@@ -101,12 +79,9 @@ class OrderSummary extends StatelessWidget {
         Text(
           value,
           style: isTotal
-              ? AppTextStyles.heading3.copyWith(
-                  color: AppColors.primary,
-                )
+              ? AppTextStyles.heading3.copyWith(color: AppColors.primary)
               : AppTextStyles.bodyLarge,
         ),
-
       ],
     );
   }

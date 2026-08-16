@@ -3,20 +3,66 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../models/product_model.dart';
 
 class ShopRepository {
+  ShopRepository();
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   CollectionReference<Map<String, dynamic>> get _products =>
-      _firestore.collection("products");
+      _firestore.collection('products');
 
   //==================================================
-  // Get Products
+  // STREAM ALL ACTIVE PRODUCTS
+  //==================================================
+
+  Stream<List<ProductModel>> streamProducts() {
+    return _products.orderBy('createdAt', descending: true).snapshots().map((
+      snapshot,
+    ) {
+      print('======================================');
+      print('SHOP FIRESTORE UPDATE');
+      print('Documents: ${snapshot.docs.length}');
+      print('======================================');
+
+      final products = <ProductModel>[];
+
+      for (final doc in snapshot.docs) {
+        try {
+          final data = doc.data();
+
+          print('Product ID: ${doc.id}');
+          print('Product name: ${data['name']}');
+          print('Status: ${data['status']}');
+
+          final product = ProductModel.fromMap(data, documentId: doc.id);
+
+          // Customer shop should only display active products.
+          if (product.status) {
+            products.add(product);
+          }
+        } catch (e, stackTrace) {
+          print('ERROR PARSING PRODUCT ${doc.id}: $e');
+
+          print(stackTrace);
+        }
+      }
+
+      print('Active products returned: ${products.length}');
+
+      return products;
+    });
+  }
+
+  //==================================================
+  // GET PRODUCTS - ONE TIME
   //==================================================
 
   Future<List<ProductModel>> getProducts({
-    int limit = 20,
-    DocumentSnapshot? lastDocument,
+    int limit = 50,
+    DocumentSnapshot<Map<String, dynamic>>? lastDocument,
   }) async {
-    Query<Map<String, dynamic>> query = _products.limit(limit);
+    Query<Map<String, dynamic>> query = _products
+        .orderBy('createdAt', descending: true)
+        .limit(limit);
 
     if (lastDocument != null) {
       query = query.startAfterDocument(lastDocument);
@@ -24,73 +70,92 @@ class ShopRepository {
 
     final snapshot = await query.get();
 
-    print("==================================");
-    print("Products Count: ${snapshot.docs.length}");
-    print("==================================");
+    print('======================================');
+    print('SHOP GET PRODUCTS');
+    print('Documents: ${snapshot.docs.length}');
+    print('======================================');
+
+    final products = <ProductModel>[];
 
     for (final doc in snapshot.docs) {
-      print(doc.id);
-      print(doc.data());
+      try {
+        final product = ProductModel.fromMap(doc.data(), documentId: doc.id);
+
+        if (product.status) {
+          products.add(product);
+        }
+      } catch (e, stackTrace) {
+        print('ERROR PARSING PRODUCT ${doc.id}: $e');
+
+        print(stackTrace);
+      }
     }
 
-    return snapshot.docs.map((e) => ProductModel.fromMap(e.data())).toList();
+    return products;
   }
 
   //==================================================
-  // Featured
+  // FEATURED
   //==================================================
 
   Future<List<ProductModel>> getFeaturedProducts() async {
     final products = await getProducts();
 
-    return products.where((e) => e.featured).toList();
+    return products.where((product) => product.featured).toList();
   }
 
   //==================================================
-  // Best Seller
+  // BEST SELLER
   //==================================================
 
   Future<List<ProductModel>> getBestSellerProducts() async {
     final products = await getProducts();
 
-    return products.where((e) => e.bestSeller).toList();
+    return products.where((product) => product.bestSeller).toList();
   }
 
   //==================================================
-  // New Arrival
+  // NEW ARRIVAL
   //==================================================
 
   Future<List<ProductModel>> getNewArrivalProducts() async {
     final products = await getProducts();
 
-    return products.where((e) => e.newArrival).toList();
+    return products.where((product) => product.newArrival).toList();
   }
 
   //==================================================
-  // Category
+  // CATEGORY
   //==================================================
 
   Future<List<ProductModel>> getProductsByCategory(String category) async {
     final products = await getProducts();
 
-    return products.where((e) => e.category == category).toList();
+    return products.where((product) => product.category == category).toList();
   }
 
   //==================================================
-  // Search
+  // SEARCH
   //==================================================
 
   Future<List<ProductModel>> searchProducts(String keyword) async {
     final products = await getProducts();
 
+    final search = keyword.toLowerCase().trim();
+
+    if (search.isEmpty) {
+      return products;
+    }
+
     return products.where((product) {
-      return product.name.toLowerCase().contains(keyword.toLowerCase()) ||
-          product.brand.toLowerCase().contains(keyword.toLowerCase());
+      return product.name.toLowerCase().contains(search) ||
+          product.brand.toLowerCase().contains(search) ||
+          product.category.toLowerCase().contains(search);
     }).toList();
   }
 
   //==================================================
-  // Single Product
+  // SINGLE PRODUCT
   //==================================================
 
   Future<ProductModel?> getProduct(String id) async {
@@ -100,6 +165,38 @@ class ShopRepository {
       return null;
     }
 
-    return ProductModel.fromMap(snapshot.data()!);
+    final data = snapshot.data();
+
+    if (data == null) {
+      return null;
+    }
+
+    return ProductModel.fromMap(data, documentId: snapshot.id);
+  }
+
+  //==================================================
+  // SINGLE PRODUCT STREAM
+  //==================================================
+
+  Stream<ProductModel?> streamProduct(String id) {
+    return _products.doc(id).snapshots().map((snapshot) {
+      if (!snapshot.exists) {
+        return null;
+      }
+
+      final data = snapshot.data();
+
+      if (data == null) {
+        return null;
+      }
+
+      final product = ProductModel.fromMap(data, documentId: snapshot.id);
+
+      if (!product.status) {
+        return null;
+      }
+
+      return product;
+    });
   }
 }

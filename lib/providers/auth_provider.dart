@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../repositories/auth_repository.dart';
 import '../models/user_model.dart';
@@ -10,35 +11,68 @@ class AuthProvider extends ChangeNotifier {
 
   String? _error;
 
-  bool get loading => _loading;
-
   UserModel? get currentUser => _currentUser;
 
+  bool get loading => _loading;
+
   String? get error => _error;
+
+  AuthProvider() {
+    _initializeCurrentUser();
+  }
+
+  // ===============================
+  // INITIALIZE CURRENT USER
+  // ===============================
+
+  Future<void> _initializeCurrentUser() async {
+    final firebaseUser = FirebaseAuth.instance.currentUser;
+
+    if (firebaseUser == null) {
+      return;
+    }
+
+    try {
+      final user = await AuthRepository.getUser(firebaseUser.uid);
+
+      if (user != null) {
+        _currentUser = user;
+        notifyListeners();
+      }
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+    }
+  }
+
+  // ===============================
+  // SET CURRENT USER
+  // ===============================
+
+  void setCurrentUser(UserModel user) {
+    _currentUser = user;
+    _error = null;
+    notifyListeners();
+  }
 
   // ===============================
   // LOGIN
   // ===============================
 
-  Future<bool> login({
-    required String email,
-    required String password,
-  }) async {
+  Future<bool> login({required String email, required String password}) async {
     _loading = true;
     _error = null;
     notifyListeners();
 
     try {
-      final credential =
-          await AuthRepository.login(
+      final credential = await AuthRepository.login(
         email: email,
         password: password,
       );
 
       final uid = credential.user!.uid;
 
-      _currentUser =
-          await AuthRepository.getUser(uid);
+      _currentUser = await AuthRepository.getUser(uid);
 
       await AuthRepository.updateLastLogin(uid);
 
@@ -71,8 +105,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final credential =
-          await AuthRepository.register(
+      final credential = await AuthRepository.register(
         email: email,
         password: password,
       );
@@ -86,9 +119,7 @@ class AuthProvider extends ChangeNotifier {
         status: true,
       );
 
-      await AuthRepository.saveCustomer(
-        user: user,
-      );
+      await AuthRepository.saveCustomer(user: user);
 
       _currentUser = user;
 

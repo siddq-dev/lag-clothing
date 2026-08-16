@@ -1,99 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-import '../../../../models/feature_product_model.dart';
+import '../../../../providers/product_provider.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
 import '../../../../widgets/products/product_card.dart';
+import '../../../../widgets/products/animated_product_card.dart';
+import '../../../../widgets/products/product_section_animation.dart';
 
 class NewArrivals extends StatelessWidget {
   const NewArrivals({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 80,
-      ),
-      child: Column(
-        children: [
-          const Text(
-            'New Arrivals',
-            style: AppTextStyles.sectionTitle,
-          ),
+    final provider = context.watch<ProductProvider>();
 
-          const SizedBox(height: 16),
+    final products = provider.newArrivals;
 
-          const Text(
-            'Fresh arrivals from our latest collection.',
-            style: AppTextStyles.sectionSubtitle,
-            textAlign: TextAlign.center,
-          ),
+    return ProductSectionAnimation(
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 80),
+        child: Column(
+          children: [
+            const Text('New Arrivals', style: AppTextStyles.sectionTitle),
 
-          const SizedBox(height: 50),
+            const SizedBox(height: 16),
 
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: newArrivalProducts.length,
-            gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              crossAxisSpacing: 24,
-              mainAxisSpacing: 24,
-              childAspectRatio: 0.48,
+            const Text(
+              'Fresh arrivals from our latest collection.',
+              style: AppTextStyles.sectionSubtitle,
+              textAlign: TextAlign.center,
             ),
-            itemBuilder: (context, index) {
-              final product = newArrivalProducts[index];
 
-              return Column(
-                children: [
-                  Expanded(
-                    child: ProductCard(
-                      product: product,
+            const SizedBox(height: 50),
 
-                      onTap: () {},
+            if (provider.loading && products.isEmpty)
+              const SizedBox(
+                height: 300,
+                child: Center(child: CircularProgressIndicator()),
+              )
+            else if (products.isEmpty)
+              const SizedBox(
+                height: 200,
+                child: Center(child: Text('No new arrivals available.')),
+              )
+            else
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: products.length > 4 ? 4 : products.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 24,
+                  mainAxisSpacing: 24,
+                  childAspectRatio: 0.72,
+                ),
+                itemBuilder: (context, index) {
+                  final product = products[index];
 
-                      onAddToCart: () {
-                        context.go(AppRouter.cart);
-                      },
+                  return AnimatedProductCard(
+                    product: product,
+                    index: index,
+                    onTap: () {
+                      context.go(
+                        '${AppRouter.shopProductDetails}/${product.id}',
+                      );
+                    },
+                  );
+                },
+              ),
+            const SizedBox(height: 35),
 
-                      onWishlist: () {
-                        context.go(AppRouter.wishlist);
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        context.go(AppRouter.shop);
-                      },
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.primary,
-                        side: const BorderSide(
-                          color: AppColors.primary,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 14,
-                        ),
-                      ),
-                      child: const Text(
-                        "Explore More",
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ],
+            OutlinedButton(
+              onPressed: () {
+                context.go(AppRouter.shop);
+              },
+              child: const Text('View More'),
+            ),
+          ],
+        ),
       ),
     );
   }

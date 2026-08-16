@@ -11,50 +11,119 @@ class ShopProductGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ShopProvider>(
       builder: (context, provider, child) {
-        // Error
+        // ==================================================
+        // LOADING
+        // ==================================================
+
+        if (provider.isLoading && provider.products.isEmpty) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(60),
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
+        // ==================================================
+        // ERROR
+        // ==================================================
+
         if (provider.error != null) {
           return Center(
-            child: Text(
-              provider.error!,
-              style: const TextStyle(
-                color: Colors.red,
-                fontSize: 18,
+            child: Padding(
+              padding: const EdgeInsets.all(40),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
+
+                  const SizedBox(height: 16),
+
+                  const Text(
+                    'Unable to load products',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  Text(
+                    provider.error!,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      provider.loadProducts();
+                    },
+                    child: const Text('Retry'),
+                  ),
+                ],
               ),
             ),
           );
         }
 
-        // Empty
+        // ==================================================
+        // EMPTY
+        // ==================================================
+
         if (provider.products.isEmpty) {
           return const Center(
-            child: Text(
-              "No products found.",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
+            child: Padding(
+              padding: EdgeInsets.all(60),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.shopping_bag_outlined,
+                    size: 60,
+                    color: Colors.grey,
+                  ),
+
+                  SizedBox(height: 20),
+
+                  Text(
+                    'No products found.',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  ),
+
+                  SizedBox(height: 8),
+
+                  Text(
+                    'There are currently no products available.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
               ),
             ),
           );
         }
 
-        // Grid
+        // ==================================================
+        // PRODUCT GRID
+        // ==================================================
+
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
+
           itemCount: provider.products.length,
-          gridDelegate:
-              const SliverGridDelegateWithFixedCrossAxisCount(
+
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
             crossAxisSpacing: 24,
             mainAxisSpacing: 24,
             childAspectRatio: .63,
           ),
+
           itemBuilder: (context, index) {
             final product = provider.products[index];
 
-            return ShopProductCard(
-              product: product,
-            );
+            return ShopProductCard(product: product);
           },
         );
       },

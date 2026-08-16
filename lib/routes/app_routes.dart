@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lag_clothing/features/orders/order_page.dart';
 import 'package:lag_clothing/features/saved_address/page/add_address_page.dart';
 import 'package:lag_clothing/models/customer_admin_model.dart';
+import 'package:lag_clothing/models/order_model.dart';
 import 'package:lag_clothing/routes/router_observer.dart';
 
 import '../features/about/pages/about_page.dart';
@@ -14,7 +15,7 @@ import '../features/checkout/pages/checkout_page.dart';
 import '../features/contact/pages/contact_pages.dart';
 import '../features/home/pages/home_pages.dart';
 import '../features/profiles/page/profile_page.dart';
-import '../features/products/pages/shop_page.dart';
+import '../features/shop/page/shop_page.dart';
 import '../features/wishlist/pages/wishlist_page.dart';
 import '../features/order_confirmation/page/order_confirmation_page.dart';
 import '../features/personal_information/page/personal_information_page.dart';
@@ -60,7 +61,11 @@ import '../features/super_admin/analytics/pages/analytics_dashboard_page.dart';
 import '../features/inventory/pages/inventory_dashboard_page.dart';
 import 'package:lag_clothing/features/super_admin/product_management/pages/product_management_page.dart';
 import '../features/super_admin/product_management/pages/add_product_page.dart';
-import '../features/super_admin/product_management/pages/product_details_page.dart';
+import '../features/super_admin/product_management/pages/product_details_page.dart'
+    as admin_product_details;
+import '../features/shop/page/product_details_page.dart'
+    as shop_product_details;
+import '../features/cart/pages/cart_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -204,6 +209,12 @@ class AppRouter {
   static const String inventory = '/admin/inventory';
 
   // ==========================
+  // Customer Product
+  // ==========================
+
+  static const String shopProductDetails = '/product';
+
+  // ==========================
   // goroutes
   // ==========================
 
@@ -220,11 +231,6 @@ class AppRouter {
       GoRoute(path: contact, builder: (context, state) => const ContactPage()),
 
       GoRoute(path: cart, builder: (context, state) => const CartPage()),
-
-      GoRoute(
-        path: checkout,
-        builder: (context, state) => const CheckoutPage(),
-      ),
 
       GoRoute(path: login, builder: (context, state) => const LoginPage()),
 
@@ -342,7 +348,11 @@ class AppRouter {
 
       GoRoute(
         path: orderDetails,
-        builder: (context, state) => const OrderDetailsPage(),
+        builder: (context, state) {
+          final order = state.extra as OrderModel;
+
+          return OrderDetailsPage(order: order);
+        },
       ),
 
       GoRoute(
@@ -474,7 +484,7 @@ class AppRouter {
         builder: (context, state) {
           final id = state.pathParameters['id']!;
 
-          return ProductDetailsPage(productId: id);
+          return admin_product_details.ProductDetailsPage(productId: id);
         },
       ),
 
@@ -551,6 +561,15 @@ class AppRouter {
       GoRoute(
         path: AppRouter.orders,
         builder: (context, state) => const OrdersPage(),
+      ),
+
+      GoRoute(
+        path: '${AppRouter.shopProductDetails}/:productId',
+        builder: (context, state) {
+          final productId = state.pathParameters['productId']!;
+
+          return shop_product_details.ProductDetailsPage(productId: productId);
+        },
       ),
     ],
   );
