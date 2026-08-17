@@ -18,13 +18,32 @@ class RecentProductsTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (products.isEmpty) {
-      return const Card(
-        child: Padding(
+      return Card(
+        margin: EdgeInsets.zero,
+        elevation: 1,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        child: const Padding(
           padding: EdgeInsets.all(40),
           child: Center(
-            child: Text(
-              "No products available.",
-              style: TextStyle(fontSize: 18),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.inventory_2_outlined, size: 48, color: Colors.grey),
+
+                SizedBox(height: 12),
+
+                Text(
+                  'No products available.',
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                ),
+
+                SizedBox(height: 5),
+
+                Text(
+                  'Add a product to see it here.',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ],
             ),
           ),
         ),
@@ -32,61 +51,112 @@ class RecentProductsTable extends StatelessWidget {
     }
 
     return Card(
-      elevation: 2,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: DataTable(
-          headingRowHeight: 55,
-          dataRowMinHeight: 70,
-          dataRowMaxHeight: 70,
-          columns: const [
-            DataColumn(label: Text("Image")),
-            DataColumn(label: Text("Product")),
-            DataColumn(label: Text("Brand")),
-            DataColumn(label: Text("Category")),
-            DataColumn(label: Text("Price")),
-            DataColumn(label: Text("Stock")),
-            DataColumn(label: Text("Status")),
-            DataColumn(label: Text("Actions")),
-          ],
-          rows: products.map((product) {
-            return ProductTableRow(
-              product: product,
-              onView: () {
-                context.go("/admin/product/${product.id}");
-              },
+      margin: EdgeInsets.zero,
+      elevation: 1,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final tableWidth = constraints.maxWidth < 950
+                ? 950.0
+                : constraints.maxWidth;
 
-              onEdit: () {
-                context.push("/editproduct/${product.id}");
-              },
+            return Scrollbar(
+              thumbVisibility: true,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  width: tableWidth,
+                  child: DataTable(
+                    headingRowHeight: 56,
+                    dataRowMinHeight: 70,
+                    dataRowMaxHeight: 80,
+                    horizontalMargin: 16,
+                    columnSpacing: 28,
 
-              onDelete: () async {
-                final confirmed = await showDialog<bool>(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      title: const Text("Delete Product"),
-                      content: Text("Delete '${product.name}'?"),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, false),
-                          child: const Text("Cancel"),
-                        ),
-                        FilledButton(
-                          onPressed: () => Navigator.pop(context, true),
-                          child: const Text("Delete"),
-                        ),
-                      ],
-                    );
-                  },
-                );
+                    headingTextStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
 
-                if (confirmed == true) {
-                  await onDelete(product.id);
-                }
-              },
+                    columns: const [
+                      DataColumn(label: Text('Image')),
+                      DataColumn(label: Text('Product')),
+                      DataColumn(label: Text('Brand')),
+                      DataColumn(label: Text('Category')),
+                      DataColumn(label: Text('Price')),
+                      DataColumn(label: Text('Stock')),
+                      DataColumn(label: Text('Status')),
+                      DataColumn(label: Text('Actions')),
+                    ],
+
+                    rows: products.map((product) {
+                      return ProductTableRow(
+                        product: product,
+
+                        // ------------------------------------------------
+                        // VIEW
+                        // ------------------------------------------------
+                        onView: () {
+                          context.go('/admin/product/${product.id}');
+                        },
+
+                        // ------------------------------------------------
+                        // EDIT
+                        // ------------------------------------------------
+                        onEdit: () {
+                          context.push('/editproduct/${product.id}');
+                        },
+
+                        // ------------------------------------------------
+                        // DELETE
+                        // ------------------------------------------------
+                        onDelete: () async {
+                          final confirmed = await showDialog<bool>(
+                            context: context,
+                            builder: (dialogContext) {
+                              return AlertDialog(
+                                title: const Text('Delete Product'),
+
+                                content: Text(
+                                  "Are you sure you want to delete '${product.name}'?",
+                                ),
+
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(dialogContext).pop(false);
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+
+                                  FilledButton(
+                                    style: FilledButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(dialogContext).pop(true);
+                                    },
+                                    child: const Text('Delete'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+
+                          if (confirmed == true) {
+                            await onDelete(product.id);
+                          }
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
             );
-          }).toList(),
+          },
         ),
       ),
     );

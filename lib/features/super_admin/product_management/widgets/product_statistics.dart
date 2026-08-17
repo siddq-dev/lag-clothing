@@ -9,61 +9,125 @@ class ProductStatistics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final isMobile = width < 600;
+
+    final cards = [
+      _StatisticData(
+        title: 'Products',
+        value: provider.totalProducts.toString(),
+        icon: Icons.inventory_2_outlined,
+        color: Colors.blue,
+      ),
+      _StatisticData(
+        title: 'Active',
+        value: provider.activeProducts.toString(),
+        icon: Icons.check_circle_outline,
+        color: Colors.green,
+      ),
+      _StatisticData(
+        title: 'Inactive',
+        value: provider.inactiveProducts.toString(),
+        icon: Icons.cancel_outlined,
+        color: Colors.red,
+      ),
+    ];
+
+    if (isMobile) {
+      return GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: cards.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 1.45,
+        ),
+        itemBuilder: (context, index) {
+          return _card(cards[index]);
+        },
+      );
+    }
+
     return Row(
       children: [
-        Expanded(
-          child: _card(
-            "Products",
-            provider.totalProducts.toString(),
-            Icons.inventory_2,
-            Colors.blue,
-          ),
-        ),
-
-        const SizedBox(width: 20),
-
-        Expanded(
-          child: _card(
-            "Active",
-            provider.activeProducts.toString(),
-            Icons.check_circle,
-            Colors.green,
-          ),
-        ),
-
-        const SizedBox(width: 20),
-
-        Expanded(
-          child: _card(
-            "Inactive",
-            provider.inactiveProducts.toString(),
-            Icons.cancel,
-            Colors.red,
-          ),
-        ),
+        for (int i = 0; i < cards.length; i++) ...[
+          Expanded(child: _card(cards[i])),
+          if (i != cards.length - 1) const SizedBox(width: 20),
+        ],
       ],
     );
   }
 
-  Widget _card(String title, String value, IconData icon, Color color) {
+  Widget _card(_StatisticData data) {
     return Card(
+      elevation: 1,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
+        child: Row(
           children: [
-            Icon(icon, color: color, size: 40),
-
-            const SizedBox(height: 15),
-
-            Text(
-              value,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: data.color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(data.icon, color: data.color, size: 26),
             ),
 
-            Text(title),
+            const SizedBox(width: 14),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    data.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+
+                  const SizedBox(height: 5),
+
+                  Text(
+                    data.value,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
+}
+
+class _StatisticData {
+  const _StatisticData({
+    required this.title,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
+
+  final String title;
+  final String value;
+  final IconData icon;
+  final Color color;
 }
