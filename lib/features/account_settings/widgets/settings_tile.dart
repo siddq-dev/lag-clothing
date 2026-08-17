@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 
-
 class SettingsTile extends StatelessWidget {
-
   final IconData icon;
   final String title;
   final String subtitle;
   final VoidCallback onTap;
 
-
   const SettingsTile({
-
     super.key,
 
     required this.icon,
@@ -20,21 +16,12 @@ class SettingsTile extends StatelessWidget {
     required this.subtitle,
 
     required this.onTap,
-
   });
-
-
 
   @override
   Widget build(BuildContext context) {
-
     return ListTile(
-
-      leading: Icon(
-        icon,
-        color: Colors.white,
-      ),
-
+      leading: Icon(icon, color: Colors.white),
 
       title: Text(
         title,
@@ -44,14 +31,7 @@ class SettingsTile extends StatelessWidget {
         ),
       ),
 
-
-      subtitle: Text(
-        subtitle,
-        style: const TextStyle(
-          color: Colors.grey,
-        ),
-      ),
-
+      subtitle: Text(subtitle, style: const TextStyle(color: Colors.grey)),
 
       trailing: const Icon(
         Icons.arrow_forward_ios,
@@ -59,11 +39,7 @@ class SettingsTile extends StatelessWidget {
         color: Colors.white,
       ),
 
-
       onTap: onTap,
-
     );
-
   }
-
 }

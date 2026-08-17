@@ -13,7 +13,6 @@ class SuperAdminSidebar extends StatelessWidget {
       color: Colors.black,
       child: ListView(
         children: [
-
           const SizedBox(height: 40),
 
           const Center(
@@ -64,19 +63,9 @@ class SuperAdminSidebar extends StatelessWidget {
             AppRouter.adminOrderDetails,
           ),
 
-          _tile(
-            context,
-            Icons.analytics,
-            "Analytics",
-            AppRouter.analytics,
-          ),
+          _tile(context, Icons.analytics, "Analytics", AppRouter.analytics),
 
-           _tile(
-            context,
-            Icons.inventory_2,
-            "Inventory",
-            AppRouter.inventory,
-          ),
+          _tile(context, Icons.inventory_2, "Inventory", AppRouter.inventory),
 
           _tile(
             context,
@@ -85,12 +74,7 @@ class SuperAdminSidebar extends StatelessWidget {
             AppRouter.websiteSettings,
           ),
 
-          _tile(
-            context,
-            Icons.logout,
-            "Logout",
-            AppRouter.login,
-          ),
+          _tile(context, Icons.logout, "Logout", AppRouter.login),
         ],
       ),
     );
@@ -103,16 +87,8 @@ class SuperAdminSidebar extends StatelessWidget {
     String route,
   ) {
     return ListTile(
-      leading: Icon(
-        icon,
-        color: Colors.white,
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          color: Colors.white,
-        ),
-      ),
+      leading: Icon(icon, color: Colors.white),
+      title: Text(title, style: const TextStyle(color: Colors.white)),
       onTap: () => context.go(route),
     );
   }

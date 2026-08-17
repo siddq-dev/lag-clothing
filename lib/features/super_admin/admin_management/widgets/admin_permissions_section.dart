@@ -21,13 +21,9 @@ class AdminPermissionsSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Text(
               "Permissions",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 20),
@@ -35,91 +31,64 @@ class AdminPermissionsSection extends StatelessWidget {
             _buildSwitch(
               title: "Dashboard",
               value: permissions.dashboard,
-              onChanged: (value) => onChanged(
-                permissions.copyWith(
-                  dashboard: value,
-                ),
-              ),
+              onChanged: (value) =>
+                  onChanged(permissions.copyWith(dashboard: value)),
             ),
 
             _buildSwitch(
               title: "Products",
               value: permissions.products,
-              onChanged: (value) => onChanged(
-                permissions.copyWith(
-                  products: value,
-                ),
-              ),
+              onChanged: (value) =>
+                  onChanged(permissions.copyWith(products: value)),
             ),
 
             _buildSwitch(
               title: "Orders",
               value: permissions.orders,
-              onChanged: (value) => onChanged(
-                permissions.copyWith(
-                  orders: value,
-                ),
-              ),
+              onChanged: (value) =>
+                  onChanged(permissions.copyWith(orders: value)),
             ),
 
             _buildSwitch(
               title: "Customers",
               value: permissions.customers,
-              onChanged: (value) => onChanged(
-                permissions.copyWith(
-                  customers: value,
-                ),
-              ),
+              onChanged: (value) =>
+                  onChanged(permissions.copyWith(customers: value)),
             ),
 
             _buildSwitch(
               title: "Inventory",
               value: permissions.inventory,
-              onChanged: (value) => onChanged(
-                permissions.copyWith(
-                  inventory: value,
-                ),
-              ),
+              onChanged: (value) =>
+                  onChanged(permissions.copyWith(inventory: value)),
             ),
 
             _buildSwitch(
               title: "Coupons",
               value: permissions.coupons,
-              onChanged: (value) => onChanged(
-                permissions.copyWith(
-                  coupons: value,
-                ),
-              ),
+              onChanged: (value) =>
+                  onChanged(permissions.copyWith(coupons: value)),
             ),
 
             _buildSwitch(
               title: "Analytics",
               value: permissions.analytics,
-              onChanged: (value) => onChanged(
-                permissions.copyWith(
-                  analytics: value,
-                ),
-              ),
+              onChanged: (value) =>
+                  onChanged(permissions.copyWith(analytics: value)),
             ),
 
             _buildSwitch(
               title: "Admins",
               value: permissions.admins,
-              onChanged: (value) => onChanged(
-                permissions.copyWith(
-                  admins: value,
-                ),
-              ),
+              onChanged: (value) =>
+                  onChanged(permissions.copyWith(admins: value)),
             ),
 
             _buildSwitch(
               title: "Settings",
               value: permissions.settings,
-              onChanged: (value) => onChanged(
-                permissions.copyWith(
-                  settings: value,
-                ),
-              ),
+              onChanged: (value) =>
+                  onChanged(permissions.copyWith(settings: value)),
             ),
           ],
         ),

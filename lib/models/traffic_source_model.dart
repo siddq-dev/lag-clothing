@@ -3,14 +3,9 @@ class TrafficSourceModel {
 
   final int visitors;
 
-  const TrafficSourceModel({
-    required this.source,
-    required this.visitors,
-  });
+  const TrafficSourceModel({required this.source, required this.visitors});
 
-  factory TrafficSourceModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory TrafficSourceModel.fromMap(Map<String, dynamic> map) {
     return TrafficSourceModel(
       source: map['source'] ?? '',
       visitors: map['visitors'] ?? 0,
@@ -18,9 +13,6 @@ class TrafficSourceModel {
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      'source': source,
-      'visitors': visitors,
-    };
+    return {'source': source, 'visitors': visitors};
   }
 }

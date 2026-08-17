@@ -24,32 +24,22 @@ class DeliveryAddress extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(14),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Row(
               children: [
-
                 Icon(Icons.location_on),
 
                 SizedBox(width: 10),
 
                 Text(
                   "Delivery Address",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
-
               ],
             ),
 
@@ -57,10 +47,7 @@ class DeliveryAddress extends StatelessWidget {
 
             Text(
               name,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
             ),
 
             const SizedBox(height: 8),
@@ -76,7 +63,6 @@ class DeliveryAddress extends StatelessWidget {
             Text("PIN : $pincode"),
 
             Text(country),
-
           ],
         ),
       ),

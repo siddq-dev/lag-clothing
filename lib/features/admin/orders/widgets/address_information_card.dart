@@ -70,10 +70,7 @@ class AddressInformationCard extends StatelessWidget {
 
             Text(
               address.fullName,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
 
             const SizedBox(height: 8),
@@ -84,16 +81,11 @@ class AddressInformationCard extends StatelessWidget {
 
             Text(address.addressLine1),
 
-            if (address.addressLine2.isNotEmpty)
-              Text(address.addressLine2),
+            if (address.addressLine2.isNotEmpty) Text(address.addressLine2),
 
-            Text(
-              "${address.city}, ${address.state}",
-            ),
+            Text("${address.city}, ${address.state}"),
 
-            Text(
-              "${address.country} - ${address.pincode}",
-            ),
+            Text("${address.country} - ${address.pincode}"),
           ],
         ),
       ),

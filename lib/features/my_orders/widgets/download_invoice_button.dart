@@ -1,31 +1,16 @@
 import 'package:flutter/material.dart';
 
-
 class DownloadInvoiceButton extends StatelessWidget {
-
-  const DownloadInvoiceButton({
-    super.key,
-  });
-
+  const DownloadInvoiceButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return ElevatedButton(
-
-      onPressed: (){
-
+      onPressed: () {
         // PDF generation later
-
       },
 
-      child:
-      const Text(
-        "Download Invoice",
-      ),
-
+      child: const Text("Download Invoice"),
     );
-
   }
-
 }

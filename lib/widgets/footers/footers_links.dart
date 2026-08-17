@@ -19,10 +19,7 @@ class FooterLinks extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Quick Links',
-          style: AppTextStyles.heading4,
-        ),
+        Text('Quick Links', style: AppTextStyles.heading4),
 
         const SizedBox(height: 16),
 
@@ -32,10 +29,7 @@ class FooterLinks extends StatelessWidget {
             child: InkWell(
               onTap: () => context.go(link.$2),
               borderRadius: BorderRadius.circular(4),
-              child: Text(
-                link.$1,
-                style: AppTextStyles.bodyMedium,
-              ),
+              child: Text(link.$1, style: AppTextStyles.bodyMedium),
             ),
           ),
         ),

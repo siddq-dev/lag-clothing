@@ -13,16 +13,10 @@ class CategoriesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 80,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 80),
       child: Column(
         children: [
-          const Text(
-            'Shop By Category',
-            style: AppTextStyles.sectionTitle,
-          ),
+          const Text('Shop By Category', style: AppTextStyles.sectionTitle),
 
           const SizedBox(height: 16),
 
@@ -38,8 +32,7 @@ class CategoriesSection extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: categories.length,
-            gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4,
               crossAxisSpacing: 24,
               mainAxisSpacing: 24,

@@ -4,11 +4,7 @@ import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
 
 class LegalSection extends StatelessWidget {
-  const LegalSection({
-    super.key,
-    required this.heading,
-    required this.body,
-  });
+  const LegalSection({super.key, required this.heading, required this.body});
 
   final String heading;
   final String body;
@@ -20,22 +16,14 @@ class LegalSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Text(
             heading,
-            style: AppTextStyles.heading3.copyWith(
-              color: AppColors.primary,
-            ),
+            style: AppTextStyles.heading3.copyWith(color: AppColors.primary),
           ),
 
           const SizedBox(height: 16),
 
-          Text(
-            body,
-            style: AppTextStyles.bodyMedium.copyWith(
-              height: 1.8,
-            ),
-          ),
+          Text(body, style: AppTextStyles.bodyMedium.copyWith(height: 1.8)),
         ],
       ),
     );

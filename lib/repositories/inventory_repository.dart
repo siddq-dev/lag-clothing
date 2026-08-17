@@ -5,32 +5,20 @@ import '../models/inventory_item_model.dart';
 class InventoryRepository {
   InventoryRepository._();
 
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static CollectionReference<Map<String, dynamic>>
-      get _products =>
-          _firestore.collection("products");
+  static CollectionReference<Map<String, dynamic>> get _products =>
+      _firestore.collection("products");
 
   //----------------------------------------------------------
   // Get Products
   //----------------------------------------------------------
 
-  static Future<List<InventoryItemModel>>
-      getProducts() async {
-    final snapshot =
-        await _products
-            .orderBy("name")
-            .get();
+  static Future<List<InventoryItemModel>> getProducts() async {
+    final snapshot = await _products.orderBy("name").get();
 
     return snapshot.docs
-        .map(
-          (doc) =>
-              InventoryItemModel.fromMap(
-            doc.id,
-            doc.data(),
-          ),
-        )
+        .map((doc) => InventoryItemModel.fromMap(doc.id, doc.data()))
         .toList();
   }
 
@@ -38,20 +26,13 @@ class InventoryRepository {
   // Stream Products
   //----------------------------------------------------------
 
-  static Stream<List<InventoryItemModel>>
-      streamProducts() {
+  static Stream<List<InventoryItemModel>> streamProducts() {
     return _products
         .orderBy("name")
         .snapshots()
         .map(
           (snapshot) => snapshot.docs
-              .map(
-                (doc) =>
-                    InventoryItemModel.fromMap(
-                  doc.id,
-                  doc.data(),
-                ),
-              )
+              .map((doc) => InventoryItemModel.fromMap(doc.id, doc.data()))
               .toList(),
         );
   }
@@ -74,26 +55,26 @@ class InventoryRepository {
   // Increase Stock
   //----------------------------------------------------------
 
- static Future<void> increaseStock({
-  required String productId,
-  required int quantity,
-}) async {
-  await _products.doc(productId).update({
-    "stock": FieldValue.increment(quantity),
-    "updatedAt": Timestamp.now(),
-  });
-}
+  static Future<void> increaseStock({
+    required String productId,
+    required int quantity,
+  }) async {
+    await _products.doc(productId).update({
+      "stock": FieldValue.increment(quantity),
+      "updatedAt": Timestamp.now(),
+    });
+  }
   //----------------------------------------------------------
   // Decrease Stock
   //----------------------------------------------------------
 
   static Future<void> decreaseStock({
-  required String productId,
-  required int quantity,
-}) async {
-  await _products.doc(productId).update({
-    "stock": FieldValue.increment(-quantity),
-    "updatedAt": Timestamp.now(),
-  });
-}
+    required String productId,
+    required int quantity,
+  }) async {
+    await _products.doc(productId).update({
+      "stock": FieldValue.increment(-quantity),
+      "updatedAt": Timestamp.now(),
+    });
+  }
 }

@@ -15,47 +15,34 @@ class PaymentMethodsPage extends StatefulWidget {
   const PaymentMethodsPage({super.key});
 
   @override
-  State<PaymentMethodsPage> createState() =>
-      _PaymentMethodsPageState();
+  State<PaymentMethodsPage> createState() => _PaymentMethodsPageState();
 }
 
-class _PaymentMethodsPageState
-    extends State<PaymentMethodsPage> {
-
+class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context
-          .read<PaymentMethodProvider>()
-          .listenPaymentMethods();
+      context.read<PaymentMethodProvider>().listenPaymentMethods();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider =
-        context.watch<PaymentMethodProvider>();
+    final provider = context.watch<PaymentMethodProvider>();
 
     return WebsiteLayout(
       currentRoute: AppRouter.profile,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 60,
-            vertical: 40,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 40),
           child: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 1100,
-              ),
+              constraints: const BoxConstraints(maxWidth: 1100),
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   /// Header
                   const PaymentHeader(),
 
@@ -64,39 +51,24 @@ class _PaymentMethodsPageState
                   /// Add Card Button
                   AddPaymentButton(
                     onPressed: () {
-                      context.push(
-                        AppRouter.addPaymentMethod,
-                      );
+                      context.push(AppRouter.addPaymentMethod);
                     },
                   ),
 
                   const SizedBox(height: 35),
 
                   if (provider.isLoading)
-
-                    const Center(
-                      child:
-                          CircularProgressIndicator(),
-                    )
-
+                    const Center(child: CircularProgressIndicator())
                   else if (provider.paymentMethods.isEmpty)
-
                     EmptyPayment(
                       onAddCard: () {
-                        context.push(
-                          AppRouter.addPaymentMethod,
-                        );
+                        context.push(AppRouter.addPaymentMethod);
                       },
                     )
-
                   else
-
                     ...provider.paymentMethods.map(
                       (card) => Padding(
-                        padding:
-                            const EdgeInsets.only(
-                          bottom: 20,
-                        ),
+                        padding: const EdgeInsets.only(bottom: 20),
                         child: PaymentCard(
                           paymentMethod: card,
 
@@ -108,17 +80,11 @@ class _PaymentMethodsPageState
                           },
 
                           onDelete: () async {
-                            await provider
-                                .deletePaymentMethod(
-                              card.id,
-                            );
+                            await provider.deletePaymentMethod(card.id);
                           },
 
                           onSetDefault: () async {
-                            await provider
-                                .setDefaultPaymentMethod(
-                              card.id,
-                            );
+                            await provider.setDefaultPaymentMethod(card.id);
                           },
                         ),
                       ),

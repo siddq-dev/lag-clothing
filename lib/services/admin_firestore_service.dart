@@ -9,27 +9,19 @@ import '../../../../models/admin_permission_model.dart';
 class AdminFirestoreService {
   AdminFirestoreService._();
 
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static CollectionReference<Map<String, dynamic>>
-      get _users =>
-          _firestore.collection("users");
+  static CollectionReference<Map<String, dynamic>> get _users =>
+      _firestore.collection("users");
 
   // ==============================
   // Load All Admins
   // ==============================
 
   static Future<List<UserModel>> getAdmins() async {
-    final snapshot = await _users
-        .where("role", isEqualTo: "admin")
-        .get();
+    final snapshot = await _users.where("role", isEqualTo: "admin").get();
 
-    return snapshot.docs
-        .map(
-          (e) => UserModel.fromMap(e.data()),
-        )
-        .toList();
+    return snapshot.docs.map((e) => UserModel.fromMap(e.data())).toList();
   }
 
   // ==============================
@@ -48,22 +40,15 @@ class AdminFirestoreService {
     try {
       secondaryApp = await Firebase.initializeApp(
         name: "AdminCreator",
-        options:
-            DefaultFirebaseOptions.currentPlatform,
+        options: DefaultFirebaseOptions.currentPlatform,
       );
     } catch (_) {
-      secondaryApp =
-          Firebase.app("AdminCreator");
+      secondaryApp = Firebase.app("AdminCreator");
     }
 
-    final secondaryAuth =
-        FirebaseAuth.instanceFor(
-      app: secondaryApp,
-    );
+    final secondaryAuth = FirebaseAuth.instanceFor(app: secondaryApp);
 
-    final credential =
-        await secondaryAuth
-            .createUserWithEmailAndPassword(
+    final credential = await secondaryAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -89,24 +74,17 @@ class AdminFirestoreService {
   // Delete Admin
   // ==============================
 
-  static Future<void> deleteAdmin(
-    String uid,
-  ) async {
+  static Future<void> deleteAdmin(String uid) async {
     await _users.doc(uid).delete();
   }
 
   // ==============================
-// Reset Password
-// ==============================
+  // Reset Password
+  // ==============================
 
-static Future<void> sendPasswordReset(
-  String email,
-) async {
-  await FirebaseAuth.instance
-      .sendPasswordResetEmail(
-    email: email,
-  );
-}
+  static Future<void> sendPasswordReset(String email) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
 
   // ==============================
   // Update Status
@@ -116,9 +94,7 @@ static Future<void> sendPasswordReset(
     required String uid,
     required bool status,
   }) async {
-    await _users.doc(uid).update({
-      "status": status,
-    });
+    await _users.doc(uid).update({"status": status});
   }
 
   // ==============================

@@ -22,7 +22,6 @@ class ReturnsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const ReturnsHeader(),
 
             const SizedBox(height: AppSpacing.xxxl),
@@ -42,15 +41,14 @@ class ReturnsPage extends StatelessWidget {
             const FAQReturns(),
             const SizedBox(height: AppSpacing.xxl),
 
-ReturnRequestButton(
-  onPressed: () {
-    // Navigate to Return Request Page
-    // Firebase integration later
-  },
-),
+            ReturnRequestButton(
+              onPressed: () {
+                // Navigate to Return Request Page
+                // Firebase integration later
+              },
+            ),
 
-const SizedBox(height: AppSpacing.xxxl),
-
+            const SizedBox(height: AppSpacing.xxxl),
           ],
         ),
       ),

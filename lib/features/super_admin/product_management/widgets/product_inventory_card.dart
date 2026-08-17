@@ -4,10 +4,7 @@ import '../../../../models/product_model.dart';
 class ProductInventoryCard extends StatelessWidget {
   final ProductModel product;
 
-  const ProductInventoryCard({
-    super.key,
-    required this.product,
-  });
+  const ProductInventoryCard({super.key, required this.product});
 
   Color get stockColor {
     if (product.stock <= 0) {
@@ -31,10 +28,7 @@ class ProductInventoryCard extends StatelessWidget {
           children: [
             const Text(
               "Inventory",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 25),
@@ -57,9 +51,7 @@ class ProductInventoryCard extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.star_border),
               title: const Text("Rating"),
-              trailing: Text(
-                product.rating.toStringAsFixed(1),
-              ),
+              trailing: Text(product.rating.toStringAsFixed(1)),
             ),
 
             const Divider(),
@@ -67,9 +59,7 @@ class ProductInventoryCard extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.reviews_outlined),
               title: const Text("Reviews"),
-              trailing: Text(
-                "${product.reviewCount}",
-              ),
+              trailing: Text("${product.reviewCount}"),
             ),
           ],
         ),

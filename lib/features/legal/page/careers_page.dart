@@ -22,14 +22,10 @@ class CareersPage extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 80,
-              vertical: 60,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 60),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
-
                 LegalSection(
                   heading: "Why Join LAG?",
                   body:
@@ -42,26 +38,15 @@ class CareersPage extends StatelessWidget {
                       "We regularly hire for Customer Support, Graphic Designers, Marketing Executives, Warehouse Operations, and Flutter Developers.",
                 ),
 
-                LegalSection(
-                  heading: "Employee Benefits",
-                  body: "",
-                ),
+                LegalSection(heading: "Employee Benefits", body: ""),
 
-                LegalBullet(
-                  text: "Competitive salary packages.",
-                ),
+                LegalBullet(text: "Competitive salary packages."),
 
-                LegalBullet(
-                  text: "Flexible working environment.",
-                ),
+                LegalBullet(text: "Flexible working environment."),
 
-                LegalBullet(
-                  text: "Career growth opportunities.",
-                ),
+                LegalBullet(text: "Career growth opportunities."),
 
-                LegalBullet(
-                  text: "Employee discounts on LAG products.",
-                ),
+                LegalBullet(text: "Employee discounts on LAG products."),
 
                 LegalSection(
                   heading: "Apply",

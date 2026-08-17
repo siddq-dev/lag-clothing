@@ -15,12 +15,10 @@ class SavedAddressesPage extends StatefulWidget {
   const SavedAddressesPage({super.key});
 
   @override
-  State<SavedAddressesPage> createState() =>
-      _SavedAddressesPageState();
+  State<SavedAddressesPage> createState() => _SavedAddressesPageState();
 }
 
-class _SavedAddressesPageState
-    extends State<SavedAddressesPage> {
+class _SavedAddressesPageState extends State<SavedAddressesPage> {
   @override
   void initState() {
     super.initState();
@@ -39,9 +37,7 @@ class _SavedAddressesPageState
     return WebsiteLayout(
       currentRoute: AppRouter.profile,
       child: provider.isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -50,12 +46,9 @@ class _SavedAddressesPageState
                 ),
                 child: Center(
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: 1100,
-                    ),
+                    constraints: const BoxConstraints(maxWidth: 1100),
                     child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         /// Header
                         const AddressesHeader(),
@@ -65,9 +58,7 @@ class _SavedAddressesPageState
                         /// Add Address
                         AddAddressButton(
                           onPressed: () {
-                            context.go(
-                              AppRouter.addAddress,
-                            );
+                            context.go(AppRouter.addAddress);
                           },
                         ),
 
@@ -77,43 +68,32 @@ class _SavedAddressesPageState
                         if (addresses.isEmpty)
                           EmptyAddresses(
                             onAddAddress: () {
-                              context.go(
-                                AppRouter.addAddress,
-                              );
+                              context.go(AppRouter.addAddress);
                             },
                           )
-
                         /// Address List
                         else
                           ...addresses.map(
                             (address) => Padding(
-                              padding:
-                                  const EdgeInsets.only(
-                                bottom: 20,
-                              ),
+                              padding: const EdgeInsets.only(bottom: 20),
                               child: AddressCard(
-                                addressType:
-                                    address.addressType.name,
+                                addressType: address.addressType.name,
 
                                 name: address.fullName,
 
                                 phone: address.phone,
 
-                                addressLine1:
-                                    address.addressLine1,
+                                addressLine1: address.addressLine1,
 
-                                addressLine2:
-                                    address.addressLine2,
+                                addressLine2: address.addressLine2,
 
                                 city: address.city,
 
                                 state: address.state,
 
-                                pincode:
-                                    address.pincode,
+                                pincode: address.pincode,
 
-                                isDefault:
-                                    address.isDefault,
+                                isDefault: address.isDefault,
 
                                 onEdit: () {
                                   context.go(
@@ -123,59 +103,38 @@ class _SavedAddressesPageState
                                 },
 
                                 onDelete: () async {
-                                  final confirm =
-                                      await showDialog<bool>(
+                                  final confirm = await showDialog<bool>(
                                     context: context,
-                                    builder: (_) =>
-                                        AlertDialog(
-                                      title: const Text(
-                                        "Delete Address",
-                                      ),
-                                      content:
-                                          const Text(
+                                    builder: (_) => AlertDialog(
+                                      title: const Text("Delete Address"),
+                                      content: const Text(
                                         "Are you sure you want to delete this address?",
                                       ),
                                       actions: [
                                         TextButton(
                                           onPressed: () {
-                                            Navigator.pop(
-                                                context,
-                                                false);
+                                            Navigator.pop(context, false);
                                           },
-                                          child:
-                                              const Text(
-                                            "Cancel",
-                                          ),
+                                          child: const Text("Cancel"),
                                         ),
                                         ElevatedButton(
                                           onPressed: () {
-                                            Navigator.pop(
-                                                context,
-                                                true);
+                                            Navigator.pop(context, true);
                                           },
-                                          child:
-                                              const Text(
-                                            "Delete",
-                                          ),
+                                          child: const Text("Delete"),
                                         ),
                                       ],
                                     ),
                                   );
 
-                                  if (confirm ==
-                                      true) {
-                                    await provider
-                                        .deleteAddress(
-                                      address.id,
-                                    );
+                                  if (confirm == true) {
+                                    await provider.deleteAddress(address.id);
 
                                     if (!mounted) {
                                       return;
                                     }
 
-                                    ScaffoldMessenger.of(
-                                            context)
-                                        .showSnackBar(
+                                    ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text(
                                           "Address Deleted Successfully",

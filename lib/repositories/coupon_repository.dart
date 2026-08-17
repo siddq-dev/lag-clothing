@@ -3,9 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/coupon_model.dart';
 
 class CouponRepository {
-  CouponRepository({
-    FirebaseFirestore? firestore,
-  }) : _firestore = firestore ?? FirebaseFirestore.instance;
+  CouponRepository({FirebaseFirestore? firestore})
+    : _firestore = firestore ?? FirebaseFirestore.instance;
 
   final FirebaseFirestore _firestore;
 
@@ -15,18 +14,12 @@ class CouponRepository {
   // Get Coupon by Code
   //==========================================================
 
-  Future<CouponModel?> getCouponByCode(
-    String code,
-  ) async {
-    final query =
-        await _firestore
-            .collection(_collection)
-            .where(
-              'code',
-              isEqualTo: code.toUpperCase(),
-            )
-            .limit(1)
-            .get();
+  Future<CouponModel?> getCouponByCode(String code) async {
+    final query = await _firestore
+        .collection(_collection)
+        .where('code', isEqualTo: code.toUpperCase())
+        .limit(1)
+        .get();
 
     if (query.docs.isEmpty) {
       return null;
@@ -34,10 +27,7 @@ class CouponRepository {
 
     final doc = query.docs.first;
 
-    return CouponModel.fromMap(
-      doc.id,
-      doc.data(),
-    );
+    return CouponModel.fromMap(doc.id, doc.data());
   }
 
   //==========================================================
@@ -47,7 +37,7 @@ class CouponRepository {
   Future<CouponModel> validateCoupon({
     required String code,
     required double subtotal,
-    
+
     required List<String> productIds,
   }) async {
     final coupon = await getCouponByCode(code);
@@ -78,22 +68,17 @@ class CouponRepository {
       );
     }
 
- 
-
     //----------------------------------------------------------
     // Product Validation
     //----------------------------------------------------------
 
     if (coupon.applicableProducts.isNotEmpty) {
       final valid = productIds.any(
-        (id) =>
-            coupon.applicableProducts.contains(id),
+        (id) => coupon.applicableProducts.contains(id),
       );
 
       if (!valid) {
-        throw Exception(
-          "Coupon is not valid for selected products.",
-        );
+        throw Exception("Coupon is not valid for selected products.");
       }
     }
 
@@ -110,11 +95,8 @@ class CouponRepository {
   }) {
     double discount = 0;
 
-    if (coupon.discountType ==
-        DiscountType.percentage) {
-      discount =
-          subtotal *
-          (coupon.discountValue / 100);
+    if (coupon.discountType == DiscountType.percentage) {
+      discount = subtotal * (coupon.discountValue / 100);
 
       if (discount > coupon.maximumDiscount) {
         discount = coupon.maximumDiscount;
@@ -130,13 +112,8 @@ class CouponRepository {
   // Increment Coupon Usage
   //==========================================================
 
-  Future<void> incrementUsage(
-    String couponId,
-  ) async {
-    await _firestore
-        .collection(_collection)
-        .doc(couponId)
-        .update({
+  Future<void> incrementUsage(String couponId) async {
+    await _firestore.collection(_collection).doc(couponId).update({
       'usedCount': FieldValue.increment(1),
       'updatedAt': Timestamp.now(),
     });
@@ -149,21 +126,12 @@ class CouponRepository {
   Stream<List<CouponModel>> streamCoupons() {
     return _firestore
         .collection(_collection)
-        .orderBy(
-          'createdAt',
-          descending: true,
-        )
+        .orderBy('createdAt', descending: true)
         .snapshots()
         .map(
-          (snapshot) =>
-              snapshot.docs
-                  .map(
-                    (doc) => CouponModel.fromMap(
-                      doc.id,
-                      doc.data(),
-                    ),
-                  )
-                  .toList(),
+          (snapshot) => snapshot.docs
+              .map((doc) => CouponModel.fromMap(doc.id, doc.data()))
+              .toList(),
         );
   }
 }

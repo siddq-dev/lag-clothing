@@ -15,124 +15,90 @@ import '../widgets/website_traffic_card.dart';
 import '../widgets/best_selling_products.dart';
 import '../widgets/low_stock_alerts.dart';
 
-
-
-
-
 class AnalyticsDashboardPage extends StatefulWidget {
   const AnalyticsDashboardPage({super.key});
 
   @override
-  State<AnalyticsDashboardPage> createState() =>
-      _AnalyticsDashboardPageState();
+  State<AnalyticsDashboardPage> createState() => _AnalyticsDashboardPageState();
 }
 
-class _AnalyticsDashboardPageState
-    extends State<AnalyticsDashboardPage> {
+class _AnalyticsDashboardPageState extends State<AnalyticsDashboardPage> {
   @override
   void initState() {
     super.initState();
 
     Future.microtask(() {
-      context
-          .read<AnalyticsProvider>()
-          .loadDashboard();
+      context.read<AnalyticsProvider>().loadDashboard();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider =
-        context.watch<AnalyticsProvider>();
+    final provider = context.watch<AnalyticsProvider>();
 
     if (provider.isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (provider.error != null) {
-      return Center(
-        child: Text(provider.error!),
-      );
+      return Center(child: Text(provider.error!));
     }
 
     return Scaffold(
-  backgroundColor: const Color(0xFF0F0F0F),
-  body: SingleChildScrollView(
-    padding: const EdgeInsets.all(30),
-      child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
-        children: [
-          const AnalyticsHeader(),
+      backgroundColor: const Color(0xFF0F0F0F),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const AnalyticsHeader(),
 
-          const SizedBox(height: 30),
+            const SizedBox(height: 30),
 
-          SummaryCards(
-            provider: provider,
-          ),
+            SummaryCards(provider: provider),
 
-          const SizedBox(height: 30),
+            const SizedBox(height: 30),
 
-       SalesChart(
-  data: provider.salesChart,
-),
+            SalesChart(data: provider.salesChart),
 
-const SizedBox(height: 30),
+            const SizedBox(height: 30),
 
-WebsiteTrafficCard(
-  todayVisitors:
-      provider.summary?.todayVisitors ?? 0,
-  totalVisitors:
-      provider.summary?.totalVisitors ?? 0,
-),
+            WebsiteTrafficCard(
+              todayVisitors: provider.summary?.todayVisitors ?? 0,
+              totalVisitors: provider.summary?.totalVisitors ?? 0,
+            ),
 
-const SizedBox(height: 30),
+            const SizedBox(height: 30),
 
-PageAnalyticsTable(
-  pages: provider.pages,
-),
+            PageAnalyticsTable(pages: provider.pages),
 
-const SizedBox(height: 30),
+            const SizedBox(height: 30),
 
-CustomerRegionCard(
-  regions: provider.regions,
-),
+            CustomerRegionCard(regions: provider.regions),
 
-const SizedBox(height: 30),
+            const SizedBox(height: 30),
 
-DeviceAnalyticsCard(
-  devices: provider.devices,
-),
+            DeviceAnalyticsCard(devices: provider.devices),
 
-const SizedBox(height: 30),
+            const SizedBox(height: 30),
 
-TrafficSourceChart(
-  sources: provider.sources,
-),
+            TrafficSourceChart(sources: provider.sources),
 
-const SizedBox(height: 30),
+            const SizedBox(height: 30),
 
-if (provider.inventory != null)
-  InventorySummaryCard(
-    inventory: provider.inventory!,
-  ),
+            if (provider.inventory != null)
+              InventorySummaryCard(inventory: provider.inventory!),
 
-  const SizedBox(height: 30),
+            const SizedBox(height: 30),
 
-BestSellingProducts(
-  products:  provider.bestSellingProducts,
-),
+            BestSellingProducts(products: provider.bestSellingProducts),
 
-const SizedBox(height: 30),
+            const SizedBox(height: 30),
 
-LowStockAlerts(
-  products: provider.lowStockProducts,
-),
-        ],
+            LowStockAlerts(products: provider.lowStockProducts),
+          ],
+        ),
       ),
-    )
     );
   }
 }

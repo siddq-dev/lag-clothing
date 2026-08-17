@@ -9,17 +9,14 @@ class CheckoutPaymentMethodModel {
     required this.icon,
   });
 }
+
 const checkoutPaymentMethods = [
   CheckoutPaymentMethodModel(
     id: "card",
     title: "Credit / Debit Card",
     icon: "credit_card",
   ),
-  CheckoutPaymentMethodModel(
-    id: "upi",
-    title: "UPI",
-    icon: "payments",
-  ),
+  CheckoutPaymentMethodModel(id: "upi", title: "UPI", icon: "payments"),
   CheckoutPaymentMethodModel(
     id: "netbanking",
     title: "Net Banking",

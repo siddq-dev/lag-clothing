@@ -6,10 +6,7 @@ import '../../../../themes/app_text_style.dart';
 import 'review_data.dart';
 
 class ReviewItem extends StatelessWidget {
-  const ReviewItem({
-    super.key,
-    required this.review,
-  });
+  const ReviewItem({super.key, required this.review});
 
   final ReviewModel review;
 
@@ -18,11 +15,7 @@ class ReviewItem extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-
-        CircleAvatar(
-          radius: 45,
-          backgroundImage: AssetImage(review.image),
-        ),
+        CircleAvatar(radius: 45, backgroundImage: AssetImage(review.image)),
 
         const SizedBox(height: 24),
 
@@ -30,11 +23,7 @@ class ReviewItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
             review.rating.toInt(),
-            (_) => const Icon(
-              Icons.star,
-              color: Colors.amber,
-              size: 22,
-            ),
+            (_) => const Icon(Icons.star, color: Colors.amber, size: 22),
           ),
         ),
 
@@ -51,10 +40,7 @@ class ReviewItem extends StatelessWidget {
 
         const SizedBox(height: 32),
 
-        Text(
-          review.name,
-          style: AppTextStyles.heading3,
-        ),
+        Text(review.name, style: AppTextStyles.heading3),
 
         const SizedBox(height: 6),
 

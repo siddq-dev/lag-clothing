@@ -5,9 +5,7 @@ import '../../../models/order_model.dart';
 import '../invoice/invoice_theme.dart';
 
 class InvoiceProductTable extends pw.StatelessWidget {
-  InvoiceProductTable({
-    required this.order,
-  });
+  InvoiceProductTable({required this.order});
 
   final OrderModel order;
 
@@ -16,21 +14,15 @@ class InvoiceProductTable extends pw.StatelessWidget {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
-
         pw.Text(
           "Ordered Items",
-          style: pw.TextStyle(
-            fontSize: 16,
-            fontWeight: pw.FontWeight.bold,
-          ),
+          style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
         ),
 
         pw.SizedBox(height: 12),
 
         pw.Table(
-          border: pw.TableBorder.all(
-            color: InvoiceTheme.border,
-          ),
+          border: pw.TableBorder.all(color: InvoiceTheme.border),
 
           columnWidths: {
             0: const pw.FlexColumnWidth(4),
@@ -42,17 +34,12 @@ class InvoiceProductTable extends pw.StatelessWidget {
           },
 
           children: [
-
             //------------------------------------------------------
             // Header
             //------------------------------------------------------
-
             pw.TableRow(
-              decoration: const pw.BoxDecoration(
-                color: PdfColors.grey300,
-              ),
+              decoration: const pw.BoxDecoration(color: PdfColors.grey300),
               children: [
-
                 _header("Product"),
 
                 _header("Size"),
@@ -64,48 +51,37 @@ class InvoiceProductTable extends pw.StatelessWidget {
                 _header("Price"),
 
                 _header("Total"),
-
               ],
             ),
 
             //------------------------------------------------------
             // Products
             //------------------------------------------------------
+            ...order.items.map((item) {
+              return pw.TableRow(
+                children: [
+                  _cell(item.productName),
 
-            ...order.items.map(
-              (item) {
-                return pw.TableRow(
-                  children: [
+                  _cell(item.size),
 
-                    _cell(item.productName),
+                  _cell(item.color),
 
-                    _cell(item.size),
+                  _cell(item.quantity.toString(), align: pw.Alignment.center),
 
-                    _cell(item.color),
+                  _cell(
+                    "₹${item.price.toStringAsFixed(2)}",
+                    align: pw.Alignment.centerRight,
+                  ),
 
-                    _cell(
-                      item.quantity.toString(),
-                      align: pw.Alignment.center,
-                    ),
-
-                    _cell(
-                      "₹${item.price.toStringAsFixed(2)}",
-                      align: pw.Alignment.centerRight,
-                    ),
-
-                    _cell(
-                      "₹${item.total.toStringAsFixed(2)}",
-                      align: pw.Alignment.centerRight,
-                    ),
-
-                  ],
-                );
-              },
-            ),
-
+                  _cell(
+                    "₹${item.total.toStringAsFixed(2)}",
+                    align: pw.Alignment.centerRight,
+                  ),
+                ],
+              );
+            }),
           ],
         ),
-
       ],
     );
   }
@@ -117,12 +93,7 @@ class InvoiceProductTable extends pw.StatelessWidget {
   pw.Widget _header(String text) {
     return pw.Padding(
       padding: const pw.EdgeInsets.all(10),
-      child: pw.Text(
-        text,
-        style: pw.TextStyle(
-          fontWeight: pw.FontWeight.bold,
-        ),
-      ),
+      child: pw.Text(text, style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
     );
   }
 
@@ -130,16 +101,11 @@ class InvoiceProductTable extends pw.StatelessWidget {
   // Body Cell
   //------------------------------------------------------
 
-  pw.Widget _cell(
-    String text, {
-    pw.Alignment align = pw.Alignment.centerLeft,
-  }) {
+  pw.Widget _cell(String text, {pw.Alignment align = pw.Alignment.centerLeft}) {
     return pw.Container(
       alignment: align,
       padding: const pw.EdgeInsets.all(10),
-      child: pw.Text(
-        text,
-      ),
+      child: pw.Text(text),
     );
   }
 }

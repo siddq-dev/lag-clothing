@@ -16,19 +16,14 @@ class TrackingStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(14),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Row(
           children: [
-
             CircleAvatar(
               radius: 34,
-              backgroundColor:
-                  AppColors.primary,
+              backgroundColor: AppColors.primary,
               child: const Icon(
                 Icons.local_shipping,
                 color: Colors.white,
@@ -40,17 +35,11 @@ class TrackingStatus extends StatelessWidget {
 
             Expanded(
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   const Text(
                     "Current Status",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight:
-                          FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
 
                   const SizedBox(height: 10),
@@ -60,8 +49,7 @@ class TrackingStatus extends StatelessWidget {
                     style: const TextStyle(
                       color: Colors.green,
                       fontSize: 18,
-                      fontWeight:
-                          FontWeight.bold,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
 
@@ -69,15 +57,11 @@ class TrackingStatus extends StatelessWidget {
 
                   Text(
                     "Expected Delivery : $expectedDate",
-                    style: const TextStyle(
-                      fontSize: 15,
-                    ),
+                    style: const TextStyle(fontSize: 15),
                   ),
-
                 ],
               ),
             ),
-
           ],
         ),
       ),

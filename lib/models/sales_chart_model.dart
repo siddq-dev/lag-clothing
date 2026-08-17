@@ -13,9 +13,7 @@ class SalesChartModel {
     required this.orders,
   });
 
-  factory SalesChartModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory SalesChartModel.fromMap(Map<String, dynamic> map) {
     return SalesChartModel(
       date: map['date'] ?? Timestamp.now(),
       revenue: (map['revenue'] ?? 0).toDouble(),
@@ -24,10 +22,6 @@ class SalesChartModel {
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      'date': date,
-      'revenue': revenue,
-      'orders': orders,
-    };
+    return {'date': date, 'revenue': revenue, 'orders': orders};
   }
 }

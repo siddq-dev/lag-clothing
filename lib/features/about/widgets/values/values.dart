@@ -10,14 +10,10 @@ class Values extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 100,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
       color: AppColors.surface,
       child: Column(
         children: [
-
           Text(
             'OUR VALUES',
             style: AppTextStyles.sectionTitle.copyWith(
@@ -46,7 +42,6 @@ class Values extends StatelessWidget {
             mainAxisSpacing: 30,
             childAspectRatio: 1.2,
             children: const [
-
               ValueCard(
                 icon: Icons.workspace_premium_outlined,
                 title: 'Premium Quality',
@@ -115,19 +110,12 @@ class ValueCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
-          Icon(
-            icon,
-            size: 42,
-            color: AppColors.primary,
-          ),
+          Icon(icon, size: 42, color: AppColors.primary),
 
           const SizedBox(height: 20),
 

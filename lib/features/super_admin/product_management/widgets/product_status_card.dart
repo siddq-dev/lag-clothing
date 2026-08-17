@@ -4,23 +4,14 @@ import '../../../../models/product_model.dart';
 class ProductStatusCard extends StatelessWidget {
   final ProductModel product;
 
-  const ProductStatusCard({
-    super.key,
-    required this.product,
-  });
+  const ProductStatusCard({super.key, required this.product});
 
-  Widget buildChip(
-    String text,
-    bool enabled,
-  ) {
+  Widget buildChip(String text, bool enabled) {
     return Chip(
-      backgroundColor:
-          enabled ? Colors.green : Colors.grey.shade300,
+      backgroundColor: enabled ? Colors.green : Colors.grey.shade300,
       label: Text(
         text,
-        style: TextStyle(
-          color: enabled ? Colors.white : Colors.black,
-        ),
+        style: TextStyle(color: enabled ? Colors.white : Colors.black),
       ),
     );
   }
@@ -35,10 +26,7 @@ class ProductStatusCard extends StatelessWidget {
           children: [
             const Text(
               "Status",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 25),
@@ -47,25 +35,13 @@ class ProductStatusCard extends StatelessWidget {
               spacing: 15,
               runSpacing: 15,
               children: [
-                buildChip(
-                  "Active",
-                  product.status,
-                ),
+                buildChip("Active", product.status),
 
-                buildChip(
-                  "Featured",
-                  product.featured,
-                ),
+                buildChip("Featured", product.featured),
 
-                buildChip(
-                  "Best Seller",
-                  product.bestSeller,
-                ),
+                buildChip("Best Seller", product.bestSeller),
 
-                buildChip(
-                  "New Arrival",
-                  product.newArrival,
-                ),
+                buildChip("New Arrival", product.newArrival),
               ],
             ),
           ],

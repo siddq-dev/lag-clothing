@@ -57,16 +57,16 @@ const List<ProductModel> featuredProducts = [
     category: 'national',
   ),
   ProductModel(
-  id: '4',
-  title: 'Away Jersey 24/25',
-  club: 'Brazil',
-  price: 1599,
-  image: 'assets/images/products/brazil_away.png',
-  rating: 4.8,
-  isFeatured: true,
-  isNew: true,
-  category: 'national',
-),
+    id: '4',
+    title: 'Away Jersey 24/25',
+    club: 'Brazil',
+    price: 1599,
+    image: 'assets/images/products/brazil_away.png',
+    rating: 4.8,
+    isFeatured: true,
+    isNew: true,
+    category: 'national',
+  ),
 ];
 
 const List<ProductModel> newArrivalProducts = [
@@ -120,7 +120,6 @@ const List<ProductModel> newArrivalProducts = [
 ];
 
 const List<ProductModel> shopProducts = [
-
   ProductModel(
     id: '1',
     title: 'Home Jersey 24/25',

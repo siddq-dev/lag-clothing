@@ -23,14 +23,10 @@ class ShippingPolicyPage extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 80,
-              vertical: 60,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 60),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
-
                 LegalSection(
                   heading: "Processing Time",
                   body:
@@ -55,29 +51,20 @@ class ShippingPolicyPage extends StatelessWidget {
                       "Once your order has been shipped, a tracking ID will be shared via email and SMS.",
                 ),
 
-                LegalSection(
-                  heading: "Shipping Highlights",
-                  body: "",
+                LegalSection(heading: "Shipping Highlights", body: ""),
+
+                LegalBullet(
+                  text: "Orders are packed securely to prevent damage.",
+                ),
+
+                LegalBullet(text: "Delivery partners vary based on location."),
+
+                LegalBullet(
+                  text: "Tracking details become available after dispatch.",
                 ),
 
                 LegalBullet(
-                  text:
-                      "Orders are packed securely to prevent damage.",
-                ),
-
-                LegalBullet(
-                  text:
-                      "Delivery partners vary based on location.",
-                ),
-
-                LegalBullet(
-                  text:
-                      "Tracking details become available after dispatch.",
-                ),
-
-                LegalBullet(
-                  text:
-                      "Customers will receive delivery notifications.",
+                  text: "Customers will receive delivery notifications.",
                 ),
               ],
             ),

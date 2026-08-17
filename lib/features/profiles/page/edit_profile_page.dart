@@ -13,33 +13,23 @@ class EditProfilePage extends StatelessWidget {
     return WebsiteLayout(
       currentRoute: AppRouter.profile,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 60,
-          vertical: 50,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 50),
         child: Center(
           child: SizedBox(
             width: 900,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
-
                 Text(
                   "Edit Profile",
-                  style: TextStyle(
-                    fontSize: 34,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
                 ),
 
                 SizedBox(height: 10),
 
                 Text(
                   "Update your personal information.",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
 
                 SizedBox(height: 40),

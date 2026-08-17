@@ -41,35 +41,33 @@ class AppTextStyles {
     color: AppColors.textSecondary,
   );
 
+  // ===========================
+  // Headings
+  // ===========================
 
-// ===========================
-// Headings
-// ===========================
+  static const TextStyle heading1 = TextStyle(
+    fontSize: 40,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+  );
 
-static const TextStyle heading1 = TextStyle(
-  fontSize: 40,
-  fontWeight: FontWeight.bold,
-  color: AppColors.textPrimary,
-);
+  static const TextStyle heading2 = TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+  );
 
-static const TextStyle heading2 = TextStyle(
-  fontSize: 32,
-  fontWeight: FontWeight.bold,
-  color: AppColors.textPrimary,
-);
+  static const TextStyle heading3 = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
 
-static const TextStyle heading3 = TextStyle(
-  fontSize: 24,
-  fontWeight: FontWeight.w600,
-  color: AppColors.textPrimary,
-);
-
-static const TextStyle heading4 = TextStyle(
-  fontSize: 20,
-  fontWeight: FontWeight.w600,
-  color: AppColors.textPrimary,
-);
-
+  static const TextStyle heading4 = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
 
   // ===========================
   // Card Text
@@ -88,35 +86,35 @@ static const TextStyle heading4 = TextStyle(
   );
 
   // ===========================
-// Body Text
-// ===========================
+  // Body Text
+  // ===========================
 
-static const TextStyle bodyLarge = TextStyle(
-  fontSize: 18,
-  fontWeight: FontWeight.w400,
-  color: AppColors.textPrimary,
-  height: 1.6,
-);
+  static const TextStyle bodyLarge = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textPrimary,
+    height: 1.6,
+  );
 
-static const TextStyle bodyMedium = TextStyle(
-  fontSize: 16,
-  fontWeight: FontWeight.w400,
-  color: AppColors.textPrimary,
-  height: 1.5,
-);
+  static const TextStyle bodyMedium = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textPrimary,
+    height: 1.5,
+  );
 
-static const TextStyle bodySmall = TextStyle(
-  fontSize: 14,
-  fontWeight: FontWeight.w400,
-  color: AppColors.textSecondary,
-  height: 1.5,
-);
+  static const TextStyle bodySmall = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textSecondary,
+    height: 1.5,
+  );
 
-static const TextStyle caption = TextStyle(
-  fontSize: 12,
-  fontWeight: FontWeight.w400,
-  color: AppColors.textSecondary,
-);
+  static const TextStyle caption = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textSecondary,
+  );
 
   // ===========================
   // Buttons

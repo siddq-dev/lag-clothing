@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../models/product_model.dart';
 
 class ProductActionMenu extends StatelessWidget {
-  const ProductActionMenu({
-    super.key,
-    required this.product,
-  });
+  const ProductActionMenu({super.key, required this.product});
 
   final ProductModel product;
 
@@ -26,18 +23,9 @@ class ProductActionMenu extends StatelessWidget {
         }
       },
       itemBuilder: (context) => const [
-        PopupMenuItem(
-          value: "view",
-          child: Text("View"),
-        ),
-        PopupMenuItem(
-          value: "edit",
-          child: Text("Edit"),
-        ),
-        PopupMenuItem(
-          value: "delete",
-          child: Text("Delete"),
-        ),
+        PopupMenuItem(value: "view", child: Text("View")),
+        PopupMenuItem(value: "edit", child: Text("Edit")),
+        PopupMenuItem(value: "delete", child: Text("Delete")),
       ],
     );
   }

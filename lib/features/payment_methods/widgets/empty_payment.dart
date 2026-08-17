@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class EmptyPayment extends StatelessWidget {
-  const EmptyPayment({
-    super.key,
-    required this.onAddCard,
-  });
+  const EmptyPayment({super.key, required this.onAddCard});
 
   final VoidCallback onAddCard;
 
@@ -12,9 +9,7 @@ class EmptyPayment extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 60,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 60),
         child: Column(
           children: [
             Icon(
@@ -27,10 +22,7 @@ class EmptyPayment extends StatelessWidget {
 
             const Text(
               "No Payment Methods",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 12),
@@ -38,10 +30,7 @@ class EmptyPayment extends StatelessWidget {
             Text(
               "You haven't added any debit or credit cards yet.\nAdd a card for faster checkout.",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                height: 1.6,
-              ),
+              style: TextStyle(color: Colors.grey.shade600, height: 1.6),
             ),
 
             const SizedBox(height: 30),
@@ -49,9 +38,7 @@ class EmptyPayment extends StatelessWidget {
             FilledButton.icon(
               onPressed: onAddCard,
               icon: const Icon(Icons.add),
-              label: const Text(
-                "Add Payment Method",
-              ),
+              label: const Text("Add Payment Method"),
             ),
           ],
         ),

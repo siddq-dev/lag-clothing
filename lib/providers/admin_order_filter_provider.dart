@@ -102,15 +102,9 @@ class AdminOrderFilterProvider extends ChangeNotifier {
       final query = _search.toLowerCase();
 
       list = list.where((order) {
-        return order.orderNumber
-                .toLowerCase()
-                .contains(query) ||
-            order.shippingAddress.fullName
-                .toLowerCase()
-                .contains(query) ||
-            order.trackingId
-                .toLowerCase()
-                .contains(query);
+        return order.orderNumber.toLowerCase().contains(query) ||
+            order.shippingAddress.fullName.toLowerCase().contains(query) ||
+            order.trackingId.toLowerCase().contains(query);
       }).toList();
     }
 
@@ -119,9 +113,7 @@ class AdminOrderFilterProvider extends ChangeNotifier {
     //--------------------------------------------------
 
     if (_status != null) {
-      list = list.where(
-        (order) => order.orderStatus == _status,
-      ).toList();
+      list = list.where((order) => order.orderStatus == _status).toList();
     }
 
     //--------------------------------------------------
@@ -129,22 +121,19 @@ class AdminOrderFilterProvider extends ChangeNotifier {
     //--------------------------------------------------
 
     if (_paymentStatus != null) {
-      list = list.where(
-        (order) =>
-            order.paymentStatus == _paymentStatus,
-      ).toList();
+      list = list
+          .where((order) => order.paymentStatus == _paymentStatus)
+          .toList();
     }
 
     //--------------------------------------------------
     // Payment Method
     //--------------------------------------------------
 
-    if (_paymentMethod != null &&
-        _paymentMethod!.isNotEmpty) {
-      list = list.where(
-        (order) =>
-            order.paymentMethod == _paymentMethod,
-      ).toList();
+    if (_paymentMethod != null && _paymentMethod!.isNotEmpty) {
+      list = list
+          .where((order) => order.paymentMethod == _paymentMethod)
+          .toList();
     }
 
     //--------------------------------------------------
@@ -154,11 +143,11 @@ class AdminOrderFilterProvider extends ChangeNotifier {
     switch (_sortBy) {
       case "Newest":
         list.sort((a, b) {
-          final aTime = a.createdAt?.toDate() ??
-              DateTime.fromMillisecondsSinceEpoch(0);
+          final aTime =
+              a.createdAt?.toDate() ?? DateTime.fromMillisecondsSinceEpoch(0);
 
-          final bTime = b.createdAt?.toDate() ??
-              DateTime.fromMillisecondsSinceEpoch(0);
+          final bTime =
+              b.createdAt?.toDate() ?? DateTime.fromMillisecondsSinceEpoch(0);
 
           return bTime.compareTo(aTime);
         });
@@ -166,26 +155,22 @@ class AdminOrderFilterProvider extends ChangeNotifier {
 
       case "Oldest":
         list.sort((a, b) {
-          final aTime = a.createdAt?.toDate() ??
-              DateTime.fromMillisecondsSinceEpoch(0);
+          final aTime =
+              a.createdAt?.toDate() ?? DateTime.fromMillisecondsSinceEpoch(0);
 
-          final bTime = b.createdAt?.toDate() ??
-              DateTime.fromMillisecondsSinceEpoch(0);
+          final bTime =
+              b.createdAt?.toDate() ?? DateTime.fromMillisecondsSinceEpoch(0);
 
           return aTime.compareTo(bTime);
         });
         break;
 
       case "Highest Amount":
-        list.sort(
-          (a, b) => b.total.compareTo(a.total),
-        );
+        list.sort((a, b) => b.total.compareTo(a.total));
         break;
 
       case "Lowest Amount":
-        list.sort(
-          (a, b) => a.total.compareTo(b.total),
-        );
+        list.sort((a, b) => a.total.compareTo(b.total));
         break;
 
       case "Pending First":
@@ -206,17 +191,13 @@ class AdminOrderFilterProvider extends ChangeNotifier {
 
       case "Delivered First":
         list.sort((a, b) {
-          if (a.orderStatus ==
-                  OrderStatus.delivered &&
-              b.orderStatus !=
-                  OrderStatus.delivered) {
+          if (a.orderStatus == OrderStatus.delivered &&
+              b.orderStatus != OrderStatus.delivered) {
             return -1;
           }
 
-          if (b.orderStatus ==
-                  OrderStatus.delivered &&
-              a.orderStatus !=
-                  OrderStatus.delivered) {
+          if (b.orderStatus == OrderStatus.delivered &&
+              a.orderStatus != OrderStatus.delivered) {
             return 1;
           }
 

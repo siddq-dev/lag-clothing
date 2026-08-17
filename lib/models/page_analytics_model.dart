@@ -14,16 +14,12 @@ class PageAnalyticsModel {
     required this.averageTime,
   });
 
-  factory PageAnalyticsModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory PageAnalyticsModel.fromMap(Map<String, dynamic> map) {
     return PageAnalyticsModel(
       page: map['page'] ?? '',
       views: map['views'] ?? 0,
-      uniqueVisitors:
-          map['uniqueVisitors'] ?? 0,
-      averageTime:
-          (map['averageTime'] ?? 0).toDouble(),
+      uniqueVisitors: map['uniqueVisitors'] ?? 0,
+      averageTime: (map['averageTime'] ?? 0).toDouble(),
     );
   }
 

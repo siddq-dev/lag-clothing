@@ -22,7 +22,6 @@ class AdminLayout extends StatelessWidget {
           //-----------------------------------
           // Sidebar
           //-----------------------------------
-
           Container(
             width: 260,
             color: const Color(0xff181818),
@@ -41,63 +40,37 @@ class AdminLayout extends StatelessWidget {
 
                 const SizedBox(height: 40),
 
-                _menuTile(
-                  Icons.dashboard,
-                  "Dashboard",
-                ),
+                _menuTile(Icons.dashboard, "Dashboard"),
 
-                _menuTile(
-                  Icons.people,
-                  "Customers",
-                ),
+                _menuTile(Icons.people, "Customers"),
 
-                _menuTile(
-                  Icons.shopping_bag,
-                  "Products",
-                ),
+                _menuTile(Icons.shopping_bag, "Products"),
 
-                _menuTile(
-                  Icons.inventory,
-                  "Inventory",
-                ),
+                _menuTile(Icons.inventory, "Inventory"),
 
-                _menuTile(
-                  Icons.receipt_long,
-                  "Orders",
-                ),
+                _menuTile(Icons.receipt_long, "Orders"),
 
-                _menuTile(
-                  Icons.analytics,
-                  "Analytics",
-                ),
+                _menuTile(Icons.analytics, "Analytics"),
 
-                _menuTile(
-                  Icons.settings,
-                  "Settings",
-                ),
+                _menuTile(Icons.settings, "Settings"),
               ],
             ),
           ),
 
-         //-----------------------------------
+          //-----------------------------------
           // Main Content
           //-----------------------------------
-
           Expanded(
             child: Column(
               children: [
                 Container(
                   height: 70,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
                   alignment: Alignment.centerLeft,
                   decoration: const BoxDecoration(
                     color: Color(0xff181818),
                     border: Border(
-                      bottom: BorderSide(
-                        color: Color(0xff2A2A2A),
-                      ),
+                      bottom: BorderSide(color: Color(0xff2A2A2A)),
                     ),
                   ),
                   child: Text(
@@ -119,21 +92,10 @@ class AdminLayout extends StatelessWidget {
     );
   }
 
-  Widget _menuTile(
-    IconData icon,
-    String title,
-  ) {
+  Widget _menuTile(IconData icon, String title) {
     return ListTile(
-      leading: Icon(
-        icon,
-        color: Colors.white,
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          color: Colors.white,
-        ),
-      ),
+      leading: Icon(icon, color: Colors.white),
+      title: Text(title, style: const TextStyle(color: Colors.white)),
       onTap: () {},
     );
   }

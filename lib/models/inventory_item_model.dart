@@ -43,10 +43,7 @@ class InventoryItemModel {
     this.updatedAt,
   });
 
-  factory InventoryItemModel.fromMap(
-    String id,
-    Map<String, dynamic> map,
-  ) {
+  factory InventoryItemModel.fromMap(String id, Map<String, dynamic> map) {
     return InventoryItemModel(
       id: id,
       name: map["name"] ?? "",

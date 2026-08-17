@@ -6,11 +6,9 @@ import '../models/customer_model.dart';
 class CustomerRepository {
   CustomerRepository._();
 
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static final FirebaseAuth _auth =
-      FirebaseAuth.instance;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   static const String _collection = 'users';
 
@@ -52,11 +50,9 @@ class CustomerRepository {
       return Stream.value(null);
     }
 
-    return _firestore
-        .collection(_collection)
-        .doc(user.uid)
-        .snapshots()
-        .map((snapshot) {
+    return _firestore.collection(_collection).doc(user.uid).snapshots().map((
+      snapshot,
+    ) {
       if (!snapshot.exists) {
         return null;
       }
@@ -79,10 +75,7 @@ class CustomerRepository {
       throw Exception("User not logged in");
     }
 
-    await _firestore
-        .collection(_collection)
-        .doc(user.uid)
-        .update({
+    await _firestore.collection(_collection).doc(user.uid).update({
       'fullName': fullName.trim(),
       'phone': phone.trim(),
     });
@@ -92,19 +85,14 @@ class CustomerRepository {
   /// Update Profile Photo
   /// -------------------------------
 
-  static Future<void> updatePhotoUrl(
-    String photoUrl,
-  ) async {
+  static Future<void> updatePhotoUrl(String photoUrl) async {
     final user = _auth.currentUser;
 
     if (user == null) {
       throw Exception("User not logged in");
     }
 
-    await _firestore
-        .collection(_collection)
-        .doc(user.uid)
-        .update({
+    await _firestore.collection(_collection).doc(user.uid).update({
       'photoUrl': photoUrl,
     });
   }
@@ -113,19 +101,14 @@ class CustomerRepository {
   /// Update Address List
   /// -------------------------------
 
-  static Future<void> updateAddresses(
-    List<dynamic> addresses,
-  ) async {
+  static Future<void> updateAddresses(List<dynamic> addresses) async {
     final user = _auth.currentUser;
 
     if (user == null) {
       throw Exception("User not logged in");
     }
 
-    await _firestore
-        .collection(_collection)
-        .doc(user.uid)
-        .update({
+    await _firestore.collection(_collection).doc(user.uid).update({
       'addresses': addresses,
     });
   }

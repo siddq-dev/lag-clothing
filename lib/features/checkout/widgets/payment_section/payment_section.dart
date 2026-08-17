@@ -4,12 +4,7 @@ import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_spacing.dart';
 import '../../../../themes/app_text_style.dart';
 
-enum PaymentMethodType {
-  upi,
-  creditCard,
-  debitCard,
-  cod,
-}
+enum PaymentMethodType { upi, creditCard, debitCard, cod }
 
 class PaymentSection extends StatefulWidget {
   const PaymentSection({super.key});
@@ -45,51 +40,30 @@ class _PaymentSectionState extends State<PaymentSection> {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Text(
-            "Payment Method",
-            style: AppTextStyles.heading2,
-          ),
+          Text("Payment Method", style: AppTextStyles.heading2),
 
           const SizedBox(height: 25),
 
-          _paymentTile(
-            "UPI",
-            PaymentMethodType.upi,
-          ),
+          _paymentTile("UPI", PaymentMethodType.upi),
 
-          _paymentTile(
-            "Credit Card",
-            PaymentMethodType.creditCard,
-          ),
+          _paymentTile("Credit Card", PaymentMethodType.creditCard),
 
-          _paymentTile(
-            "Debit Card",
-            PaymentMethodType.debitCard,
-          ),
+          _paymentTile("Debit Card", PaymentMethodType.debitCard),
 
-          _paymentTile(
-            "Cash on Delivery",
-            PaymentMethodType.cod,
-          ),
+          _paymentTile("Cash on Delivery", PaymentMethodType.cod),
 
           const SizedBox(height: 25),
 
-          if (_selected == PaymentMethodType.upi)
-            const _UpiSection(),
+          if (_selected == PaymentMethodType.upi) const _UpiSection(),
 
           if (_selected == PaymentMethodType.creditCard ||
               _selected == PaymentMethodType.debitCard)
-            _CardSection(
-              banks: banks,
-            ),
+            _CardSection(banks: banks),
 
           if (_selected == PaymentMethodType.cod)
             Container(
@@ -98,19 +72,14 @@ class _PaymentSectionState extends State<PaymentSection> {
                 color: AppColors.background,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Text(
-                "Pay when your order is delivered.",
-              ),
+              child: const Text("Pay when your order is delivered."),
             ),
         ],
       ),
     );
   }
 
-  Widget _paymentTile(
-    String title,
-    PaymentMethodType value,
-  ) {
+  Widget _paymentTile(String title, PaymentMethodType value) {
     return RadioListTile<PaymentMethodType>(
       value: value,
       groupValue: _selected,
@@ -134,18 +103,14 @@ class _UpiSection extends StatelessWidget {
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         hintText: "Enter UPI ID (example@okaxis)",
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
 }
 
 class _CardSection extends StatelessWidget {
-  const _CardSection({
-    required this.banks,
-  });
+  const _CardSection({required this.banks});
 
   final List<String> banks;
 
@@ -153,7 +118,6 @@ class _CardSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         Autocomplete<String>(
           optionsBuilder: (TextEditingValue value) {
             if (value.text.isEmpty) {
@@ -161,17 +125,10 @@ class _CardSection extends StatelessWidget {
             }
 
             return banks.where(
-              (bank) => bank
-                  .toLowerCase()
-                  .contains(value.text.toLowerCase()),
+              (bank) => bank.toLowerCase().contains(value.text.toLowerCase()),
             );
           },
-          fieldViewBuilder: (
-            context,
-            controller,
-            focusNode,
-            onSubmit,
-          ) {
+          fieldViewBuilder: (context, controller, focusNode, onSubmit) {
             return TextField(
               controller: controller,
               focusNode: focusNode,
@@ -191,9 +148,7 @@ class _CardSection extends StatelessWidget {
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             hintText: "Card Number",
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
 
@@ -213,7 +168,6 @@ class _CardSection extends StatelessWidget {
             ),
           ),
         ),
-
       ],
     );
   }

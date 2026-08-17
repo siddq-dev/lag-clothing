@@ -10,18 +10,11 @@ class PaymentHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        Text(
-          "Payment Methods",
-          style: AppTextStyles.heading2,
-        ),
+        Text("Payment Methods", style: AppTextStyles.heading2),
 
         const SizedBox(height: 10),
 
-        const Text(
-          "Manage your saved payment options.",
-        ),
-
+        const Text("Manage your saved payment options."),
       ],
     );
   }

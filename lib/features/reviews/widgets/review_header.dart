@@ -10,11 +10,7 @@ class ReviewHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        Text(
-          "Customer Reviews",
-          style: AppTextStyles.heading2,
-        ),
+        Text("Customer Reviews", style: AppTextStyles.heading2),
 
         const SizedBox(height: 12),
 
@@ -23,7 +19,6 @@ class ReviewHeader extends StatelessWidget {
           "Share your own experience to help other football fans make the right choice.",
           style: AppTextStyles.bodyMedium,
         ),
-
       ],
     );
   }

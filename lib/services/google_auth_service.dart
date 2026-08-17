@@ -6,8 +6,7 @@ class GoogleAuthService {
   GoogleAuthService._();
 
   static final FirebaseAuth _auth = FirebaseAuth.instance;
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   static Future<UserCredential?> signInWithGoogle() async {
     try {
@@ -16,12 +15,9 @@ class GoogleAuthService {
       if (kIsWeb) {
         final GoogleAuthProvider provider = GoogleAuthProvider();
 
-        provider.setCustomParameters({
-          'prompt': 'select_account',
-        });
+        provider.setCustomParameters({'prompt': 'select_account'});
 
-        userCredential =
-            await _auth.signInWithPopup(provider);
+        userCredential = await _auth.signInWithPopup(provider);
       } else {
         throw UnimplementedError(
           'Google Sign-In for Android/iOS will be added later.',
@@ -39,8 +35,7 @@ class GoogleAuthService {
   static Future<void> _createUserDocument(User? user) async {
     if (user == null) return;
 
-    final doc =
-        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    final doc = FirebaseFirestore.instance.collection('users').doc(user.uid);
 
     final snapshot = await doc.get();
 

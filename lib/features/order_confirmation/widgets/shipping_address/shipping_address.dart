@@ -15,14 +15,11 @@ class ShippingAddress extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           SizedBox(
             width: 180,
             child: Text(
@@ -37,7 +34,6 @@ class ShippingAddress extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Text(
                   "John Doe",
                   style: AppTextStyles.bodyLarge.copyWith(
@@ -47,29 +43,18 @@ class ShippingAddress extends StatelessWidget {
 
                 const SizedBox(height: 6),
 
-                Text(
-                  "123 ABC Street",
-                  style: AppTextStyles.bodyMedium,
-                ),
+                Text("123 ABC Street", style: AppTextStyles.bodyMedium),
 
                 const SizedBox(height: 4),
 
-                Text(
-                  "Chennai",
-                  style: AppTextStyles.bodyMedium,
-                ),
+                Text("Chennai", style: AppTextStyles.bodyMedium),
 
                 const SizedBox(height: 4),
 
-                Text(
-                  "Tamil Nadu - 600001",
-                  style: AppTextStyles.bodyMedium,
-                ),
-
+                Text("Tamil Nadu - 600001", style: AppTextStyles.bodyMedium),
               ],
             ),
           ),
-
         ],
       ),
     );

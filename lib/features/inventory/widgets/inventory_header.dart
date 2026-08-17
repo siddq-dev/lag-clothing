@@ -5,15 +5,9 @@ class InventoryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Row(
       children: [
-
-        const Icon(
-          Icons.inventory_2,
-          size: 34,
-          color: Colors.white,
-        ),
+        const Icon(Icons.inventory_2, size: 34, color: Colors.white),
 
         const SizedBox(width: 15),
 
@@ -33,8 +27,7 @@ class InventoryHeader extends StatelessWidget {
 
           icon: const Icon(Icons.add),
 
-          label:
-              const Text("Add Stock"),
+          label: const Text("Add Stock"),
         ),
       ],
     );

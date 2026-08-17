@@ -8,37 +8,25 @@ class AdminAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final user =
-        context.watch<AuthProvider>().currentUser;
+    final user = context.watch<AuthProvider>().currentUser;
 
     return Container(
       height: 70,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 30,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Row(
         children: [
-
           const Spacer(),
 
-          Text(
-            user?.name ?? "",
-          ),
+          Text(user?.name ?? ""),
 
           const SizedBox(width: 20),
 
           IconButton(
             onPressed: () {
-              context
-                  .read<AuthProvider>()
-                  .logout();
+              context.read<AuthProvider>().logout();
             },
-            icon: const Icon(
-              Icons.logout,
-            ),
+            icon: const Icon(Icons.logout),
           ),
-
         ],
       ),
     );

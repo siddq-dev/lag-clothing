@@ -18,13 +18,11 @@ class ContactPage extends StatelessWidget {
       currentRoute: AppRouter.contact,
       child: const Column(
         children: [
-
           ContactHero(),
           ContactForm(),
           MapSection(),
           ContactInfo(),
           SocialLinks(),
-
         ],
       ),
     );

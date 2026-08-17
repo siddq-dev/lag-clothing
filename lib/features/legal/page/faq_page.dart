@@ -20,13 +20,9 @@ class FAQPage extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 80,
-              vertical: 60,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 60),
             child: Column(
               children: const [
-
                 ExpansionTile(
                   title: Text("How long does shipping take?"),
                   children: [

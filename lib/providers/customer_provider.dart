@@ -27,8 +27,7 @@ class CustomerProvider extends ChangeNotifier {
 
       notifyListeners();
 
-      _customer =
-          await CustomerRepository.getCurrentCustomer();
+      _customer = await CustomerRepository.getCurrentCustomer();
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -57,10 +56,7 @@ class CustomerProvider extends ChangeNotifier {
 
       notifyListeners();
 
-      await CustomerRepository.updateProfile(
-        fullName: fullName,
-        phone: phone,
-      );
+      await CustomerRepository.updateProfile(fullName: fullName, phone: phone);
 
       await loadCustomer();
 
@@ -80,9 +76,7 @@ class CustomerProvider extends ChangeNotifier {
   /// -------------------------------
   /// Update Profile Photo
   /// -------------------------------
-  Future<bool> updatePhotoUrl(
-    String photoUrl,
-  ) async {
+  Future<bool> updatePhotoUrl(String photoUrl) async {
     try {
       _isLoading = true;
       _error = null;
@@ -109,9 +103,7 @@ class CustomerProvider extends ChangeNotifier {
   /// -------------------------------
   /// Update Address List
   /// -------------------------------
-  Future<bool> updateAddresses(
-    List<dynamic> addresses,
-  ) async {
+  Future<bool> updateAddresses(List<dynamic> addresses) async {
     try {
       _isLoading = true;
       _error = null;

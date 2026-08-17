@@ -15,24 +15,17 @@ class PasswordCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Text(
-            "Password",
-            style: AppTextStyles.heading3,
-          ),
+          Text("Password", style: AppTextStyles.heading3),
 
           const SizedBox(height: 20),
 
           Row(
             children: [
-
               const Icon(
                 Icons.lock_outline,
                 color: AppColors.primary,
@@ -44,12 +37,9 @@ class PasswordCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   "************",
-                  style: AppTextStyles.bodyLarge.copyWith(
-                    letterSpacing: 2,
-                  ),
+                  style: AppTextStyles.bodyLarge.copyWith(letterSpacing: 2),
                 ),
               ),
-
             ],
           ),
 
@@ -66,9 +56,7 @@ class PasswordCard extends StatelessWidget {
               label: const Text("Change Password"),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primary,
-                side: const BorderSide(
-                  color: AppColors.primary,
-                ),
+                side: const BorderSide(color: AppColors.primary),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 14,
@@ -76,7 +64,6 @@ class PasswordCard extends StatelessWidget {
               ),
             ),
           ),
-
         ],
       ),
     );

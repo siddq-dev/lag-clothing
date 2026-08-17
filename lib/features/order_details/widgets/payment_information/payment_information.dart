@@ -58,44 +58,27 @@ class PaymentInformation extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Text(
-            "Payment Information",
-            style: AppTextStyles.heading2,
-          ),
+          Text("Payment Information", style: AppTextStyles.heading2),
 
           const SizedBox(height: AppSpacing.xl),
 
-          _infoRow(
-            "Payment Method",
-            paymentMethod,
-          ),
+          _infoRow("Payment Method", paymentMethod),
 
           const SizedBox(height: 18),
 
           Row(
             children: [
-
               SizedBox(
                 width: 170,
-                child: Text(
-                  "Payment Status",
-                  style: AppTextStyles.bodyLarge,
-                ),
+                child: Text("Payment Status", style: AppTextStyles.bodyLarge),
               ),
 
-              Icon(
-                statusIcon,
-                color: statusColor,
-                size: 22,
-              ),
+              Icon(statusIcon, color: statusColor, size: 22),
 
               const SizedBox(width: 10),
 
@@ -106,54 +89,36 @@ class PaymentInformation extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-
             ],
           ),
 
           const SizedBox(height: 18),
 
-          _infoRow(
-            "Transaction ID",
-            transactionId,
-          ),
+          _infoRow("Transaction ID", transactionId),
 
           const SizedBox(height: 18),
 
-          _infoRow(
-            "Paid On",
-            paymentDate,
-          ),
-
+          _infoRow("Paid On", paymentDate),
         ],
       ),
     );
   }
 
-  Widget _infoRow(
-    String title,
-    String value,
-  ) {
+  Widget _infoRow(String title, String value) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         SizedBox(
           width: 170,
-          child: Text(
-            title,
-            style: AppTextStyles.bodyLarge,
-          ),
+          child: Text(title, style: AppTextStyles.bodyLarge),
         ),
 
         Expanded(
           child: Text(
             value,
-            style: AppTextStyles.bodyLarge.copyWith(
-              color: Colors.white,
-            ),
+            style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
           ),
         ),
-
       ],
     );
   }

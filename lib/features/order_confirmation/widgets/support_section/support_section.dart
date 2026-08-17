@@ -15,14 +15,11 @@ class SupportSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           SizedBox(
             width: 180,
             child: Text(
@@ -37,10 +34,8 @@ class SupportSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Row(
                   children: [
-
                     const Icon(
                       Icons.email_outlined,
                       color: AppColors.primary,
@@ -53,7 +48,6 @@ class SupportSection extends StatelessWidget {
                       "support@lagclothing.com",
                       style: AppTextStyles.bodyLarge,
                     ),
-
                   ],
                 ),
 
@@ -61,7 +55,6 @@ class SupportSection extends StatelessWidget {
 
                 Row(
                   children: [
-
                     const Icon(
                       Icons.phone_outlined,
                       color: AppColors.primary,
@@ -70,18 +63,12 @@ class SupportSection extends StatelessWidget {
 
                     const SizedBox(width: 8),
 
-                    Text(
-                      "+91 XXXXX XXXXX",
-                      style: AppTextStyles.bodyLarge,
-                    ),
-
+                    Text("+91 XXXXX XXXXX", style: AppTextStyles.bodyLarge),
                   ],
                 ),
-
               ],
             ),
           ),
-
         ],
       ),
     );

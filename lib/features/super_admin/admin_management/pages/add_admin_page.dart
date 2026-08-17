@@ -8,13 +8,8 @@ class AddAdminPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Create Admin"),
-      ),
-      body: const Padding(
-        padding: EdgeInsets.all(30),
-        child: AdminForm(),
-      ),
+      appBar: AppBar(title: const Text("Create Admin")),
+      body: const Padding(padding: EdgeInsets.all(30), child: AdminForm()),
     );
   }
 }

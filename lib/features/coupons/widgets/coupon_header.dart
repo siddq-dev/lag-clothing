@@ -7,16 +7,10 @@ class CouponHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        Text(
-          "Coupons & Offers",
-          style: AppTextStyles.heading2,
-        ),
+        Text("Coupons & Offers", style: AppTextStyles.heading2),
 
         const SizedBox(height: 12),
 
@@ -24,7 +18,6 @@ class CouponHeader extends StatelessWidget {
           "Save more on every purchase by applying available coupons during checkout.",
           style: AppTextStyles.bodyMedium,
         ),
-
       ],
     );
   }

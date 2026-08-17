@@ -10,24 +10,16 @@ class AnalyticsService {
   // Track Page
   //----------------------------------------------------------
 
-  static Future<void> track(
-    String page,
-  ) async {
+  static Future<void> track(String page) async {
     if (!_sessionStarted) {
-      await AnalyticsSessionService.startSession(
-        firstPage: page,
-      );
+      await AnalyticsSessionService.startSession(firstPage: page);
 
       _sessionStarted = true;
     } else {
-      await AnalyticsSessionService.updateSession(
-        currentPage: page,
-      );
+      await AnalyticsSessionService.updateSession(currentPage: page);
     }
 
-    await AnalyticsTrackingService.trackPage(
-      page,
-    );
+    await AnalyticsTrackingService.trackPage(page);
   }
 
   //----------------------------------------------------------

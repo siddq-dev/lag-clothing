@@ -52,9 +52,7 @@ class PaymentMethodModel {
     };
   }
 
-  factory PaymentMethodModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory PaymentMethodModel.fromMap(Map<String, dynamic> map) {
     return PaymentMethodModel(
       id: map['id'] ?? '',
       userId: map['userId'] ?? '',
@@ -88,8 +86,7 @@ class PaymentMethodModel {
     return PaymentMethodModel(
       id: id ?? this.id,
       userId: userId ?? this.userId,
-      cardHolderName:
-          cardHolderName ?? this.cardHolderName,
+      cardHolderName: cardHolderName ?? this.cardHolderName,
       cardNumber: cardNumber ?? this.cardNumber,
       last4Digits: last4Digits ?? this.last4Digits,
       expiryMonth: expiryMonth ?? this.expiryMonth,

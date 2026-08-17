@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 import '../../../layout/website_layout.dart';
 
 import 'widgets/admin_sidebar.dart';
@@ -16,16 +15,11 @@ class AdminDashboardPage extends StatelessWidget {
       currentRoute: "",
       child: Row(
         children: [
-
-          SizedBox(
-            width: 260,
-            child: AdminSidebar(),
-          ),
+          SizedBox(width: 260, child: AdminSidebar()),
 
           Expanded(
             child: Column(
               children: [
-
                 AdminAppBar(),
 
                 Expanded(
@@ -39,11 +33,9 @@ class AdminDashboardPage extends StatelessWidget {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
-
         ],
       ),
     );

@@ -36,9 +36,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
     final customer = provider.customer;
 
     if (customer == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (!_initialized) {
@@ -57,10 +55,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
           padding: const EdgeInsets.all(30),
           child: Column(
             children: [
-
-              ProfileImagePicker(
-                imageUrl: customer.photoUrl,
-              ),
+              ProfileImagePicker(imageUrl: customer.photoUrl),
 
               const SizedBox(height: 35),
 

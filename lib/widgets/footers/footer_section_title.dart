@@ -4,10 +4,7 @@ import '../../themes/app_colors.dart';
 import '../../themes/app_text_style.dart';
 
 class FooterSectionTitle extends StatelessWidget {
-  const FooterSectionTitle({
-    super.key,
-    required this.title,
-  });
+  const FooterSectionTitle({super.key, required this.title});
 
   final String title;
 
@@ -15,9 +12,7 @@ class FooterSectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: AppTextStyles.heading3.copyWith(
-        color: AppColors.primary,
-      ),
+      style: AppTextStyles.heading3.copyWith(color: AppColors.primary),
     );
   }
 }

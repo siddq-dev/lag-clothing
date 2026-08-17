@@ -10,14 +10,10 @@ class ContactInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 80,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 80),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Expanded(
             child: _buildItem(
               Icons.location_on_outlined,
@@ -27,11 +23,7 @@ class ContactInfo extends StatelessWidget {
           ),
 
           Expanded(
-            child: _buildItem(
-              Icons.phone_outlined,
-              'Phone',
-              '+91 98765 43210',
-            ),
+            child: _buildItem(Icons.phone_outlined, 'Phone', '+91 98765 43210'),
           ),
 
           Expanded(
@@ -54,28 +46,15 @@ class ContactInfo extends StatelessWidget {
     );
   }
 
-  Widget _buildItem(
-    IconData icon,
-    String title,
-    String value,
-  ) {
+  Widget _buildItem(IconData icon, String title, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-
-        Icon(
-          icon,
-          size: 40,
-          color: AppColors.primary,
-        ),
+        Icon(icon, size: 40, color: AppColors.primary),
 
         const SizedBox(height: 20),
 
-        Text(
-          title,
-          style: AppTextStyles.heading3,
-          textAlign: TextAlign.center,
-        ),
+        Text(title, style: AppTextStyles.heading3, textAlign: TextAlign.center),
 
         const SizedBox(height: 12),
 

@@ -5,9 +5,7 @@ import '../../../models/order_model.dart';
 import '../invoice/invoice_theme.dart';
 
 class InvoiceSummary extends pw.StatelessWidget {
-  InvoiceSummary({
-    required this.order,
-  });
+  InvoiceSummary({required this.order});
 
   final OrderModel order;
 
@@ -19,18 +17,14 @@ class InvoiceSummary extends pw.StatelessWidget {
         width: 280,
 
         decoration: pw.BoxDecoration(
-          border: pw.Border.all(
-            color: InvoiceTheme.border,
-          ),
+          border: pw.Border.all(color: InvoiceTheme.border),
         ),
 
         child: pw.Column(
           children: [
-
             //--------------------------------------------------
             // Header
             //--------------------------------------------------
-
             pw.Container(
               width: double.infinity,
 
@@ -55,35 +49,17 @@ class InvoiceSummary extends pw.StatelessWidget {
 
               child: pw.Column(
                 children: [
+                  _row("Subtotal", order.subtotal),
 
-                  _row(
-                    "Subtotal",
-                    order.subtotal,
-                  ),
+                  _row("Shipping", order.shippingCharge),
 
-                  _row(
-                    "Shipping",
-                    order.shippingCharge,
-                  ),
+                  _row("Discount", order.discount),
 
-                  _row(
-                    "Discount",
-                    order.discount,
-                  ),
-
-                  _row(
-                    "Tax",
-                    order.tax,
-                  ),
+                  _row("Tax", order.tax),
 
                   pw.Divider(),
 
-                  _row(
-                    "Grand Total",
-                    order.total,
-                    bold: true,
-                  ),
-
+                  _row("Grand Total", order.total, bold: true),
                 ],
               ),
             ),
@@ -97,42 +73,27 @@ class InvoiceSummary extends pw.StatelessWidget {
   // Row
   //--------------------------------------------------------
 
-  pw.Widget _row(
-    String title,
-    double amount, {
-    bool bold = false,
-  }) {
+  pw.Widget _row(String title, double amount, {bool bold = false}) {
     return pw.Padding(
-      padding: const pw.EdgeInsets.symmetric(
-        vertical: 5,
-      ),
+      padding: const pw.EdgeInsets.symmetric(vertical: 5),
 
       child: pw.Row(
-        mainAxisAlignment:
-            pw.MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
 
         children: [
-
           pw.Text(
             title,
             style: bold
-                ? pw.TextStyle(
-                    fontWeight:
-                        pw.FontWeight.bold,
-                  )
+                ? pw.TextStyle(fontWeight: pw.FontWeight.bold)
                 : const pw.TextStyle(),
           ),
 
           pw.Text(
             "₹${amount.toStringAsFixed(2)}",
             style: bold
-                ? pw.TextStyle(
-                    fontWeight:
-                        pw.FontWeight.bold,
-                  )
+                ? pw.TextStyle(fontWeight: pw.FontWeight.bold)
                 : const pw.TextStyle(),
           ),
-
         ],
       ),
     );

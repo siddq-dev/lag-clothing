@@ -4,10 +4,7 @@ import '../../../../../models/order_model.dart';
 import '../../../../../services/invoice_service.dart';
 
 class InvoiceButtons extends StatelessWidget {
-  const InvoiceButtons({
-    super.key,
-    required this.order,
-  });
+  const InvoiceButtons({super.key, required this.order});
 
   final OrderModel order;
 
@@ -19,51 +16,36 @@ class InvoiceButtons extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Row(
           children: [
-            const Icon(
-              Icons.receipt_long,
-              size: 28,
-            ),
+            const Icon(Icons.receipt_long, size: 28),
 
             const SizedBox(width: 12),
 
             const Expanded(
               child: Text(
                 "Invoice",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
 
             //----------------------------------------------------------
             // Download Invoice
             //----------------------------------------------------------
-
             OutlinedButton.icon(
               onPressed: () async {
                 try {
-                  await InvoiceService.downloadInvoice(
-                    order,
-                  );
+                  await InvoiceService.downloadInvoice(order);
 
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text(
-                          "Invoice downloaded successfully.",
-                        ),
+                        content: Text("Invoice downloaded successfully."),
                       ),
                     );
                   }
                 } catch (e) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          "Download failed\n$e",
-                        ),
-                      ),
+                      SnackBar(content: Text("Download failed\n$e")),
                     );
                   }
                 }
@@ -77,22 +59,15 @@ class InvoiceButtons extends StatelessWidget {
             //----------------------------------------------------------
             // Print Invoice
             //----------------------------------------------------------
-
             FilledButton.icon(
               onPressed: () async {
                 try {
-                  await InvoiceService.printInvoice(
-                    order,
-                  );
+                  await InvoiceService.printInvoice(order);
                 } catch (e) {
                   if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          "Print failed\n$e",
-                        ),
-                      ),
-                    );
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text("Print failed\n$e")));
                   }
                 }
               },

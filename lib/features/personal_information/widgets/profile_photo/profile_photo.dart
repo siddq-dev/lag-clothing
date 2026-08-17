@@ -15,24 +15,16 @@ class ProfilePhoto extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         children: [
-
           Stack(
             children: [
-
               const CircleAvatar(
                 radius: 60,
                 backgroundColor: AppColors.primary,
-                child: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                  size: 70,
-                ),
+                child: Icon(Icons.person, color: Colors.white, size: 70),
               ),
 
               Positioned(
@@ -42,10 +34,7 @@ class ProfilePhoto extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.primary,
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 2,
-                    ),
+                    border: Border.all(color: Colors.black, width: 2),
                   ),
                   child: IconButton(
                     onPressed: () {
@@ -60,16 +49,12 @@ class ProfilePhoto extends StatelessWidget {
                   ),
                 ),
               ),
-
             ],
           ),
 
           const SizedBox(height: AppSpacing.lg),
 
-          Text(
-            "Profile Photo",
-            style: AppTextStyles.heading3,
-          ),
+          Text("Profile Photo", style: AppTextStyles.heading3),
 
           const SizedBox(height: AppSpacing.md),
 
@@ -82,16 +67,10 @@ class ProfilePhoto extends StatelessWidget {
             label: const Text("Change Photo"),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.primary,
-              side: const BorderSide(
-                color: AppColors.primary,
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 22,
-                vertical: 14,
-              ),
+              side: const BorderSide(color: AppColors.primary),
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
             ),
           ),
-
         ],
       ),
     );

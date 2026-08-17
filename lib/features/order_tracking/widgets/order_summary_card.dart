@@ -24,14 +24,11 @@ class OrderSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(
           children: [
-
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
@@ -46,10 +43,8 @@ class OrderSummaryCard extends StatelessWidget {
 
             Expanded(
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Text(
                     "Order #$orderId",
                     style: const TextStyle(
@@ -60,12 +55,7 @@ class OrderSummaryCard extends StatelessWidget {
 
                   const SizedBox(height: 10),
 
-                  Text(
-                    productName,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
+                  Text(productName, style: const TextStyle(fontSize: 16)),
 
                   const SizedBox(height: 8),
 
@@ -75,29 +65,22 @@ class OrderSummaryCard extends StatelessWidget {
 
                   Text(
                     "Total : $totalAmount",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
 
                   const SizedBox(height: 5),
 
-                  Text(
-                    "Ordered : $orderDate",
-                  ),
+                  Text("Ordered : $orderDate"),
 
                   const SizedBox(height: 8),
 
                   Chip(
                     label: Text(paymentStatus),
-                    backgroundColor:
-                        Colors.green.shade100,
+                    backgroundColor: Colors.green.shade100,
                   ),
-
                 ],
               ),
             ),
-
           ],
         ),
       ),

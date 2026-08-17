@@ -3,19 +3,11 @@ import 'package:flutter/material.dart';
 class RefundProcess extends StatelessWidget {
   const RefundProcess({super.key});
 
-  Widget step(
-    String number,
-    String title,
-    String description,
-  ) {
+  Widget step(String number, String title, String description) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        CircleAvatar(
-          radius: 18,
-          child: Text(number),
-        ),
+        CircleAvatar(radius: 18, child: Text(number)),
 
         const SizedBox(width: 20),
 
@@ -25,7 +17,6 @@ class RefundProcess extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Text(
                   title,
                   style: const TextStyle(
@@ -36,18 +27,11 @@ class RefundProcess extends StatelessWidget {
 
                 const SizedBox(height: 6),
 
-                Text(
-                  description,
-                  style: const TextStyle(
-                    height: 1.6,
-                  ),
-                ),
-
+                Text(description, style: const TextStyle(height: 1.6)),
               ],
             ),
           ),
         ),
-
       ],
     );
   }
@@ -61,13 +45,9 @@ class RefundProcess extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Text(
               "Refund Process",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 25),
@@ -95,7 +75,6 @@ class RefundProcess extends StatelessWidget {
               "Refund Issued",
               "Refund will be credited to your original payment method within 5-7 business days.",
             ),
-
           ],
         ),
       ),

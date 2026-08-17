@@ -5,29 +5,22 @@ import '../../../../../models/order_model.dart';
 import '../../../../../providers/order_provider.dart';
 
 class OrderNotesCard extends StatefulWidget {
-  const OrderNotesCard({
-    super.key,
-    required this.order,
-  });
+  const OrderNotesCard({super.key, required this.order});
 
   final OrderModel order;
 
   @override
-  State<OrderNotesCard> createState() =>
-      _OrderNotesCardState();
+  State<OrderNotesCard> createState() => _OrderNotesCardState();
 }
 
-class _OrderNotesCardState
-    extends State<OrderNotesCard> {
+class _OrderNotesCardState extends State<OrderNotesCard> {
   late TextEditingController controller;
 
   @override
   void initState() {
     super.initState();
 
-    controller = TextEditingController(
-      text: widget.order.adminNotes,
-    );
+    controller = TextEditingController(text: widget.order.adminNotes);
   }
 
   @override
@@ -44,16 +37,11 @@ class _OrderNotesCardState
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Text(
               "Admin Notes",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 20),
@@ -80,13 +68,8 @@ class _OrderNotesCardState
 
                       if (!context.mounted) return;
 
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Notes Updated",
-                          ),
-                        ),
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Notes Updated")),
                       );
                     },
               icon: const Icon(Icons.save),

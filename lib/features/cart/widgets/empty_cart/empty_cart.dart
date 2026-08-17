@@ -13,21 +13,14 @@ class EmptyCart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 40,
-          vertical: 60,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 60),
         child: Container(
-          constraints: const BoxConstraints(
-            maxWidth: 550,
-          ),
+          constraints: const BoxConstraints(maxWidth: 550),
           padding: const EdgeInsets.all(40),
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: AppColors.border,
-            ),
+            border: Border.all(color: AppColors.border),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,

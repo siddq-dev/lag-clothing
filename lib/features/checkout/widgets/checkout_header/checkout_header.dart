@@ -11,17 +11,11 @@ class CheckoutHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Checkout",
-          style: AppTextStyles.heading1,
-        ),
+        Text("Checkout", style: AppTextStyles.heading1),
 
         const SizedBox(height: AppSpacing.sm),
 
-        Text(
-          "Complete your order securely.",
-          style: AppTextStyles.bodyLarge,
-        ),
+        Text("Complete your order securely.", style: AppTextStyles.bodyLarge),
       ],
     );
   }

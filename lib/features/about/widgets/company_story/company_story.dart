@@ -10,14 +10,10 @@ class CompanyStory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 100,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-
           /// LEFT SIDE
           Expanded(
             flex: 6,
@@ -26,9 +22,7 @@ class CompanyStory extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(
-                  color: AppColors.border,
-                ),
+                border: Border.all(color: AppColors.border),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(24),
@@ -48,7 +42,6 @@ class CompanyStory extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Text(
                   'ABOUT LAG CLOTHING',
                   style: AppTextStyles.sectionTitle.copyWith(

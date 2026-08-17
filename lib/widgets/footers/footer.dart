@@ -38,29 +38,19 @@ class _DesktopFooter extends StatelessWidget {
     return const Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        Expanded(
-          flex: 2,
-          child: FooterBrand(),
-        ),
+        Expanded(flex: 2, child: FooterBrand()),
 
         SizedBox(width: AppSpacing.xxl),
 
-        Expanded(
-          child: FooterLinks(),
-        ),
+        Expanded(child: FooterLinks()),
 
         SizedBox(width: AppSpacing.xxl),
 
-        Expanded(
-          child: FooterCustomerSupport(),
-        ),
+        Expanded(child: FooterCustomerSupport()),
 
         SizedBox(width: AppSpacing.xxl),
 
-        Expanded(
-          child: FooterCompany(),
-        ),
+        Expanded(child: FooterCompany()),
       ],
     );
   }
@@ -74,29 +64,19 @@ class _TabletFooter extends StatelessWidget {
     return const Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        Expanded(
-          flex: 2,
-          child: FooterBrand(),
-        ),
+        Expanded(flex: 2, child: FooterBrand()),
 
         SizedBox(width: AppSpacing.lg),
 
-        Expanded(
-          child: FooterLinks(),
-        ),
+        Expanded(child: FooterLinks()),
 
         SizedBox(width: AppSpacing.lg),
 
-        Expanded(
-          child: FooterCustomerSupport(),
-        ),
+        Expanded(child: FooterCustomerSupport()),
 
         SizedBox(width: AppSpacing.lg),
 
-        Expanded(
-          child: FooterCompany(),
-        ),
+        Expanded(child: FooterCompany()),
       ],
     );
   }
@@ -110,7 +90,6 @@ class _MobileFooter extends StatelessWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         FooterBrand(),
 
         SizedBox(height: AppSpacing.xl),
@@ -124,7 +103,6 @@ class _MobileFooter extends StatelessWidget {
         SizedBox(height: AppSpacing.xl),
 
         FooterCompany(),
-
       ],
     );
   }

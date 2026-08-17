@@ -4,10 +4,7 @@ import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
 
 class LegalBullet extends StatelessWidget {
-  const LegalBullet({
-    super.key,
-    required this.text,
-  });
+  const LegalBullet({super.key, required this.text});
 
   final String text;
 
@@ -18,14 +15,9 @@ class LegalBullet extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           const Padding(
             padding: EdgeInsets.only(top: 6),
-            child: Icon(
-              Icons.circle,
-              size: 8,
-              color: AppColors.primary,
-            ),
+            child: Icon(Icons.circle, size: 8, color: AppColors.primary),
           ),
 
           const SizedBox(width: 12),
@@ -33,9 +25,7 @@ class LegalBullet extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: AppTextStyles.bodyMedium.copyWith(
-                height: 1.8,
-              ),
+              style: AppTextStyles.bodyMedium.copyWith(height: 1.8),
             ),
           ),
         ],

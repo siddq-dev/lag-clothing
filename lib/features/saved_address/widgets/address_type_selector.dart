@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AddressType {
-  home,
-  office,
-  other,
-}
+enum AddressType { home, office, other }
 
 class AddressTypeSelector extends StatelessWidget {
   const AddressTypeSelector({
@@ -23,10 +19,7 @@ class AddressTypeSelector extends StatelessWidget {
       children: [
         const Text(
           "Address Type",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
 
         const SizedBox(height: 12),

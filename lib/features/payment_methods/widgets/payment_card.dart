@@ -22,14 +22,11 @@ class PaymentCard extends StatelessWidget {
     return Card(
       elevation: 1,
       margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(22),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -51,8 +48,7 @@ class PaymentCard extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: Colors.green.shade100,
-                      borderRadius:
-                          BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Text(
                       "DEFAULT",
@@ -81,18 +77,14 @@ class PaymentCard extends StatelessWidget {
 
             Text(
               paymentMethod.cardHolderName,
-              style: const TextStyle(
-                fontSize: 16,
-              ),
+              style: const TextStyle(fontSize: 16),
             ),
 
             const SizedBox(height: 6),
 
             Text(
               "Expires ${paymentMethod.expiryMonth}/${paymentMethod.expiryYear}",
-              style: TextStyle(
-                color: Colors.grey.shade600,
-              ),
+              style: TextStyle(color: Colors.grey.shade600),
             ),
 
             const SizedBox(height: 24),
@@ -118,8 +110,7 @@ class PaymentCard extends StatelessWidget {
                 if (!paymentMethod.isDefault)
                   FilledButton(
                     onPressed: onSetDefault,
-                    child:
-                        const Text("Set Default"),
+                    child: const Text("Set Default"),
                   ),
               ],
             ),

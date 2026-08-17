@@ -11,9 +11,7 @@ class ShopHero extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 320,
-      decoration: const BoxDecoration(
-        color: AppColors.background,
-      ),
+      decoration: const BoxDecoration(color: AppColors.background),
       child: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -31,9 +29,7 @@ class ShopHero extends StatelessWidget {
               const SizedBox(height: 20),
 
               ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: 700,
-                ),
+                constraints: const BoxConstraints(maxWidth: 700),
                 child: const Text(
                   "Explore premium football jerseys from clubs and national teams around the world.",
                   textAlign: TextAlign.center,

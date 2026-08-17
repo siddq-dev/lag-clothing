@@ -49,9 +49,7 @@ class AdminPermissionModel {
     );
   }
 
-  factory AdminPermissionModel.fromMap(
-    Map<String, dynamic>? map,
-  ) {
+  factory AdminPermissionModel.fromMap(Map<String, dynamic>? map) {
     if (map == null) {
       return const AdminPermissionModel();
     }

@@ -7,26 +7,19 @@ import 'package:flutter/foundation.dart';
 class AnalyticsTrackingService {
   AnalyticsTrackingService._();
 
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static final FirebaseAuth _auth =
-      FirebaseAuth.instance;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //----------------------------------------------------------
   // Track Page Visit
   //----------------------------------------------------------
 
-  static Future<void> trackPage(
-    String page,
-  ) async {
+  static Future<void> trackPage(String page) async {
     try {
-      final uid =
-          _auth.currentUser?.uid ?? "guest";
+      final uid = _auth.currentUser?.uid ?? "guest";
 
-      await _firestore
-          .collection("page_visits")
-          .add({
+      await _firestore.collection("page_visits").add({
         "page": page,
 
         "userId": uid,
@@ -44,9 +37,7 @@ class AnalyticsTrackingService {
         "timestamp": Timestamp.now(),
       });
     } catch (e) {
-      debugPrint(
-        "Analytics Error : $e",
-      );
+      debugPrint("Analytics Error : $e");
     }
   }
 

@@ -10,27 +10,18 @@ class CallToAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 100,
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 80,
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 80),
       decoration: BoxDecoration(
         color: AppColors.primary,
         borderRadius: BorderRadius.circular(30),
       ),
       child: Column(
         children: [
-
           Text(
             'Ready to Wear Your Passion?',
             textAlign: TextAlign.center,
-            style: AppTextStyles.heading1.copyWith(
-              color: Colors.white,
-            ),
+            style: AppTextStyles.heading1.copyWith(color: Colors.white),
           ),
 
           const SizedBox(height: 20),
@@ -57,20 +48,14 @@ class CallToAction extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               foregroundColor: AppColors.primary,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 40,
-                vertical: 20,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
               ),
             ),
             child: const Text(
               'Explore Collection',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
         ],

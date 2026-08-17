@@ -15,20 +15,14 @@ class OrderConfirmationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WebsiteLayout(
-  currentRoute: AppRouter.checkout,
-  child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 60,
-          vertical: 50,
-        ),
+      currentRoute: AppRouter.checkout,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 50),
         child: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 900,
-            ),
+            constraints: const BoxConstraints(maxWidth: 900),
             child: Column(
               children: const [
-
                 ConfirmationHeader(),
 
                 SizedBox(height: 30),
@@ -46,7 +40,6 @@ class OrderConfirmationPage extends StatelessWidget {
                 SizedBox(height: 40),
 
                 ConfirmationActions(),
-
               ],
             ),
           ),

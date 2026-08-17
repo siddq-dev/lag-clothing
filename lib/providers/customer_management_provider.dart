@@ -20,8 +20,7 @@ class CustomerManagementProvider extends ChangeNotifier {
 
   CustomerAdminModel? _selectedCustomer;
 
-  CustomerAdminModel? get selectedCustomer =>
-      _selectedCustomer;
+  CustomerAdminModel? get selectedCustomer => _selectedCustomer;
 
   //----------------------------------------------------------
   // Orders
@@ -37,8 +36,7 @@ class CustomerManagementProvider extends ChangeNotifier {
 
   OrderModel? _currentOrder;
 
-  OrderModel? get currentOrder =>
-      _currentOrder;
+  OrderModel? get currentOrder => _currentOrder;
 
   //----------------------------------------------------------
   // Loading
@@ -65,9 +63,7 @@ class CustomerManagementProvider extends ChangeNotifier {
 
     notifyListeners();
 
-    CustomerManagementRepository
-        .streamCustomers()
-        .listen(
+    CustomerManagementRepository.streamCustomers().listen(
       (customers) {
         _customers = customers;
 
@@ -89,9 +85,7 @@ class CustomerManagementProvider extends ChangeNotifier {
   // Load Customer Details
   //----------------------------------------------------------
 
-  Future<void> loadCustomer(
-    CustomerAdminModel customer,
-  ) async {
+  Future<void> loadCustomer(CustomerAdminModel customer) async {
     _selectedCustomer = customer;
 
     _isLoading = true;
@@ -99,15 +93,11 @@ class CustomerManagementProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _orders =
-          await CustomerManagementRepository
-              .getCustomerOrders(
+      _orders = await CustomerManagementRepository.getCustomerOrders(
         customer.uid,
       );
 
-      _currentOrder =
-          await CustomerManagementRepository
-              .getCurrentOrder(
+      _currentOrder = await CustomerManagementRepository.getCurrentOrder(
         customer.uid,
       );
     } catch (e) {
@@ -133,9 +123,7 @@ class CustomerManagementProvider extends ChangeNotifier {
   // Search Customers
   //----------------------------------------------------------
 
-  List<CustomerAdminModel> searchCustomers(
-    String keyword,
-  ) {
+  List<CustomerAdminModel> searchCustomers(String keyword) {
     if (keyword.isEmpty) {
       return _customers;
     }
@@ -143,35 +131,26 @@ class CustomerManagementProvider extends ChangeNotifier {
     final lower = keyword.toLowerCase();
 
     return _customers.where((customer) {
-      return customer.fullName
-              .toLowerCase()
-              .contains(lower) ||
-          customer.email
-              .toLowerCase()
-              .contains(lower) ||
+      return customer.fullName.toLowerCase().contains(lower) ||
+          customer.email.toLowerCase().contains(lower) ||
           customer.phone.contains(lower);
     }).toList();
-
-
-    
   }
-//----------------------------------------------------------
-// Statistics
-//----------------------------------------------------------
+  //----------------------------------------------------------
+  // Statistics
+  //----------------------------------------------------------
 
-double get totalSpend =>
-    _selectedCustomer?.totalSpent ?? 0;
+  double get totalSpend => _selectedCustomer?.totalSpent ?? 0;
 
-double get averageOrderValue {
-  if (_orders.isEmpty) return 0;
+  double get averageOrderValue {
+    if (_orders.isEmpty) return 0;
 
-  return totalSpend / _orders.length;
-}
+    return totalSpend / _orders.length;
+  }
 
-DateTime? get lastOrder {
-  if (_orders.isEmpty) return null;
+  DateTime? get lastOrder {
+    if (_orders.isEmpty) return null;
 
-  return _orders.first.createdAt?.toDate();
-}
-
+    return _orders.first.createdAt?.toDate();
+  }
 }

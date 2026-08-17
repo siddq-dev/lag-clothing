@@ -11,29 +11,21 @@ class CartHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        vertical: AppSpacing.xxl,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xxl),
       child: Column(
         children: [
-
           Text(
             "Shopping Cart",
-            style: AppTextStyles.heading1.copyWith(
-              color: AppColors.primary,
-            ),
+            style: AppTextStyles.heading1.copyWith(color: AppColors.primary),
           ),
 
           const SizedBox(height: 12),
 
           Text(
             "Review your selected jerseys before proceeding to checkout.",
-            style: AppTextStyles.bodyLarge.copyWith(
-              color: Colors.grey,
-            ),
+            style: AppTextStyles.bodyLarge.copyWith(color: Colors.grey),
             textAlign: TextAlign.center,
           ),
-
         ],
       ),
     );

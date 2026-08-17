@@ -5,27 +5,30 @@ import 'breakpoints.dart';
 class ScreenSize {
   ScreenSize._();
 
-  static bool isMobile(BuildContext context) {
-    return MediaQuery.of(context).size.width < Breakpoints.mobile;
-  }
-
-  static bool isTablet(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
-    return width >= Breakpoints.mobile &&
-        width < Breakpoints.tablet;
-  }
-
-  static bool isDesktop(BuildContext context) {
-    return MediaQuery.of(context).size.width >=
-        Breakpoints.tablet;
-  }
-
   static double width(BuildContext context) {
-    return MediaQuery.of(context).size.width;
+    return MediaQuery.sizeOf(context).width;
   }
 
   static double height(BuildContext context) {
-    return MediaQuery.of(context).size.height;
+    return MediaQuery.sizeOf(context).height;
+  }
+
+  static bool isSmallMobile(BuildContext context) {
+    return width(context) < Breakpoints.smallMobile;
+  }
+
+  static bool isMobile(BuildContext context) {
+    return width(context) < Breakpoints.mobile;
+  }
+
+  static bool isTablet(BuildContext context) {
+    final screenWidth = width(context);
+
+    return screenWidth >= Breakpoints.mobile &&
+        screenWidth < Breakpoints.tablet;
+  }
+
+  static bool isDesktop(BuildContext context) {
+    return width(context) >= Breakpoints.tablet;
   }
 }

@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../models/order_model.dart';
 
 class OrderTimeline extends StatelessWidget {
-  const OrderTimeline({
-    super.key,
-    required this.order,
-  });
+  const OrderTimeline({super.key, required this.order});
 
   final OrderModel order;
 
@@ -27,114 +24,89 @@ class OrderTimeline extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               "Order Timeline",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 20),
 
-            ...List.generate(
-              statuses.length,
-              (index) {
-                final completed =
-                    index <= currentIndex;
+            ...List.generate(statuses.length, (index) {
+              final completed = index <= currentIndex;
 
-                final isLast =
-                    index == statuses.length - 1;
+              final isLast = index == statuses.length - 1;
 
-                return Row(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                  children: [
-
-                    Column(
-                      children: [
-
-                        CircleAvatar(
-                          radius: 14,
-                          backgroundColor:
-                              completed
-                                  ? Colors.green
-                                  : Colors.grey.shade400,
-                          child: Icon(
-                            completed
-                                ? Icons.check
-                                : Icons.circle,
-                            size: 14,
-                            color: Colors.white,
-                          ),
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 14,
+                        backgroundColor: completed
+                            ? Colors.green
+                            : Colors.grey.shade400,
+                        child: Icon(
+                          completed ? Icons.check : Icons.circle,
+                          size: 14,
+                          color: Colors.white,
                         ),
+                      ),
 
-                        if (!isLast)
-                          Container(
-                            width: 2,
-                            height: 45,
-                            color: completed
-                                ? Colors.green
-                                : Colors.grey.shade300,
-                          ),
-                      ],
-                    ),
-
-                    const SizedBox(width: 16),
-
-                    Expanded(
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(
-                          top: 4,
+                      if (!isLast)
+                        Container(
+                          width: 2,
+                          height: 45,
+                          color: completed
+                              ? Colors.green
+                              : Colors.grey.shade300,
                         ),
-                        child: Text(
-                          statuses[index],
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight:
-                                completed
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
-                            color: completed
-                                ? Colors.green
-                                : Colors.grey,
-                          ),
+                    ],
+                  ),
+
+                  const SizedBox(width: 16),
+
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        statuses[index],
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: completed
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          color: completed ? Colors.green : Colors.grey,
                         ),
                       ),
                     ),
-                  ],
-                );
-              },
-            ),
+                  ),
+                ],
+              );
+            }),
 
-            if (order.orderStatus ==
-                OrderStatus.cancelled)
+            if (order.orderStatus == OrderStatus.cancelled)
               const Padding(
                 padding: EdgeInsets.only(top: 12),
                 child: Text(
                   "Order Cancelled",
                   style: TextStyle(
                     color: Colors.red,
-                    fontWeight:
-                        FontWeight.bold,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
 
-            if (order.orderStatus ==
-                OrderStatus.returned)
+            if (order.orderStatus == OrderStatus.returned)
               const Padding(
                 padding: EdgeInsets.only(top: 12),
                 child: Text(
                   "Order Returned",
                   style: TextStyle(
                     color: Colors.deepOrange,
-                    fontWeight:
-                        FontWeight.bold,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),

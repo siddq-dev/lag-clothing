@@ -10,18 +10,11 @@ class NotificationHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        Text(
-          "Notifications",
-          style: AppTextStyles.heading2,
-        ),
+        Text("Notifications", style: AppTextStyles.heading2),
 
         const SizedBox(height: 10),
 
-        const Text(
-          "Stay updated with your orders, offers and new arrivals.",
-        ),
-
+        const Text("Stay updated with your orders, offers and new arrivals."),
       ],
     );
   }

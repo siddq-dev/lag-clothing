@@ -9,8 +9,7 @@ class PaymentMethodProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _error;
 
-  List<PaymentMethodModel> get paymentMethods =>
-      _paymentMethods;
+  List<PaymentMethodModel> get paymentMethods => _paymentMethods;
 
   bool get isLoading => _isLoading;
 
@@ -18,9 +17,7 @@ class PaymentMethodProvider extends ChangeNotifier {
 
   PaymentMethodModel? get defaultPaymentMethod {
     try {
-      return _paymentMethods.firstWhere(
-        (card) => card.isDefault,
-      );
+      return _paymentMethods.firstWhere((card) => card.isDefault);
     } catch (_) {
       return null;
     }
@@ -37,9 +34,7 @@ class PaymentMethodProvider extends ChangeNotifier {
 
       notifyListeners();
 
-      _paymentMethods =
-          await PaymentMethodRepository
-              .getPaymentMethods();
+      _paymentMethods = await PaymentMethodRepository.getPaymentMethods();
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -53,30 +48,23 @@ class PaymentMethodProvider extends ChangeNotifier {
   // ==========================================
 
   void listenPaymentMethods() {
-    PaymentMethodRepository
-        .streamPaymentMethods()
-        .listen(
-      (cards) {
-        _paymentMethods = cards;
-        notifyListeners();
-      },
-    );
+    PaymentMethodRepository.streamPaymentMethods().listen((cards) {
+      _paymentMethods = cards;
+      notifyListeners();
+    });
   }
 
   // ==========================================
   // Add Card
   // ==========================================
 
-  Future<void> addPaymentMethod(
-    PaymentMethodModel card,
-  ) async {
+  Future<void> addPaymentMethod(PaymentMethodModel card) async {
     try {
       _isLoading = true;
 
       notifyListeners();
 
-      await PaymentMethodRepository
-          .addPaymentMethod(card);
+      await PaymentMethodRepository.addPaymentMethod(card);
 
       await loadPaymentMethods();
     } catch (e) {
@@ -92,16 +80,13 @@ class PaymentMethodProvider extends ChangeNotifier {
   // Update Card
   // ==========================================
 
-  Future<void> updatePaymentMethod(
-    PaymentMethodModel card,
-  ) async {
+  Future<void> updatePaymentMethod(PaymentMethodModel card) async {
     try {
       _isLoading = true;
 
       notifyListeners();
 
-      await PaymentMethodRepository
-          .updatePaymentMethod(card);
+      await PaymentMethodRepository.updatePaymentMethod(card);
 
       await loadPaymentMethods();
     } catch (e) {
@@ -117,16 +102,13 @@ class PaymentMethodProvider extends ChangeNotifier {
   // Delete Card
   // ==========================================
 
-  Future<void> deletePaymentMethod(
-    String id,
-  ) async {
+  Future<void> deletePaymentMethod(String id) async {
     try {
       _isLoading = true;
 
       notifyListeners();
 
-      await PaymentMethodRepository
-          .deletePaymentMethod(id);
+      await PaymentMethodRepository.deletePaymentMethod(id);
 
       await loadPaymentMethods();
     } catch (e) {
@@ -142,16 +124,13 @@ class PaymentMethodProvider extends ChangeNotifier {
   // Set Default Card
   // ==========================================
 
-  Future<void> setDefaultPaymentMethod(
-    String id,
-  ) async {
+  Future<void> setDefaultPaymentMethod(String id) async {
     try {
       _isLoading = true;
 
       notifyListeners();
 
-      await PaymentMethodRepository
-          .setDefaultPaymentMethod(id);
+      await PaymentMethodRepository.setDefaultPaymentMethod(id);
 
       await loadPaymentMethods();
     } catch (e) {

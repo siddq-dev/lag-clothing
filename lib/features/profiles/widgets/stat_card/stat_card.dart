@@ -24,27 +24,18 @@ class StatCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.border,
-          ),
+          border: Border.all(color: AppColors.border),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
-            Icon(
-              icon,
-              size: 30,
-              color: AppColors.primary,
-            ),
+            Icon(icon, size: 30, color: AppColors.primary),
 
             const SizedBox(height: 12),
 
             Text(
               count,
-              style: AppTextStyles.heading2.copyWith(
-                color: Colors.white,
-              ),
+              style: AppTextStyles.heading2.copyWith(color: Colors.white),
             ),
 
             const SizedBox(height: 6),
@@ -55,7 +46,6 @@ class StatCard extends StatelessWidget {
                 color: Colors.grey.shade400,
               ),
             ),
-
           ],
         ),
       ),

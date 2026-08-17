@@ -5,10 +5,7 @@ import '../../../../models/order_model.dart';
 import 'order_items_table.dart';
 
 class CurrentOrderCard extends StatelessWidget {
-  const CurrentOrderCard({
-    super.key,
-    required this.order,
-  });
+  const CurrentOrderCard({super.key, required this.order});
 
   final OrderModel order;
 
@@ -16,21 +13,15 @@ class CurrentOrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       child: Padding(
         padding: const EdgeInsets.all(30),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               "Current Order",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 25),
@@ -39,41 +30,20 @@ class CurrentOrderCard extends StatelessWidget {
               spacing: 40,
               runSpacing: 20,
               children: [
-
-                _tile(
-                  "Order Number",
-                  order.orderNumber,
-                ),
+                _tile("Order Number", order.orderNumber),
 
                 _tile(
                   "Ordered Date",
-                  order.createdAt
-                          ?.toDate()
-                          .toString()
-                          .split(" ")
-                          .first ??
-                      "-",
+                  order.createdAt?.toDate().toString().split(" ").first ?? "-",
                 ),
 
-                _tile(
-                  "Status",
-                  order.orderStatus.name,
-                ),
+                _tile("Status", order.orderStatus.name),
 
-                _tile(
-                  "Payment",
-                  order.paymentMethod,
-                ),
+                _tile("Payment", order.paymentMethod),
 
-                _tile(
-                  "Payment Status",
-                  order.paymentStatus.name,
-                ),
+                _tile("Payment Status", order.paymentStatus.name),
 
-                _tile(
-                  "Tracking ID",
-                  order.trackingId,
-                ),
+                _tile("Tracking ID", order.trackingId),
               ],
             ),
 
@@ -85,10 +55,7 @@ class CurrentOrderCard extends StatelessWidget {
 
             const Text(
               "Shipping Address",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
 
             const SizedBox(height: 10),
@@ -104,9 +71,7 @@ class CurrentOrderCard extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-            OrderItemsTable(
-              items: order.items,
-            ),
+            OrderItemsTable(items: order.items),
 
             const SizedBox(height: 30),
 
@@ -126,31 +91,17 @@ class CurrentOrderCard extends StatelessWidget {
     );
   }
 
-  Widget _tile(
-    String title,
-    String value,
-  ) {
+  Widget _tile(String title, String value) {
     return SizedBox(
       width: 220,
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.grey,
-            ),
-          ),
+          Text(title, style: const TextStyle(color: Colors.grey)),
 
           const SizedBox(height: 5),
 
-          Text(
-            value,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
     );

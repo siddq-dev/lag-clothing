@@ -3,21 +3,10 @@ import 'package:flutter/material.dart';
 class ExchangePolicy extends StatelessWidget {
   const ExchangePolicy({super.key});
 
-  Widget item(
-    IconData icon,
-    String title,
-    String subtitle,
-  ) {
+  Widget item(IconData icon, String title, String subtitle) {
     return ListTile(
-      leading: CircleAvatar(
-        child: Icon(icon),
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      leading: CircleAvatar(child: Icon(icon)),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
       subtitle: Padding(
         padding: const EdgeInsets.only(top: 6),
         child: Text(subtitle),
@@ -30,21 +19,15 @@ class ExchangePolicy extends StatelessWidget {
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 20,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 "Exchange Policy",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
             ),
 
@@ -73,7 +56,6 @@ class ExchangePolicy extends StatelessWidget {
               "Fast Processing",
               "Exchange requests are processed within 2 business days.",
             ),
-
           ],
         ),
       ),

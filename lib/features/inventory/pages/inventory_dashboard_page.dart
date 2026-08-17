@@ -13,62 +13,44 @@ class InventoryDashboardPage extends StatefulWidget {
   const InventoryDashboardPage({super.key});
 
   @override
-  State<InventoryDashboardPage> createState() =>
-      _InventoryDashboardPageState();
+  State<InventoryDashboardPage> createState() => _InventoryDashboardPageState();
 }
 
-class _InventoryDashboardPageState
-    extends State<InventoryDashboardPage> {
-
-  final TextEditingController _searchController =
-      TextEditingController();
+class _InventoryDashboardPageState extends State<InventoryDashboardPage> {
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
     Future.microtask(() {
-      context
-          .read<InventoryProvider>()
-          .loadInventory();
+      context.read<InventoryProvider>().loadInventory();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    final provider =
-        context.watch<InventoryProvider>();
+    final provider = context.watch<InventoryProvider>();
 
     return Scaffold(
       backgroundColor: const Color(0xFF111111),
 
       body: provider.isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding:
-                  const EdgeInsets.all(30),
+              padding: const EdgeInsets.all(30),
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   const InventoryHeader(),
 
                   const SizedBox(height: 30),
 
-                  InventorySummaryCards(
-                    provider: provider,
-                  ),
+                  InventorySummaryCards(provider: provider),
 
                   const SizedBox(height: 30),
 
-                  InventorySearchBar(
-                    controller:
-                        _searchController,
-                  ),
+                  InventorySearchBar(controller: _searchController),
 
                   const SizedBox(height: 20),
 
@@ -77,10 +59,7 @@ class _InventoryDashboardPageState
                   const SizedBox(height: 30),
 
                   InventoryTable(
-                    products:
-                        provider.search(
-                      _searchController.text,
-                    ),
+                    products: provider.search(_searchController.text),
                   ),
                 ],
               ),

@@ -10,11 +10,7 @@ class ReturnsHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        Text(
-          "Returns & Refunds",
-          style: AppTextStyles.heading2,
-        ),
+        Text("Returns & Refunds", style: AppTextStyles.heading2),
 
         const SizedBox(height: 12),
 
@@ -24,7 +20,6 @@ class ReturnsHeader extends StatelessWidget {
           "Review the policies below before submitting a return request.",
           style: AppTextStyles.bodyMedium,
         ),
-
       ],
     );
   }

@@ -35,47 +35,31 @@ class OrderSummary extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Order Summary",
-            style: AppTextStyles.heading2,
-          ),
+          Text("Order Summary", style: AppTextStyles.heading2),
 
           const SizedBox(height: AppSpacing.xl),
 
-          _summaryRow(
-            "Subtotal",
-            "₹${subtotal.toStringAsFixed(2)}",
-          ),
+          _summaryRow("Subtotal", "₹${subtotal.toStringAsFixed(2)}"),
 
           const SizedBox(height: AppSpacing.md),
 
           _summaryRow(
             "Shipping",
-            shipping == 0
-                ? "FREE"
-                : "₹${shipping.toStringAsFixed(2)}",
+            shipping == 0 ? "FREE" : "₹${shipping.toStringAsFixed(2)}",
           ),
 
           const SizedBox(height: AppSpacing.md),
 
-          _summaryRow(
-            "Tax",
-            "₹${tax.toStringAsFixed(2)}",
-          ),
+          _summaryRow("Tax", "₹${tax.toStringAsFixed(2)}"),
 
           const SizedBox(height: AppSpacing.md),
 
-          _summaryRow(
-            "Discount",
-            "- ₹${discount.toStringAsFixed(2)}",
-          ),
+          _summaryRow("Discount", "- ₹${discount.toStringAsFixed(2)}"),
 
           const Divider(height: 40),
 
@@ -92,57 +76,45 @@ class OrderSummary extends StatelessWidget {
           const SizedBox(height: AppSpacing.xl),
 
           SizedBox(
-  width: double.infinity,
-  height: 55,
-  child: ElevatedButton(
-    onPressed: () async {
-      final cartProvider = context.read<CartProvider>();
+            width: double.infinity,
+            height: 55,
+            child: ElevatedButton(
+              onPressed: () async {
+                final cartProvider = context.read<CartProvider>();
 
-      final error = await CheckoutValidationService.validate(
-        cartProvider,
-      );
+                final error = await CheckoutValidationService.validate(
+                  cartProvider,
+                );
 
-      if (!context.mounted) return;
+                if (!context.mounted) return;
 
-      if (error != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(error),
+                if (error != null) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(error)));
+                  return;
+                }
+
+                context.go(AppRouter.checkout);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text("Proceed to Checkout"),
+            ),
           ),
-        );
-        return;
-      }
-
-      context.go(AppRouter.checkout);
-    },
-    style: ElevatedButton.styleFrom(
-      backgroundColor: AppColors.primary,
-      foregroundColor: Colors.white,
-    ),
-    child: const Text(
-      "Proceed to Checkout",
-    ),
-  ),
-),
-         ]
-          ),
-        
-      );
-    
+        ],
+      ),
+    );
   }
 
-  Widget _summaryRow(
-    String title,
-    String value, {
-    bool isTotal = false,
-  }) {
+  Widget _summaryRow(String title, String value, {bool isTotal = false}) {
     return Row(
       children: [
         Text(
           title,
-          style: isTotal
-              ? AppTextStyles.heading3
-              : AppTextStyles.bodyLarge,
+          style: isTotal ? AppTextStyles.heading3 : AppTextStyles.bodyLarge,
         ),
 
         const Spacer(),
@@ -150,9 +122,7 @@ class OrderSummary extends StatelessWidget {
         Text(
           value,
           style: isTotal
-              ? AppTextStyles.heading3.copyWith(
-                  color: AppColors.primary,
-                )
+              ? AppTextStyles.heading3.copyWith(color: AppColors.primary)
               : AppTextStyles.bodyLarge,
         ),
       ],

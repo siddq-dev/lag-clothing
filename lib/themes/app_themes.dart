@@ -34,9 +34,7 @@ class AppTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: const BorderSide(
-            color: AppColors.border,
-          ),
+          side: const BorderSide(color: AppColors.border),
         ),
       ),
 
@@ -45,13 +43,8 @@ class AppTheme {
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.white,
           elevation: 0,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 16,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           textStyle: AppTextStyles.button,
         ),
       ),
@@ -62,24 +55,17 @@ class AppTheme {
 
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(
-            color: AppColors.border,
-          ),
+          borderSide: const BorderSide(color: AppColors.border),
         ),
 
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(
-            color: AppColors.border,
-          ),
+          borderSide: const BorderSide(color: AppColors.border),
         ),
 
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(
-            color: AppColors.primary,
-            width: 2,
-          ),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
 
         hintStyle: AppTextStyles.caption,
@@ -87,18 +73,18 @@ class AppTheme {
 
       dividerColor: AppColors.divider,
 
-    textTheme: const TextTheme(
-  displayLarge: AppTextStyles.heroTitle,
-  displayMedium: AppTextStyles.sectionTitle,
+      textTheme: const TextTheme(
+        displayLarge: AppTextStyles.heroTitle,
+        displayMedium: AppTextStyles.sectionTitle,
 
-  titleLarge: AppTextStyles.cardTitle,
+        titleLarge: AppTextStyles.cardTitle,
 
-  bodyLarge: AppTextStyles.bodyLarge,
-  bodyMedium: AppTextStyles.bodyMedium,
-  bodySmall: AppTextStyles.bodySmall,
+        bodyLarge: AppTextStyles.bodyLarge,
+        bodyMedium: AppTextStyles.bodyMedium,
+        bodySmall: AppTextStyles.bodySmall,
 
-  labelLarge: AppTextStyles.button,
-),
+        labelLarge: AppTextStyles.button,
+      ),
     );
   }
 }

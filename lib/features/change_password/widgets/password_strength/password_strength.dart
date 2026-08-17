@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../themes/app_colors.dart';
 
 class PasswordStrength extends StatelessWidget {
-  const PasswordStrength({
-    super.key,
-    required this.password,
-  });
+  const PasswordStrength({super.key, required this.password});
 
   final String password;
 
@@ -66,10 +63,7 @@ class PasswordStrength extends StatelessWidget {
         const SizedBox(height: 6),
         Text(
           title,
-          style: TextStyle(
-            color: color,
-            fontWeight: FontWeight.w600,
-          ),
+          style: TextStyle(color: color, fontWeight: FontWeight.w600),
         ),
       ],
     );

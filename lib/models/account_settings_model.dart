@@ -26,18 +26,13 @@ class AccountSettingsModel {
     };
   }
 
-  factory AccountSettingsModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory AccountSettingsModel.fromMap(Map<String, dynamic> map) {
     return AccountSettingsModel(
-      privateAccount:
-          map['privateAccount'] ?? false,
+      privateAccount: map['privateAccount'] ?? false,
 
-      personalizedAds:
-          map['personalizedAds'] ?? true,
+      personalizedAds: map['personalizedAds'] ?? true,
 
-      biometricLogin:
-          map['biometricLogin'] ?? false,
+      biometricLogin: map['biometricLogin'] ?? false,
 
       createdAt: map['createdAt'],
       updatedAt: map['updatedAt'],
@@ -52,20 +47,15 @@ class AccountSettingsModel {
     Timestamp? updatedAt,
   }) {
     return AccountSettingsModel(
-      privateAccount:
-          privateAccount ?? this.privateAccount,
+      privateAccount: privateAccount ?? this.privateAccount,
 
-      personalizedAds:
-          personalizedAds ?? this.personalizedAds,
+      personalizedAds: personalizedAds ?? this.personalizedAds,
 
-      biometricLogin:
-          biometricLogin ?? this.biometricLogin,
+      biometricLogin: biometricLogin ?? this.biometricLogin,
 
-      createdAt:
-          createdAt ?? this.createdAt,
+      createdAt: createdAt ?? this.createdAt,
 
-      updatedAt:
-          updatedAt ?? this.updatedAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }

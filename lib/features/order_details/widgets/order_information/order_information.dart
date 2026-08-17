@@ -45,91 +45,59 @@ class OrderInformation extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Text(
-            "Order Information",
-            style: AppTextStyles.heading2,
-          ),
+          Text("Order Information", style: AppTextStyles.heading2),
 
           const SizedBox(height: AppSpacing.xl),
 
           Row(
             children: [
-
               SizedBox(
                 width: 170,
-                child: Text(
-                  "Status",
-                  style: AppTextStyles.bodyLarge,
-                ),
+                child: Text("Status", style: AppTextStyles.bodyLarge),
               ),
 
-              StatusBadge(
-                status: status,
-              ),
-
+              StatusBadge(status: status),
             ],
           ),
 
           const SizedBox(height: 18),
 
-          _infoRow(
-            "Order ID",
-            orderId,
-          ),
+          _infoRow("Order ID", orderId),
 
           const SizedBox(height: 18),
 
-          _infoRow(
-            "Order Date",
-            orderDate,
-          ),
+          _infoRow("Order Date", orderDate),
 
           const SizedBox(height: 18),
 
           _infoRow(
             deliveryTitle,
-            status.toLowerCase() == "cancelled"
-                ? "-"
-                : deliveryDate,
+            status.toLowerCase() == "cancelled" ? "-" : deliveryDate,
           ),
-
         ],
       ),
     );
   }
 
-  Widget _infoRow(
-    String title,
-    String value,
-  ) {
+  Widget _infoRow(String title, String value) {
     return Row(
       children: [
-
         SizedBox(
           width: 170,
-          child: Text(
-            title,
-            style: AppTextStyles.bodyLarge,
-          ),
+          child: Text(title, style: AppTextStyles.bodyLarge),
         ),
 
         Expanded(
           child: Text(
             value,
-            style: AppTextStyles.bodyLarge.copyWith(
-              color: Colors.white,
-            ),
+            style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
           ),
         ),
-
       ],
     );
   }

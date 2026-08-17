@@ -5,12 +5,10 @@ import '../../../../models/product_model.dart';
 class ProductFirestoreService {
   ProductFirestoreService._();
 
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static CollectionReference<Map<String, dynamic>>
-      get _collection =>
-          _firestore.collection("products");
+  static CollectionReference<Map<String, dynamic>> get _collection =>
+      _firestore.collection("products");
 
   // ==========================
   // Get All Products
@@ -22,9 +20,7 @@ class ProductFirestoreService {
         .get();
 
     return snapshot.docs
-        .map(
-          (doc) => ProductModel.fromMap(doc.data()),
-        )
+        .map((doc) => ProductModel.fromMap(doc.data()))
         .toList();
   }
 
@@ -32,33 +28,23 @@ class ProductFirestoreService {
   // Create Product
   // ==========================
 
-  static Future<void> createProduct(
-    ProductModel product,
-  ) async {
-    await _collection
-        .doc(product.id)
-        .set(product.toMap());
+  static Future<void> createProduct(ProductModel product) async {
+    await _collection.doc(product.id).set(product.toMap());
   }
 
   // ==========================
   // Update Product
   // ==========================
 
-  static Future<void> updateProduct(
-    ProductModel product,
-  ) async {
-    await _collection
-        .doc(product.id)
-        .update(product.toMap());
+  static Future<void> updateProduct(ProductModel product) async {
+    await _collection.doc(product.id).update(product.toMap());
   }
 
   // ==========================
   // Delete Product
   // ==========================
 
-  static Future<void> deleteProduct(
-    String productId,
-  ) async {
+  static Future<void> deleteProduct(String productId) async {
     await _collection.doc(productId).delete();
   }
 
@@ -66,18 +52,13 @@ class ProductFirestoreService {
   // Get Single Product
   // ==========================
 
-  static Future<ProductModel?> getProduct(
-    String id,
-  ) async {
-    final doc =
-        await _collection.doc(id).get();
+  static Future<ProductModel?> getProduct(String id) async {
+    final doc = await _collection.doc(id).get();
 
     if (!doc.exists) {
       return null;
     }
 
-    return ProductModel.fromMap(
-      doc.data()!,
-    );
+    return ProductModel.fromMap(doc.data()!);
   }
 }

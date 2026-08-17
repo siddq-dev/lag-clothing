@@ -3,50 +3,19 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/order_provider.dart';
 
-
 class CancelOrderButton extends StatelessWidget {
-
-
   final String orderId;
 
-
-  const CancelOrderButton({
-
-    super.key,
-
-    required this.orderId,
-
-  });
-
-
+  const CancelOrderButton({super.key, required this.orderId});
 
   @override
   Widget build(BuildContext context) {
-
-
     return ElevatedButton(
-
-      onPressed: (){
-
-
-        context
-            .read<OrderProvider>()
-            .cancelOrder(
-              orderId,
-            );
-
-
+      onPressed: () {
+        context.read<OrderProvider>().cancelOrder(orderId);
       },
 
-
-      child:
-      const Text(
-        "Cancel Order",
-      ),
-
+      child: const Text("Cancel Order"),
     );
-
-
   }
-
 }

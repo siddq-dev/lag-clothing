@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../themes/app_colors.dart';
 
 class UpdatePasswordButton extends StatelessWidget {
-  const UpdatePasswordButton({
-    super.key,
-    required this.onPressed,
-  });
+  const UpdatePasswordButton({super.key, required this.onPressed});
 
   final VoidCallback onPressed;
 
@@ -21,9 +18,7 @@ class UpdatePasswordButton extends StatelessWidget {
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
         ),
-        child: const Text(
-          "Update Password",
-        ),
+        child: const Text("Update Password"),
       ),
     );
   }

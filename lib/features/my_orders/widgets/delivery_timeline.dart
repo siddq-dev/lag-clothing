@@ -2,157 +2,79 @@ import 'package:flutter/material.dart';
 
 import 'tracking_step.dart';
 
-
 class DeliveryTimeline extends StatelessWidget {
-
-  const DeliveryTimeline({
-    super.key,
-  });
-
+  const DeliveryTimeline({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-
     return const Card(
-
       child: Padding(
-
-        padding:
-        EdgeInsets.all(24),
-
+        padding: EdgeInsets.all(24),
 
         child: Column(
-
-          crossAxisAlignment:
-          CrossAxisAlignment.start,
-
+          crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-
-
             Text(
-
               "Track Your Order",
 
-              style:
-
-              TextStyle(
-
-                fontSize:22,
-
-                fontWeight:
-                FontWeight.bold,
-
-              ),
-
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
-
-
-            SizedBox(
-              height:30,
-            ),
-
-
+            SizedBox(height: 30),
 
             TrackingStep(
+              title: "Order Confirmed",
 
-              title:
-              "Order Confirmed",
+              subtitle: "Your order has been confirmed",
 
-              subtitle:
-              "Your order has been confirmed",
+              completed: true,
 
-              completed:
-              true,
-
-              active:
-              false,
-
+              active: false,
             ),
-
-
 
             TrackingStep(
+              title: "Packed",
 
-              title:
-              "Packed",
+              subtitle: "Your package is ready",
 
-              subtitle:
-              "Your package is ready",
+              completed: true,
 
-              completed:
-              true,
-
-              active:
-              false,
-
+              active: false,
             ),
-
-
 
             TrackingStep(
+              title: "Shipped",
 
-              title:
-              "Shipped",
+              subtitle: "Your order is on the way",
 
-              subtitle:
-              "Your order is on the way",
+              completed: true,
 
-              completed:
-              true,
-
-              active:
-              true,
-
+              active: true,
             ),
-
-
 
             TrackingStep(
+              title: "Out for Delivery",
 
-              title:
-              "Out for Delivery",
+              subtitle: "Delivery partner is nearby",
 
-              subtitle:
-              "Delivery partner is nearby",
+              completed: false,
 
-              completed:
-              false,
-
-              active:
-              false,
-
+              active: false,
             ),
-
-
 
             TrackingStep(
+              title: "Delivered",
 
-              title:
-              "Delivered",
+              subtitle: "Order delivered successfully",
 
-              subtitle:
-              "Order delivered successfully",
+              completed: false,
 
-              completed:
-              false,
-
-              active:
-              false,
-
+              active: false,
             ),
-
-
           ],
-
         ),
-
       ),
-
     );
-
   }
-
 }

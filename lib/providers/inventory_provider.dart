@@ -6,8 +6,7 @@ import '../repositories/inventory_repository.dart';
 class InventoryProvider extends ChangeNotifier {
   List<InventoryItemModel> _products = [];
 
-  List<InventoryItemModel> get products =>
-      _products;
+  List<InventoryItemModel> get products => _products;
 
   bool _isLoading = false;
 
@@ -27,9 +26,7 @@ class InventoryProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _products =
-          await InventoryRepository
-              .getProducts();
+      _products = await InventoryRepository.getProducts();
 
       _error = null;
     } catch (e) {
@@ -53,23 +50,16 @@ class InventoryProvider extends ChangeNotifier {
   // Search
   //----------------------------------------------------------
 
-  List<InventoryItemModel> search(
-    String keyword,
-  ) {
+  List<InventoryItemModel> search(String keyword) {
     if (keyword.isEmpty) {
       return _products;
     }
 
-    final lower =
-        keyword.toLowerCase();
+    final lower = keyword.toLowerCase();
 
     return _products.where((product) {
-      return product.name
-              .toLowerCase()
-              .contains(lower) ||
-          product.sku
-              .toLowerCase()
-              .contains(lower);
+      return product.name.toLowerCase().contains(lower) ||
+          product.sku.toLowerCase().contains(lower);
     }).toList();
   }
 
@@ -77,34 +67,20 @@ class InventoryProvider extends ChangeNotifier {
   // Summary
   //----------------------------------------------------------
 
-  int get totalProducts =>
-      _products.length;
+  int get totalProducts => _products.length;
 
-  int get inStock =>
-      _products
-          .where((e) => e.stock > e.reorderLevel)
-          .length;
+  int get inStock => _products.where((e) => e.stock > e.reorderLevel).length;
 
   int get lowStock =>
-      _products
-          .where(
-            (e) =>
-                e.stock > 0 &&
-                e.stock <= e.reorderLevel,
-          )
-          .length;
+      _products.where((e) => e.stock > 0 && e.stock <= e.reorderLevel).length;
 
-  int get outOfStock =>
-      _products
-          .where((e) => e.stock == 0)
-          .length;
+  int get outOfStock => _products.where((e) => e.stock == 0).length;
 
   double get inventoryValue {
     double value = 0;
 
     for (final product in _products) {
-      value +=
-          product.price * product.stock;
+      value += product.price * product.stock;
     }
 
     return value;

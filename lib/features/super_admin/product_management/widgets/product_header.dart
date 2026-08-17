@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProductHeader extends StatelessWidget {
-  const ProductHeader({
-    super.key,
-    required this.onAddProduct,
-  });
+  const ProductHeader({super.key, required this.onAddProduct});
 
   final VoidCallback onAddProduct;
 
@@ -18,18 +15,12 @@ class ProductHeader extends StatelessWidget {
             children: [
               Text(
                 "Product Management",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 6),
               Text(
                 "Manage products, pricing, inventory, images and SEO.",
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 15,
-                ),
+                style: TextStyle(color: Colors.grey, fontSize: 15),
               ),
             ],
           ),
@@ -40,10 +31,7 @@ class ProductHeader extends StatelessWidget {
           icon: const Icon(Icons.add),
           label: const Text("Add Product"),
           style: FilledButton.styleFrom(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 22,
-              vertical: 18,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
           ),
         ),
       ],

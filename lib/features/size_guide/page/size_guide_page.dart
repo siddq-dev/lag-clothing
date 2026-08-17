@@ -20,13 +20,9 @@ class SizeGuidePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Text(
               "Jersey Size Guide",
-              style: TextStyle(
-                fontSize: 34,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 10),
@@ -50,7 +46,6 @@ class SizeGuidePage extends StatelessWidget {
             const SizedBox(height: 40),
 
             const FitInformation(),
-
           ],
         ),
       ),

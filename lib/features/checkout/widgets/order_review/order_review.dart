@@ -6,10 +6,7 @@ import '../../../../themes/app_spacing.dart';
 import '../../../../themes/app_text_style.dart';
 
 class OrderReview extends StatelessWidget {
-  const OrderReview({
-    super.key,
-    required this.cartItems,
-  });
+  const OrderReview({super.key, required this.cartItems});
 
   final List<CartProduct> cartItems;
 
@@ -35,18 +32,12 @@ class OrderReview extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Text(
-            "Order Review",
-            style: AppTextStyles.heading2,
-          ),
+          Text("Order Review", style: AppTextStyles.heading2),
 
           const SizedBox(height: 25),
 
@@ -55,44 +46,38 @@ class OrderReview extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 18),
               child: Row(
                 children: [
-
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
-  item.product.image,
-  width: 70,
-  height: 70,
-  fit: BoxFit.cover,
-  errorBuilder: (context, error, stackTrace) {
-    return Container(
-      width: 70,
-      height: 70,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade800,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: const Icon(
-        Icons.image_not_supported,
-        color: Colors.white54,
-      ),
-    );
-  },
-),
-),
+                      item.product.image,
+                      width: 70,
+                      height: 70,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          width: 70,
+                          height: 70,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade800,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(
+                            Icons.image_not_supported,
+                            color: Colors.white54,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
 
                   const SizedBox(width: 15),
 
                   Expanded(
                     child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
-                        Text(
-                          item.product.club,
-                          style: AppTextStyles.heading3,
-                        ),
+                        Text(item.product.club, style: AppTextStyles.heading3),
 
                         const SizedBox(height: 4),
 
@@ -107,7 +92,6 @@ class OrderReview extends StatelessWidget {
                           "Qty : ${item.quantity}",
                           style: AppTextStyles.bodySmall,
                         ),
-
                       ],
                     ),
                   ),
@@ -125,53 +109,33 @@ class OrderReview extends StatelessWidget {
 
           const Divider(height: 40),
 
-          _summaryRow(
-            "Items ($totalItems)",
-            "₹${subtotal.toStringAsFixed(0)}",
-          ),
+          _summaryRow("Items ($totalItems)", "₹${subtotal.toStringAsFixed(0)}"),
 
           const SizedBox(height: 12),
 
           _summaryRow(
             "Shipping",
-            shipping == 0
-                ? "FREE"
-                : "₹${shipping.toStringAsFixed(0)}",
+            shipping == 0 ? "FREE" : "₹${shipping.toStringAsFixed(0)}",
           ),
 
           const SizedBox(height: 12),
 
-          _summaryRow(
-            "Discount",
-            "- ₹${discount.toStringAsFixed(0)}",
-          ),
+          _summaryRow("Discount", "- ₹${discount.toStringAsFixed(0)}"),
 
           const Divider(height: 35),
 
-          _summaryRow(
-            "Total",
-            "₹${total.toStringAsFixed(0)}",
-            isTotal: true,
-          ),
-
+          _summaryRow("Total", "₹${total.toStringAsFixed(0)}", isTotal: true),
         ],
       ),
     );
   }
 
-  Widget _summaryRow(
-    String title,
-    String value, {
-    bool isTotal = false,
-  }) {
+  Widget _summaryRow(String title, String value, {bool isTotal = false}) {
     return Row(
       children: [
-
         Text(
           title,
-          style: isTotal
-              ? AppTextStyles.heading3
-              : AppTextStyles.bodyLarge,
+          style: isTotal ? AppTextStyles.heading3 : AppTextStyles.bodyLarge,
         ),
 
         const Spacer(),
@@ -179,12 +143,9 @@ class OrderReview extends StatelessWidget {
         Text(
           value,
           style: isTotal
-              ? AppTextStyles.heading3.copyWith(
-                  color: AppColors.primary,
-                )
+              ? AppTextStyles.heading3.copyWith(color: AppColors.primary)
               : AppTextStyles.bodyLarge,
         ),
-
       ],
     );
   }

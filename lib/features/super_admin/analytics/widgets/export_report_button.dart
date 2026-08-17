@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ExportReportButton extends StatelessWidget {
-  const ExportReportButton({
-    super.key,
-    required this.onExport,
-  });
+  const ExportReportButton({super.key, required this.onExport});
 
   final VoidCallback onExport;
 
@@ -12,12 +9,8 @@ class ExportReportButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FilledButton.icon(
       onPressed: onExport,
-      icon: const Icon(
-        Icons.download,
-      ),
-      label: const Text(
-        "Export Report",
-      ),
+      icon: const Icon(Icons.download),
+      label: const Text("Export Report"),
     );
   }
 }

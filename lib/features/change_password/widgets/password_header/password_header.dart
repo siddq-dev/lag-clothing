@@ -11,10 +11,8 @@ class PasswordHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         Row(
           children: [
-
             IconButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -29,11 +27,8 @@ class PasswordHeader extends StatelessWidget {
 
             Text(
               "CHANGE PASSWORD",
-              style: AppTextStyles.heading1.copyWith(
-                color: Colors.white,
-              ),
+              style: AppTextStyles.heading1.copyWith(color: Colors.white),
             ),
-
           ],
         ),
 
@@ -48,7 +43,6 @@ class PasswordHeader extends StatelessWidget {
             ),
           ),
         ),
-
       ],
     );
   }

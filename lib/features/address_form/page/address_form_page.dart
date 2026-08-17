@@ -9,10 +9,7 @@ import '../../../themes/app_text_style.dart';
 import '../widgets/address_form.dart';
 
 class AddressFormPage extends StatelessWidget {
-  const AddressFormPage({
-    super.key,
-    this.isEditing = false,
-  });
+  const AddressFormPage({super.key, this.isEditing = false});
 
   final bool isEditing;
 
@@ -22,23 +19,16 @@ class AddressFormPage extends StatelessWidget {
       currentRoute: AppRouter.profile,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 60,
-            vertical: 40,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 40),
           child: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 850,
-              ),
+              constraints: const BoxConstraints(maxWidth: 850),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   /// Back Button + Title
                   Row(
                     children: [
-
                       IconButton(
                         onPressed: () {
                           Navigator.pop(context);
@@ -52,14 +42,11 @@ class AddressFormPage extends StatelessWidget {
                       const SizedBox(width: 10),
 
                       Text(
-                        isEditing
-                            ? "EDIT ADDRESS"
-                            : "ADD ADDRESS",
+                        isEditing ? "EDIT ADDRESS" : "ADD ADDRESS",
                         style: AppTextStyles.heading1.copyWith(
                           color: Colors.white,
                         ),
                       ),
-
                     ],
                   ),
 
@@ -84,15 +71,10 @@ class AddressFormPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: const Color(0xFF1C1C1E),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: Colors.white12,
-                      ),
+                      border: Border.all(color: Colors.white12),
                     ),
-                    child: AddressForm(
-                      isEditing: isEditing,
-                    ),
+                    child: AddressForm(isEditing: isEditing),
                   ),
-
                 ],
               ),
             ),

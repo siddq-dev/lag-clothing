@@ -16,9 +16,7 @@ class SaveButton extends StatelessWidget {
           // Save User Information
         },
         icon: const Icon(Icons.save_outlined),
-        label: const Text(
-          "SAVE CHANGES",
-        ),
+        label: const Text("SAVE CHANGES"),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,

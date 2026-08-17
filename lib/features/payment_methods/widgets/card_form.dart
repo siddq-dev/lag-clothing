@@ -24,14 +24,10 @@ class CardForm extends StatelessWidget {
   final bool isDefault;
   final ValueChanged<bool?> onDefaultChanged;
 
-  InputDecoration decoration(
-    String label,
-  ) {
+  InputDecoration decoration(String label) {
     return InputDecoration(
       labelText: label,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
     );
   }
 
@@ -41,15 +37,11 @@ class CardForm extends StatelessWidget {
       key: formKey,
       child: Column(
         children: [
-
           TextFormField(
             controller: cardHolderController,
-            decoration: decoration(
-              "Card Holder Name *",
-            ),
+            decoration: decoration("Card Holder Name *"),
             validator: (value) {
-              if (value == null ||
-                  value.trim().isEmpty) {
+              if (value == null || value.trim().isEmpty) {
                 return "Card holder name is required";
               }
               return null;
@@ -61,17 +53,13 @@ class CardForm extends StatelessWidget {
           TextFormField(
             controller: cardNumberController,
             keyboardType: TextInputType.number,
-            decoration: decoration(
-              "Card Number *",
-            ),
+            decoration: decoration("Card Number *"),
             validator: (value) {
-              if (value == null ||
-                  value.trim().isEmpty) {
+              if (value == null || value.trim().isEmpty) {
                 return "Card number is required";
               }
 
-              final number =
-                  value.replaceAll(" ", "");
+              final number = value.replaceAll(" ", "");
 
               if (number.length != 16) {
                 return "Enter a valid 16-digit card number";
@@ -85,26 +73,19 @@ class CardForm extends StatelessWidget {
 
           Row(
             children: [
-
               Expanded(
                 child: TextFormField(
                   controller: expiryMonthController,
-                  keyboardType:
-                      TextInputType.number,
-                  decoration:
-                      decoration("Month"),
+                  keyboardType: TextInputType.number,
+                  decoration: decoration("Month"),
                   validator: (value) {
-                    if (value == null ||
-                        value.isEmpty) {
+                    if (value == null || value.isEmpty) {
                       return "Required";
                     }
 
-                    final month =
-                        int.tryParse(value);
+                    final month = int.tryParse(value);
 
-                    if (month == null ||
-                        month < 1 ||
-                        month > 12) {
+                    if (month == null || month < 1 || month > 12) {
                       return "Invalid";
                     }
 
@@ -118,13 +99,10 @@ class CardForm extends StatelessWidget {
               Expanded(
                 child: TextFormField(
                   controller: expiryYearController,
-                  keyboardType:
-                      TextInputType.number,
-                  decoration:
-                      decoration("Year"),
+                  keyboardType: TextInputType.number,
+                  decoration: decoration("Year"),
                   validator: (value) {
-                    if (value == null ||
-                        value.isEmpty) {
+                    if (value == null || value.isEmpty) {
                       return "Required";
                     }
 
@@ -138,14 +116,11 @@ class CardForm extends StatelessWidget {
               Expanded(
                 child: TextFormField(
                   controller: cvvController,
-                  keyboardType:
-                      TextInputType.number,
+                  keyboardType: TextInputType.number,
                   obscureText: true,
-                  decoration:
-                      decoration("CVV"),
+                  decoration: decoration("CVV"),
                   validator: (value) {
-                    if (value == null ||
-                        value.isEmpty) {
+                    if (value == null || value.isEmpty) {
                       return "Required";
                     }
 
@@ -166,9 +141,7 @@ class CardForm extends StatelessWidget {
             value: isDefault,
             onChanged: onDefaultChanged,
             contentPadding: EdgeInsets.zero,
-            title: const Text(
-              "Set as Default Payment Method",
-            ),
+            title: const Text("Set as Default Payment Method"),
           ),
         ],
       ),

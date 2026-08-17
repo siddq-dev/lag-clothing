@@ -10,17 +10,10 @@ class MapSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 80,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 80),
       child: Column(
         children: [
-
-          const Text(
-            'Visit Our Store',
-            style: AppTextStyles.sectionTitle,
-          ),
+          const Text('Visit Our Store', style: AppTextStyles.sectionTitle),
 
           const SizedBox(height: 16),
 
@@ -38,19 +31,13 @@ class MapSection extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.surface,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: AppColors.border,
-              ),
+              border: Border.all(color: AppColors.border),
             ),
             child: const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-
-                  Icon(
-                    Icons.location_on,
-                    size: 80,
-                  ),
+                  Icon(Icons.location_on, size: 80),
 
                   SizedBox(height: 20),
 
@@ -66,7 +53,6 @@ class MapSection extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: AppTextStyles.bodyMedium,
                   ),
-
                 ],
               ),
             ),

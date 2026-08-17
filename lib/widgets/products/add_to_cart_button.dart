@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AddToCartButton extends StatelessWidget {
-  const AddToCartButton({
-    super.key,
-    required this.onPressed,
-  });
+  const AddToCartButton({super.key, required this.onPressed});
 
   final VoidCallback onPressed;
 
@@ -14,9 +11,7 @@ class AddToCartButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: const Text(
-          'Add to Cart',
-        ),
+        child: const Text('Add to Cart'),
       ),
     );
   }

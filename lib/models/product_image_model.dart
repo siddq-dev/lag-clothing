@@ -12,16 +12,10 @@ class ProductImageModel {
   });
 
   Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'imageUrl': imageUrl,
-      'isPrimary': isPrimary,
-    };
+    return {'id': id, 'imageUrl': imageUrl, 'isPrimary': isPrimary};
   }
 
-  factory ProductImageModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory ProductImageModel.fromMap(Map<String, dynamic> map) {
     return ProductImageModel(
       id: map['id'] ?? '',
       imageUrl: map['imageUrl'] ?? '',
@@ -29,11 +23,7 @@ class ProductImageModel {
     );
   }
 
-  ProductImageModel copyWith({
-    String? id,
-    String? imageUrl,
-    bool? isPrimary,
-  }) {
+  ProductImageModel copyWith({String? id, String? imageUrl, bool? isPrimary}) {
     return ProductImageModel(
       id: id ?? this.id,
       imageUrl: imageUrl ?? this.imageUrl,

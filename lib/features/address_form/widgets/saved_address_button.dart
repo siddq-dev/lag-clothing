@@ -26,11 +26,7 @@ class SaveAddressButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        child: Text(
-          isEditing
-              ? "Update Address"
-              : "Save Address",
-        ),
+        child: Text(isEditing ? "Update Address" : "Save Address"),
       ),
     );
   }

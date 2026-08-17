@@ -24,9 +24,7 @@ class NotificationTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
-        side: BorderSide(
-          color: Colors.grey.shade300,
-        ),
+        side: BorderSide(color: Colors.grey.shade300),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(
@@ -36,40 +34,21 @@ class NotificationTile extends StatelessWidget {
 
         leading: CircleAvatar(
           radius: 24,
-          backgroundColor:
-              Theme.of(context)
-                  .colorScheme
-                  .primaryContainer,
-          child: Icon(
-            icon,
-            color: Theme.of(context)
-                .colorScheme
-                .primary,
-          ),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          child: Icon(icon, color: Theme.of(context).colorScheme.primary),
         ),
 
         title: Text(
           title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
 
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 4),
-          child: Text(
-            subtitle,
-            style: TextStyle(
-              color: Colors.grey.shade600,
-            ),
-          ),
+          child: Text(subtitle, style: TextStyle(color: Colors.grey.shade600)),
         ),
 
-        trailing: Switch(
-          value: value,
-          onChanged: onChanged,
-        ),
+        trailing: Switch(value: value, onChanged: onChanged),
       ),
     );
   }

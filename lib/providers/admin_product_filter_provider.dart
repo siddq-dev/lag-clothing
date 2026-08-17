@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../models/product_model.dart';
 
-
 class AdminProductFilterProvider extends ChangeNotifier {
   // =========================
   // Search
@@ -135,109 +134,107 @@ class AdminProductFilterProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-List<ProductModel> apply(List<ProductModel> products) {
-  List<ProductModel> list = List.from(products);
+  List<ProductModel> apply(List<ProductModel> products) {
+    List<ProductModel> list = List.from(products);
 
-  // Search
-  if (search.isNotEmpty) {
-    final query = search.toLowerCase();
+    // Search
+    if (search.isNotEmpty) {
+      final query = search.toLowerCase();
 
-    list = list.where((product) {
-    return product.name.toLowerCase().contains(query) ||
-    product.brand.toLowerCase().contains(query) ||
-    product.variants.any(
-      (variant) =>
-          variant.sku.toLowerCase().contains(query),
-    );
-    }).toList();
+      list = list.where((product) {
+        return product.name.toLowerCase().contains(query) ||
+            product.brand.toLowerCase().contains(query) ||
+            product.variants.any(
+              (variant) => variant.sku.toLowerCase().contains(query),
+            );
+      }).toList();
+    }
+
+    // Category
+    if (category != null) {
+      list = list.where((e) => e.category == category).toList();
+    }
+
+    // Brand
+    if (brand != null) {
+      list = list.where((e) => e.brand == brand).toList();
+    }
+
+    // Status
+    if (status != null) {
+      final active = status == "active";
+      list = list.where((e) => e.status == active).toList();
+    }
+
+    // Featured
+    if (featured) {
+      list = list.where((e) => e.featured).toList();
+    }
+
+    // Best Seller
+    if (bestSeller) {
+      list = list.where((e) => e.bestSeller).toList();
+    }
+
+    // New Arrival
+    if (newArrival) {
+      list = list.where((e) => e.newArrival).toList();
+    }
+
+    // Sorting
+    switch (sortBy) {
+      case "Newest":
+        list.sort((a, b) {
+          final aTime =
+              a.createdAt?.toDate() ?? DateTime.fromMillisecondsSinceEpoch(0);
+
+          final bTime =
+              b.createdAt?.toDate() ?? DateTime.fromMillisecondsSinceEpoch(0);
+
+          return bTime.compareTo(aTime);
+        });
+        break;
+
+      case "Oldest":
+        list.sort((a, b) {
+          final aTime =
+              a.createdAt?.toDate() ?? DateTime.fromMillisecondsSinceEpoch(0);
+
+          final bTime =
+              b.createdAt?.toDate() ?? DateTime.fromMillisecondsSinceEpoch(0);
+
+          return aTime.compareTo(bTime);
+        });
+        break;
+      case "Price ↑":
+        list.sort((a, b) => a.price.compareTo(b.price));
+        break;
+
+      case "Price ↓":
+        list.sort((a, b) => b.price.compareTo(a.price));
+        break;
+
+      case "Stock ↑":
+        list.sort((a, b) => a.stock.compareTo(b.stock));
+        break;
+
+      case "Stock ↓":
+        list.sort((a, b) => b.stock.compareTo(a.stock));
+        break;
+
+      case "Name A-Z":
+        list.sort((a, b) => a.name.compareTo(b.name));
+        break;
+
+      case "Name Z-A":
+        list.sort((a, b) => b.name.compareTo(a.name));
+        break;
+
+      case "Rating":
+        list.sort((a, b) => b.rating.compareTo(a.rating));
+        break;
+    }
+
+    return list;
   }
-
-  // Category
-  if (category != null) {
-    list = list.where((e) => e.category == category).toList();
-  }
-
-  // Brand
-  if (brand != null) {
-    list = list.where((e) => e.brand == brand).toList();
-  }
-
-  // Status
-  if (status != null) {
-    final active = status == "active";
-    list = list.where((e) => e.status == active).toList();
-  }
-
-  // Featured
-  if (featured) {
-    list = list.where((e) => e.featured).toList();
-  }
-
-  // Best Seller
-  if (bestSeller) {
-    list = list.where((e) => e.bestSeller).toList();
-  }
-
-  // New Arrival
-  if (newArrival) {
-    list = list.where((e) => e.newArrival).toList();
-  }
-
-  // Sorting
-  switch (sortBy) {
-    case "Newest":
-  list.sort((a, b) {
-    final aTime =
-        a.createdAt?.toDate() ?? DateTime.fromMillisecondsSinceEpoch(0);
-
-    final bTime =
-        b.createdAt?.toDate() ?? DateTime.fromMillisecondsSinceEpoch(0);
-
-    return bTime.compareTo(aTime);
-  });
-  break;
-
-case "Oldest":
-  list.sort((a, b) {
-    final aTime =
-        a.createdAt?.toDate() ?? DateTime.fromMillisecondsSinceEpoch(0);
-
-    final bTime =
-        b.createdAt?.toDate() ?? DateTime.fromMillisecondsSinceEpoch(0);
-
-    return aTime.compareTo(bTime);
-  });
-  break;
-    case "Price ↑":
-      list.sort((a, b) => a.price.compareTo(b.price));
-      break;
-
-    case "Price ↓":
-      list.sort((a, b) => b.price.compareTo(a.price));
-      break;
-
-    case "Stock ↑":
-      list.sort((a, b) => a.stock.compareTo(b.stock));
-      break;
-
-    case "Stock ↓":
-      list.sort((a, b) => b.stock.compareTo(a.stock));
-      break;
-
-    case "Name A-Z":
-      list.sort((a, b) => a.name.compareTo(b.name));
-      break;
-
-    case "Name Z-A":
-      list.sort((a, b) => b.name.compareTo(a.name));
-      break;
-
-    case "Rating":
-      list.sort((a, b) => b.rating.compareTo(a.rating));
-      break;
-  }
-
-  return list;
-}
-
 }

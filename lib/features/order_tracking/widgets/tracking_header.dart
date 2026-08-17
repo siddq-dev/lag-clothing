@@ -10,11 +10,7 @@ class TrackingHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        Text(
-          "Track Your Order",
-          style: AppTextStyles.heading2,
-        ),
+        Text("Track Your Order", style: AppTextStyles.heading2),
 
         const SizedBox(height: 12),
 
@@ -23,7 +19,6 @@ class TrackingHeader extends StatelessWidget {
           "You can monitor every step of your purchase in real time.",
           style: AppTextStyles.bodyMedium,
         ),
-
       ],
     );
   }

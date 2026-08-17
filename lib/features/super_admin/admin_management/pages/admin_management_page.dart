@@ -19,8 +19,7 @@ class AdminManagementPage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(30),
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
@@ -36,14 +35,10 @@ class AdminManagementPage extends StatelessWidget {
 
                       ElevatedButton.icon(
                         onPressed: () {
-                          context.push(
-                            AppRouter.addAdmin,
-                          );
+                          context.push(AppRouter.addAdmin);
                         },
                         icon: const Icon(Icons.add),
-                        label: const Text(
-                          "Add Admin",
-                        ),
+                        label: const Text("Add Admin"),
                       ),
                     ],
                   ),

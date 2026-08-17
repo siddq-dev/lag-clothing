@@ -24,15 +24,11 @@ class AdminProductSearchBar extends StatelessWidget {
         decoration: InputDecoration(
           hintText: "Search by Product, Brand or SKU",
 
-          prefixIcon: const Icon(
-            Icons.search,
-          ),
+          prefixIcon: const Icon(Icons.search),
 
           suffixIcon: controller.text.isNotEmpty
               ? IconButton(
-                  icon: const Icon(
-                    Icons.clear,
-                  ),
+                  icon: const Icon(Icons.clear),
                   onPressed: () {
                     controller.clear();
                     onClear?.call();
@@ -42,19 +38,14 @@ class AdminProductSearchBar extends StatelessWidget {
 
           filled: true,
 
-          border: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(12),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
 
           enabledBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12),
           ),
 
           focusedBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
       ),

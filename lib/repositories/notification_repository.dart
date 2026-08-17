@@ -6,28 +6,23 @@ import '../models/notification_settings_model.dart';
 class NotificationRepository {
   NotificationRepository._();
 
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static final FirebaseAuth _auth =
-      FirebaseAuth.instance;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   static String get _uid => _auth.currentUser!.uid;
 
-  static DocumentReference<Map<String, dynamic>>
-      get _document =>
-          _firestore
-              .collection('users')
-              .doc(_uid)
-              .collection('notification_settings')
-              .doc('settings');
+  static DocumentReference<Map<String, dynamic>> get _document => _firestore
+      .collection('users')
+      .doc(_uid)
+      .collection('notification_settings')
+      .doc('settings');
 
   // ==========================================
   // Get Notification Settings
   // ==========================================
 
-  static Future<NotificationSettingsModel>
-      getSettings() async {
+  static Future<NotificationSettingsModel> getSettings() async {
     final snapshot = await _document.get();
 
     if (!snapshot.exists) {
@@ -48,17 +43,14 @@ class NotificationRepository {
       return settings;
     }
 
-    return NotificationSettingsModel.fromMap(
-      snapshot.data()!,
-    );
+    return NotificationSettingsModel.fromMap(snapshot.data()!);
   }
 
   // ==========================================
   // Stream Notification Settings
   // ==========================================
 
-  static Stream<NotificationSettingsModel>
-      streamSettings() {
+  static Stream<NotificationSettingsModel> streamSettings() {
     return _document.snapshots().map((snapshot) {
       if (!snapshot.exists) {
         return const NotificationSettingsModel(
@@ -72,9 +64,7 @@ class NotificationRepository {
         );
       }
 
-      return NotificationSettingsModel.fromMap(
-        snapshot.data()!,
-      );
+      return NotificationSettingsModel.fromMap(snapshot.data()!);
     });
   }
 
@@ -82,15 +72,10 @@ class NotificationRepository {
   // Save Notification Settings
   // ==========================================
 
-  static Future<void> updateSettings(
-    NotificationSettingsModel settings,
-  ) async {
-    await _document.set(
-      {
-        ...settings.toMap(),
-        'updatedAt': FieldValue.serverTimestamp(),
-      },
-      SetOptions(merge: true),
-    );
+  static Future<void> updateSettings(NotificationSettingsModel settings) async {
+    await _document.set({
+      ...settings.toMap(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
   }
 }

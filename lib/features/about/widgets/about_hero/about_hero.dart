@@ -11,19 +11,14 @@ class AboutHero extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 420,
-      decoration: const BoxDecoration(
-        color: AppColors.background,
-      ),
+      decoration: const BoxDecoration(color: AppColors.background),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
             Text(
               'ABOUT LAG CLOTHING',
-              style: AppTextStyles.heading1.copyWith(
-                color: AppColors.primary,
-              ),
+              style: AppTextStyles.heading1.copyWith(color: AppColors.primary),
             ),
 
             const SizedBox(height: 24),

@@ -14,40 +14,32 @@ class PermissionGuard extends StatelessWidget {
 
   final WidgetBuilder builder;
 
-  final bool Function(AdminPermissionModel permissions)
-      hasPermission;
-@override
-Widget build(BuildContext context) {
-  final user = context.watch<AuthProvider>().currentUser;
+  final bool Function(AdminPermissionModel permissions) hasPermission;
+  @override
+  Widget build(BuildContext context) {
+    final user = context.watch<AuthProvider>().currentUser;
 
-  if (user == null) {
-    return const Scaffold(
-      body: Center(
-        child: Text("User not found"),
-      ),
-    );
-  }
+    if (user == null) {
+      return const Scaffold(body: Center(child: Text("User not found")));
+    }
 
-  // Super Admin has access to everything
-  if (user.role == UserRole.superAdmin) {
-    return builder(context);
-  }
+    // Super Admin has access to everything
+    if (user.role == UserRole.superAdmin) {
+      return builder(context);
+    }
 
-  // Normal Admin permission check
-  if (!hasPermission(user.permissions)) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          "Access Denied",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+    // Normal Admin permission check
+    if (!hasPermission(user.permissions)) {
+      return const Scaffold(
+        body: Center(
+          child: Text(
+            "Access Denied",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ),
-      ),
-    );
-  }
+      );
+    }
 
-  return builder(context);
-}
+    return builder(context);
+  }
 }

@@ -55,9 +55,7 @@ class ShopProductGrid extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   ElevatedButton(
-                    onPressed: () {
-                      provider.loadProducts();
-                    },
+                    onPressed: provider.loadProducts,
                     child: const Text('Retry'),
                   ),
                 ],
@@ -104,20 +102,93 @@ class ShopProductGrid extends StatelessWidget {
         }
 
         // ==================================================
+        // SCREEN WIDTH
+        // ==================================================
+
+        final width = MediaQuery.sizeOf(context).width;
+
+        // ==================================================
+        // RESPONSIVE GRID SETTINGS
+        // ==================================================
+
+        int crossAxisCount;
+        double crossAxisSpacing;
+        double mainAxisSpacing;
+        double cardHeight;
+
+        // --------------------------------------------------
+        // PHONE
+        // --------------------------------------------------
+
+        if (width < 600) {
+          crossAxisCount = 2;
+          crossAxisSpacing = 10;
+          mainAxisSpacing = 12;
+
+          // At 390px screen width the product cards are
+          // approximately 185px wide.
+          //
+          // We give them enough vertical space for:
+          // image + brand + name + price + sizes + button.
+          cardHeight = 455;
+        }
+        // --------------------------------------------------
+        // TABLET
+        // --------------------------------------------------
+        else if (width < 1024) {
+          crossAxisCount = 3;
+          crossAxisSpacing = 18;
+          mainAxisSpacing = 18;
+          cardHeight = 470;
+        }
+        // --------------------------------------------------
+        // SMALL DESKTOP
+        // --------------------------------------------------
+        else if (width < 1440) {
+          crossAxisCount = 3;
+          crossAxisSpacing = 22;
+          mainAxisSpacing = 22;
+          cardHeight = 500;
+        }
+        // --------------------------------------------------
+        // LARGE DESKTOP
+        // --------------------------------------------------
+        else {
+          crossAxisCount = 4;
+          crossAxisSpacing = 24;
+          mainAxisSpacing = 24;
+          cardHeight = 520;
+        }
+
+        // ==================================================
         // PRODUCT GRID
         // ==================================================
 
         return GridView.builder(
           shrinkWrap: true,
+
           physics: const NeverScrollableScrollPhysics(),
 
           itemCount: provider.products.length,
 
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            crossAxisSpacing: 24,
-            mainAxisSpacing: 24,
-            childAspectRatio: .63,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+
+            crossAxisSpacing: crossAxisSpacing,
+
+            mainAxisSpacing: mainAxisSpacing,
+
+            // ------------------------------------------------
+            // FIXED CARD HEIGHT
+            // ------------------------------------------------
+            //
+            // This prevents the yellow/black
+            // "BOTTOM OVERFLOWED" warning.
+            //
+            // mainAxisExtent gives each card an explicit height
+            // instead of calculating the height from its width.
+            //
+            mainAxisExtent: cardHeight,
           ),
 
           itemBuilder: (context, index) {

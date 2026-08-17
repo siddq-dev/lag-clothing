@@ -40,12 +40,10 @@ class SavePaymentButton extends StatefulWidget {
   final String? paymentId;
 
   @override
-  State<SavePaymentButton> createState() =>
-      _SavePaymentButtonState();
+  State<SavePaymentButton> createState() => _SavePaymentButtonState();
 }
 
-class _SavePaymentButtonState
-    extends State<SavePaymentButton> {
+class _SavePaymentButtonState extends State<SavePaymentButton> {
   bool loading = false;
 
   Future<void> saveCard() async {
@@ -62,29 +60,23 @@ class _SavePaymentButtonState
         loading = true;
       });
 
-      final number = widget.cardNumberController.text
-          .replaceAll(" ", "");
+      final number = widget.cardNumberController.text.replaceAll(" ", "");
 
       final card = PaymentMethodModel(
         id: '',
         userId: user.uid,
 
-        cardHolderName:
-            widget.cardHolderController.text.trim(),
+        cardHolderName: widget.cardHolderController.text.trim(),
 
         cardNumber: number,
 
-        last4Digits:
-            number.substring(number.length - 4),
+        last4Digits: number.substring(number.length - 4),
 
-        expiryMonth:
-            widget.expiryMonthController.text.trim(),
+        expiryMonth: widget.expiryMonthController.text.trim(),
 
-        expiryYear:
-            widget.expiryYearController.text.trim(),
+        expiryYear: widget.expiryYearController.text.trim(),
 
-        cvv:
-            widget.cvvController.text.trim(),
+        cvv: widget.cvvController.text.trim(),
 
         cardBrand: _detectCardBrand(number),
 
@@ -96,9 +88,7 @@ class _SavePaymentButtonState
 
       if (widget.isEditing) {
         await widget.provider.updatePaymentMethod(
-          card.copyWith(
-            id: widget.paymentId!,
-          ),
+          card.copyWith(id: widget.paymentId!),
         );
       } else {
         await widget.provider.addPaymentMethod(card);
@@ -120,11 +110,9 @@ class _SavePaymentButtonState
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
       if (mounted) {
         setState(() {
@@ -143,8 +131,7 @@ class _SavePaymentButtonState
       return 'MasterCard';
     }
 
-    if (number.startsWith('34') ||
-        number.startsWith('37')) {
+    if (number.startsWith('34') || number.startsWith('37')) {
       return 'American Express';
     }
 
@@ -172,12 +159,8 @@ class _SavePaymentButtonState
                 ),
               )
             : Text(
-                widget.isEditing
-                    ? "UPDATE CARD"
-                    : "SAVE CARD",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                widget.isEditing ? "UPDATE CARD" : "SAVE CARD",
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
       ),
     );

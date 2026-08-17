@@ -10,19 +10,17 @@ class FooterCompany extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  final companyLinks = [
-  ('Privacy Policy', AppRouter.privacyPolicy),
-  ('Terms & Conditions', AppRouter.termsConditions),
-  ('Cookie Policy', AppRouter.cookiePolicy),
-  ('Careers', AppRouter.careers),
-];
+    final companyLinks = [
+      ('Privacy Policy', AppRouter.privacyPolicy),
+      ('Terms & Conditions', AppRouter.termsConditions),
+      ('Cookie Policy', AppRouter.cookiePolicy),
+      ('Careers', AppRouter.careers),
+    ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const FooterSectionTitle(
-          title: 'Company',
-        ),
+        const FooterSectionTitle(title: 'Company'),
 
         const SizedBox(height: 20),
 
@@ -31,14 +29,11 @@ class FooterCompany extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 10),
             child: InkWell(
               borderRadius: BorderRadius.circular(4),
- onTap: () {
-  context.go(item.$2);
-},
-              
-              child: Text(
-                item.$1,
-                style: AppTextStyles.bodyMedium,
-              ),
+              onTap: () {
+                context.go(item.$2);
+              },
+
+              child: Text(item.$1, style: AppTextStyles.bodyMedium),
             ),
           ),
         ),

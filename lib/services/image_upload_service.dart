@@ -5,8 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 class ImageUploadService {
   ImageUploadService._();
 
-  static final FirebaseStorage _storage =
-      FirebaseStorage.instance;
+  static final FirebaseStorage _storage = FirebaseStorage.instance;
 
   /// Uploads profile image to Firebase Storage
   ///
@@ -24,34 +23,22 @@ class ImageUploadService {
           .child('profile')
           .child('profile.jpg');
 
-      final metadata = SettableMetadata(
-        contentType: 'image/jpeg',
-      );
+      final metadata = SettableMetadata(contentType: 'image/jpeg');
 
-      final uploadTask = await ref.putData(
-        imageBytes,
-        metadata,
-      );
+      final uploadTask = await ref.putData(imageBytes, metadata);
 
-      final downloadUrl =
-          await uploadTask.ref.getDownloadURL();
+      final downloadUrl = await uploadTask.ref.getDownloadURL();
 
       return downloadUrl;
     } on FirebaseException catch (e) {
-      throw Exception(
-        e.message ?? 'Failed to upload image.',
-      );
+      throw Exception(e.message ?? 'Failed to upload image.');
     } catch (e) {
-      throw Exception(
-        'Image upload failed.',
-      );
+      throw Exception('Image upload failed.');
     }
   }
 
   /// Delete existing profile image
-  static Future<void> deleteProfileImage({
-    required String uid,
-  }) async {
+  static Future<void> deleteProfileImage({required String uid}) async {
     try {
       final ref = _storage
           .ref()

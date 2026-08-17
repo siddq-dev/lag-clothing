@@ -9,46 +9,22 @@ class AdminOrderFilter extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           const Text(
             "Filters",
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
 
           const SizedBox(height: 25),
 
           DropdownButtonFormField<String>(
-            decoration: const InputDecoration(
-              labelText: "Order Status",
-            ),
+            decoration: const InputDecoration(labelText: "Order Status"),
             items: const [
-              DropdownMenuItem(
-                value: "Pending",
-                child: Text("Pending"),
-              ),
-              DropdownMenuItem(
-                value: "Confirmed",
-                child: Text("Confirmed"),
-              ),
-              DropdownMenuItem(
-                value: "Packed",
-                child: Text("Packed"),
-              ),
-              DropdownMenuItem(
-                value: "Shipped",
-                child: Text("Shipped"),
-              ),
-              DropdownMenuItem(
-                value: "Delivered",
-                child: Text("Delivered"),
-              ),
-              DropdownMenuItem(
-                value: "Cancelled",
-                child: Text("Cancelled"),
-              ),
+              DropdownMenuItem(value: "Pending", child: Text("Pending")),
+              DropdownMenuItem(value: "Confirmed", child: Text("Confirmed")),
+              DropdownMenuItem(value: "Packed", child: Text("Packed")),
+              DropdownMenuItem(value: "Shipped", child: Text("Shipped")),
+              DropdownMenuItem(value: "Delivered", child: Text("Delivered")),
+              DropdownMenuItem(value: "Cancelled", child: Text("Cancelled")),
             ],
             onChanged: (_) {},
           ),
@@ -56,18 +32,10 @@ class AdminOrderFilter extends StatelessWidget {
           const SizedBox(height: 20),
 
           DropdownButtonFormField<String>(
-            decoration: const InputDecoration(
-              labelText: "Payment Method",
-            ),
+            decoration: const InputDecoration(labelText: "Payment Method"),
             items: const [
-              DropdownMenuItem(
-                value: "Paid",
-                child: Text("Paid"),
-              ),
-              DropdownMenuItem(
-                value: "COD",
-                child: Text("Cash on Delivery"),
-              ),
+              DropdownMenuItem(value: "Paid", child: Text("Paid")),
+              DropdownMenuItem(value: "COD", child: Text("Cash on Delivery")),
             ],
             onChanged: (_) {},
           ),
@@ -75,18 +43,10 @@ class AdminOrderFilter extends StatelessWidget {
           const SizedBox(height: 20),
 
           DropdownButtonFormField<String>(
-            decoration: const InputDecoration(
-              labelText: "Delivery Type",
-            ),
+            decoration: const InputDecoration(labelText: "Delivery Type"),
             items: const [
-              DropdownMenuItem(
-                value: "Standard",
-                child: Text("Standard"),
-              ),
-              DropdownMenuItem(
-                value: "Express",
-                child: Text("Express"),
-              ),
+              DropdownMenuItem(value: "Standard", child: Text("Standard")),
+              DropdownMenuItem(value: "Express", child: Text("Express")),
             ],
             onChanged: (_) {},
           ),
@@ -102,7 +62,6 @@ class AdminOrderFilter extends StatelessWidget {
               child: const Text("Apply Filters"),
             ),
           ),
-
         ],
       ),
     );

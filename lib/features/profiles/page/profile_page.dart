@@ -17,16 +17,12 @@ class ProfilePage extends StatelessWidget {
       currentRoute: AppRouter.profile,
       child: const SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 60,
-            vertical: 50,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 60, vertical: 50),
           child: Center(
             child: SizedBox(
               width: 1100,
               child: Column(
                 children: [
-
                   ProfileHeader(),
 
                   SizedBox(height: 35),
@@ -40,7 +36,6 @@ class ProfilePage extends StatelessWidget {
                   SizedBox(height: 35),
 
                   LogoutButton(),
-
                 ],
               ),
             ),

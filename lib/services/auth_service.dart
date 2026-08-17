@@ -5,8 +5,7 @@ class AuthService {
   AuthService._();
 
   static final FirebaseAuth _auth = FirebaseAuth.instance;
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // ==========================
   // Register Customer
@@ -17,11 +16,8 @@ class AuthService {
     required String phone,
     required String password,
   }) async {
-    final UserCredential credential =
-        await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    final UserCredential credential = await _auth
+        .createUserWithEmailAndPassword(email: email, password: password);
 
     final user = credential.user;
 
@@ -59,14 +55,13 @@ class AuthService {
     await _auth.signOut();
   }
 
- // ==========================
-// Forgot Password
-// ==========================
-static Future<void> forgotPassword(String email) async {
-  await _auth.sendPasswordResetEmail(
-    email: email.trim(),
-  );
-}
+  // ==========================
+  // Forgot Password
+  // ==========================
+  static Future<void> forgotPassword(String email) async {
+    await _auth.sendPasswordResetEmail(email: email.trim());
+  }
+
   // ==========================
   // Current User
   // ==========================

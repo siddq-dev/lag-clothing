@@ -11,15 +11,12 @@ class AdminSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final user =
-        context.watch<AuthProvider>().currentUser;
+    final user = context.watch<AuthProvider>().currentUser;
 
     return Container(
       color: Colors.black,
       child: ListView(
         children: [
-
           const SizedBox(height: 40),
 
           const Center(
@@ -36,44 +33,28 @@ class AdminSidebar extends StatelessWidget {
           const SizedBox(height: 40),
 
           ListTile(
-            leading: const Icon(
-              Icons.dashboard,
-              color: Colors.white,
-            ),
+            leading: const Icon(Icons.dashboard, color: Colors.white),
             title: const Text(
               "Dashboard",
-              style: TextStyle(
-                color: Colors.white,
-              ),
+              style: TextStyle(color: Colors.white),
             ),
             onTap: () {
-              context.go(
-                AppRouter.adminDashboard,
-              );
+              context.go(AppRouter.adminDashboard);
             },
           ),
 
           ListTile(
-            leading: const Icon(
-              Icons.shopping_bag,
-              color: Colors.white,
-            ),
+            leading: const Icon(Icons.shopping_bag, color: Colors.white),
             title: const Text(
               "Products",
-              style: TextStyle(
-                color: Colors.white,
-              ),
+              style: TextStyle(color: Colors.white),
             ),
             onTap: () {
-              context.go(
-                AppRouter.manageProducts,
-              );
+              context.go(AppRouter.manageProducts);
             },
           ),
 
-          if (user?.role ==
-              UserRole.superAdmin)
-
+          if (user?.role == UserRole.superAdmin)
             ListTile(
               leading: const Icon(
                 Icons.admin_panel_settings,
@@ -81,17 +62,12 @@ class AdminSidebar extends StatelessWidget {
               ),
               title: const Text(
                 "Admin Management",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
+                style: TextStyle(color: Colors.white),
               ),
               onTap: () {
-                context.go(
-                  AppRouter.adminManagement,
-                );
+                context.go(AppRouter.adminManagement);
               },
             ),
-
         ],
       ),
     );

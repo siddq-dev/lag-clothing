@@ -1,10 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum InventoryLogType {
-  stockIn,
-  stockOut,
-  manualAdjustment,
-}
+enum InventoryLogType { stockIn, stockOut, manualAdjustment }
 
 class InventoryLogModel {
   final String id;

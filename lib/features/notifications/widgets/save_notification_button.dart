@@ -15,12 +15,10 @@ class SaveNotificationButton extends StatefulWidget {
   final NotificationSettingsModel settings;
 
   @override
-  State<SaveNotificationButton> createState() =>
-      _SaveNotificationButtonState();
+  State<SaveNotificationButton> createState() => _SaveNotificationButtonState();
 }
 
-class _SaveNotificationButtonState
-    extends State<SaveNotificationButton> {
+class _SaveNotificationButtonState extends State<SaveNotificationButton> {
   bool loading = false;
 
   Future<void> saveSettings() async {
@@ -29,17 +27,13 @@ class _SaveNotificationButtonState
         loading = true;
       });
 
-      await widget.provider.updateSettings(
-        widget.settings,
-      );
+      await widget.provider.updateSettings(widget.settings);
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-            "Notification settings updated successfully",
-          ),
+          content: Text("Notification settings updated successfully"),
         ),
       );
 
@@ -47,13 +41,9 @@ class _SaveNotificationButtonState
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.toString(),
-          ),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
       if (mounted) {
         setState(() {
@@ -81,9 +71,7 @@ class _SaveNotificationButtonState
               )
             : const Text(
                 "SAVE SETTINGS",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
       ),
     );

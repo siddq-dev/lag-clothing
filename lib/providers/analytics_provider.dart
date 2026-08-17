@@ -41,8 +41,7 @@ class AnalyticsProvider extends ChangeNotifier {
 
   List<SalesChartModel> _salesChart = [];
 
-  List<SalesChartModel> get salesChart =>
-      _salesChart;
+  List<SalesChartModel> get salesChart => _salesChart;
 
   //----------------------------------------------------------
   // Page Analytics
@@ -50,8 +49,7 @@ class AnalyticsProvider extends ChangeNotifier {
 
   List<PageAnalyticsModel> _pages = [];
 
-  List<PageAnalyticsModel> get pages =>
-      _pages;
+  List<PageAnalyticsModel> get pages => _pages;
 
   //----------------------------------------------------------
   // Customer Regions
@@ -59,8 +57,7 @@ class AnalyticsProvider extends ChangeNotifier {
 
   List<CustomerRegionModel> _regions = [];
 
-  List<CustomerRegionModel> get regions =>
-      _regions;
+  List<CustomerRegionModel> get regions => _regions;
 
   //----------------------------------------------------------
   // Device Analytics
@@ -68,8 +65,7 @@ class AnalyticsProvider extends ChangeNotifier {
 
   List<DeviceAnalyticsModel> _devices = [];
 
-  List<DeviceAnalyticsModel> get devices =>
-      _devices;
+  List<DeviceAnalyticsModel> get devices => _devices;
 
   //----------------------------------------------------------
   // Traffic Sources
@@ -77,8 +73,7 @@ class AnalyticsProvider extends ChangeNotifier {
 
   List<TrafficSourceModel> _sources = [];
 
-  List<TrafficSourceModel> get sources =>
-      _sources;
+  List<TrafficSourceModel> get sources => _sources;
 
   //----------------------------------------------------------
   // Inventory Analytics
@@ -86,8 +81,7 @@ class AnalyticsProvider extends ChangeNotifier {
 
   InventoryAnalyticsModel? _inventory;
 
-  InventoryAnalyticsModel? get inventory =>
-      _inventory;
+  InventoryAnalyticsModel? get inventory => _inventory;
 
   //----------------------------------------------------------
   // Load Dashboard
@@ -109,38 +103,26 @@ class AnalyticsProvider extends ChangeNotifier {
         AnalyticsRepository.getTrafficSources(),
         AnalyticsRepository.getInventoryAnalytics(),
         AnalyticsRepository.getBestSellingProducts(),
-  AnalyticsRepository.getLowStockProducts(),
+        AnalyticsRepository.getLowStockProducts(),
       ]);
 
-      _summary =
-          results[0] as AnalyticsSummaryModel;
+      _summary = results[0] as AnalyticsSummaryModel;
 
-      _salesChart =
-          results[1] as List<SalesChartModel>;
+      _salesChart = results[1] as List<SalesChartModel>;
 
-      _pages =
-          results[2] as List<PageAnalyticsModel>;
+      _pages = results[2] as List<PageAnalyticsModel>;
 
-      _regions =
-          results[3] as List<CustomerRegionModel>;
+      _regions = results[3] as List<CustomerRegionModel>;
 
-      _devices =
-          results[4] as List<DeviceAnalyticsModel>;
+      _devices = results[4] as List<DeviceAnalyticsModel>;
 
-      _sources =
-          results[5] as List<TrafficSourceModel>;
+      _sources = results[5] as List<TrafficSourceModel>;
 
-      _inventory =
-          results[6] as InventoryAnalyticsModel;
-          
-_bestSellingProducts =
-    results[7]
-        as List<Map<String, dynamic>>;
+      _inventory = results[6] as InventoryAnalyticsModel;
 
-_lowStockProducts =
-    results[8]
-        as List<Map<String, dynamic>>;
+      _bestSellingProducts = results[7] as List<Map<String, dynamic>>;
 
+      _lowStockProducts = results[8] as List<Map<String, dynamic>>;
     } catch (e) {
       _error = e.toString();
     }
@@ -150,29 +132,20 @@ _lowStockProducts =
     notifyListeners();
   }
 
+  //----------------------------------------------------------
+  // Best Selling Products
+  //----------------------------------------------------------
 
-//----------------------------------------------------------
-// Best Selling Products
-//----------------------------------------------------------
+  List<Map<String, dynamic>> _bestSellingProducts = [];
 
-List<Map<String, dynamic>>
-    _bestSellingProducts = [];
+  List<Map<String, dynamic>> get bestSellingProducts => _bestSellingProducts;
 
-List<Map<String, dynamic>>
-    get bestSellingProducts =>
-        _bestSellingProducts;
+  // Low Stock
+  //----------------------------------------------------------
 
+  List<Map<String, dynamic>> _lowStockProducts = [];
 
-// Low Stock
-//----------------------------------------------------------
-
-List<Map<String, dynamic>>
-    _lowStockProducts = [];
-
-List<Map<String, dynamic>>
-    get lowStockProducts =>
-        _lowStockProducts;
-
+  List<Map<String, dynamic>> get lowStockProducts => _lowStockProducts;
 
   //----------------------------------------------------------
   // Refresh
@@ -186,21 +159,15 @@ List<Map<String, dynamic>>
   // Helpers
   //----------------------------------------------------------
 
-  double get revenue =>
-      _summary?.totalRevenue ?? 0;
+  double get revenue => _summary?.totalRevenue ?? 0;
 
-  int get orders =>
-      _summary?.totalOrders ?? 0;
+  int get orders => _summary?.totalOrders ?? 0;
 
-  int get customers =>
-      _summary?.totalCustomers ?? 0;
+  int get customers => _summary?.totalCustomers ?? 0;
 
-  int get products =>
-      _summary?.totalProducts ?? 0;
+  int get products => _summary?.totalProducts ?? 0;
 
-  double get averageOrder =>
-      _summary?.averageOrderValue ?? 0;
+  double get averageOrder => _summary?.averageOrderValue ?? 0;
 
-  int get visitors =>
-      _summary?.totalVisitors ?? 0;
+  int get visitors => _summary?.totalVisitors ?? 0;
 }

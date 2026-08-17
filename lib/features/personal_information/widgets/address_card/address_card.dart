@@ -15,25 +15,18 @@ class AddressCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Text(
-            "Default Shipping Address",
-            style: AppTextStyles.heading3,
-          ),
+          Text("Default Shipping Address", style: AppTextStyles.heading3),
 
           const SizedBox(height: 20),
 
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               const Icon(
                 Icons.location_on_outlined,
                 color: AppColors.primary,
@@ -46,7 +39,6 @@ class AddressCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     Text(
                       "John Doe",
                       style: AppTextStyles.bodyLarge.copyWith(
@@ -56,17 +48,11 @@ class AddressCard extends StatelessWidget {
 
                     const SizedBox(height: 6),
 
-                    Text(
-                      "123 ABC Street",
-                      style: AppTextStyles.bodyMedium,
-                    ),
+                    Text("123 ABC Street", style: AppTextStyles.bodyMedium),
 
                     const SizedBox(height: 4),
 
-                    Text(
-                      "Chennai",
-                      style: AppTextStyles.bodyMedium,
-                    ),
+                    Text("Chennai", style: AppTextStyles.bodyMedium),
 
                     const SizedBox(height: 4),
 
@@ -74,11 +60,9 @@ class AddressCard extends StatelessWidget {
                       "Tamil Nadu - 600001",
                       style: AppTextStyles.bodyMedium,
                     ),
-
                   ],
                 ),
               ),
-
             ],
           ),
 
@@ -95,9 +79,7 @@ class AddressCard extends StatelessWidget {
               label: const Text("Edit Address"),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primary,
-                side: const BorderSide(
-                  color: AppColors.primary,
-                ),
+                side: const BorderSide(color: AppColors.primary),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 14,
@@ -105,7 +87,6 @@ class AddressCard extends StatelessWidget {
               ),
             ),
           ),
-
         ],
       ),
     );

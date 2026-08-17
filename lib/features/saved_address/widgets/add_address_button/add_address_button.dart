@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../themes/app_colors.dart';
 
 class AddAddressButton extends StatelessWidget {
-  const AddAddressButton({
-    super.key,
-    required this.onPressed,
-  });
+  const AddAddressButton({super.key, required this.onPressed});
 
   final VoidCallback onPressed;
 
@@ -21,10 +18,7 @@ class AddAddressButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 18,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

@@ -46,14 +46,11 @@ class BillingForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         CheckboxListTile(
           value: sameAsShipping,
           onChanged: onChanged,
           contentPadding: EdgeInsets.zero,
-          title: const Text(
-            "Billing Address same as Shipping",
-          ),
+          title: const Text("Billing Address same as Shipping"),
         ),
 
         if (!sameAsShipping) ...[
@@ -63,10 +60,7 @@ class BillingForm extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               "Billing Address",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
 

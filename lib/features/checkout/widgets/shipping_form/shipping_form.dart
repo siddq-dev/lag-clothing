@@ -14,38 +14,22 @@ class ShippingForm extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Text(
-            "Shipping Information",
-            style: AppTextStyles.heading2,
-          ),
+          Text("Shipping Information", style: AppTextStyles.heading2),
 
           const SizedBox(height: AppSpacing.xl),
 
           Row(
             children: const [
-
-              Expanded(
-                child: _CheckoutTextField(
-                  hint: "First Name",
-                ),
-              ),
+              Expanded(child: _CheckoutTextField(hint: "First Name")),
 
               SizedBox(width: 20),
 
-              Expanded(
-                child: _CheckoutTextField(
-                  hint: "Last Name",
-                ),
-              ),
-
+              Expanded(child: _CheckoutTextField(hint: "Last Name")),
             ],
           ),
 
@@ -65,35 +49,21 @@ class ShippingForm extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          const _CheckoutTextField(
-            hint: "Street Address",
-          ),
+          const _CheckoutTextField(hint: "Street Address"),
 
           const SizedBox(height: 20),
 
-          const _CheckoutTextField(
-            hint: "Apartment / Landmark (Optional)",
-          ),
+          const _CheckoutTextField(hint: "Apartment / Landmark (Optional)"),
 
           const SizedBox(height: 20),
 
           Row(
             children: const [
-
-              Expanded(
-                child: _CheckoutTextField(
-                  hint: "City",
-                ),
-              ),
+              Expanded(child: _CheckoutTextField(hint: "City")),
 
               SizedBox(width: 20),
 
-              Expanded(
-                child: _CheckoutTextField(
-                  hint: "State",
-                ),
-              ),
-
+              Expanded(child: _CheckoutTextField(hint: "State")),
             ],
           ),
 
@@ -101,7 +71,6 @@ class ShippingForm extends StatelessWidget {
 
           Row(
             children: const [
-
               Expanded(
                 child: _CheckoutTextField(
                   hint: "Pincode",
@@ -111,15 +80,9 @@ class ShippingForm extends StatelessWidget {
 
               SizedBox(width: 20),
 
-              Expanded(
-                child: _CheckoutTextField(
-                  hint: "Country",
-                ),
-              ),
-
+              Expanded(child: _CheckoutTextField(hint: "Country")),
             ],
           ),
-
         ],
       ),
     );
@@ -127,10 +90,7 @@ class ShippingForm extends StatelessWidget {
 }
 
 class _CheckoutTextField extends StatelessWidget {
-  const _CheckoutTextField({
-    required this.hint,
-    this.keyboardType,
-  });
+  const _CheckoutTextField({required this.hint, this.keyboardType});
 
   final String hint;
   final TextInputType? keyboardType;
@@ -145,9 +105,7 @@ class _CheckoutTextField extends StatelessWidget {
         filled: true,
         fillColor: AppColors.background,
 
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
 
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -155,10 +113,7 @@ class _CheckoutTextField extends StatelessWidget {
 
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: AppColors.primary,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: AppColors.primary, width: 2),
         ),
 
         contentPadding: const EdgeInsets.symmetric(

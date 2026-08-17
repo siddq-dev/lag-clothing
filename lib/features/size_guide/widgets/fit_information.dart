@@ -3,29 +3,13 @@ import 'package:flutter/material.dart';
 class FitInformation extends StatelessWidget {
   const FitInformation({super.key});
 
-  Widget buildInfoTile(
-    IconData icon,
-    String title,
-    String description,
-  ) {
+  Widget buildInfoTile(IconData icon, String title, String description) {
     return ListTile(
-      leading: CircleAvatar(
-        child: Icon(icon),
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      leading: CircleAvatar(child: Icon(icon)),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
       subtitle: Padding(
         padding: const EdgeInsets.only(top: 6),
-        child: Text(
-          description,
-          style: const TextStyle(
-            height: 1.5,
-          ),
-        ),
+        child: Text(description, style: const TextStyle(height: 1.5)),
       ),
     );
   }
@@ -34,28 +18,17 @@ class FitInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 1.5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 20,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 24,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: 24),
               child: Text(
                 "Fit Information",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
             ),
 
@@ -84,7 +57,6 @@ class FitInformation extends StatelessWidget {
               "Easy Exchange",
               "Wrong size? Size exchanges are available within the return policy period.",
             ),
-
           ],
         ),
       ),

@@ -11,25 +11,15 @@ class FooterContact extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Contact',
-          style: AppTextStyles.heading4,
-        ),
+        Text('Contact', style: AppTextStyles.heading4),
 
         const SizedBox(height: 16),
 
         const Row(
           children: [
-            Icon(
-              Icons.email_outlined,
-              size: 18,
-              color: AppColors.primary,
-            ),
+            Icon(Icons.email_outlined, size: 18, color: AppColors.primary),
             SizedBox(width: 8),
-            Text(
-              'info@lagclothing.com',
-              style: AppTextStyles.bodyMedium,
-            ),
+            Text('info@lagclothing.com', style: AppTextStyles.bodyMedium),
           ],
         ),
 
@@ -37,16 +27,9 @@ class FooterContact extends StatelessWidget {
 
         const Row(
           children: [
-            Icon(
-              Icons.phone_outlined,
-              size: 18,
-              color: AppColors.primary,
-            ),
+            Icon(Icons.phone_outlined, size: 18, color: AppColors.primary),
             SizedBox(width: 8),
-            Text(
-              '+91 XXXXX XXXXX',
-              style: AppTextStyles.bodyMedium,
-            ),
+            Text('+91 XXXXX XXXXX', style: AppTextStyles.bodyMedium),
           ],
         ),
 
@@ -60,40 +43,25 @@ class FooterContact extends StatelessWidget {
               color: AppColors.primary,
             ),
             SizedBox(width: 8),
-            Text(
-              'Tamil Nadu, India',
-              style: AppTextStyles.bodyMedium,
-            ),
+            Text('Tamil Nadu, India', style: AppTextStyles.bodyMedium),
           ],
         ),
 
         const SizedBox(height: 20),
 
-        Text(
-          'Follow Us',
-          style: AppTextStyles.heading4,
-        ),
+        Text('Follow Us', style: AppTextStyles.heading4),
 
         const SizedBox(height: 12),
 
         const Row(
           children: [
-            Icon(
-              Icons.camera_alt_outlined,
-              color: AppColors.primary,
-            ),
+            Icon(Icons.camera_alt_outlined, color: AppColors.primary),
             SizedBox(width: 12),
 
-            Icon(
-              Icons.facebook_outlined,
-              color: AppColors.primary,
-            ),
+            Icon(Icons.facebook_outlined, color: AppColors.primary),
             SizedBox(width: 12),
 
-            Icon(
-              Icons.chat_outlined,
-              color: AppColors.primary,
-            ),
+            Icon(Icons.chat_outlined, color: AppColors.primary),
           ],
         ),
       ],

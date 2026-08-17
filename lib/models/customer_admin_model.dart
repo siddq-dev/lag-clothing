@@ -31,10 +31,7 @@ class CustomerAdminModel {
     this.lastLogin,
   });
 
-  factory CustomerAdminModel.fromMap(
-    String uid,
-    Map<String, dynamic> map,
-  ) {
+  factory CustomerAdminModel.fromMap(String uid, Map<String, dynamic> map) {
     return CustomerAdminModel(
       uid: uid,
       fullName: map['fullName'] ?? '',
@@ -42,8 +39,7 @@ class CustomerAdminModel {
       phone: map['phone'] ?? '',
       photoUrl: map['photoUrl'] ?? '',
       totalOrders: map['totalOrders'] ?? 0,
-      totalSpent:
-          (map['totalSpent'] ?? 0).toDouble(),
+      totalSpent: (map['totalSpent'] ?? 0).toDouble(),
       createdAt: map['createdAt'],
       lastLogin: map['lastLogin'],
     );

@@ -231,7 +231,8 @@ class _DeliveryAddressCardState extends State<DeliveryAddressCard> {
     final checkoutProvider = context.watch<CheckoutProvider>();
 
     // Use dynamic access to avoid compile-time dependency on a specific getter name
-    final savedAddress = (checkoutProvider as dynamic).defaultShippingAddressHint;
+    final savedAddress =
+        (checkoutProvider as dynamic).defaultShippingAddressHint;
 
     if (savedAddress == null) {
       return const SizedBox.shrink();

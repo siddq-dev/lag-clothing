@@ -22,14 +22,10 @@ class ExchangePolicyPage extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 80,
-              vertical: 60,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 60),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
-
                 LegalSection(
                   heading: "Eligibility",
                   body:
@@ -42,18 +38,14 @@ class ExchangePolicyPage extends StatelessWidget {
                       "Submit an exchange request through My Orders. Our team will review your request and arrange pickup if approved.",
                 ),
 
-                LegalSection(
-                  heading: "Important Notes",
-                  body: "",
-                ),
+                LegalSection(heading: "Important Notes", body: ""),
 
                 LegalBullet(
-                  text: "Only size exchanges are supported for eligible products.",
+                  text:
+                      "Only size exchanges are supported for eligible products.",
                 ),
 
-                LegalBullet(
-                  text: "Customized jerseys cannot be exchanged.",
-                ),
+                LegalBullet(text: "Customized jerseys cannot be exchanged."),
 
                 LegalBullet(
                   text: "Damaged items should be reported within 48 hours.",

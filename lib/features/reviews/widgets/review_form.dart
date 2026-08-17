@@ -10,8 +10,7 @@ class ReviewForm extends StatefulWidget {
 }
 
 class _ReviewFormState extends State<ReviewForm> {
-  final TextEditingController reviewController =
-      TextEditingController();
+  final TextEditingController reviewController = TextEditingController();
 
   int selectedRating = 5;
 
@@ -25,37 +24,27 @@ class _ReviewFormState extends State<ReviewForm> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Text(
               "Write a Review",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 10),
 
-            const Text(
-              "Share your experience with this product.",
-            ),
+            const Text("Share your experience with this product."),
 
             const SizedBox(height: 25),
 
             /// Rating
             const Text(
               "Your Rating",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 12),
@@ -70,9 +59,7 @@ class _ReviewFormState extends State<ReviewForm> {
                     });
                   },
                   icon: Icon(
-                    index < selectedRating
-                        ? Icons.star
-                        : Icons.star_border,
+                    index < selectedRating ? Icons.star : Icons.star_border,
                     color: Colors.amber,
                     size: 34,
                   ),
@@ -83,12 +70,7 @@ class _ReviewFormState extends State<ReviewForm> {
             const SizedBox(height: 25),
 
             /// Review Field
-            const Text(
-              "Review",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            const Text("Review", style: TextStyle(fontWeight: FontWeight.bold)),
 
             const SizedBox(height: 12),
 
@@ -99,8 +81,7 @@ class _ReviewFormState extends State<ReviewForm> {
                 hintText:
                     "Tell other customers what you liked about this jersey...",
                 border: OutlineInputBorder(
-                  borderRadius:
-                      BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
             ),
@@ -114,29 +95,22 @@ class _ReviewFormState extends State<ReviewForm> {
                 onPressed: () {
                   // Firebase Later
 
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text(
-                        "Review Submitted Successfully",
-                      ),
+                      content: Text("Review Submitted Successfully"),
                     ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      AppColors.primary,
+                  backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
                 ),
                 child: const Text(
                   "SUBMIT REVIEW",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-
           ],
         ),
       ),

@@ -15,17 +15,11 @@ class ConfirmationDetails extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: const Column(
         children: [
-
-          DetailRow(
-            title: "Order ID",
-            value: "#LAG202607230001",
-          ),
+          DetailRow(title: "Order ID", value: "#LAG202607230001"),
 
           DetailRow(
             title: "Payment Status",
@@ -40,11 +34,7 @@ class ConfirmationDetails extends StatelessWidget {
             valueColor: Colors.white,
           ),
 
-          DetailRow(
-            title: "Estimated Delivery",
-            value: "25 Jul – 27 Jul 2026",
-          ),
-
+          DetailRow(title: "Estimated Delivery", value: "25 Jul – 27 Jul 2026"),
         ],
       ),
     );

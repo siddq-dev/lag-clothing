@@ -7,9 +7,7 @@ import '../widgets/success/success_details.dart';
 import '../widgets/success/success_header.dart';
 
 class OrderSuccessPage extends StatelessWidget {
-  const OrderSuccessPage({
-    super.key,
-  });
+  const OrderSuccessPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,6 @@ class OrderSuccessPage extends StatelessWidget {
             width: 700,
             child: Column(
               children: [
-
                 SuccessHeader(),
 
                 SizedBox(height: 30),
@@ -32,7 +29,6 @@ class OrderSuccessPage extends StatelessWidget {
                 SizedBox(height: 40),
 
                 SuccessButtons(),
-
               ],
             ),
           ),

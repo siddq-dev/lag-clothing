@@ -35,24 +35,15 @@ class ProductSeoModel {
     };
   }
 
-  factory ProductSeoModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory ProductSeoModel.fromMap(Map<String, dynamic> map) {
     return ProductSeoModel(
       seoTitle: map['seoTitle'] ?? '',
       metaDescription: map['metaDescription'] ?? '',
       slug: map['slug'] ?? '',
-      keywords: List<String>.from(
-        map['keywords'] ?? [],
-      ),
-      hashtags: List<String>.from(
-        map['hashtags'] ?? [],
-      ),
-      searchTags: List<String>.from(
-        map['searchTags'] ?? [],
-      ),
-      openGraphImage:
-          map['openGraphImage'] ?? '',
+      keywords: List<String>.from(map['keywords'] ?? []),
+      hashtags: List<String>.from(map['hashtags'] ?? []),
+      searchTags: List<String>.from(map['searchTags'] ?? []),
+      openGraphImage: map['openGraphImage'] ?? '',
     );
   }
 
@@ -67,14 +58,12 @@ class ProductSeoModel {
   }) {
     return ProductSeoModel(
       seoTitle: seoTitle ?? this.seoTitle,
-      metaDescription:
-          metaDescription ?? this.metaDescription,
+      metaDescription: metaDescription ?? this.metaDescription,
       slug: slug ?? this.slug,
       keywords: keywords ?? this.keywords,
       hashtags: hashtags ?? this.hashtags,
       searchTags: searchTags ?? this.searchTags,
-      openGraphImage:
-          openGraphImage ?? this.openGraphImage,
+      openGraphImage: openGraphImage ?? this.openGraphImage,
     );
   }
 }

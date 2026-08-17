@@ -10,16 +10,12 @@ class DetailsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.only(
-        bottom: AppSpacing.lg,
-      ),
+      padding: const EdgeInsets.only(bottom: AppSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Row(
             children: [
-
               IconButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -34,11 +30,8 @@ class DetailsHeader extends StatelessWidget {
 
               Text(
                 "ORDER DETAILS",
-                style: AppTextStyles.heading1.copyWith(
-                  color: Colors.white,
-                ),
+                style: AppTextStyles.heading1.copyWith(color: Colors.white),
               ),
-
             ],
           ),
 
@@ -53,7 +46,6 @@ class DetailsHeader extends StatelessWidget {
               ),
             ),
           ),
-
         ],
       ),
     );

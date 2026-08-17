@@ -14,15 +14,12 @@ class CustomerRegionModel {
     required this.revenue,
   });
 
-  factory CustomerRegionModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory CustomerRegionModel.fromMap(Map<String, dynamic> map) {
     return CustomerRegionModel(
       country: map['country'] ?? '',
       customers: map['customers'] ?? 0,
       orders: map['orders'] ?? 0,
-      revenue:
-          (map['revenue'] ?? 0).toDouble(),
+      revenue: (map['revenue'] ?? 0).toDouble(),
     );
   }
 

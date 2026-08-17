@@ -10,17 +10,10 @@ class SocialLinks extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 80,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 80),
       child: Column(
         children: [
-
-          const Text(
-            'Follow LAG Clothing',
-            style: AppTextStyles.sectionTitle,
-          ),
+          const Text('Follow LAG Clothing', style: AppTextStyles.sectionTitle),
 
           const SizedBox(height: 16),
 
@@ -37,7 +30,6 @@ class SocialLinks extends StatelessWidget {
             runSpacing: 20,
             alignment: WrapAlignment.center,
             children: [
-
               SocialButton(
                 icon: Icons.camera_alt_outlined,
                 label: 'Instagram',
@@ -62,12 +54,7 @@ class SocialLinks extends StatelessWidget {
                 onTap: () {},
               ),
 
-              SocialButton(
-                icon: Icons.chat,
-                label: 'WhatsApp',
-                onTap: () {},
-              ),
-
+              SocialButton(icon: Icons.chat, label: 'WhatsApp', onTap: () {}),
             ],
           ),
         ],

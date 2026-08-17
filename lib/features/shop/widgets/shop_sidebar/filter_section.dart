@@ -10,35 +10,40 @@ class FilterSection extends StatelessWidget {
   });
 
   final String title;
-
   final List<String> options;
-
   final Set<String> selectedValues;
-
-  final Function(String value) onChanged;
+  final ValueChanged<String> onChanged;
 
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
       tilePadding: EdgeInsets.zero,
       childrenPadding: EdgeInsets.zero,
+
+      // Keep filters closed initially.
+      initiallyExpanded: false,
+
+      iconColor: Colors.white,
+      collapsedIconColor: Colors.white,
+
       title: Text(
         title,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 17,
-        ),
+        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
       ),
+
       children: options.map((option) {
+        final isSelected = selectedValues.contains(option);
+
         return CheckboxListTile(
           dense: true,
-          contentPadding: const EdgeInsets.only(
-            left: 8,
-          ),
-          controlAffinity:
-              ListTileControlAffinity.leading,
-          title: Text(option),
-          value: selectedValues.contains(option),
+          contentPadding: const EdgeInsets.only(left: 4, right: 0),
+
+          controlAffinity: ListTileControlAffinity.leading,
+
+          title: Text(option, style: const TextStyle(fontSize: 14)),
+
+          value: isSelected,
+
           onChanged: (_) {
             onChanged(option);
           },

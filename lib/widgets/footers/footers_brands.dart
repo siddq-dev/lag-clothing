@@ -11,11 +11,7 @@ class FooterBrand extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        Image.asset(
-          'assets/images/logo/lag_logo.png',
-          height: 70,
-        ),
+        Image.asset('assets/images/logo/lag_logo.png', height: 70),
 
         const SizedBox(height: 20),
 
@@ -48,16 +44,9 @@ class FooterBrand extends StatelessWidget {
 
         const Row(
           children: [
-            Icon(
-              Icons.phone_outlined,
-              size: 18,
-              color: AppColors.primary,
-            ),
+            Icon(Icons.phone_outlined, size: 18, color: AppColors.primary),
             SizedBox(width: 8),
-            Text(
-              '+91 98765 43210',
-              style: AppTextStyles.bodySmall,
-            ),
+            Text('+91 98765 43210', style: AppTextStyles.bodySmall),
           ],
         ),
 
@@ -65,16 +54,9 @@ class FooterBrand extends StatelessWidget {
 
         const Row(
           children: [
-            Icon(
-              Icons.email_outlined,
-              size: 18,
-              color: AppColors.primary,
-            ),
+            Icon(Icons.email_outlined, size: 18, color: AppColors.primary),
             SizedBox(width: 8),
-            Text(
-              'support@lagclothing.com',
-              style: AppTextStyles.bodySmall,
-            ),
+            Text('support@lagclothing.com', style: AppTextStyles.bodySmall),
           ],
         ),
 
@@ -82,26 +64,19 @@ class FooterBrand extends StatelessWidget {
 
         Row(
           children: [
-
             IconButton(
               onPressed: () {},
               icon: const Icon(Icons.camera_alt_outlined),
             ),
 
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.facebook),
-            ),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.facebook)),
 
             IconButton(
               onPressed: () {},
               icon: const Icon(Icons.play_circle_outline),
             ),
 
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.chat),
-            ),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.chat)),
 
             IconButton(
               onPressed: () {},

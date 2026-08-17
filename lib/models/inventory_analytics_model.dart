@@ -17,17 +17,13 @@ class InventoryAnalyticsModel {
     required this.inventoryValue,
   });
 
-  factory InventoryAnalyticsModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory InventoryAnalyticsModel.fromMap(Map<String, dynamic> map) {
     return InventoryAnalyticsModel(
-      totalProducts:
-          map['totalProducts'] ?? 0,
+      totalProducts: map['totalProducts'] ?? 0,
       inStock: map['inStock'] ?? 0,
       lowStock: map['lowStock'] ?? 0,
       outOfStock: map['outOfStock'] ?? 0,
-      inventoryValue:
-          (map['inventoryValue'] ?? 0).toDouble(),
+      inventoryValue: (map['inventoryValue'] ?? 0).toDouble(),
     );
   }
 

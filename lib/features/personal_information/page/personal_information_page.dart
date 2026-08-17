@@ -18,23 +18,16 @@ class PersonalInformationPage extends StatelessWidget {
       currentRoute: AppRouter.profile,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 60,
-            vertical: 40,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 40),
           child: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 900,
-              ),
+              constraints: const BoxConstraints(maxWidth: 900),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   /// Page Title
                   Row(
                     children: [
-
                       IconButton(
                         onPressed: () {
                           Navigator.pop(context);
@@ -51,7 +44,6 @@ class PersonalInformationPage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
                     ],
                   ),
 
@@ -79,7 +71,6 @@ class PersonalInformationPage extends StatelessWidget {
 
                   /// Save Button
                   const SaveButton(),
-
                 ],
               ),
             ),

@@ -9,11 +9,7 @@ class EmptyWishlist extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
-          Icon(
-            Icons.favorite_border,
-            color: Colors.red,
-            size: 80,
-          ),
+          Icon(Icons.favorite_border, color: Colors.red, size: 80),
           SizedBox(height: 20),
           Text(
             'Your Wishlist is Empty',
@@ -26,10 +22,7 @@ class EmptyWishlist extends StatelessWidget {
           SizedBox(height: 10),
           Text(
             'Save your favourite jerseys here.',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 16,
-            ),
+            style: TextStyle(color: Colors.white70, fontSize: 16),
           ),
         ],
       ),

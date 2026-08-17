@@ -5,26 +5,17 @@ class EmptyNotifications extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: const [
-
-          Icon(
-            Icons.notifications_none,
-            size: 80,
-            color: Colors.grey,
-          ),
+          Icon(Icons.notifications_none, size: 80, color: Colors.grey),
 
           SizedBox(height: 20),
 
           Text(
             "No Notifications Yet",
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
 
           SizedBox(height: 15),
@@ -38,7 +29,6 @@ class EmptyNotifications extends StatelessWidget {
             "• Account",
             textAlign: TextAlign.center,
           ),
-
         ],
       ),
     );

@@ -19,17 +19,12 @@ class AddressTypeSelector extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        Text(
-          "Address Type",
-          style: AppTextStyles.bodyLarge,
-        ),
+        Text("Address Type", style: AppTextStyles.bodyLarge),
 
         const SizedBox(height: AppSpacing.md),
 
         Row(
           children: [
-
             _buildOption("Home"),
 
             const SizedBox(width: 20),
@@ -39,10 +34,8 @@ class AddressTypeSelector extends StatelessWidget {
             const SizedBox(width: 20),
 
             _buildOption("Other"),
-
           ],
         ),
-
       ],
     );
   }
@@ -53,7 +46,6 @@ class AddressTypeSelector extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       child: Row(
         children: [
-
           Radio<String>(
             value: value,
             groupValue: selectedType,
@@ -65,11 +57,7 @@ class AddressTypeSelector extends StatelessWidget {
             },
           ),
 
-          Text(
-            value,
-            style: AppTextStyles.bodyLarge,
-          ),
-
+          Text(value, style: AppTextStyles.bodyLarge),
         ],
       ),
     );

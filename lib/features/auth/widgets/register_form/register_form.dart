@@ -7,10 +7,7 @@ import '../../../../services/auth_service.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
 
-enum VerificationType {
-  phone,
-  email,
-}
+enum VerificationType { phone, email }
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -44,41 +41,33 @@ class _RegisterFormState extends State<RegisterForm> {
   Future<void> register() async {
     if (!agree) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please accept Terms & Privacy Policy"),
-        ),
+        const SnackBar(content: Text("Please accept Terms & Privacy Policy")),
       );
       return;
     }
 
     if (verificationType == VerificationType.phone) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Phone verification coming soon."),
-        ),
+        const SnackBar(content: Text("Phone verification coming soon.")),
       );
       return;
     }
 
     if (nameController.text.trim().isEmpty ||
-    emailController.text.trim().isEmpty ||
-    phoneController.text.trim().isEmpty ||
-    passwordController.text.trim().isEmpty ||
-    confirmPasswordController.text.trim().isEmpty) {
+        emailController.text.trim().isEmpty ||
+        phoneController.text.trim().isEmpty ||
+        passwordController.text.trim().isEmpty ||
+        confirmPasswordController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please fill all required fields."),
-        ),
+        const SnackBar(content: Text("Please fill all required fields.")),
       );
       return;
     }
 
     if (passwordController.text != confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Passwords do not match."),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Passwords do not match.")));
       return;
     }
 
@@ -87,19 +76,17 @@ class _RegisterFormState extends State<RegisterForm> {
         isLoading = true;
       });
 
-   await AuthService.register(
-  fullName: nameController.text.trim(),
-  email: emailController.text.trim(),
-  phone: phoneController.text.trim(),
-  password: passwordController.text.trim(),
-);
+      await AuthService.register(
+        fullName: nameController.text.trim(),
+        email: emailController.text.trim(),
+        phone: phoneController.text.trim(),
+        password: passwordController.text.trim(),
+      );
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Account created successfully."),
-        ),
+        const SnackBar(content: Text("Account created successfully.")),
       );
 
       context.go(AppRouter.profile);
@@ -123,9 +110,9 @@ class _RegisterFormState extends State<RegisterForm> {
           message = e.message ?? message;
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     } finally {
       if (mounted) {
         setState(() {
@@ -157,9 +144,7 @@ class _RegisterFormState extends State<RegisterForm> {
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: Icon(icon),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
       ],
@@ -174,16 +159,11 @@ class _RegisterFormState extends State<RegisterForm> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(50),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 420,
-            ),
+            constraints: const BoxConstraints(maxWidth: 420),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Create Account",
-                  style: AppTextStyles.heading2,
-                ),
+                Text("Create Account", style: AppTextStyles.heading2),
 
                 const SizedBox(height: 10),
 
@@ -243,10 +223,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
                 const SizedBox(height: 30),
 
-                Text(
-                  "Verify Using",
-                  style: AppTextStyles.bodyLarge,
-                ),
+                Text("Verify Using", style: AppTextStyles.bodyLarge),
 
                 const SizedBox(height: 10),
 
@@ -255,15 +232,11 @@ class _RegisterFormState extends State<RegisterForm> {
                   groupValue: verificationType,
                   activeColor: AppColors.primary,
                   contentPadding: EdgeInsets.zero,
-                  title: const Text(
-                    "Mobile Number (Coming Soon)",
-                  ),
+                  title: const Text("Mobile Number (Coming Soon)"),
                   onChanged: (_) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text(
-                          "Phone verification coming soon.",
-                        ),
+                        content: Text("Phone verification coming soon."),
                       ),
                     );
                   },
@@ -274,9 +247,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   groupValue: verificationType,
                   activeColor: AppColors.primary,
                   contentPadding: EdgeInsets.zero,
-                  title: const Text(
-                    "Email Address",
-                  ),
+                  title: const Text("Email Address"),
                   onChanged: (value) {
                     setState(() {
                       verificationType = value!;
@@ -290,9 +261,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   value: agree,
                   activeColor: AppColors.primary,
                   contentPadding: EdgeInsets.zero,
-                  title: const Text(
-                    "I agree to the Terms & Privacy Policy",
-                  ),
+                  title: const Text("I agree to the Terms & Privacy Policy"),
                   onChanged: (value) {
                     setState(() {
                       agree = value ?? false;
@@ -312,9 +281,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       foregroundColor: Colors.white,
                     ),
                     child: isLoading
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
-                          )
+                        ? const CircularProgressIndicator(color: Colors.white)
                         : const Text(
                             "CONTINUE",
                             style: TextStyle(
@@ -330,9 +297,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "Already have an account?",
-                    ),
+                    const Text("Already have an account?"),
                     TextButton(
                       onPressed: () {
                         context.go(AppRouter.login);

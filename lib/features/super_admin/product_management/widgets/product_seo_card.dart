@@ -5,10 +5,7 @@ import '../../../../models/product_model.dart';
 class ProductSeoCard extends StatelessWidget {
   final ProductModel product;
 
-  const ProductSeoCard({
-    super.key,
-    required this.product,
-  });
+  const ProductSeoCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +13,11 @@ class ProductSeoCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               "SEO Information",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 20),
@@ -33,9 +26,7 @@ class ProductSeoCard extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            Text(
-              "Meta Description : ${product.seo.metaDescription}",
-            ),
+            Text("Meta Description : ${product.seo.metaDescription}"),
 
             const SizedBox(height: 10),
 

@@ -15,18 +15,12 @@ class OrderSearchBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Text(
-            "Search Order",
-            style: AppTextStyles.heading3,
-          ),
+          Text("Search Order", style: AppTextStyles.heading3),
 
           const SizedBox(height: AppSpacing.md),
 
@@ -41,16 +35,11 @@ class OrderSearchBar extends StatelessWidget {
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  color: AppColors.border,
-                ),
+                borderSide: BorderSide(color: AppColors.border),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  color: AppColors.primary,
-                  width: 2,
-                ),
+                borderSide: BorderSide(color: AppColors.primary, width: 2),
               ),
             ),
             onChanged: (value) {
@@ -58,7 +47,6 @@ class OrderSearchBar extends StatelessWidget {
               // Search Order
             },
           ),
-
         ],
       ),
     );

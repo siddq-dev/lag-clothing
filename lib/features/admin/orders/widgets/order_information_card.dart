@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../models/order_model.dart';
 
 class OrderInformationCard extends StatelessWidget {
-  const OrderInformationCard({
-    super.key,
-    required this.order,
-  });
+  const OrderInformationCard({super.key, required this.order});
 
   final OrderModel order;
 
@@ -21,57 +18,36 @@ class OrderInformationCard extends StatelessWidget {
           children: [
             const Text(
               "Order Information",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 20),
 
-            _infoRow(
-              "Order Number",
-              order.orderNumber,
-            ),
+            _infoRow("Order Number", order.orderNumber),
 
             _infoRow(
               "Tracking ID",
-              order.trackingId.isEmpty
-                  ? "-"
-                  : order.trackingId,
+              order.trackingId.isEmpty ? "-" : order.trackingId,
             ),
 
-            _infoRow(
-              "Order Status",
-              order.orderStatus.name,
-            ),
+            _infoRow("Order Status", order.orderStatus.name),
 
-            _infoRow(
-              "Payment Status",
-              order.paymentStatus.name,
-            ),
+            _infoRow("Payment Status", order.paymentStatus.name),
 
-            _infoRow(
-              "Payment Method",
-              order.paymentMethod,
-            ),
+            _infoRow("Payment Method", order.paymentMethod),
 
             _infoRow(
               "Created At",
               order.createdAt == null
                   ? "-"
-                  : order.createdAt!
-                      .toDate()
-                      .toString(),
+                  : order.createdAt!.toDate().toString(),
             ),
 
             _infoRow(
               "Updated At",
               order.updatedAt == null
                   ? "-"
-                  : order.updatedAt!
-                      .toDate()
-                      .toString(),
+                  : order.updatedAt!.toDate().toString(),
             ),
           ],
         ),
@@ -79,29 +55,20 @@ class OrderInformationCard extends StatelessWidget {
     );
   }
 
-  Widget _infoRow(
-    String title,
-    String value,
-  ) {
+  Widget _infoRow(String title, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 8,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
           SizedBox(
             width: 170,
             child: Text(
               title,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
 
-          Expanded(
-            child: Text(value),
-          ),
+          Expanded(child: Text(value)),
         ],
       ),
     );

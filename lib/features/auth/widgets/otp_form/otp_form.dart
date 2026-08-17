@@ -4,11 +4,7 @@ import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
 
 class OtpForm extends StatefulWidget {
-  const OtpForm({
-    super.key,
-    required this.destination,
-    required this.isPhone,
-  });
+  const OtpForm({super.key, required this.destination, required this.isPhone});
 
   final String destination;
   final bool isPhone;
@@ -18,15 +14,15 @@ class OtpForm extends StatefulWidget {
 }
 
 class _OtpFormState extends State<OtpForm> {
-
-  final List<TextEditingController> otpControllers =
-      List.generate(6, (_) => TextEditingController());
+  final List<TextEditingController> otpControllers = List.generate(
+    6,
+    (_) => TextEditingController(),
+  );
 
   int seconds = 30;
 
   @override
   void dispose() {
-
     for (var controller in otpControllers) {
       controller.dispose();
     }
@@ -42,33 +38,24 @@ class _OtpFormState extends State<OtpForm> {
         maxLength: 1,
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
-        decoration: const InputDecoration(
-          counterText: "",
-        ),
+        decoration: const InputDecoration(counterText: ""),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: AppColors.background,
       child: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(50),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 420,
-            ),
+            constraints: const BoxConstraints(maxWidth: 420),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-                Text(
-                  "OTP Verification",
-                  style: AppTextStyles.heading2,
-                ),
+                Text("OTP Verification", style: AppTextStyles.heading2),
 
                 const SizedBox(height: 15),
 
@@ -92,10 +79,7 @@ class _OtpFormState extends State<OtpForm> {
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(
-                    6,
-                    (index) => otpBox(index),
-                  ),
+                  children: List.generate(6, (index) => otpBox(index)),
                 ),
 
                 const SizedBox(height: 30),
@@ -103,22 +87,14 @@ class _OtpFormState extends State<OtpForm> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
-                    const Text(
-                      "Didn't receive OTP?",
-                    ),
+                    const Text("Didn't receive OTP?"),
 
                     TextButton(
-                      onPressed: seconds == 0
-                          ? () {}
-                          : null,
+                      onPressed: seconds == 0 ? () {} : null,
                       child: Text(
-                        seconds == 0
-                            ? "Resend OTP"
-                            : "Resend in ${seconds}s",
+                        seconds == 0 ? "Resend OTP" : "Resend in ${seconds}s",
                       ),
                     ),
-
                   ],
                 ),
 
@@ -137,13 +113,10 @@ class _OtpFormState extends State<OtpForm> {
                     ),
                     child: const Text(
                       "VERIFY OTP",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
-
               ],
             ),
           ),

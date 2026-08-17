@@ -5,10 +5,7 @@ import '../../../../themes/app_spacing.dart';
 import '../../../../themes/app_text_style.dart';
 
 class OrderTimeline extends StatelessWidget {
-  const OrderTimeline({
-    super.key,
-    required this.currentStep,
-  });
+  const OrderTimeline({super.key, required this.currentStep});
 
   /// 0 = Order Confirmed
   /// 1 = Packed
@@ -33,41 +30,30 @@ class OrderTimeline extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Text(
-            "Order Timeline",
-            style: AppTextStyles.heading2,
-          ),
+          Text("Order Timeline", style: AppTextStyles.heading2),
 
           const SizedBox(height: AppSpacing.xl),
 
           ...List.generate(steps.length, (index) {
-
             final completed = index <= currentStep;
 
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Column(
                   children: [
-
                     CircleAvatar(
                       radius: 13,
                       backgroundColor: completed
                           ? Colors.green
                           : Colors.grey.shade700,
                       child: Icon(
-                        completed
-                            ? Icons.check
-                            : Icons.circle,
+                        completed ? Icons.check : Icons.circle,
                         size: completed ? 16 : 10,
                         color: Colors.white,
                       ),
@@ -77,11 +63,8 @@ class OrderTimeline extends StatelessWidget {
                       Container(
                         width: 2,
                         height: 42,
-                        color: completed
-                            ? Colors.green
-                            : Colors.grey.shade700,
+                        color: completed ? Colors.green : Colors.grey.shade700,
                       ),
-
                   ],
                 ),
 
@@ -92,20 +75,16 @@ class OrderTimeline extends StatelessWidget {
                   child: Text(
                     steps[index],
                     style: AppTextStyles.bodyLarge.copyWith(
-                      color: completed
-                          ? Colors.white
-                          : Colors.grey.shade500,
+                      color: completed ? Colors.white : Colors.grey.shade500,
                       fontWeight: completed
                           ? FontWeight.w600
                           : FontWeight.normal,
                     ),
                   ),
                 ),
-
               ],
             );
           }),
-
         ],
       ),
     );

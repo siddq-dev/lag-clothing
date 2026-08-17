@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '/models/customer_admin_model.dart';
 
 class CustomerProfileCard extends StatelessWidget {
-  const CustomerProfileCard({
-    super.key,
-    required this.customer,
-  });
+  const CustomerProfileCard({super.key, required this.customer});
 
   final CustomerAdminModel customer;
 
@@ -14,9 +11,7 @@ class CustomerProfileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       child: Padding(
         padding: const EdgeInsets.all(30),
         child: Row(
@@ -24,15 +19,11 @@ class CustomerProfileCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 50,
-              backgroundImage:
-                  customer.photoUrl.isNotEmpty
-                      ? NetworkImage(customer.photoUrl)
-                      : null,
+              backgroundImage: customer.photoUrl.isNotEmpty
+                  ? NetworkImage(customer.photoUrl)
+                  : null,
               child: customer.photoUrl.isEmpty
-                  ? const Icon(
-                      Icons.person,
-                      size: 50,
-                    )
+                  ? const Icon(Icons.person, size: 50)
                   : null,
             ),
 
@@ -40,8 +31,7 @@ class CustomerProfileCard extends StatelessWidget {
 
             Expanded(
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     customer.fullName,
@@ -53,47 +43,35 @@ class CustomerProfileCard extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  _infoTile(
-                    Icons.email,
-                    "Email",
-                    customer.email,
-                  ),
+                  _infoTile(Icons.email, "Email", customer.email),
 
-                  _infoTile(
-                    Icons.phone,
-                    "Phone",
-                    customer.phone,
-                  ),
+                  _infoTile(Icons.phone, "Phone", customer.phone),
 
                   _infoTile(
                     Icons.calendar_today,
                     "Joined",
-                    customer.createdAt
-                            ?.toDate()
-                            .toString()
-                            .split(" ")
-                            .first ??
+                    customer.createdAt?.toDate().toString().split(" ").first ??
                         "-",
                   ),
 
-             _infoTile(
-  Icons.shopping_bag,
-  "Total Orders",
-  customer.totalOrders.toString(),
-),
+                  _infoTile(
+                    Icons.shopping_bag,
+                    "Total Orders",
+                    customer.totalOrders.toString(),
+                  ),
 
                   const SizedBox(height: 20),
 
-              Chip(
-  backgroundColor: Colors.blue,
-  label: Text(
-    "₹${customer.totalSpent.toStringAsFixed(2)}",
-    style: const TextStyle(
-      color: Colors.white,
-      fontWeight: FontWeight.bold,
-    ),
-  ),
-),
+                  Chip(
+                    backgroundColor: Colors.blue,
+                    label: Text(
+                      "₹${customer.totalSpent.toStringAsFixed(2)}",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -103,14 +81,9 @@ class CustomerProfileCard extends StatelessWidget {
     );
   }
 
-  Widget _infoTile(
-    IconData icon,
-    String title,
-    String value,
-  ) {
+  Widget _infoTile(IconData icon, String title, String value) {
     return Padding(
-      padding:
-          const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.only(bottom: 15),
       child: Row(
         children: [
           Icon(icon),
@@ -121,15 +94,11 @@ class CustomerProfileCard extends StatelessWidget {
             width: 90,
             child: Text(
               title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
 
-          Expanded(
-            child: Text(value),
-          ),
+          Expanded(child: Text(value)),
         ],
       ),
     );

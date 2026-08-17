@@ -18,19 +18,15 @@ class ReviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 1.5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             /// Customer Info
             Row(
               children: [
-
                 CircleAvatar(
                   radius: 24,
                   backgroundColor: Colors.grey.shade200,
@@ -49,7 +45,6 @@ class ReviewCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       Text(
                         customerName,
                         style: const TextStyle(
@@ -67,11 +62,9 @@ class ReviewCard extends StatelessWidget {
                           fontSize: 13,
                         ),
                       ),
-
                     ],
                   ),
                 ),
-
               ],
             ),
 
@@ -82,9 +75,7 @@ class ReviewCard extends StatelessWidget {
               children: List.generate(
                 5,
                 (index) => Icon(
-                  index < rating
-                      ? Icons.star
-                      : Icons.star_border,
+                  index < rating ? Icons.star : Icons.star_border,
                   color: Colors.amber,
                   size: 22,
                 ),
@@ -94,28 +85,18 @@ class ReviewCard extends StatelessWidget {
             const SizedBox(height: 18),
 
             /// Review Text
-            Text(
-              reviewText,
-              style: const TextStyle(
-                fontSize: 15,
-                height: 1.6,
-              ),
-            ),
+            Text(reviewText, style: const TextStyle(fontSize: 15, height: 1.6)),
 
             const SizedBox(height: 20),
 
             /// Helpful Section
             Row(
               children: [
-
                 TextButton.icon(
                   onPressed: () {
                     // Firebase later
                   },
-                  icon: const Icon(
-                    Icons.thumb_up_alt_outlined,
-                    size: 18,
-                  ),
+                  icon: const Icon(Icons.thumb_up_alt_outlined, size: 18),
                   label: const Text("Helpful"),
                 ),
 
@@ -125,16 +106,11 @@ class ReviewCard extends StatelessWidget {
                   onPressed: () {
                     // Firebase later
                   },
-                  icon: const Icon(
-                    Icons.flag_outlined,
-                    size: 18,
-                  ),
+                  icon: const Icon(Icons.flag_outlined, size: 18),
                   label: const Text("Report"),
                 ),
-
               ],
             ),
-
           ],
         ),
       ),

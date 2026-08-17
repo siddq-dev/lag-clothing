@@ -8,16 +8,22 @@ class ResponsiveBuilder extends StatelessWidget {
     required this.desktop,
     this.tablet,
     this.mobile,
+    this.smallMobile,
   });
 
   final Widget desktop;
   final Widget? tablet;
   final Widget? mobile;
+  final Widget? smallMobile;
 
   @override
   Widget build(BuildContext context) {
+    if (ScreenSize.isSmallMobile(context)) {
+      return smallMobile ?? mobile ?? tablet ?? desktop;
+    }
+
     if (ScreenSize.isMobile(context)) {
-      return mobile ?? desktop;
+      return mobile ?? tablet ?? desktop;
     }
 
     if (ScreenSize.isTablet(context)) {

@@ -22,21 +22,17 @@ class CouponCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: Padding(
         padding: const EdgeInsets.all(22),
         child: Row(
           children: [
-
             Container(
               width: 95,
               height: 95,
               decoration: BoxDecoration(
                 color: AppColors.primary,
-                borderRadius:
-                    BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
                 child: Text(
@@ -55,10 +51,8 @@ class CouponCard extends StatelessWidget {
 
             Expanded(
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Text(
                     code,
                     style: const TextStyle(
@@ -73,14 +67,9 @@ class CouponCard extends StatelessWidget {
 
                   const SizedBox(height: 10),
 
-                  Text(
-                    "Minimum Order : $minimum",
-                  ),
+                  Text("Minimum Order : $minimum"),
 
-                  Text(
-                    "Valid Until : $expiry",
-                  ),
-
+                  Text("Valid Until : $expiry"),
                 ],
               ),
             ),
@@ -90,14 +79,11 @@ class CouponCard extends StatelessWidget {
                 // Apply Later
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    AppColors.primary,
-                foregroundColor:
-                    Colors.white,
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
               ),
               child: const Text("APPLY"),
             ),
-
           ],
         ),
       ),

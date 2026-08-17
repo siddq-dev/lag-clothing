@@ -6,10 +6,7 @@ import '../widgets/product_table_row.dart';
 import '../../../../models/product_model.dart';
 
 class ProductTable extends StatelessWidget {
-  const ProductTable({
-    super.key,
-    required this.products,
-  });
+  const ProductTable({super.key, required this.products});
 
   final List<ProductModel> products;
 
@@ -36,10 +33,8 @@ class ProductTable extends StatelessWidget {
                   product: product,
                   onView: () {},
                   onEdit: () {
-  context.push(
-    "${AppRouter.addProduct}?id=${product.id}",
-  );
-},
+                    context.push("${AppRouter.addProduct}?id=${product.id}");
+                  },
                   onDelete: () {},
                 ),
               )

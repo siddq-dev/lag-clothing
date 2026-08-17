@@ -9,13 +9,9 @@ class ContactHero extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 100,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
       child: const Column(
         children: [
-
           Text(
             'Contact Us',
             style: AppTextStyles.heroTitle,
@@ -32,7 +28,6 @@ class ContactHero extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-
         ],
       ),
     );

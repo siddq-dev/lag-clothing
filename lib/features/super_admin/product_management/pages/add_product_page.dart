@@ -12,10 +12,7 @@ import '../widgets/seo_section.dart';
 import '../widgets/publish_section.dart';
 
 class AddProductPage extends StatelessWidget {
-  const AddProductPage({
-    super.key,
-    this.productId,
-  });
+  const AddProductPage({super.key, this.productId});
 
   final String? productId;
 
@@ -35,11 +32,7 @@ class AddProductPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            productId == null
-                ? "Add Product"
-                : "Edit Product",
-          ),
+          title: Text(productId == null ? "Add Product" : "Edit Product"),
         ),
         body: const SingleChildScrollView(
           padding: EdgeInsets.all(30),

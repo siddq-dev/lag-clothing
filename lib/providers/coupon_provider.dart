@@ -4,9 +4,8 @@ import '../models/coupon_model.dart';
 import '../repositories/coupon_repository.dart';
 
 class CouponProvider extends ChangeNotifier {
-  CouponProvider({
-    CouponRepository? repository,
-  }) : _repository = repository ?? CouponRepository();
+  CouponProvider({CouponRepository? repository})
+    : _repository = repository ?? CouponRepository();
 
   final CouponRepository _repository;
 
@@ -41,7 +40,7 @@ class CouponProvider extends ChangeNotifier {
   Future<bool> applyCoupon({
     required String code,
     required double subtotal,
-    
+
     required List<String> productIds,
   }) async {
     _isLoading = true;
@@ -53,7 +52,7 @@ class CouponProvider extends ChangeNotifier {
       final result = await _repository.validateCoupon(
         code: code,
         subtotal: subtotal,
-        
+
         productIds: productIds,
       );
 

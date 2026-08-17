@@ -46,18 +46,14 @@ class AddressForm extends StatelessWidget {
         keyboardType: keyboardType,
         maxLines: maxLines,
         validator: (value) {
-          if (requiredField &&
-              (value == null || value.trim().isEmpty)) {
+          if (requiredField && (value == null || value.trim().isEmpty)) {
             return "$label is required";
           }
           return null;
         },
         decoration: InputDecoration(
-          labelText:
-              requiredField ? "$label *" : "$label (Optional)",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          labelText: requiredField ? "$label *" : "$label (Optional)",
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
     );

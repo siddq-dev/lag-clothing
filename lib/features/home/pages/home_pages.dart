@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
               FeaturedCollection(),
               NewArrivals(),
               WhyChooseUs(),
-              CustomerReviews(),
+              // CustomerReviews(),
             ],
           ),
         ),

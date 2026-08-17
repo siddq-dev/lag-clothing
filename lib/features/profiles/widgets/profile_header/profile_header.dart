@@ -40,10 +40,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
 
     if (provider.error != null) {
       return Center(
-        child: Text(
-          provider.error!,
-          style: const TextStyle(color: Colors.red),
-        ),
+        child: Text(provider.error!, style: const TextStyle(color: Colors.red)),
       );
     }
 
@@ -55,38 +52,28 @@ class _ProfileHeaderState extends State<ProfileHeader> {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         children: [
           Text(
             "MY ACCOUNT",
-            style: AppTextStyles.heading1.copyWith(
-              color: Colors.white,
-            ),
+            style: AppTextStyles.heading1.copyWith(color: Colors.white),
           ),
 
           const SizedBox(height: 30),
 
           Stack(
             children: [
-              customer?.photoUrl != null &&
-                      customer!.photoUrl.isNotEmpty
+              customer?.photoUrl != null && customer!.photoUrl.isNotEmpty
                   ? CircleAvatar(
                       radius: 50,
-                      backgroundImage:
-                          NetworkImage(customer.photoUrl),
+                      backgroundImage: NetworkImage(customer.photoUrl),
                     )
                   : const CircleAvatar(
                       radius: 50,
                       backgroundColor: AppColors.primary,
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: 55,
-                      ),
+                      child: Icon(Icons.person, color: Colors.white, size: 55),
                     ),
 
               Positioned(
@@ -96,10 +83,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   decoration: BoxDecoration(
                     color: AppColors.primary,
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 2,
-                    ),
+                    border: Border.all(color: Colors.black, width: 2),
                   ),
                   child: IconButton(
                     icon: const Icon(
@@ -154,13 +138,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
             label: const Text("Edit Profile"),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.primary,
-              side: const BorderSide(
-                color: AppColors.primary,
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 22,
-                vertical: 14,
-              ),
+              side: const BorderSide(color: AppColors.primary),
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
             ),
           ),
         ],

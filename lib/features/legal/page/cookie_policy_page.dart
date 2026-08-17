@@ -22,14 +22,10 @@ class CookiePolicyPage extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 80,
-              vertical: 60,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 60),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
-
                 LegalSection(
                   heading: "What Are Cookies?",
                   body:
@@ -42,26 +38,15 @@ class CookiePolicyPage extends StatelessWidget {
                       "Cookies help us keep you logged in, remember shopping cart items, analyze website traffic, and improve performance.",
                 ),
 
-                LegalSection(
-                  heading: "Types of Cookies",
-                  body: "",
-                ),
+                LegalSection(heading: "Types of Cookies", body: ""),
 
-                LegalBullet(
-                  text: "Essential Cookies",
-                ),
+                LegalBullet(text: "Essential Cookies"),
 
-                LegalBullet(
-                  text: "Performance Cookies",
-                ),
+                LegalBullet(text: "Performance Cookies"),
 
-                LegalBullet(
-                  text: "Analytics Cookies",
-                ),
+                LegalBullet(text: "Analytics Cookies"),
 
-                LegalBullet(
-                  text: "Marketing Cookies",
-                ),
+                LegalBullet(text: "Marketing Cookies"),
 
                 LegalSection(
                   heading: "Managing Cookies",

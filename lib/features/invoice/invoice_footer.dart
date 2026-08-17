@@ -16,30 +16,22 @@ class InvoiceFooter extends pw.StatelessWidget {
 
       decoration: pw.BoxDecoration(
         color: InvoiceTheme.light,
-        border: pw.Border.all(
-          color: InvoiceTheme.border,
-        ),
+        border: pw.Border.all(color: InvoiceTheme.border),
       ),
 
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
         children: [
-
           pw.Text(
             "Thank You For Shopping With ${CompanyInfo.companyName}",
-            style: pw.TextStyle(
-              fontWeight: pw.FontWeight.bold,
-              fontSize: 16,
-            ),
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 16),
           ),
 
           pw.SizedBox(height: 10),
 
           pw.Text(
             CompanyInfo.tagline,
-            style: pw.TextStyle(
-              color: InvoiceTheme.secondary,
-            ),
+            style: pw.TextStyle(color: InvoiceTheme.secondary),
           ),
 
           pw.SizedBox(height: 12),
@@ -60,28 +52,21 @@ class InvoiceFooter extends pw.StatelessWidget {
 
           pw.Text(
             "Returns accepted within 7 days from delivery.",
-            style: const pw.TextStyle(
-              fontSize: 10,
-            ),
+            style: const pw.TextStyle(fontSize: 10),
           ),
 
           pw.SizedBox(height: 4),
 
           pw.Text(
             "Please keep this invoice for warranty and return purposes.",
-            style: const pw.TextStyle(
-              fontSize: 10,
-            ),
+            style: const pw.TextStyle(fontSize: 10),
           ),
 
           pw.SizedBox(height: 14),
 
           pw.Text(
             "© ${DateTime.now().year} ${CompanyInfo.companyName}",
-            style: pw.TextStyle(
-              color: PdfColors.grey700,
-              fontSize: 10,
-            ),
+            style: pw.TextStyle(color: PdfColors.grey700, fontSize: 10),
           ),
         ],
       ),

@@ -10,14 +10,10 @@ class Journey extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 100,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
       color: AppColors.surface,
       child: Column(
         children: [
-
           Text(
             'OUR JOURNEY',
             style: AppTextStyles.sectionTitle.copyWith(
@@ -40,7 +36,6 @@ class Journey extends StatelessWidget {
 
           Row(
             children: const [
-
               Expanded(
                 child: JourneyItem(
                   year: '2026',
@@ -63,10 +58,7 @@ class Journey extends StatelessWidget {
               ),
 
               Expanded(
-                child: JourneyItem(
-                  year: 'Future',
-                  title: 'Global Expansion',
-                ),
+                child: JourneyItem(year: 'Future', title: 'Global Expansion'),
               ),
             ],
           ),
@@ -77,11 +69,7 @@ class Journey extends StatelessWidget {
 }
 
 class JourneyItem extends StatelessWidget {
-  const JourneyItem({
-    super.key,
-    required this.year,
-    required this.title,
-  });
+  const JourneyItem({super.key, required this.year, required this.title});
 
   final String year;
   final String title;
@@ -90,7 +78,6 @@ class JourneyItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         Container(
           width: 22,
           height: 22,
@@ -102,10 +89,7 @@ class JourneyItem extends StatelessWidget {
 
         const SizedBox(height: 20),
 
-        Text(
-          year,
-          style: AppTextStyles.heading3,
-        ),
+        Text(year, style: AppTextStyles.heading3),
 
         const SizedBox(height: 12),
 

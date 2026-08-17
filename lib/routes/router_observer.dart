@@ -14,33 +14,21 @@ class AnalyticsRouteObserver extends NavigatorObserver {
   }
 
   @override
-  void didPush(
-    Route route,
-    Route? previousRoute,
-  ) {
+  void didPush(Route route, Route? previousRoute) {
     super.didPush(route, previousRoute);
 
     _track(route);
   }
 
   @override
-  void didReplace({
-    Route? newRoute,
-    Route? oldRoute,
-  }) {
-    super.didReplace(
-      newRoute: newRoute,
-      oldRoute: oldRoute,
-    );
+  void didReplace({Route? newRoute, Route? oldRoute}) {
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
 
     _track(newRoute);
   }
 
   @override
-  void didPop(
-    Route route,
-    Route? previousRoute,
-  ) {
+  void didPop(Route route, Route? previousRoute) {
     super.didPop(route, previousRoute);
 
     _track(previousRoute);

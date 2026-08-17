@@ -5,10 +5,7 @@ import '../../../../models/product_model.dart';
 class ProductActionButtons extends StatelessWidget {
   final ProductModel product;
 
-  const ProductActionButtons({
-    super.key,
-    required this.product,
-  });
+  const ProductActionButtons({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +20,7 @@ class ProductActionButtons extends StatelessWidget {
         const SizedBox(width: 15),
 
         FilledButton.icon(
-          style: FilledButton.styleFrom(
-            backgroundColor: Colors.red,
-          ),
+          style: FilledButton.styleFrom(backgroundColor: Colors.red),
           onPressed: () {},
           icon: const Icon(Icons.delete),
           label: const Text("Delete"),

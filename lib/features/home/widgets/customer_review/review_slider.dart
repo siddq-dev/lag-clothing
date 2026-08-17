@@ -13,7 +13,6 @@ class ReviewSlider extends StatefulWidget {
 }
 
 class _ReviewSliderState extends State<ReviewSlider> {
-
   final PageController controller = PageController();
 
   int currentPage = 0;
@@ -24,23 +23,19 @@ class _ReviewSliderState extends State<ReviewSlider> {
   void initState() {
     super.initState();
 
-    timer = Timer.periodic(
-      const Duration(seconds: 5),
-      (_) {
+    timer = Timer.periodic(const Duration(seconds: 5), (_) {
+      currentPage++;
 
-        currentPage++;
+      if (currentPage >= reviews.length) {
+        currentPage = 0;
+      }
 
-        if (currentPage >= reviews.length) {
-          currentPage = 0;
-        }
-
-        controller.animateToPage(
-          currentPage,
-          duration: const Duration(milliseconds: 700),
-          curve: Curves.easeInOut,
-        );
-      },
-    );
+      controller.animateToPage(
+        currentPage,
+        duration: const Duration(milliseconds: 700),
+        curve: Curves.easeInOut,
+      );
+    });
   }
 
   @override
@@ -52,22 +47,16 @@ class _ReviewSliderState extends State<ReviewSlider> {
 
   @override
   Widget build(BuildContext context) {
-
     return SizedBox(
       height: 450,
 
       child: PageView.builder(
-
         controller: controller,
 
         itemCount: reviews.length,
 
-        itemBuilder: (context,index){
-
-          return ReviewItem(
-            review: reviews[index],
-          );
-
+        itemBuilder: (context, index) {
+          return ReviewItem(review: reviews[index]);
         },
       ),
     );

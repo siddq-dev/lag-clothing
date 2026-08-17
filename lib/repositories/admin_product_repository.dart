@@ -29,36 +29,24 @@ class AdminProductRepository {
   // Create Product
   // ==========================
 
-  static Future<void> createProduct(
-    ProductModel product,
-  ) async {
-    await ProductFirestoreService.createProduct(
-      product,
-    );
+  static Future<void> createProduct(ProductModel product) async {
+    await ProductFirestoreService.createProduct(product);
   }
 
   // ==========================
   // Update Product
   // ==========================
 
-  static Future<void> updateProduct(
-    ProductModel product,
-  ) async {
-    await ProductFirestoreService.updateProduct(
-      product,
-    );
+  static Future<void> updateProduct(ProductModel product) async {
+    await ProductFirestoreService.updateProduct(product);
   }
 
   // ==========================
   // Delete Product
   // ==========================
 
-  static Future<void> deleteProduct(
-    String productId,
-  ) async {
-    await ProductFirestoreService.deleteProduct(
-      productId,
-    );
+  static Future<void> deleteProduct(String productId) async {
+    await ProductFirestoreService.deleteProduct(productId);
   }
 
   // ==========================

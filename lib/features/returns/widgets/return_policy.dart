@@ -3,21 +3,10 @@ import 'package:flutter/material.dart';
 class ReturnPolicy extends StatelessWidget {
   const ReturnPolicy({super.key});
 
-  Widget policyTile(
-    IconData icon,
-    String title,
-    String description,
-  ) {
+  Widget policyTile(IconData icon, String title, String description) {
     return ListTile(
-      leading: CircleAvatar(
-        child: Icon(icon),
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      leading: CircleAvatar(child: Icon(icon)),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
       subtitle: Padding(
         padding: const EdgeInsets.only(top: 6),
         child: Text(description),
@@ -30,21 +19,15 @@ class ReturnPolicy extends StatelessWidget {
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 20,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 "Return Policy",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
             ),
 
@@ -67,7 +50,6 @@ class ReturnPolicy extends StatelessWidget {
               "Non-Returnable",
               "Customized jerseys cannot be returned unless damaged.",
             ),
-
           ],
         ),
       ),

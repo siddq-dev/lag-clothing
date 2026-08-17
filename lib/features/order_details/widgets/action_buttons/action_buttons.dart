@@ -4,15 +4,12 @@ import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_spacing.dart';
 
 class ActionButtons extends StatelessWidget {
-  const ActionButtons({
-    super.key,
-  });
+  const ActionButtons({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-
         Expanded(
           child: OutlinedButton.icon(
             onPressed: () {
@@ -21,22 +18,14 @@ class ActionButtons extends StatelessWidget {
             },
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.primary,
-              side: const BorderSide(
-                color: AppColors.primary,
-              ),
-              padding: const EdgeInsets.symmetric(
-                vertical: 18,
-              ),
+              side: const BorderSide(color: AppColors.primary),
+              padding: const EdgeInsets.symmetric(vertical: 18),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            icon: const Icon(
-              Icons.download_outlined,
-            ),
-            label: const Text(
-              "Download Invoice",
-            ),
+            icon: const Icon(Icons.download_outlined),
+            label: const Text("Download Invoice"),
           ),
         ),
 
@@ -51,22 +40,15 @@ class ActionButtons extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(
-                vertical: 18,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 18),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            icon: const Icon(
-              Icons.shopping_cart_checkout_outlined,
-            ),
-            label: const Text(
-              "Buy Again",
-            ),
+            icon: const Icon(Icons.shopping_cart_checkout_outlined),
+            label: const Text("Buy Again"),
           ),
         ),
-
       ],
     );
   }

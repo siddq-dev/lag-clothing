@@ -26,8 +26,7 @@ class NotificationProvider extends ChangeNotifier {
 
       notifyListeners();
 
-      _settings =
-          await NotificationRepository.getSettings();
+      _settings = await NotificationRepository.getSettings();
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -41,29 +40,23 @@ class NotificationProvider extends ChangeNotifier {
   // ==========================================
 
   void listenSettings() {
-    NotificationRepository.streamSettings().listen(
-      (settings) {
-        _settings = settings;
-        notifyListeners();
-      },
-    );
+    NotificationRepository.streamSettings().listen((settings) {
+      _settings = settings;
+      notifyListeners();
+    });
   }
 
   // ==========================================
   // Save Settings
   // ==========================================
 
-  Future<void> updateSettings(
-    NotificationSettingsModel settings,
-  ) async {
+  Future<void> updateSettings(NotificationSettingsModel settings) async {
     try {
       _isLoading = true;
 
       notifyListeners();
 
-      await NotificationRepository.updateSettings(
-        settings,
-      );
+      await NotificationRepository.updateSettings(settings);
 
       _settings = settings;
     } catch (e) {
@@ -82,74 +75,43 @@ class NotificationProvider extends ChangeNotifier {
   Future<void> toggleOrderUpdates(bool value) async {
     if (_settings == null) return;
 
-    await updateSettings(
-      _settings!.copyWith(
-        orderUpdates: value,
-      ),
-    );
+    await updateSettings(_settings!.copyWith(orderUpdates: value));
   }
 
   Future<void> togglePromotions(bool value) async {
     if (_settings == null) return;
 
-    await updateSettings(
-      _settings!.copyWith(
-        promotions: value,
-      ),
-    );
+    await updateSettings(_settings!.copyWith(promotions: value));
   }
 
   Future<void> toggleNewArrivals(bool value) async {
     if (_settings == null) return;
 
-    await updateSettings(
-      _settings!.copyWith(
-        newArrivals: value,
-      ),
-    );
+    await updateSettings(_settings!.copyWith(newArrivals: value));
   }
 
   Future<void> toggleBackInStock(bool value) async {
     if (_settings == null) return;
 
-    await updateSettings(
-      _settings!.copyWith(
-        backInStock: value,
-      ),
-    );
+    await updateSettings(_settings!.copyWith(backInStock: value));
   }
 
-  Future<void> togglePushNotifications(
-      bool value) async {
+  Future<void> togglePushNotifications(bool value) async {
     if (_settings == null) return;
 
-    await updateSettings(
-      _settings!.copyWith(
-        pushNotifications: value,
-      ),
-    );
+    await updateSettings(_settings!.copyWith(pushNotifications: value));
   }
 
-  Future<void> toggleEmailNotifications(
-      bool value) async {
+  Future<void> toggleEmailNotifications(bool value) async {
     if (_settings == null) return;
 
-    await updateSettings(
-      _settings!.copyWith(
-        emailNotifications: value,
-      ),
-    );
+    await updateSettings(_settings!.copyWith(emailNotifications: value));
   }
 
-  Future<void> toggleSmsNotifications(
-      bool value) async {
+  Future<void> toggleSmsNotifications(bool value) async {
     if (_settings == null) return;
 
-    await updateSettings(
-      _settings!.copyWith(
-        smsNotifications: value,
-      ),
-    );
+    await updateSettings(_settings!.copyWith(smsNotifications: value));
   }
 
   // ==========================================

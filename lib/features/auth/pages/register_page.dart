@@ -16,17 +16,9 @@ class RegisterPage extends StatelessWidget {
         height: MediaQuery.of(context).size.height - 80,
         child: const Row(
           children: [
+            Expanded(flex: 6, child: AuthBanner()),
 
-            Expanded(
-              flex: 6,
-              child: AuthBanner(),
-            ),
-
-            Expanded(
-              flex: 4,
-              child: RegisterForm(),
-            ),
-
+            Expanded(flex: 4, child: RegisterForm()),
           ],
         ),
       ),

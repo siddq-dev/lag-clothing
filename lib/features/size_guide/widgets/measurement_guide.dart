@@ -3,30 +3,20 @@ import 'package:flutter/material.dart';
 class MeasurementGuide extends StatelessWidget {
   const MeasurementGuide({super.key});
 
-  Widget buildStep(
-    IconData icon,
-    String title,
-    String description,
-  ) {
+  Widget buildStep(IconData icon, String title, String description) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 25),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          CircleAvatar(
-            radius: 24,
-            child: Icon(icon),
-          ),
+          CircleAvatar(radius: 24, child: Icon(icon)),
 
           const SizedBox(width: 20),
 
           Expanded(
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Text(
                   title,
                   style: const TextStyle(
@@ -37,17 +27,10 @@ class MeasurementGuide extends StatelessWidget {
 
                 const SizedBox(height: 8),
 
-                Text(
-                  description,
-                  style: const TextStyle(
-                    height: 1.6,
-                  ),
-                ),
-
+                Text(description, style: const TextStyle(height: 1.6)),
               ],
             ),
           ),
-
         ],
       ),
     );
@@ -57,22 +40,15 @@ class MeasurementGuide extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 1.5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Text(
               "How to Measure Yourself",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 25),
@@ -94,7 +70,6 @@ class MeasurementGuide extends StatelessWidget {
               "Length",
               "Measure from the highest shoulder point straight down to the bottom of the jersey.",
             ),
-
           ],
         ),
       ),

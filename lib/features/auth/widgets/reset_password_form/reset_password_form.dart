@@ -7,13 +7,10 @@ class ResetPasswordForm extends StatefulWidget {
   const ResetPasswordForm({super.key});
 
   @override
-  State<ResetPasswordForm> createState() =>
-      _ResetPasswordFormState();
+  State<ResetPasswordForm> createState() => _ResetPasswordFormState();
 }
 
-class _ResetPasswordFormState
-    extends State<ResetPasswordForm> {
-
+class _ResetPasswordFormState extends State<ResetPasswordForm> {
   final passwordController = TextEditingController();
   final confirmController = TextEditingController();
 
@@ -28,7 +25,6 @@ class _ResetPasswordFormState
   }
 
   int get strength {
-
     int score = 0;
 
     final password = passwordController.text;
@@ -42,9 +38,7 @@ class _ResetPasswordFormState
   }
 
   Color get strengthColor {
-
     switch (strength) {
-
       case 0:
       case 1:
         return Colors.red;
@@ -58,9 +52,7 @@ class _ResetPasswordFormState
   }
 
   String get strengthText {
-
     switch (strength) {
-
       case 0:
       case 1:
         return "Weak";
@@ -79,11 +71,9 @@ class _ResetPasswordFormState
     required bool obscure,
     required VoidCallback toggle,
   }) {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         Text(label),
 
         const SizedBox(height: 10),
@@ -99,43 +89,29 @@ class _ResetPasswordFormState
 
             suffixIcon: IconButton(
               onPressed: toggle,
-              icon: Icon(
-                obscure
-                    ? Icons.visibility_off
-                    : Icons.visibility,
-              ),
+              icon: Icon(obscure ? Icons.visibility_off : Icons.visibility),
             ),
 
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
-
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: AppColors.background,
       child: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(50),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 420,
-            ),
+            constraints: const BoxConstraints(maxWidth: 420),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-                Text(
-                  "Reset Password",
-                  style: AppTextStyles.heading2,
-                ),
+                Text("Reset Password", style: AppTextStyles.heading2),
 
                 const SizedBox(height: 12),
 
@@ -206,15 +182,11 @@ class _ResetPasswordFormState
                   height: 55,
                   child: ElevatedButton(
                     onPressed: () {
-
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text(
-                            "Password Reset Successfully",
-                          ),
+                          content: Text("Password Reset Successfully"),
                         ),
                       );
-
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
@@ -222,13 +194,10 @@ class _ResetPasswordFormState
                     ),
                     child: const Text(
                       "RESET PASSWORD",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
-
               ],
             ),
           ),

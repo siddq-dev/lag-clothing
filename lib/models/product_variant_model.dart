@@ -38,8 +38,7 @@ class ProductVariantModel {
       sku: sku ?? this.sku,
       stock: stock ?? this.stock,
       available: available ?? this.available,
-      additionalPrice:
-          additionalPrice ?? this.additionalPrice,
+      additionalPrice: additionalPrice ?? this.additionalPrice,
     );
   }
 
@@ -55,8 +54,7 @@ class ProductVariantModel {
     };
   }
 
-  factory ProductVariantModel.fromMap(
-      Map<String, dynamic> map) {
+  factory ProductVariantModel.fromMap(Map<String, dynamic> map) {
     return ProductVariantModel(
       id: map["id"] ?? "",
       color: map["color"] ?? "",
@@ -64,8 +62,7 @@ class ProductVariantModel {
       sku: map["sku"] ?? "",
       stock: map["stock"] ?? 0,
       available: map["available"] ?? true,
-      additionalPrice:
-          (map["additionalPrice"] ?? 0).toDouble(),
+      additionalPrice: (map["additionalPrice"] ?? 0).toDouble(),
     );
   }
 }

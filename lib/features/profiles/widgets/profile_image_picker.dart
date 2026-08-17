@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProfileImagePicker extends StatelessWidget {
-  const ProfileImagePicker({
-    super.key,
-    required this.imageUrl,
-    this.onTap,
-  });
+  const ProfileImagePicker({super.key, required this.imageUrl, this.onTap});
 
   final String? imageUrl;
   final VoidCallback? onTap;
@@ -18,16 +14,11 @@ class ProfileImagePicker extends StatelessWidget {
           CircleAvatar(
             radius: 70,
             backgroundColor: Colors.grey.shade200,
-            backgroundImage:
-                imageUrl != null && imageUrl!.isNotEmpty
-                    ? NetworkImage(imageUrl!)
-                    : null,
+            backgroundImage: imageUrl != null && imageUrl!.isNotEmpty
+                ? NetworkImage(imageUrl!)
+                : null,
             child: imageUrl == null || imageUrl!.isEmpty
-                ? const Icon(
-                    Icons.person,
-                    size: 70,
-                    color: Colors.grey,
-                  )
+                ? const Icon(Icons.person, size: 70, color: Colors.grey)
                 : null,
           ),
 
@@ -42,10 +33,7 @@ class ProfileImagePicker extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 3,
-                  ),
+                  border: Border.all(color: Colors.white, width: 3),
                 ),
                 child: const Icon(
                   Icons.camera_alt,

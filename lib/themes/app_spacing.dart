@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-
 /// Standard spacing values used across the application.
 class AppSpacing {
   AppSpacing._();
 
- // Base spacing values
+  // Base spacing values
   static const double xs = 4.0;
   static const double sm = 8.0;
   static const double md = 16.0;
@@ -14,10 +13,11 @@ class AppSpacing {
   static const double xxl = 48.0;
   static const double xxxl = 64.0;
 
-
-   // Common page padding
-  static const EdgeInsets pagePadding =
-      EdgeInsets.symmetric(horizontal: xl, vertical: lg);
+  // Common page padding
+  static const EdgeInsets pagePadding = EdgeInsets.symmetric(
+    horizontal: xl,
+    vertical: lg,
+  );
 
   // Section spacing
   static const SizedBox sectionGap = SizedBox(height: xxl);

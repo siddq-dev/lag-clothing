@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class StatusBadge extends StatelessWidget {
-  const StatusBadge({
-    super.key,
-    required this.status,
-  });
+  const StatusBadge({super.key, required this.status});
 
   final String status;
 
@@ -46,10 +43,7 @@ class StatusBadge extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 14,
-        vertical: 8,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(30),
@@ -57,12 +51,7 @@ class StatusBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-
-          Icon(
-            icon,
-            size: 18,
-            color: textColor,
-          ),
+          Icon(icon, size: 18, color: textColor),
 
           const SizedBox(width: 8),
 
@@ -74,7 +63,6 @@ class StatusBadge extends StatelessWidget {
               fontSize: 14,
             ),
           ),
-
         ],
       ),
     );

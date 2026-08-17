@@ -11,7 +11,6 @@ class CreatePasswordForm extends StatefulWidget {
 }
 
 class _CreatePasswordFormState extends State<CreatePasswordForm> {
-
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
@@ -26,7 +25,6 @@ class _CreatePasswordFormState extends State<CreatePasswordForm> {
   }
 
   int get strength {
-
     final password = passwordController.text;
 
     int score = 0;
@@ -40,9 +38,7 @@ class _CreatePasswordFormState extends State<CreatePasswordForm> {
   }
 
   Color get strengthColor {
-
     switch (strength) {
-
       case 0:
       case 1:
         return Colors.red;
@@ -60,9 +56,7 @@ class _CreatePasswordFormState extends State<CreatePasswordForm> {
   }
 
   String get strengthText {
-
     switch (strength) {
-
       case 0:
       case 1:
         return "Weak";
@@ -85,11 +79,9 @@ class _CreatePasswordFormState extends State<CreatePasswordForm> {
     required bool obscure,
     required VoidCallback toggle,
   }) {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         Text(label),
 
         const SizedBox(height: 10),
@@ -103,49 +95,33 @@ class _CreatePasswordFormState extends State<CreatePasswordForm> {
           },
 
           decoration: InputDecoration(
-
             prefixIcon: const Icon(Icons.lock_outline),
 
             suffixIcon: IconButton(
               onPressed: toggle,
-              icon: Icon(
-                obscure
-                    ? Icons.visibility_off
-                    : Icons.visibility,
-              ),
+              icon: Icon(obscure ? Icons.visibility_off : Icons.visibility),
             ),
 
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
-
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: AppColors.background,
       child: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(50),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 420,
-            ),
+            constraints: const BoxConstraints(maxWidth: 420),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-                Text(
-                  "Create Password",
-                  style: AppTextStyles.heading2,
-                ),
+                Text("Create Password", style: AppTextStyles.heading2),
 
                 const SizedBox(height: 12),
 
@@ -224,13 +200,10 @@ class _CreatePasswordFormState extends State<CreatePasswordForm> {
                     ),
                     child: const Text(
                       "CREATE ACCOUNT",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
-
               ],
             ),
           ),

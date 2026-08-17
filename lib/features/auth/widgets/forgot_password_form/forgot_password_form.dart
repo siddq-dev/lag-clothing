@@ -10,13 +10,10 @@ class ForgotPasswordForm extends StatefulWidget {
   const ForgotPasswordForm({super.key});
 
   @override
-  State<ForgotPasswordForm> createState() =>
-      _ForgotPasswordFormState();
+  State<ForgotPasswordForm> createState() => _ForgotPasswordFormState();
 }
 
-class _ForgotPasswordFormState
-    extends State<ForgotPasswordForm> {
-
+class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
   final emailController = TextEditingController();
 
   bool isLoading = false;
@@ -30,9 +27,7 @@ class _ForgotPasswordFormState
   Future<void> sendResetLink() async {
     if (emailController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please enter your email address."),
-        ),
+        const SnackBar(content: Text("Please enter your email address.")),
       );
       return;
     }
@@ -42,27 +37,21 @@ class _ForgotPasswordFormState
         isLoading = true;
       });
 
-      await AuthService.forgotPassword(
-        emailController.text.trim(),
-      );
+      await AuthService.forgotPassword(emailController.text.trim());
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-            "Password reset link sent. Please check your email.",
-          ),
+          content: Text("Password reset link sent. Please check your email."),
         ),
       );
 
       context.go(AppRouter.login);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
       if (mounted) {
         setState(() {
@@ -81,7 +70,6 @@ class _ForgotPasswordFormState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         Text(label),
 
         const SizedBox(height: 10),
@@ -92,9 +80,7 @@ class _ForgotPasswordFormState
           decoration: InputDecoration(
             prefixIcon: Icon(icon),
             hintText: hint,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
       ],
@@ -103,25 +89,17 @@ class _ForgotPasswordFormState
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: AppColors.background,
       child: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(50),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 420,
-            ),
+            constraints: const BoxConstraints(maxWidth: 420),
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-                Text(
-                  "Forgot Password",
-                  style: AppTextStyles.heading2,
-                ),
+                Text("Forgot Password", style: AppTextStyles.heading2),
 
                 const SizedBox(height: 15),
 
@@ -145,23 +123,16 @@ class _ForgotPasswordFormState
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: isLoading
-                        ? null
-                        : sendResetLink,
+                    onPressed: isLoading ? null : sendResetLink,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          AppColors.primary,
+                      backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                     ),
                     child: isLoading
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
-                          )
+                        ? const CircularProgressIndicator(color: Colors.white)
                         : const Text(
                             "SEND RESET LINK",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                   ),
                 ),
@@ -173,12 +144,9 @@ class _ForgotPasswordFormState
                     onPressed: () {
                       context.go(AppRouter.login);
                     },
-                    child: const Text(
-                      "Back to Login",
-                    ),
+                    child: const Text("Back to Login"),
                   ),
                 ),
-
               ],
             ),
           ),

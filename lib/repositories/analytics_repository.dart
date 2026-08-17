@@ -11,48 +11,38 @@ import '../models/traffic_source_model.dart';
 class AnalyticsRepository {
   AnalyticsRepository._();
 
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   //----------------------------------------------------------
   // Dashboard Summary
   //----------------------------------------------------------
 
   static Future<AnalyticsSummaryModel> getSummary() async {
-    final ordersSnapshot =
-        await _firestore.collection('orders').get();
+    final ordersSnapshot = await _firestore.collection('orders').get();
 
-    final usersSnapshot =
-        await _firestore
-            .collection('users')
-            .where('role', isEqualTo: 'customer')
-            .get();
+    final usersSnapshot = await _firestore
+        .collection('users')
+        .where('role', isEqualTo: 'customer')
+        .get();
 
-    final productsSnapshot =
-        await _firestore.collection('products').get();
+    final productsSnapshot = await _firestore.collection('products').get();
 
     double revenue = 0;
 
     for (final doc in ordersSnapshot.docs) {
-      revenue +=
-          (doc['total'] ?? 0).toDouble();
+      revenue += (doc['total'] ?? 0).toDouble();
     }
 
-    final double averageOrder =
-        ordersSnapshot.docs.isEmpty
-            ? 0
-            : revenue /
-                ordersSnapshot.docs.length;
+    final double averageOrder = ordersSnapshot.docs.isEmpty
+        ? 0
+        : revenue / ordersSnapshot.docs.length;
 
     return AnalyticsSummaryModel(
       totalRevenue: revenue,
       totalOrders: ordersSnapshot.docs.length,
-      totalCustomers:
-          usersSnapshot.docs.length,
-      totalProducts:
-          productsSnapshot.docs.length,
-      averageOrderValue:
-          averageOrder,
+      totalCustomers: usersSnapshot.docs.length,
+      totalProducts: productsSnapshot.docs.length,
+      averageOrderValue: averageOrder,
       todayVisitors: 0,
       totalVisitors: 0,
     );
@@ -62,24 +52,16 @@ class AnalyticsRepository {
   // Sales Chart
   //----------------------------------------------------------
 
-  static Future<List<SalesChartModel>>
-      getSalesChart() async {
-    final snapshot =
-        await _firestore
-            .collection('orders')
-            .orderBy(
-              'createdAt',
-              descending: false,
-            )
-            .get();
+  static Future<List<SalesChartModel>> getSalesChart() async {
+    final snapshot = await _firestore
+        .collection('orders')
+        .orderBy('createdAt', descending: false)
+        .get();
 
     return snapshot.docs.map((doc) {
       return SalesChartModel(
-        date:
-            doc['createdAt'] ??
-            Timestamp.now(),
-        revenue:
-            (doc['total'] ?? 0).toDouble(),
+        date: doc['createdAt'] ?? Timestamp.now(),
+        revenue: (doc['total'] ?? 0).toDouble(),
         orders: 1,
       );
     }).toList();
@@ -89,24 +71,17 @@ class AnalyticsRepository {
   // Page Analytics
   //----------------------------------------------------------
 
-  static Future<List<PageAnalyticsModel>>
-      getPageAnalytics() async {
-    final snapshot =
-        await _firestore
-            .collection('page_visits')
-            .get();
+  static Future<List<PageAnalyticsModel>> getPageAnalytics() async {
+    final snapshot = await _firestore.collection('page_visits').get();
 
     final Map<String, int> pageViews = {};
 
     for (final doc in snapshot.docs) {
-     final data = doc.data();
+      final data = doc.data();
 
-final page =
-    (data['page'] as String?) ??
-    "Unknown";
+      final page = (data['page'] as String?) ?? "Unknown";
 
-      pageViews[page] =
-          (pageViews[page] ?? 0) + 1;
+      pageViews[page] = (pageViews[page] ?? 0) + 1;
     }
 
     return pageViews.entries
@@ -125,38 +100,30 @@ final page =
   // Customer Region
   //----------------------------------------------------------
 
-  static Future<List<CustomerRegionModel>>
-      getCustomerRegions() async {
-    final snapshot =
-        await _firestore
-            .collection('users')
-            .where(
-              'role',
-              isEqualTo: 'customer',
-            )
-            .get();
+  static Future<List<CustomerRegionModel>> getCustomerRegions() async {
+    final snapshot = await _firestore
+        .collection('users')
+        .where('role', isEqualTo: 'customer')
+        .get();
 
     final Map<String, int> countries = {};
 
-  for (final doc in snapshot.docs) {
-  final data = doc.data();
+    for (final doc in snapshot.docs) {
+      final data = doc.data();
 
-  final country =
-      (data['country'] as String?) ?? "Unknown";
+      final country = (data['country'] as String?) ?? "Unknown";
 
-  countries[country] =
-      (countries[country] ?? 0) + 1;
-}
+      countries[country] = (countries[country] ?? 0) + 1;
+    }
 
     return countries.entries
         .map(
-          (e) =>
-              CustomerRegionModel(
-                country: e.key,
-                customers: e.value,
-                orders: 0,
-                revenue: 0,
-              ),
+          (e) => CustomerRegionModel(
+            country: e.key,
+            customers: e.value,
+            orders: 0,
+            revenue: 0,
+          ),
         )
         .toList();
   }
@@ -165,24 +132,17 @@ final page =
   // Device Analytics
   //----------------------------------------------------------
 
-  static Future<List<DeviceAnalyticsModel>>
-      getDeviceAnalytics() async {
-    final snapshot =
-        await _firestore
-            .collection('page_visits')
-            .get();
+  static Future<List<DeviceAnalyticsModel>> getDeviceAnalytics() async {
+    final snapshot = await _firestore.collection('page_visits').get();
 
     final Map<String, int> devices = {};
 
     for (final doc in snapshot.docs) {
       final data = doc.data();
 
-final device =
-    (data['device'] as String?) ??
-    "Unknown";
+      final device = (data['device'] as String?) ?? "Unknown";
 
-      devices[device] =
-          (devices[device] ?? 0) + 1;
+      devices[device] = (devices[device] ?? 0) + 1;
     }
 
     final total = snapshot.docs.length;
@@ -192,9 +152,7 @@ final device =
           (e) => DeviceAnalyticsModel(
             device: e.key,
             visitors: e.value,
-            percentage: total == 0
-                ? 0
-                : (e.value / total) * 100,
+            percentage: total == 0 ? 0 : (e.value / total) * 100,
           ),
         )
         .toList();
@@ -204,102 +162,73 @@ final device =
   // Traffic Sources
   //----------------------------------------------------------
 
-  static Future<List<TrafficSourceModel>>
-      getTrafficSources() async {
-    final snapshot =
-        await _firestore
-            .collection('page_visits')
-            .get();
+  static Future<List<TrafficSourceModel>> getTrafficSources() async {
+    final snapshot = await _firestore.collection('page_visits').get();
 
     final Map<String, int> sources = {};
 
     for (final doc in snapshot.docs) {
       final data = doc.data();
 
-final source =
-    (data['source'] as String?) ??
-    "Direct";
+      final source = (data['source'] as String?) ?? "Direct";
 
-      sources[source] =
-          (sources[source] ?? 0) + 1;
+      sources[source] = (sources[source] ?? 0) + 1;
     }
 
     return sources.entries
-        .map(
-          (e) => TrafficSourceModel(
-            source: e.key,
-            visitors: e.value,
-          ),
-        )
+        .map((e) => TrafficSourceModel(source: e.key, visitors: e.value))
         .toList();
   }
 
-//----------------------------------------------------------
-// Best Selling Products
-//----------------------------------------------------------
+  //----------------------------------------------------------
+  // Best Selling Products
+  //----------------------------------------------------------
 
-static Future<List<Map<String, dynamic>>>
-    getBestSellingProducts() async {
-  final snapshot = await _firestore
-      .collection('products')
-      .orderBy(
-        'soldCount',
-        descending: true,
-      )
-      .limit(10)
-      .get();
+  static Future<List<Map<String, dynamic>>> getBestSellingProducts() async {
+    final snapshot = await _firestore
+        .collection('products')
+        .orderBy('soldCount', descending: true)
+        .limit(10)
+        .get();
 
-  return snapshot.docs.map((doc) {
-    final data = doc.data();
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
 
-    return {
-      "id": doc.id,
-      "name": data["name"] ?? "",
-      "sold": data["soldCount"] ?? 0,
-      "revenue":
-          (data["revenue"] ?? 0).toDouble(),
-      "stock": data["stock"] ?? 0,
-    };
-  }).toList();
-}
-
-
-// Low Stock Products
-//----------------------------------------------------------
-
-static Future<List<Map<String, dynamic>>>
-    getLowStockProducts() async {
-  final snapshot =
-      await _firestore.collection("products").get();
-
-  final List<Map<String, dynamic>> products = [];
-
-  for (final doc in snapshot.docs) {
-    final stock = doc["stock"] ?? 0;
-
-    if (stock <= 10) {
-      products.add({
+      return {
         "id": doc.id,
-        "name": doc["name"] ?? "",
-        "stock": stock,
-      });
-    }
+        "name": data["name"] ?? "",
+        "sold": data["soldCount"] ?? 0,
+        "revenue": (data["revenue"] ?? 0).toDouble(),
+        "stock": data["stock"] ?? 0,
+      };
+    }).toList();
   }
 
-  return products;
-}
+  // Low Stock Products
+  //----------------------------------------------------------
 
+  static Future<List<Map<String, dynamic>>> getLowStockProducts() async {
+    final snapshot = await _firestore.collection("products").get();
+
+    final List<Map<String, dynamic>> products = [];
+
+    for (final doc in snapshot.docs) {
+      final stock = doc["stock"] ?? 0;
+
+      if (stock <= 10) {
+        products.add({"id": doc.id, "name": doc["name"] ?? "", "stock": stock});
+      }
+    }
+
+    return products;
+  }
 
   //----------------------------------------------------------
   // Inventory Analytics
   //----------------------------------------------------------
 
-  static Future<InventoryAnalyticsModel>
-      getInventoryAnalytics() async {
-    final snapshot =
-        await _firestore
-            .collection('products')
-            .get();
+  static Future<InventoryAnalyticsModel> getInventoryAnalytics() async {
+    final snapshot = await _firestore.collection('products').get();
 
     int inStock = 0;
 
@@ -310,11 +239,9 @@ static Future<List<Map<String, dynamic>>>
     double inventoryValue = 0;
 
     for (final doc in snapshot.docs) {
-      final stock =
-          doc['stock'] ?? 0;
+      final stock = doc['stock'] ?? 0;
 
-      final price =
-          (doc['price'] ?? 0).toDouble();
+      final price = (doc['price'] ?? 0).toDouble();
 
       inventoryValue += stock * price;
 
@@ -328,13 +255,11 @@ static Future<List<Map<String, dynamic>>>
     }
 
     return InventoryAnalyticsModel(
-      totalProducts:
-          snapshot.docs.length,
+      totalProducts: snapshot.docs.length,
       inStock: inStock,
       lowStock: lowStock,
       outOfStock: outOfStock,
-      inventoryValue:
-          inventoryValue,
+      inventoryValue: inventoryValue,
     );
   }
 }

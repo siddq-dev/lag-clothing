@@ -23,17 +23,13 @@ class AnalyticsSummaryModel {
     required this.totalVisitors,
   });
 
-  factory AnalyticsSummaryModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory AnalyticsSummaryModel.fromMap(Map<String, dynamic> map) {
     return AnalyticsSummaryModel(
-      totalRevenue:
-          (map['totalRevenue'] ?? 0).toDouble(),
+      totalRevenue: (map['totalRevenue'] ?? 0).toDouble(),
       totalOrders: map['totalOrders'] ?? 0,
       totalCustomers: map['totalCustomers'] ?? 0,
       totalProducts: map['totalProducts'] ?? 0,
-      averageOrderValue:
-          (map['averageOrderValue'] ?? 0).toDouble(),
+      averageOrderValue: (map['averageOrderValue'] ?? 0).toDouble(),
       todayVisitors: map['todayVisitors'] ?? 0,
       totalVisitors: map['totalVisitors'] ?? 0,
     );

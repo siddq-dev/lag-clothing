@@ -20,22 +20,14 @@ class AddressProvider extends ChangeNotifier {
   // ==========================
 
   List<AddressModel> get shippingAddresses =>
-      _addresses
-          .where(
-            (e) => e.purpose == AddressPurpose.shipping,
-          )
-          .toList();
+      _addresses.where((e) => e.purpose == AddressPurpose.shipping).toList();
 
   // ==========================
   // Billing Addresses
   // ==========================
 
   List<AddressModel> get billingAddresses =>
-      _addresses
-          .where(
-            (e) => e.purpose == AddressPurpose.billing,
-          )
-          .toList();
+      _addresses.where((e) => e.purpose == AddressPurpose.billing).toList();
 
   // ==========================
   // Default Shipping
@@ -43,9 +35,7 @@ class AddressProvider extends ChangeNotifier {
 
   AddressModel? get defaultShippingAddress {
     try {
-      return shippingAddresses.firstWhere(
-        (e) => e.isDefault,
-      );
+      return shippingAddresses.firstWhere((e) => e.isDefault);
     } catch (_) {
       return null;
     }
@@ -57,9 +47,7 @@ class AddressProvider extends ChangeNotifier {
 
   AddressModel? get defaultBillingAddress {
     try {
-      return billingAddresses.firstWhere(
-        (e) => e.isDefault,
-      );
+      return billingAddresses.firstWhere((e) => e.isDefault);
     } catch (_) {
       return null;
     }
@@ -76,8 +64,7 @@ class AddressProvider extends ChangeNotifier {
 
       notifyListeners();
 
-      _addresses =
-          await AddressRepository.getAddresses();
+      _addresses = await AddressRepository.getAddresses();
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -91,21 +78,17 @@ class AddressProvider extends ChangeNotifier {
   // ==========================
 
   void listenAddresses() {
-    AddressRepository.streamAddresses().listen(
-      (list) {
-        _addresses = list;
-        notifyListeners();
-      },
-    );
+    AddressRepository.streamAddresses().listen((list) {
+      _addresses = list;
+      notifyListeners();
+    });
   }
 
   // ==========================
   // Add Address
   // ==========================
 
-  Future<void> addAddress(
-    AddressModel address,
-  ) async {
+  Future<void> addAddress(AddressModel address) async {
     try {
       _isLoading = true;
       notifyListeners();
@@ -125,9 +108,7 @@ class AddressProvider extends ChangeNotifier {
   // Update Address
   // ==========================
 
-  Future<void> updateAddress(
-    AddressModel address,
-  ) async {
+  Future<void> updateAddress(AddressModel address) async {
     try {
       _isLoading = true;
       notifyListeners();
@@ -147,9 +128,7 @@ class AddressProvider extends ChangeNotifier {
   // Delete Address
   // ==========================
 
-  Future<void> deleteAddress(
-    String id,
-  ) async {
+  Future<void> deleteAddress(String id) async {
     try {
       _isLoading = true;
       notifyListeners();
@@ -169,18 +148,12 @@ class AddressProvider extends ChangeNotifier {
   // Set Default
   // ==========================
 
-  Future<void> setDefaultAddress(
-    String id,
-    AddressPurpose purpose,
-  ) async {
+  Future<void> setDefaultAddress(String id, AddressPurpose purpose) async {
     try {
       _isLoading = true;
       notifyListeners();
 
-      await AddressRepository.setDefaultAddress(
-        id,
-        purpose,
-      );
+      await AddressRepository.setDefaultAddress(id, purpose);
 
       await loadAddresses();
     } catch (e) {

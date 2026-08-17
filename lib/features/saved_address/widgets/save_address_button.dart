@@ -11,7 +11,7 @@ class SaveAddressButton extends StatefulWidget {
     super.key,
     required this.provider,
     this.isEditing = false,
-  this.addressId,
+    this.addressId,
 
     required this.shippingFormKey,
     required this.billingFormKey,
@@ -43,7 +43,7 @@ class SaveAddressButton extends StatefulWidget {
 
   final AddressProvider provider;
   final bool isEditing;
-final String? addressId;
+  final String? addressId;
 
   final GlobalKey<FormState> shippingFormKey;
   final GlobalKey<FormState> billingFormKey;
@@ -73,8 +73,7 @@ final String? addressId;
   final bool billingDefault;
 
   @override
-  State<SaveAddressButton> createState() =>
-      _SaveAddressButtonState();
+  State<SaveAddressButton> createState() => _SaveAddressButtonState();
 }
 
 class _SaveAddressButtonState extends State<SaveAddressButton> {
@@ -119,25 +118,23 @@ class _SaveAddressButtonState extends State<SaveAddressButton> {
       );
 
       if (widget.isEditing) {
-  await widget.provider.updateAddress(
-    shippingAddress.copyWith(
-      id: widget.addressId!,
-    ),
-  );
-} else {
-  await widget.provider.addAddress(shippingAddress);
-}
+        await widget.provider.updateAddress(
+          shippingAddress.copyWith(id: widget.addressId!),
+        );
+      } else {
+        await widget.provider.addAddress(shippingAddress);
+      }
 
-    if (widget.billingSame) {
-  final billingAddress = shippingAddress.copyWith(
-    addressType: shippingAddress.addressType,
-    purpose: AddressPurpose.billing,
-  );
+      if (widget.billingSame) {
+        final billingAddress = shippingAddress.copyWith(
+          addressType: shippingAddress.addressType,
+          purpose: AddressPurpose.billing,
+        );
 
-  if (!widget.isEditing) {
-    await widget.provider.addAddress(billingAddress);
-  }
-} else {
+        if (!widget.isEditing) {
+          await widget.provider.addAddress(billingAddress);
+        }
+      } else {
         final billingAddress = AddressModel(
           id: '',
           userId: user.uid,
@@ -158,31 +155,23 @@ class _SaveAddressButtonState extends State<SaveAddressButton> {
         );
 
         if (!widget.isEditing) {
-  await widget.provider.addAddress(billingAddress);
-}
+          await widget.provider.addAddress(billingAddress);
+        }
       }
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Address saved successfully",
-          ),
-        ),
+        const SnackBar(content: Text("Address saved successfully")),
       );
 
       context.pop();
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.toString(),
-          ),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
       if (mounted) {
         setState(() {
@@ -209,13 +198,9 @@ class _SaveAddressButtonState extends State<SaveAddressButton> {
                 ),
               )
             : Text(
-  widget.isEditing
-      ? "UPDATE ADDRESS"
-      : "SAVE ADDRESS",
-  style: const TextStyle(
-    fontWeight: FontWeight.bold,
-  ),
-),
+                widget.isEditing ? "UPDATE ADDRESS" : "SAVE ADDRESS",
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
       ),
     );
   }

@@ -18,28 +18,21 @@ class AddPaymentMethodPage extends StatefulWidget {
   final bool isEditing;
 
   @override
-  State<AddPaymentMethodPage> createState() =>
-      _AddPaymentMethodPageState();
+  State<AddPaymentMethodPage> createState() => _AddPaymentMethodPageState();
 }
 
-class _AddPaymentMethodPageState
-    extends State<AddPaymentMethodPage> {
+class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
   final formKey = GlobalKey<FormState>();
 
-  final cardHolderController =
-      TextEditingController();
+  final cardHolderController = TextEditingController();
 
-  final cardNumberController =
-      TextEditingController();
+  final cardNumberController = TextEditingController();
 
-  final expiryMonthController =
-      TextEditingController();
+  final expiryMonthController = TextEditingController();
 
-  final expiryYearController =
-      TextEditingController();
+  final expiryYearController = TextEditingController();
 
-  final cvvController =
-      TextEditingController();
+  final cvvController = TextEditingController();
 
   bool isDefault = false;
 
@@ -47,24 +40,18 @@ class _AddPaymentMethodPageState
   void initState() {
     super.initState();
 
-    if (widget.isEditing &&
-        widget.paymentMethod != null) {
+    if (widget.isEditing && widget.paymentMethod != null) {
       final card = widget.paymentMethod!;
 
-      cardHolderController.text =
-          card.cardHolderName;
+      cardHolderController.text = card.cardHolderName;
 
-      cardNumberController.text =
-          card.cardNumber;
+      cardNumberController.text = card.cardNumber;
 
-      expiryMonthController.text =
-          card.expiryMonth;
+      expiryMonthController.text = card.expiryMonth;
 
-      expiryYearController.text =
-          card.expiryYear;
+      expiryYearController.text = card.expiryYear;
 
-      cvvController.text =
-          card.cvv;
+      cvvController.text = card.cvv;
 
       isDefault = card.isDefault;
     }
@@ -83,34 +70,24 @@ class _AddPaymentMethodPageState
 
   @override
   Widget build(BuildContext context) {
-    final provider =
-        context.watch<PaymentMethodProvider>();
+    final provider = context.watch<PaymentMethodProvider>();
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.isEditing
-              ? "Edit Payment Method"
-              : "Add Payment Method",
+          widget.isEditing ? "Edit Payment Method" : "Add Payment Method",
         ),
       ),
 
       body: SingleChildScrollView(
-        padding:
-            const EdgeInsets.all(30),
+        padding: const EdgeInsets.all(30),
 
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Text(
               "Card Details",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight:
-                    FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 25),
@@ -118,28 +95,21 @@ class _AddPaymentMethodPageState
             CardForm(
               formKey: formKey,
 
-              cardHolderController:
-                  cardHolderController,
+              cardHolderController: cardHolderController,
 
-              cardNumberController:
-                  cardNumberController,
+              cardNumberController: cardNumberController,
 
-              expiryMonthController:
-                  expiryMonthController,
+              expiryMonthController: expiryMonthController,
 
-              expiryYearController:
-                  expiryYearController,
+              expiryYearController: expiryYearController,
 
-              cvvController:
-                  cvvController,
+              cvvController: cvvController,
 
               isDefault: isDefault,
 
-              onDefaultChanged:
-                  (value) {
+              onDefaultChanged: (value) {
                 setState(() {
-                  isDefault =
-                      value ?? false;
+                  isDefault = value ?? false;
                 });
               },
             ),
@@ -151,28 +121,21 @@ class _AddPaymentMethodPageState
 
               formKey: formKey,
 
-              cardHolderController:
-                  cardHolderController,
+              cardHolderController: cardHolderController,
 
-              cardNumberController:
-                  cardNumberController,
+              cardNumberController: cardNumberController,
 
-              expiryMonthController:
-                  expiryMonthController,
+              expiryMonthController: expiryMonthController,
 
-              expiryYearController:
-                  expiryYearController,
+              expiryYearController: expiryYearController,
 
-              cvvController:
-                  cvvController,
+              cvvController: cvvController,
 
               isDefault: isDefault,
 
-              isEditing:
-                  widget.isEditing,
+              isEditing: widget.isEditing,
 
-              paymentId:
-                  widget.paymentMethod?.id,
+              paymentId: widget.paymentMethod?.id,
             ),
           ],
         ),

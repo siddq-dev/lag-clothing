@@ -4,10 +4,7 @@ import '../../../../models/order_model.dart';
 import 'previous_order_tile.dart';
 
 class PreviousOrdersSection extends StatelessWidget {
-  const PreviousOrdersSection({
-    super.key,
-    required this.orders,
-  });
+  const PreviousOrdersSection({super.key, required this.orders});
 
   final List<OrderModel> orders;
 
@@ -17,11 +14,7 @@ class PreviousOrdersSection extends StatelessWidget {
       return const Card(
         child: Padding(
           padding: EdgeInsets.all(30),
-          child: Center(
-            child: Text(
-              "No Previous Orders",
-            ),
-          ),
+          child: Center(child: Text("No Previous Orders")),
         ),
       );
     }
@@ -34,10 +27,7 @@ class PreviousOrdersSection extends StatelessWidget {
           children: [
             const Text(
               "Previous Orders",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 25),
@@ -45,9 +35,7 @@ class PreviousOrdersSection extends StatelessWidget {
             ...orders.map(
               (order) => Padding(
                 padding: const EdgeInsets.only(bottom: 15),
-                child: PreviousOrderTile(
-                  order: order,
-                ),
+                child: PreviousOrderTile(order: order),
               ),
             ),
           ],

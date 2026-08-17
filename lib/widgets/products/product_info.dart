@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 import '../../themes/app_text_style.dart';
 
 class ProductInfo extends StatelessWidget {
-  const ProductInfo({
-    super.key,
-    required this.club,
-    required this.title,
-  });
+  const ProductInfo({super.key, required this.club, required this.title});
 
   final String club;
   final String title;

@@ -26,28 +26,24 @@ class AdminManagementRepository {
   }
 
   static Future<void> updateAdmin({
-  required String uid,
-  required String name,
-  required String phone,
-  required bool status,
-  required AdminPermissionModel permissions,
-}) {
-  return AdminFirestoreService.updateAdmin(
-    uid: uid,
-    name: name,
-    phone: phone,
-    status: status,
-    permissions: permissions,
-  );
-}
+    required String uid,
+    required String name,
+    required String phone,
+    required bool status,
+    required AdminPermissionModel permissions,
+  }) {
+    return AdminFirestoreService.updateAdmin(
+      uid: uid,
+      name: name,
+      phone: phone,
+      status: status,
+      permissions: permissions,
+    );
+  }
 
-static Future<void> sendPasswordReset(
-  String email,
-) {
-  return AdminFirestoreService
-      .sendPasswordReset(email);
-}
-
+  static Future<void> sendPasswordReset(String email) {
+    return AdminFirestoreService.sendPasswordReset(email);
+  }
 
   // ==========================
   // Get All Admins
@@ -61,12 +57,9 @@ static Future<void> sendPasswordReset(
   // Delete Admin
   // ==========================
 
-  static Future<void> deleteAdmin(
-    String uid,
-  ) {
+  static Future<void> deleteAdmin(String uid) {
     return AdminFirestoreService.deleteAdmin(uid);
   }
-
 
   // ==========================
   // Update Status
@@ -76,9 +69,6 @@ static Future<void> sendPasswordReset(
     required String uid,
     required bool status,
   }) {
-    return AdminFirestoreService.updateStatus(
-      uid: uid,
-      status: status,
-    );
+    return AdminFirestoreService.updateStatus(uid: uid, status: status);
   }
 }

@@ -38,28 +38,24 @@ class _SaveButtonState extends State<SaveButton> {
       });
 
       await context.read<CustomerProvider>().updateProfile(
-            fullName: widget.nameController.text.trim(),
-            // email: widget.emailController.text.trim(),
-            phone: widget.phoneController.text.trim(),
-          );
+        fullName: widget.nameController.text.trim(),
+        // email: widget.emailController.text.trim(),
+        phone: widget.phoneController.text.trim(),
+      );
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Profile Updated Successfully"),
-        ),
+        const SnackBar(content: Text("Profile Updated Successfully")),
       );
 
       context.go(AppRouter.profile);
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
       if (mounted) {
         setState(() {
@@ -87,9 +83,7 @@ class _SaveButtonState extends State<SaveButton> {
               )
             : const Text(
                 "SAVE CHANGES",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
       ),
     );

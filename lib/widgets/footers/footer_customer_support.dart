@@ -10,21 +10,19 @@ class FooterCustomerSupport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  final supportLinks = [
-  ('FAQ', AppRouter.faq),
-  ('Shipping Policy', AppRouter.shippingPolicy),
-  ('Return & Refund Policy', AppRouter.returns),
-  ('Exchange Policy', AppRouter.exchangePolicy),
-  ('Size Guide', AppRouter.sizeGuide),
-  ('Track Order', AppRouter.orderTracking),
-];
+    final supportLinks = [
+      ('FAQ', AppRouter.faq),
+      ('Shipping Policy', AppRouter.shippingPolicy),
+      ('Return & Refund Policy', AppRouter.returns),
+      ('Exchange Policy', AppRouter.exchangePolicy),
+      ('Size Guide', AppRouter.sizeGuide),
+      ('Track Order', AppRouter.orderTracking),
+    ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const FooterSectionTitle(
-          title: 'Customer Support',
-        ),
+        const FooterSectionTitle(title: 'Customer Support'),
 
         const SizedBox(height: 20),
 
@@ -36,10 +34,7 @@ class FooterCustomerSupport extends StatelessWidget {
               onTap: () {
                 context.go(item.$2);
               },
-              child: Text(
-                item.$1,
-                style: AppTextStyles.bodyMedium,
-              ),
+              child: Text(item.$1, style: AppTextStyles.bodyMedium),
             ),
           ),
         ),

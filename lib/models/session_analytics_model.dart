@@ -25,9 +25,7 @@ class SessionAnalyticsModel {
     required this.active,
   });
 
-  factory SessionAnalyticsModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory SessionAnalyticsModel.fromMap(Map<String, dynamic> map) {
     return SessionAnalyticsModel(
       sessionId: map["sessionId"] ?? "",
       userId: map["userId"] ?? "",

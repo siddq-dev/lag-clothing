@@ -27,38 +27,32 @@ class WebsiteLayout extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
+
       body: SafeArea(
         child: Column(
           children: [
             WebsiteNavigationBar(
               selectedItem: currentRoute,
-
-              // Logged-in user
               currentUser: currentUser,
 
-              // Main Navigation
               onMenuSelected: (route) {
                 context.go(route);
               },
 
-              // Search
               onSearch: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Search page coming soon')),
                 );
               },
 
-              // Wishlist
               onWishlist: () {
                 context.go(AppRouter.wishlist);
               },
 
-              // Cart
               onCart: () {
                 context.go(AppRouter.cart);
               },
 
-              // Sign In / Profile
               onSignIn: () {
                 if (currentUser != null) {
                   context.go(AppRouter.profile);
@@ -71,6 +65,7 @@ class WebsiteLayout extends StatelessWidget {
             Expanded(
               child: scrollable
                   ? SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
                       child: Column(children: [child, const Footer()]),
                     )
                   : Column(

@@ -16,22 +16,10 @@ class AnalyticsDateFilter extends StatelessWidget {
     return DropdownButton<String>(
       value: selected,
       items: const [
-        DropdownMenuItem(
-          value: "Today",
-          child: Text("Today"),
-        ),
-        DropdownMenuItem(
-          value: "Week",
-          child: Text("This Week"),
-        ),
-        DropdownMenuItem(
-          value: "Month",
-          child: Text("This Month"),
-        ),
-        DropdownMenuItem(
-          value: "Year",
-          child: Text("This Year"),
-        ),
+        DropdownMenuItem(value: "Today", child: Text("Today")),
+        DropdownMenuItem(value: "Week", child: Text("This Week")),
+        DropdownMenuItem(value: "Month", child: Text("This Month")),
+        DropdownMenuItem(value: "Year", child: Text("This Year")),
       ],
       onChanged: (value) {
         if (value != null) {

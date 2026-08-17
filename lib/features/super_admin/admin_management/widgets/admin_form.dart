@@ -7,10 +7,7 @@ import 'admin_permissions_section.dart';
 import '../../../../../models/admin_permission_model.dart';
 
 class AdminForm extends StatefulWidget {
-  const AdminForm({
-    super.key,
-    this.admin,
-  });
+  const AdminForm({super.key, this.admin});
 
   final UserModel? admin;
 
@@ -31,8 +28,7 @@ class _AdminFormState extends State<AdminForm> {
 
   bool status = true;
 
-  AdminPermissionModel permissions =
-    AdminPermissionModel.defaultAdmin();
+  AdminPermissionModel permissions = AdminPermissionModel.defaultAdmin();
 
   @override
   void initState() {
@@ -46,8 +42,7 @@ class _AdminFormState extends State<AdminForm> {
 
       status = widget.admin!.status;
 
-    permissions = widget.admin!.permissions;
-
+      permissions = widget.admin!.permissions;
     }
   }
 
@@ -70,9 +65,7 @@ class _AdminFormState extends State<AdminForm> {
         children: [
           TextFormField(
             controller: nameController,
-            decoration: const InputDecoration(
-              labelText: "Admin Name",
-            ),
+            decoration: const InputDecoration(labelText: "Admin Name"),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return "Enter Admin Name";
@@ -86,9 +79,7 @@ class _AdminFormState extends State<AdminForm> {
           TextFormField(
             controller: emailController,
             readOnly: widget.admin != null,
-            decoration: const InputDecoration(
-              labelText: "Email",
-            ),
+            decoration: const InputDecoration(labelText: "Email"),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return "Enter Email";
@@ -101,9 +92,7 @@ class _AdminFormState extends State<AdminForm> {
 
           TextFormField(
             controller: phoneController,
-            decoration: const InputDecoration(
-              labelText: "Phone Number",
-            ),
+            decoration: const InputDecoration(labelText: "Phone Number"),
           ),
 
           if (widget.admin == null) ...[
@@ -112,9 +101,7 @@ class _AdminFormState extends State<AdminForm> {
             TextFormField(
               controller: passwordController,
               obscureText: true,
-              decoration: const InputDecoration(
-                labelText: "Password",
-              ),
+              decoration: const InputDecoration(labelText: "Password"),
               validator: (value) {
                 if (value == null || value.length < 6) {
                   return "Minimum 6 characters";
@@ -139,13 +126,13 @@ class _AdminFormState extends State<AdminForm> {
           const SizedBox(height: 40),
 
           AdminPermissionsSection(
-  permissions: permissions,
-  onChanged: (value) {
-    setState(() {
-      permissions = value;
-    });
-  },
-),
+            permissions: permissions,
+            onChanged: (value) {
+              setState(() {
+                permissions = value;
+              });
+            },
+          ),
 
           SizedBox(
             height: 50,
@@ -161,9 +148,7 @@ class _AdminFormState extends State<AdminForm> {
                       ),
                     )
                   : Text(
-                      widget.admin == null
-                          ? "Create Admin"
-                          : "Update Admin",
+                      widget.admin == null ? "Create Admin" : "Update Admin",
                     ),
               onPressed: provider.loading
                   ? null

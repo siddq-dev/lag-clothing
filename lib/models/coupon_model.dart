@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum DiscountType {
-  percentage,
-  fixed,
-}
+enum DiscountType { percentage, fixed }
 
 class CouponModel {
   final String id;
@@ -63,44 +60,32 @@ class CouponModel {
   }
 
   bool get isAvailable {
-    return active &&
-        isStarted &&
-        !isExpired &&
-        usedCount < usageLimit;
+    return active && isStarted && !isExpired && usedCount < usageLimit;
   }
 
-  factory CouponModel.fromMap(
-    String id,
-    Map<String, dynamic> map,
-  ) {
+  factory CouponModel.fromMap(String id, Map<String, dynamic> map) {
     return CouponModel(
       id: id,
       code: map['code'] ?? '',
       description: map['description'] ?? '',
 
-      discountType:
-          (map['discountType'] ?? 'percentage') == 'fixed'
-              ? DiscountType.fixed
-              : DiscountType.percentage,
+      discountType: (map['discountType'] ?? 'percentage') == 'fixed'
+          ? DiscountType.fixed
+          : DiscountType.percentage,
 
-      discountValue:
-          (map['discountValue'] ?? 0).toDouble(),
+      discountValue: (map['discountValue'] ?? 0).toDouble(),
 
-      minimumOrderAmount:
-          (map['minimumOrderAmount'] ?? 0).toDouble(),
+      minimumOrderAmount: (map['minimumOrderAmount'] ?? 0).toDouble(),
 
-      maximumDiscount:
-          (map['maximumDiscount'] ?? 0).toDouble(),
+      maximumDiscount: (map['maximumDiscount'] ?? 0).toDouble(),
 
-      startDate:
-          map['startDate'] != null
-              ? (map['startDate'] as Timestamp).toDate()
-              : null,
+      startDate: map['startDate'] != null
+          ? (map['startDate'] as Timestamp).toDate()
+          : null,
 
-      endDate:
-          map['endDate'] != null
-              ? (map['endDate'] as Timestamp).toDate()
-              : null,
+      endDate: map['endDate'] != null
+          ? (map['endDate'] as Timestamp).toDate()
+          : null,
 
       usageLimit: map['usageLimit'] ?? 0,
 
@@ -108,15 +93,11 @@ class CouponModel {
 
       active: map['active'] ?? true,
 
-      applicableCategories:
-          List<String>.from(
-            map['applicableCategories'] ?? [],
-          ),
+      applicableCategories: List<String>.from(
+        map['applicableCategories'] ?? [],
+      ),
 
-      applicableProducts:
-          List<String>.from(
-            map['applicableProducts'] ?? [],
-          ),
+      applicableProducts: List<String>.from(map['applicableProducts'] ?? []),
 
       createdAt: map['createdAt'],
       updatedAt: map['updatedAt'],
@@ -128,10 +109,9 @@ class CouponModel {
       'code': code,
       'description': description,
 
-      'discountType':
-          discountType == DiscountType.fixed
-              ? 'fixed'
-              : 'percentage',
+      'discountType': discountType == DiscountType.fixed
+          ? 'fixed'
+          : 'percentage',
 
       'discountValue': discountValue,
 
@@ -183,19 +163,15 @@ class CouponModel {
       description: description ?? this.description,
       discountType: discountType ?? this.discountType,
       discountValue: discountValue ?? this.discountValue,
-      minimumOrderAmount:
-          minimumOrderAmount ?? this.minimumOrderAmount,
-      maximumDiscount:
-          maximumDiscount ?? this.maximumDiscount,
+      minimumOrderAmount: minimumOrderAmount ?? this.minimumOrderAmount,
+      maximumDiscount: maximumDiscount ?? this.maximumDiscount,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       usageLimit: usageLimit ?? this.usageLimit,
       usedCount: usedCount ?? this.usedCount,
       active: active ?? this.active,
-      applicableCategories:
-          applicableCategories ?? this.applicableCategories,
-      applicableProducts:
-          applicableProducts ?? this.applicableProducts,
+      applicableCategories: applicableCategories ?? this.applicableCategories,
+      applicableProducts: applicableProducts ?? this.applicableProducts,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

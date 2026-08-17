@@ -10,13 +10,9 @@ class MissionVision extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 100,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
       child: Column(
         children: [
-
           Text(
             'OUR MISSION & VISION',
             style: AppTextStyles.sectionTitle.copyWith(
@@ -39,7 +35,6 @@ class MissionVision extends StatelessWidget {
 
           Row(
             children: const [
-
               Expanded(
                 child: MissionVisionCard(
                   icon: Icons.flag_outlined,
@@ -86,18 +81,11 @@ class MissionVisionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         children: [
-
-          Icon(
-            icon,
-            size: 48,
-            color: AppColors.primary,
-          ),
+          Icon(icon, size: 48, color: AppColors.primary),
 
           const SizedBox(height: 24),
 

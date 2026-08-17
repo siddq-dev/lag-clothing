@@ -6,21 +6,17 @@ import '../models/account_settings_model.dart';
 class AccountSettingsRepository {
   AccountSettingsRepository._();
 
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static final FirebaseAuth _auth =
-      FirebaseAuth.instance;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   static String get _uid => _auth.currentUser!.uid;
 
-  static DocumentReference<Map<String, dynamic>>
-      get _document =>
-          _firestore
-              .collection('users')
-              .doc(_uid)
-              .collection('account_settings')
-              .doc('settings');
+  static DocumentReference<Map<String, dynamic>> get _document => _firestore
+      .collection('users')
+      .doc(_uid)
+      .collection('account_settings')
+      .doc('settings');
 
   // ==========================================
   // Load Settings
@@ -43,9 +39,7 @@ class AccountSettingsRepository {
       return settings;
     }
 
-    return AccountSettingsModel.fromMap(
-      snapshot.data()!,
-    );
+    return AccountSettingsModel.fromMap(snapshot.data()!);
   }
 
   // ==========================================
@@ -62,9 +56,7 @@ class AccountSettingsRepository {
         );
       }
 
-      return AccountSettingsModel.fromMap(
-        snapshot.data()!,
-      );
+      return AccountSettingsModel.fromMap(snapshot.data()!);
     });
   }
 
@@ -72,13 +64,9 @@ class AccountSettingsRepository {
   // Update Settings
   // ==========================================
 
-  static Future<void> updateSettings(
-    AccountSettingsModel settings,
-  ) async {
+  static Future<void> updateSettings(AccountSettingsModel settings) async {
     await _document.set(
-      settings.copyWith(
-        updatedAt: Timestamp.now(),
-      ).toMap(),
+      settings.copyWith(updatedAt: Timestamp.now()).toMap(),
       SetOptions(merge: true),
     );
   }

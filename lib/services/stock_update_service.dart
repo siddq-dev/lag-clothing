@@ -6,8 +6,7 @@ import '/repositories/inventory_log_repository.dart';
 class StockUpdateService {
   StockUpdateService._();
 
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // ==========================================================
   // Stock OUT Log
@@ -23,10 +22,7 @@ class StockUpdateService {
     required String performedBy,
   }) async {
     final log = InventoryLogModel(
-      id: _firestore
-          .collection("inventory_logs")
-          .doc()
-          .id,
+      id: _firestore.collection("inventory_logs").doc().id,
       productId: productId,
       productName: productName,
       type: InventoryLogType.stockOut,
@@ -55,10 +51,7 @@ class StockUpdateService {
     required String performedBy,
   }) async {
     final log = InventoryLogModel(
-      id: _firestore
-          .collection("inventory_logs")
-          .doc()
-          .id,
+      id: _firestore.collection("inventory_logs").doc().id,
       productId: productId,
       productName: productName,
       type: InventoryLogType.stockIn,

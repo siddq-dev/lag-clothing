@@ -13,10 +13,7 @@ class OrdersPage extends StatelessWidget {
       child: Center(
         child: Text(
           "Orders Page",
-          style: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
         ),
       ),
     );

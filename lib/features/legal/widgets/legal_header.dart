@@ -4,11 +4,7 @@ import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_style.dart';
 
 class LegalHeader extends StatelessWidget {
-  const LegalHeader({
-    super.key,
-    required this.title,
-    required this.subtitle,
-  });
+  const LegalHeader({super.key, required this.title, required this.subtitle});
 
   final String title;
   final String subtitle;
@@ -17,10 +13,7 @@ class LegalHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 60,
-        vertical: 80,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 80),
       color: AppColors.background,
       child: Column(
         children: [

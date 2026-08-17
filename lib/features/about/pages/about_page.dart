@@ -19,7 +19,6 @@ class AboutPage extends StatelessWidget {
       currentRoute: AppRouter.about,
       child: const Column(
         children: [
-
           AboutHero(),
 
           CompanyStory(),
@@ -31,7 +30,6 @@ class AboutPage extends StatelessWidget {
           Values(),
 
           CallToAction(),
-
         ],
       ),
     );

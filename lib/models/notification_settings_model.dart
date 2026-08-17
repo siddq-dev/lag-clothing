@@ -38,9 +38,7 @@ class NotificationSettingsModel {
     };
   }
 
-  factory NotificationSettingsModel.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory NotificationSettingsModel.fromMap(Map<String, dynamic> map) {
     return NotificationSettingsModel(
       orderUpdates: map['orderUpdates'] ?? true,
       promotions: map['promotions'] ?? true,
@@ -70,12 +68,9 @@ class NotificationSettingsModel {
       promotions: promotions ?? this.promotions,
       newArrivals: newArrivals ?? this.newArrivals,
       backInStock: backInStock ?? this.backInStock,
-      pushNotifications:
-          pushNotifications ?? this.pushNotifications,
-      emailNotifications:
-          emailNotifications ?? this.emailNotifications,
-      smsNotifications:
-          smsNotifications ?? this.smsNotifications,
+      pushNotifications: pushNotifications ?? this.pushNotifications,
+      emailNotifications: emailNotifications ?? this.emailNotifications,
+      smsNotifications: smsNotifications ?? this.smsNotifications,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

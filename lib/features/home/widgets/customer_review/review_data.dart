@@ -15,7 +15,6 @@ class ReviewModel {
 }
 
 const List<ReviewModel> reviews = [
-
   ReviewModel(
     name: 'Rahul Kumar',
     designation: 'Verified Buyer',
@@ -51,5 +50,4 @@ const List<ReviewModel> reviews = [
     review:
         'The jersey perfectly matched the product images shown on the website. The fabric quality, sleeve stitching, and printed logo all feel premium. Shipping was smooth, and the order tracking kept me updated throughout. I am genuinely impressed and will be recommending LAG Clothing to my friends.',
   ),
-
 ];

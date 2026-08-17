@@ -13,12 +13,10 @@ class ManageProductsPage extends StatefulWidget {
   const ManageProductsPage({super.key});
 
   @override
-  State<ManageProductsPage> createState() =>
-      _ManageProductsPageState();
+  State<ManageProductsPage> createState() => _ManageProductsPageState();
 }
 
-class _ManageProductsPageState
-    extends State<ManageProductsPage> {
+class _ManageProductsPageState extends State<ManageProductsPage> {
   late TextEditingController searchController;
 
   @override
@@ -40,20 +38,14 @@ class _ManageProductsPageState
 
   @override
   Widget build(BuildContext context) {
-    
-    final productProvider =
-    context.watch<ProductProvider>();
+    final productProvider = context.watch<ProductProvider>();
 
-final filterProvider =
-    context.watch<AdminProductFilterProvider>();
+    final filterProvider = context.watch<AdminProductFilterProvider>();
 
-final products =
-    filterProvider.apply(productProvider.products);
+    final products = filterProvider.apply(productProvider.products);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Manage Products"),
-      ),
+      appBar: AppBar(title: const Text("Manage Products")),
 
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -67,24 +59,18 @@ final products =
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-
             Row(
               children: [
-
                 Expanded(
                   child: AdminProductSearchBar(
                     controller: searchController,
                     onChanged: (value) {
-                      context
-                          .read<
-                              AdminProductFilterProvider>()
-                          .updateSearch(value);
+                      context.read<AdminProductFilterProvider>().updateSearch(
+                        value,
+                      );
                     },
                     onClear: () {
-                      context
-                          .read<
-                              AdminProductFilterProvider>()
-                          .clearSearch();
+                      context.read<AdminProductFilterProvider>().clearSearch();
                     },
                   ),
                 ),
@@ -102,20 +88,16 @@ final products =
                       builder: (_) {
                         return const Dialog(
                           child: Padding(
-                            padding:
-                                EdgeInsets.all(20),
-                            child:
-                                AdminProductFilter(),
+                            padding: EdgeInsets.all(20),
+                            child: AdminProductFilter(),
                           ),
                         );
                       },
                     );
                   },
-                  icon:
-                      const Icon(Icons.filter_alt),
+                  icon: const Icon(Icons.filter_alt),
                   label: const Text("Filters"),
                 ),
-
               ],
             ),
 
@@ -125,52 +107,31 @@ final products =
               child: Card(
                 elevation: 2,
                 child: SingleChildScrollView(
-                  scrollDirection:
-                      Axis.horizontal,
+                  scrollDirection: Axis.horizontal,
                   child: DataTable(
                     headingRowHeight: 60,
                     dataRowMinHeight: 72,
 
                     columns: const [
+                      DataColumn(label: Text("Image")),
 
-                      DataColumn(
-                        label: Text("Image"),
-                      ),
+                      DataColumn(label: Text("Name")),
 
-                      DataColumn(
-                        label: Text("Name"),
-                      ),
+                      DataColumn(label: Text("Brand")),
 
-                      DataColumn(
-                        label: Text("Brand"),
-                      ),
+                      DataColumn(label: Text("Category")),
 
-                      DataColumn(
-                        label: Text("Category"),
-                      ),
+                      DataColumn(label: Text("Price")),
 
-                      DataColumn(
-                        label: Text("Price"),
-                      ),
+                      DataColumn(label: Text("Stock")),
 
-                      DataColumn(
-                        label: Text("Stock"),
-                      ),
+                      DataColumn(label: Text("Status")),
 
-                      DataColumn(
-                        label: Text("Status"),
-                      ),
-
-                      DataColumn(
-                        label: Text("Actions"),
-                      ),
-
+                      DataColumn(label: Text("Actions")),
                     ],
 
                     rows: products.map((product) {
-
                       return DataRow(
-
                         onSelectChanged: (_) {
                           context.push(
                             AppRouter.productDetails,
@@ -179,54 +140,31 @@ final products =
                         },
 
                         cells: [
-
                           DataCell(
                             product.images.isEmpty
-                                ? const Icon(
-                                    Icons.image,
-                                  )
+                                ? const Icon(Icons.image)
                                 : Image.network(
-                                    product
-                                        .images
-                                        .first
-                                        .imageUrl,
+                                    product.images.first.imageUrl,
                                     width: 60,
                                     height: 60,
                                     fit: BoxFit.cover,
                                   ),
                           ),
 
-                          DataCell(
-                            Text(product.name),
-                          ),
+                          DataCell(Text(product.name)),
 
-                          DataCell(
-                            Text(product.brand),
-                          ),
+                          DataCell(Text(product.brand)),
 
-                          DataCell(
-                            Text(product.category),
-                          ),
+                          DataCell(Text(product.category)),
 
-                          DataCell(
-                            Text(
-                              "₹${product.price}",
-                            ),
-                          ),
+                          DataCell(Text("₹${product.price}")),
 
-                          DataCell(
-                            Text(
-                              product.stock
-                                  .toString(),
-                            ),
-                          ),
+                          DataCell(Text(product.stock.toString())),
 
                           DataCell(
                             Chip(
                               label: Text(
-                                product.status
-                                    ? "Active"
-                                    : "Inactive",
+                                product.status ? "Active" : "Inactive",
                               ),
                             ),
                           ),
@@ -234,49 +172,35 @@ final products =
                           DataCell(
                             Row(
                               children: [
-
                                 IconButton(
-                                  icon:
-                                      const Icon(
-                                    Icons.visibility,
-                                  ),
+                                  icon: const Icon(Icons.visibility),
                                   onPressed: () {
                                     context.push(
-                                      AppRouter
-                                          .productDetails,
+                                      AppRouter.productDetails,
                                       extra: product,
                                     );
                                   },
                                 ),
 
                                 IconButton(
-                                  icon:
-                                      const Icon(
-                                    Icons.edit,
-                                  ),
+                                  icon: const Icon(Icons.edit),
                                   onPressed: () {
                                     context.push(
-                                      AppRouter
-                                          .editProduct,
+                                      AppRouter.editProduct,
                                       extra: product,
                                     );
                                   },
                                 ),
-
                               ],
                             ),
                           ),
-
                         ],
-
                       );
-
                     }).toList(),
                   ),
                 ),
               ),
             ),
-
           ],
         ),
       ),
