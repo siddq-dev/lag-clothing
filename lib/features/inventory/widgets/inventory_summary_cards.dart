@@ -9,78 +9,366 @@ class InventorySummaryCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+
+        // Mobile / small tablet
+        if (width < 600) {
+          return _buildMobileCards();
+        }
+
+        // Desktop
+        return _buildDesktopCards();
+      },
+    );
+  }
+
+  // ============================================================
+  // DESKTOP
+  // ============================================================
+
+  Widget _buildDesktopCards() {
     return Row(
       children: [
         Expanded(
           child: _card(
-            "Products",
-            provider.totalProducts.toString(),
-            Colors.blue,
+            title: 'Products',
+            value: provider.totalProducts.toString(),
+            color: Colors.blue,
+            icon: Icons.inventory_2_outlined,
           ),
         ),
 
-        const SizedBox(width: 20),
-
-        Expanded(
-          child: _card("In Stock", provider.inStock.toString(), Colors.green),
-        ),
-
-        const SizedBox(width: 20),
+        const SizedBox(width: 16),
 
         Expanded(
           child: _card(
-            "Low Stock",
-            provider.lowStock.toString(),
-            Colors.orange,
+            title: 'In Stock',
+            value: provider.inStock.toString(),
+            color: Colors.green,
+            icon: Icons.check_circle_outline,
           ),
         ),
 
-        const SizedBox(width: 20),
+        const SizedBox(width: 16),
 
         Expanded(
           child: _card(
-            "Out of Stock",
-            provider.outOfStock.toString(),
-            Colors.red,
+            title: 'Low Stock',
+            value: provider.lowStock.toString(),
+            color: Colors.orange,
+            icon: Icons.warning_amber_rounded,
           ),
         ),
 
-        const SizedBox(width: 20),
+        const SizedBox(width: 16),
 
         Expanded(
           child: _card(
-            "Inventory Value",
-            "₹${provider.inventoryValue.toStringAsFixed(0)}",
-            Colors.purple,
+            title: 'Out of Stock',
+            value: provider.outOfStock.toString(),
+            color: Colors.red,
+            icon: Icons.cancel_outlined,
+          ),
+        ),
+
+        const SizedBox(width: 16),
+
+        Expanded(
+          child: _card(
+            title: 'Inventory Value',
+            value: '₹${provider.inventoryValue.toStringAsFixed(0)}',
+            color: Colors.purple,
+            icon: Icons.currency_rupee,
           ),
         ),
       ],
     );
   }
 
-  Widget _card(String title, String value, Color color) {
-    return Card(
-      color: const Color(0xFF1A1A1A),
+  // ============================================================
+  // MOBILE
+  // ============================================================
 
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-
-        child: Column(
+  Widget _buildMobileCards() {
+    return Column(
+      children: [
+        // --------------------------------------------------------
+        // ROW 1
+        // Products + In Stock
+        // --------------------------------------------------------
+        Row(
           children: [
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 24,
-                color: color,
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: _mobileCard(
+                title: 'Products',
+                value: provider.totalProducts.toString(),
+                color: Colors.blue,
+                icon: Icons.inventory_2_outlined,
               ),
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(width: 10),
 
-            Text(title, style: const TextStyle(color: Colors.white70)),
+            Expanded(
+              child: _mobileCard(
+                title: 'In Stock',
+                value: provider.inStock.toString(),
+                color: Colors.green,
+                icon: Icons.check_circle_outline,
+              ),
+            ),
           ],
         ),
+
+        const SizedBox(height: 10),
+
+        // --------------------------------------------------------
+        // ROW 2
+        // Low Stock + Out of Stock
+        // --------------------------------------------------------
+        Row(
+          children: [
+            Expanded(
+              child: _mobileCard(
+                title: 'Low Stock',
+                value: provider.lowStock.toString(),
+                color: Colors.orange,
+                icon: Icons.warning_amber_rounded,
+              ),
+            ),
+
+            const SizedBox(width: 10),
+
+            Expanded(
+              child: _mobileCard(
+                title: 'Out of Stock',
+                value: provider.outOfStock.toString(),
+                color: Colors.red,
+                icon: Icons.cancel_outlined,
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 10),
+
+        // --------------------------------------------------------
+        // ROW 3
+        // Inventory Value
+        // --------------------------------------------------------
+        _mobileWideCard(
+          title: 'Inventory Value',
+          value: '₹${provider.inventoryValue.toStringAsFixed(0)}',
+          color: Colors.purple,
+          icon: Icons.currency_rupee,
+        ),
+      ],
+    );
+  }
+
+  // ============================================================
+  // DESKTOP CARD
+  // ============================================================
+
+  Widget _card({
+    required String title,
+    required String value,
+    required Color color,
+    required IconData icon,
+  }) {
+    return Container(
+      constraints: const BoxConstraints(minHeight: 145),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1A1A),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+      ),
+      padding: const EdgeInsets.all(18),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Icon
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.12),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color, size: 21),
+          ),
+
+          const SizedBox(height: 12),
+
+          // Value
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: color,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          const SizedBox(height: 5),
+
+          // Title
+          Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ============================================================
+  // MOBILE SMALL CARD
+  // ============================================================
+
+  Widget _mobileCard({
+    required String title,
+    required String value,
+    required Color color,
+    required IconData icon,
+  }) {
+    return Container(
+      height: 128,
+      decoration: BoxDecoration(
+        color: const Color(0xFF181818),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // ------------------------------------------------------
+          // ICON
+          // ------------------------------------------------------
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.12),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color, size: 19),
+          ),
+
+          const SizedBox(height: 8),
+
+          // ------------------------------------------------------
+          // VALUE
+          // ------------------------------------------------------
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: color,
+              fontSize: 21,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          const SizedBox(height: 4),
+
+          // ------------------------------------------------------
+          // TITLE
+          // ------------------------------------------------------
+          Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ============================================================
+  // MOBILE WIDE CARD
+  // ============================================================
+
+  Widget _mobileWideCard({
+    required String title,
+    required String value,
+    required Color color,
+    required IconData icon,
+  }) {
+    return Container(
+      width: double.infinity,
+      height: 92,
+      decoration: BoxDecoration(
+        color: const Color(0xFF181818),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+      child: Row(
+        children: [
+          // ------------------------------------------------------
+          // ICON
+          // ------------------------------------------------------
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.12),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color, size: 21),
+          ),
+
+          const SizedBox(width: 14),
+
+          // ------------------------------------------------------
+          // TITLE
+          // ------------------------------------------------------
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+
+          // ------------------------------------------------------
+          // VALUE
+          // ------------------------------------------------------
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: color,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }
