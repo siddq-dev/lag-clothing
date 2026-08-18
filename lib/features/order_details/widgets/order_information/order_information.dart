@@ -20,72 +20,167 @@ class OrderInformation extends StatelessWidget {
   final String orderDate;
   final String deliveryDate;
 
+  // ============================================================
+  // DELIVERY TITLE
+  // ============================================================
+
   String get deliveryTitle {
     switch (status.toLowerCase()) {
-      case "delivered":
-        return "Delivered On";
+      case 'delivered':
+        return 'Delivered On';
 
-      case "shipped":
-      case "processing":
-        return "Expected Delivery";
+      case 'shipped':
+      case 'processing':
+      case 'confirmed':
+      case 'packed':
+      case 'out for delivery':
+        return 'Expected Delivery';
 
-      case "cancelled":
-        return "Delivery";
+      case 'cancelled':
+      case 'refund requested':
+      case 'exchange requested':
+      case 'returned':
+        return 'Delivery';
 
       default:
-        return "Delivery";
+        return 'Delivery';
     }
   }
 
+  // ============================================================
+  // BUILD
+  // ============================================================
+
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    // Mobile breakpoint
+    final isMobile = width < 600;
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(AppSpacing.xl),
+      padding: EdgeInsets.all(isMobile ? AppSpacing.lg : AppSpacing.xl),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(isMobile ? 16 : 20),
         border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Order Information", style: AppTextStyles.heading2),
+          // ======================================================
+          // TITLE
+          // ======================================================
+          Text('Order Information', style: AppTextStyles.heading2),
 
-          const SizedBox(height: AppSpacing.xl),
+          SizedBox(height: isMobile ? AppSpacing.lg : AppSpacing.xl),
 
-          Row(
-            children: [
-              SizedBox(
-                width: 170,
-                child: Text("Status", style: AppTextStyles.bodyLarge),
-              ),
+          // ======================================================
+          // STATUS
+          // ======================================================
+          if (isMobile) _buildMobileStatus() else _buildDesktopStatus(),
 
-              StatusBadge(status: status),
-            ],
+          SizedBox(height: isMobile ? 16 : 18),
+
+          // ======================================================
+          // ORDER ID
+          // ======================================================
+          _buildResponsiveInfoRow(
+            title: 'Order ID',
+            value: orderId,
+            isMobile: isMobile,
           ),
 
-          const SizedBox(height: 18),
+          SizedBox(height: isMobile ? 16 : 18),
 
-          _infoRow("Order ID", orderId),
+          // ======================================================
+          // ORDER DATE
+          // ======================================================
+          _buildResponsiveInfoRow(
+            title: 'Order Date',
+            value: orderDate,
+            isMobile: isMobile,
+          ),
 
-          const SizedBox(height: 18),
+          SizedBox(height: isMobile ? 16 : 18),
 
-          _infoRow("Order Date", orderDate),
-
-          const SizedBox(height: 18),
-
-          _infoRow(
-            deliveryTitle,
-            status.toLowerCase() == "cancelled" ? "-" : deliveryDate,
+          // ======================================================
+          // DELIVERY
+          // ======================================================
+          _buildResponsiveInfoRow(
+            title: deliveryTitle,
+            value: status.toLowerCase() == 'cancelled' ? '-' : deliveryDate,
+            isMobile: isMobile,
           ),
         ],
       ),
     );
   }
 
-  Widget _infoRow(String title, String value) {
+  // ============================================================
+  // DESKTOP STATUS
+  // ============================================================
+
+  Widget _buildDesktopStatus() {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 170,
+          child: Text('Status', style: AppTextStyles.bodyLarge),
+        ),
+
+        Flexible(child: StatusBadge(status: status)),
+      ],
+    );
+  }
+
+  // ============================================================
+  // MOBILE STATUS
+  // ============================================================
+
+  Widget _buildMobileStatus() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Status', style: AppTextStyles.bodyLarge),
+
+        const SizedBox(height: 8),
+
+        // Flexible width prevents the badge from forcing
+        // the parent Row/Column beyond the screen width.
+        Align(
+          alignment: Alignment.centerLeft,
+          child: StatusBadge(status: status),
+        ),
+      ],
+    );
+  }
+
+  // ============================================================
+  // RESPONSIVE INFORMATION ROW
+  // ============================================================
+
+  Widget _buildResponsiveInfoRow({
+    required String title,
+    required String value,
+    required bool isMobile,
+  }) {
+    if (isMobile) {
+      return _buildMobileInfoRow(title: title, value: value);
+    }
+
+    return _buildDesktopInfoRow(title: title, value: value);
+  }
+
+  // ============================================================
+  // DESKTOP INFORMATION ROW
+  // ============================================================
+
+  Widget _buildDesktopInfoRow({required String title, required String value}) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
           width: 170,
@@ -95,6 +190,39 @@ class OrderInformation extends StatelessWidget {
         Expanded(
           child: Text(
             value,
+            softWrap: true,
+            overflow: TextOverflow.visible,
+            style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ============================================================
+  // MOBILE INFORMATION ROW
+  // ============================================================
+
+  Widget _buildMobileInfoRow({required String title, required String value}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // --------------------------------------------------------
+        // LABEL
+        // --------------------------------------------------------
+        Text(title, style: AppTextStyles.bodyLarge),
+
+        const SizedBox(height: 7),
+
+        // --------------------------------------------------------
+        // VALUE
+        // --------------------------------------------------------
+        SizedBox(
+          width: double.infinity,
+          child: Text(
+            value,
+            softWrap: true,
+            overflow: TextOverflow.visible,
             style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
           ),
         ),

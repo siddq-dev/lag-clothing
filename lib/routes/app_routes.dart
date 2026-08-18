@@ -6,6 +6,7 @@ import 'package:lag_clothing/models/customer_admin_model.dart';
 import 'package:lag_clothing/models/order_model.dart';
 import 'package:lag_clothing/routes/router_observer.dart';
 
+import '../features/order_details/page/order_detail_page.dart';
 import '../features/about/pages/about_page.dart';
 import '../features/auth/pages/forgot_password_page.dart';
 import '../features/auth/pages/login_page.dart';
@@ -177,6 +178,8 @@ class AppRouter {
   static const String adminDashboard = '/admin/dashboard';
 
   static const String adminProducts = '/admin/products';
+
+  static const String adminOrders = '/admin/orders';
 
   static const String adminOrderDetails = '/admin/order-details';
 
@@ -439,6 +442,15 @@ class AppRouter {
       GoRoute(
         path: adminOrderDetails,
         builder: (context, state) => const AdminManageOrdersPage(),
+      ),
+
+      GoRoute(
+        path: '${adminOrderDetails}/:orderNumber',
+        builder: (context, state) {
+          final order = state.extra as OrderModel;
+
+          return OrderDetailsPage(order: order);
+        },
       ),
 
       GoRoute(
