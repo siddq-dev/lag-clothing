@@ -650,6 +650,7 @@ class _ProductInformation extends StatelessWidget {
       quantity: provider.quantity,
       size: selectedSize,
       color: selectedColor,
+      sku: variant.sku,
     );
 
     // ----------------------------------------------------------

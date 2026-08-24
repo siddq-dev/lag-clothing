@@ -77,21 +77,11 @@ class CheckoutRepository {
             return false;
           }
 
-          final variantSize = (variant['size'] ?? '')
-              .toString()
-              .trim()
-              .toLowerCase();
+          final variantSku = (variant['sku'] ?? '').toString().trim();
 
-          final variantColor = (variant['color'] ?? '')
-              .toString()
-              .trim()
-              .toLowerCase();
+          final itemSku = item.sku.trim();
 
-          final itemSize = item.size.trim().toLowerCase();
-
-          final itemColor = item.color.trim().toLowerCase();
-
-          return variantSize == itemSize && variantColor == itemColor;
+          return variantSku == itemSku;
         }, orElse: () => null);
 
         if (matchingVariant == null) {
@@ -292,21 +282,11 @@ class CheckoutRepository {
 
             final variant = Map<String, dynamic>.from(rawVariant);
 
-            final variantSize = (variant['size'] ?? '')
-                .toString()
-                .trim()
-                .toLowerCase();
+            final variantSku = (variant['sku'] ?? '').toString().trim();
 
-            final variantColor = (variant['color'] ?? '')
-                .toString()
-                .trim()
-                .toLowerCase();
+            final itemSku = item.sku.trim();
 
-            final itemSize = item.size.trim().toLowerCase();
-
-            final itemColor = item.color.trim().toLowerCase();
-
-            if (variantSize == itemSize && variantColor == itemColor) {
+            if (variantSku == itemSku) {
               matchingVariant = variant;
               break;
             }
@@ -366,29 +346,18 @@ class CheckoutRepository {
 
             final variant = Map<String, dynamic>.from(rawVariant);
 
-            final variantSize = (variant['size'] ?? '')
-                .toString()
-                .trim()
-                .toLowerCase();
+            final variantSku = (variant['sku'] ?? '').toString().trim();
 
-            final variantColor = (variant['color'] ?? '')
-                .toString()
-                .trim()
-                .toLowerCase();
-
-            final itemSize = item.size.trim().toLowerCase();
-
-            final itemColor = item.color.trim().toLowerCase();
+            final itemSku = item.sku.trim();
 
             // ------------------------------------------------
             // MATCH:
             //
             // productId = document ID
-            // size      = cart item size
-            // color     = cart item color
+            // sku       = cart item SKU
             // ------------------------------------------------
 
-            if (variantSize == itemSize && variantColor == itemColor) {
+            if (variantSku == itemSku) {
               final currentVariantStock =
                   (variant['stock'] as num?)?.toInt() ?? 0;
 

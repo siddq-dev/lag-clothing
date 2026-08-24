@@ -12,6 +12,7 @@ class CartItemModel {
 
   final String size;
   final String color;
+  final String sku;
 
   /// Current stock of the exact selected size + color variant.
   ///
@@ -33,6 +34,7 @@ class CartItemModel {
     required this.quantity,
     required this.size,
     required this.color,
+    required this.sku,
     this.availableStock,
     this.isAvailable = true,
     this.addedAt,
@@ -81,6 +83,7 @@ class CartItemModel {
       'quantity': quantity,
       'size': size,
       'color': color,
+      'sku': sku,
       'availableStock': availableStock,
       'isAvailable': isAvailable,
       'addedAt': addedAt,
@@ -101,6 +104,7 @@ class CartItemModel {
       quantity: (map['quantity'] as num?)?.toInt() ?? 1,
       size: map['size']?.toString() ?? '',
       color: map['color']?.toString() ?? '',
+      sku: map['sku']?.toString() ?? '',
       availableStock: (map['availableStock'] as num?)?.toInt(),
       isAvailable: map['isAvailable'] is bool
           ? map['isAvailable'] as bool
@@ -122,6 +126,7 @@ class CartItemModel {
     int? quantity,
     String? size,
     String? color,
+    String? sku,
     int? availableStock,
     bool? isAvailable,
     Timestamp? addedAt,
@@ -135,6 +140,7 @@ class CartItemModel {
       quantity: quantity ?? this.quantity,
       size: size ?? this.size,
       color: color ?? this.color,
+      sku: sku ?? this.sku,
       availableStock: availableStock ?? this.availableStock,
       isAvailable: isAvailable ?? this.isAvailable,
       addedAt: addedAt ?? this.addedAt,

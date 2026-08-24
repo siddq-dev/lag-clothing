@@ -759,6 +759,40 @@ class ProductManagementProvider extends ChangeNotifier {
       }
 
       //======================================================
+      // SKU VALIDATION
+      //======================================================
+
+      // Check for empty SKUs across all variants
+      for (final variant in _form.variants) {
+        if (variant.sku.trim().isEmpty) {
+          throw Exception("SKU is required for all sizes.");
+        }
+      }
+
+      // Check for duplicate SKUs locally across variants
+      final seenSkus = <String>{};
+      for (final variant in _form.variants) {
+        final sku = variant.sku.trim();
+        if (seenSkus.contains(sku)) {
+          throw Exception(
+            "Duplicate SKU found: $sku. Each size must have a unique SKU.",
+          );
+        }
+        seenSkus.add(sku);
+      }
+
+      // Check for SKU existence in Firestore (remote uniqueness)
+      for (final sku in seenSkus) {
+        final exists = await ProductManagementRepository.skuExists(
+          sku,
+          excludeProductId: _editingProduct?.id,
+        );
+        if (exists) {
+          throw Exception("SKU '$sku' already exists.");
+        }
+      }
+
+      //======================================================
       // MAKE SURE THERE IS ONE PRIMARY IMAGE
       //======================================================
 
