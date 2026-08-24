@@ -153,6 +153,7 @@ class CartRepository {
           'quantity': newQuantity,
           'size': size,
           'color': color,
+          'sku': item.sku,
           'availableStock': item.availableStock,
           'isAvailable': item.isAvailable,
         });
@@ -165,6 +166,7 @@ class CartRepository {
           'quantity': item.quantity,
           'size': size,
           'color': color,
+          'sku': item.sku,
           'availableStock': item.availableStock,
           'isAvailable': item.isAvailable,
           'addedAt': Timestamp.now(),

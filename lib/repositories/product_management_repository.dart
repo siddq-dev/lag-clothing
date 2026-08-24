@@ -87,4 +87,24 @@ class ProductManagementRepository {
       "inactive": inactive,
     };
   }
+
+  //==================================================
+  // Check SKU Existence (read-only, admin validation)
+  //==================================================
+  static Future<bool> skuExists(String sku, {String? excludeProductId}) async {
+    // Firestore can't query a field nested inside an array-of-maps directly,
+    // so this fetches all products and checks client-side.
+    // TODO(backend): denormalize into a top-level `skus/{sku}` collection
+    // for an indexed check if the catalog grows significantly.
+    final snapshot = await _products.get();
+    for (final doc in snapshot.docs) {
+      if (excludeProductId != null && doc.id == excludeProductId) continue;
+      final variants = (doc.data()["variants"] as List<dynamic>? ?? []);
+      final match = variants.any(
+        (v) => (v as Map<String, dynamic>)["sku"] == sku,
+      );
+      if (match) return true;
+    }
+    return false;
+  }
 }

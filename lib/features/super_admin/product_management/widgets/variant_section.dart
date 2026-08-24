@@ -40,7 +40,7 @@ class VariantSection extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(30),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1B1B1B),
+                  color: const Color(0xFF1A1A1A),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Center(
@@ -86,13 +86,39 @@ class _ColorCard extends StatelessWidget {
 
   const _ColorCard({required this.color});
 
+  String? _getSkuError(String? providerError, String sku) {
+    if (providerError == null) return null;
+    final trimmedSku = sku.trim();
+
+    // 1. Blank SKU error on save attempt
+    if (trimmedSku.isEmpty && providerError.contains("SKU is required")) {
+      return "SKU is required";
+    }
+
+    // 2. Duplicate SKU error
+    if (trimmedSku.isNotEmpty &&
+        providerError.contains("Duplicate SKU") &&
+        providerError.contains(trimmedSku)) {
+      return "Duplicate SKU found";
+    }
+
+    // 3. SKU already exists in database
+    if (trimmedSku.isNotEmpty &&
+        providerError.contains("already exists") &&
+        providerError.contains(trimmedSku)) {
+      return "SKU already exists";
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<ProductManagementProvider>();
 
     return Card(
       elevation: 0,
-      color: const Color(0xFF1B1B1B),
+      color: const Color(0xFF1A1A1A),
       child: Padding(
         padding: const EdgeInsets.all(18),
         child: Column(
@@ -178,16 +204,22 @@ class _ColorCard extends StatelessWidget {
                 ),
               ),
 
-            ...color.variants.map(
-              (variant) => Padding(
+            ...color.variants.map((variant) {
+              final skuError = _getSkuError(provider.error, variant.sku);
+
+              return Padding(
                 padding: const EdgeInsets.only(bottom: 15),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
                       width: 45,
-                      child: Text(
-                        variant.size,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 14),
+                        child: Text(
+                          variant.size,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
 
@@ -197,9 +229,19 @@ class _ColorCard extends StatelessWidget {
                       flex: 2,
                       child: TextFormField(
                         initialValue: variant.sku,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: "SKU",
-                          border: OutlineInputBorder(),
+                          errorText: skuError,
+                          border: const OutlineInputBorder(),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          focusedErrorBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
                         ),
                         onChanged: (value) {
                           provider.updateSkuForColorSize(color, variant, value);
@@ -218,6 +260,9 @@ class _ColorCard extends StatelessWidget {
                         decoration: const InputDecoration(
                           labelText: "Stock",
                           border: OutlineInputBorder(),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
                         ),
                         onChanged: (value) {
                           provider.updateStockForColorSize(
@@ -230,8 +275,8 @@ class _ColorCard extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-            ),
+              );
+            }),
 
             const SizedBox(height: 20),
 
