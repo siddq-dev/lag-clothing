@@ -9,6 +9,10 @@ admin.initializeApp();
 
 const brevoApiKey = defineSecret("BREVO_API_KEY");
 
+// Official LAG Clothing mailbox.
+// Must be added as a VERIFIED SENDER in Brevo before emails will send.
+const OFFICIAL_EMAIL = "lagclothing.com@gmail.com";
+
 /**
  * Creates a Brevo API client using the Firebase Secret Manager API key.
  *
@@ -68,10 +72,10 @@ exports.testBrevoEmail = onRequest(
         const client = getBrevoClient();
 
         const result =
-          await client.transactionalEmails.sendTransacEmail({
-            subject: "LAG Clothing - Brevo Test",
+        await client.transactionalEmails.sendTransacEmail({
+          subject: "LAG Clothing - Brevo Test",
 
-            htmlContent: `
+          htmlContent: `
               <!DOCTYPE html>
               <html>
                 <body style="
@@ -154,20 +158,19 @@ exports.testBrevoEmail = onRequest(
               </html>
             `,
 
-            // Temporary verified sender for testing.
-            // Later change to order@lagclothing.com.
-            sender: {
-              name: "Clothing App",
-              email: "mhdsiddq17@gmail.com",
-            },
+          // Official verified sender.
+          sender: {
+            name: "LAG Clothing",
+            email: OFFICIAL_EMAIL,
+          },
 
-            // Your test email.
-            to: [
-              {
-                email: "abualmahdi07@gmail.com",
-              },
-            ],
-          });
+          // Your test email.
+          to: [
+            {
+              email: OFFICIAL_EMAIL,
+            },
+          ],
+        });
 
         logger.info("Brevo test email sent successfully", {
           result,
@@ -194,7 +197,7 @@ exports.testBrevoEmail = onRequest(
 
 /**
  * ============================================================
- * ORDER CREATED -> SEND CUSTOMER EMAIL
+ * ORDER CREATED -> SEND CUSTOMER EMAIL + NOTIFY LAG CLOTHING
  * ============================================================
  *
  * Firestore path:
@@ -208,7 +211,8 @@ exports.testBrevoEmail = onRequest(
  * 3. Find the Firebase Auth customer.
  * 4. Get the customer's email.
  * 5. Build the email.
- * 6. Send the email through Brevo.
+ * 6. Send confirmation to the customer through Brevo.
+ * 7. Send a notification copy to the LAG Clothing mailbox.
  */
 exports.sendOrderConfirmationEmail = onDocumentCreated(
     {
@@ -233,14 +237,14 @@ exports.sendOrderConfirmationEmail = onDocumentCreated(
         });
 
         /**
-         * --------------------------------------------------------
-         * GET USER ID
-         * --------------------------------------------------------
-         */
+   * --------------------------------------------------------
+   * GET USER ID
+   * --------------------------------------------------------
+   */
 
         const userId = order.userId ?
-          order.userId.toString() :
-          "";
+        order.userId.toString() :
+        "";
 
         if (!userId) {
           logger.error("Order does not contain userId", {
@@ -251,10 +255,10 @@ exports.sendOrderConfirmationEmail = onDocumentCreated(
         }
 
         /**
-         * --------------------------------------------------------
-         * GET CUSTOMER FROM FIREBASE AUTH
-         * --------------------------------------------------------
-         */
+   * --------------------------------------------------------
+   * GET CUSTOMER FROM FIREBASE AUTH
+   * --------------------------------------------------------
+   */
 
         let customer;
 
@@ -282,67 +286,67 @@ exports.sendOrderConfirmationEmail = onDocumentCreated(
         }
 
         /**
-         * --------------------------------------------------------
-         * CUSTOMER NAME
-         * --------------------------------------------------------
-         */
+   * --------------------------------------------------------
+   * CUSTOMER NAME
+   * --------------------------------------------------------
+   */
 
         const customerNameValue =
-          customer.displayName || "Customer";
+        customer.displayName || "Customer";
 
         const customerName =
-          stringValue(customerNameValue, "Customer");
+        stringValue(customerNameValue, "Customer");
 
         /**
-         * --------------------------------------------------------
-         * ORDER DATA
-         * --------------------------------------------------------
-         */
+   * --------------------------------------------------------
+   * ORDER DATA
+   * --------------------------------------------------------
+   */
 
         const orderNumber =
-          stringValue(order.orderNumber, orderId);
+        stringValue(order.orderNumber, orderId);
 
         const total =
-          Number(order.total || order.grandTotal || 0);
+        Number(order.total || order.grandTotal || 0);
 
         const subtotal =
-          Number(order.subtotal || 0);
+        Number(order.subtotal || 0);
 
         const shippingCharge =
-          Number(
-              order.shippingCharge ||
-              order.shipping ||
-              0,
-          );
+        Number(
+            order.shippingCharge ||
+          order.shipping ||
+          0,
+        );
 
         const discount =
-          Number(order.discount || 0);
+        Number(order.discount || 0);
 
         const tax =
-          Number(order.tax || 0);
+        Number(order.tax || 0);
 
         const paymentMethod =
-          stringValue(
-              order.paymentMethod,
-              "Not specified",
-          );
+        stringValue(
+            order.paymentMethod,
+            "Not specified",
+        );
 
         const paymentStatus =
-          stringValue(
-              order.paymentStatus,
-              "pending",
-          );
+        stringValue(
+            order.paymentStatus,
+            "pending",
+        );
 
         /**
-         * --------------------------------------------------------
-         * BUILD ORDER ITEMS HTML
-         * --------------------------------------------------------
-         */
+   * --------------------------------------------------------
+   * BUILD ORDER ITEMS HTML
+   * --------------------------------------------------------
+   */
 
         const items =
-          Array.isArray(order.items) ?
-            order.items :
-            [];
+        Array.isArray(order.items) ?
+          order.items :
+          [];
 
         let itemsHtml = "";
 
@@ -359,31 +363,31 @@ exports.sendOrderConfirmationEmail = onDocumentCreated(
           itemsHtml = items
               .map((item) => {
                 const productName =
-                  stringValue(
-                      item.productName,
-                      "Product",
-                  );
+              stringValue(
+                  item.productName,
+                  "Product",
+              );
 
                 const size =
-                  stringValue(
-                      item.size,
-                      "-",
-                  );
+              stringValue(
+                  item.size,
+                  "-",
+              );
 
                 const color =
-                  stringValue(
-                      item.color,
-                      "-",
-                  );
+              stringValue(
+                  item.color,
+                  "-",
+              );
 
                 const quantity =
-                  Number(item.quantity || 0);
+              Number(item.quantity || 0);
 
                 const price =
-                  Number(item.price || 0);
+              Number(item.price || 0);
 
                 const itemTotal =
-                  Number(item.total || 0);
+              Number(item.total || 0);
 
                 return `
                   <div style="
@@ -435,372 +439,271 @@ exports.sendOrderConfirmationEmail = onDocumentCreated(
         }
 
         /**
-         * --------------------------------------------------------
-         * SHIPPING ADDRESS
-         * --------------------------------------------------------
-         */
+   * --------------------------------------------------------
+   * SHIPPING ADDRESS
+   * --------------------------------------------------------
+   */
 
         const shippingAddress =
-          order.shippingAddress || {};
+        order.shippingAddress || {};
 
         const fullName =
-          shippingAddress.fullName ?
-            shippingAddress.fullName.toString() :
-            customerName;
+        shippingAddress.fullName ?
+          shippingAddress.fullName.toString() :
+          customerName;
 
         const addressLine1 =
-          shippingAddress.addressLine1 ?
-            shippingAddress.addressLine1.toString() :
-            "";
+        shippingAddress.addressLine1 ?
+          shippingAddress.addressLine1.toString() :
+          "";
 
         const addressLine2 =
-          shippingAddress.addressLine2 ?
-            shippingAddress.addressLine2.toString() :
-            "";
+        shippingAddress.addressLine2 ?
+          shippingAddress.addressLine2.toString() :
+          "";
 
         const landmark =
-          shippingAddress.landmark ?
-            shippingAddress.landmark.toString() :
-            "";
+        shippingAddress.landmark ?
+          shippingAddress.landmark.toString() :
+          "";
 
         const city =
-          shippingAddress.city ?
-            shippingAddress.city.toString() :
-            "";
+        shippingAddress.city ?
+          shippingAddress.city.toString() :
+          "";
 
         const state =
-          shippingAddress.state ?
-            shippingAddress.state.toString() :
-            "";
+        shippingAddress.state ?
+          shippingAddress.state.toString() :
+          "";
 
         const pincode =
-          shippingAddress.pincode ?
-            shippingAddress.pincode.toString() :
-            "";
+        shippingAddress.pincode ?
+          shippingAddress.pincode.toString() :
+          "";
 
         const country =
-          shippingAddress.country ?
-            shippingAddress.country.toString() :
-            "India";
+        shippingAddress.country ?
+          shippingAddress.country.toString() :
+          "India";
 
         /**
-         * --------------------------------------------------------
-         * SEND EMAIL
-         * --------------------------------------------------------
-         */
+   * --------------------------------------------------------
+   * SHARED ORDER DETAILS BLOCK (used in both emails)
+   * --------------------------------------------------------
+   */
+
+        const addressHtml = `
+          ${escapeHtml(fullName)}<br>
+          ${escapeHtml(addressLine1)}<br>
+          ${addressLine2 ? `${escapeHtml(addressLine2)}<br>` : ""}
+          ${landmark ? `${escapeHtml(landmark)}<br>` : ""}
+          ${escapeHtml(city)}, ${escapeHtml(state)} ${escapeHtml(pincode)}<br>
+          ${escapeHtml(country)}
+        `;
+
+        const summaryTableHtml = `
+          <table style="
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+          ">
+            <tr>
+              <td style="padding: 6px 0; color: #666666;">Subtotal</td>
+              <td style="padding: 6px 0; text-align: right;">
+  ₹${subtotal.toFixed(2)}
+</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; color: #666666;">Shipping</td>
+             <td style="padding: 6px 0; text-align: right;">
+  ₹${shippingCharge.toFixed(2)}
+</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; color: #666666;">Discount</td>
+              <td style="padding: 6px 0; text-align: right;">
+  -₹${discount.toFixed(2)}
+</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; color: #666666;">Tax</td>
+              <td style="padding: 6px 0; text-align: right;">
+  ₹${tax.toFixed(2)}
+</td>
+            </tr>
+            <tr>
+              <td style="
+                padding: 12px 0;
+                border-top: 1px solid #dddddd;
+                font-weight: bold;
+                font-size: 17px;
+              ">Total</td>
+              <td style="
+                padding: 12px 0;
+                border-top: 1px solid #dddddd;
+                text-align: right;
+                font-weight: bold;
+                font-size: 17px;
+              ">
+  ₹${total.toFixed(2)}
+</td>
+            </tr>
+          </table>
+        `;
 
         const client = getBrevoClient();
 
-        const result =
+        /**
+   * --------------------------------------------------------
+   * EMAIL 1 - CONFIRMATION TO THE CUSTOMER
+   * --------------------------------------------------------
+   */
+
+        try {
+          const customerResult =
           await client.transactionalEmails.sendTransacEmail({
             subject:
               `LAG Clothing - Order Confirmation #${orderNumber}`,
 
             htmlContent: `
-              <!DOCTYPE html>
-              <html>
-
-                <body style="
-                  margin: 0;
-                  padding: 0;
-                  background-color: #f5f5f5;
-                  font-family: Arial, Helvetica, sans-serif;
-                ">
-
-                  <div style="
-                    max-width: 600px;
-                    margin: 30px auto;
-                    background: #ffffff;
-                    border-radius: 12px;
-                    overflow: hidden;
+                <!DOCTYPE html>
+                <html>
+                  <body style="
+                    margin: 0;
+                    padding: 0;
+                    background-color: #f5f5f5;
+                    font-family: Arial, Helvetica, sans-serif;
                   ">
-
-                    <!-- HEADER -->
-
                     <div style="
-                      background: #111111;
-                      padding: 25px;
-                      text-align: center;
+                      max-width: 600px;
+                      margin: 30px auto;
+                      background: #ffffff;
+                      border-radius: 12px;
+                      overflow: hidden;
                     ">
+                      <div style="
+                        background: #111111;
+                        padding: 25px;
+                        text-align: center;
+                      ">
+                        <h1 style="
+                          margin: 0;
+                          color: #ffffff;
+                          font-size: 28px;
+                        ">
+                          LAG Clothing
+                        </h1>
+                      </div>
 
-                      <h1 style="
-                        margin: 0;
-                        color: #ffffff;
-                        font-size: 28px;
+                      <div style="padding: 30px;">
+                        <h2 style="margin-top: 0; color: #111111;">
+                          Order Confirmed 🎉
+                        </h2>
+
+                        <p style="
+  color: #444444;
+  font-size: 16px;
+  line-height: 1.6;
+">
+                          Hi ${escapeHtml(fullName)},
+                        </p>
+
+                       <div style="
+  color: #444444;
+  font-size: 16px;
+  line-height: 1.6;
+">
+                          Thank you for shopping with LAG Clothing.
+                          Your order has been successfully placed.
+                        </p>
+
+                        <div style="
+                          margin: 20px 0;
+                          padding: 18px;
+                          background: #f5f5f5;
+                          border-radius: 8px;
+                        ">
+                          <div style="color: #777777; font-size: 13px;">
+                            ORDER NUMBER
+                          </div>
+                          <div style="
+                            margin-top: 5px;
+                            color: #111111;
+                            font-size: 20px;
+                            font-weight: bold;
+                          ">
+                            #${escapeHtml(orderNumber)}
+                          </div>
+                        </div>
+
+                        <h3 style="color: #111111; margin-top: 30px;">
+                          Order Items
+                        </h3>
+
+                        ${itemsHtml}
+
+                        <h3 style="color: #111111; margin-top: 30px;">
+                          Order Summary
+                        </h3>
+
+                        ${summaryTableHtml}
+
+                        <div style="
+                          margin-top: 25px;
+                          padding: 16px;
+                          background: #f5f5f5;
+                          border-radius: 8px;
+                        ">
+                          <div>
+                            <strong>Payment method:</strong>
+                            ${escapeHtml(paymentMethod)}
+                          </div>
+                          <div style="margin-top: 6px;">
+                            <strong>Payment status:</strong>
+                            ${escapeHtml(paymentStatus)}
+                          </div>
+                        </div>
+
+                        <h3 style="color: #111111; margin-top: 30px;">
+                          Delivery Address
+                        </h3>
+
+                       <div style="
+  color: #555555;
+  font-size: 14px;
+  line-height: 1.6;
+">                          ${addressHtml}
+                        </div>
+
+                        <div style="
+  color: #555555;
+  font-size: 14px;
+  line-height: 1.6;
+">
+                          We will keep you updated as your order
+                          moves through the delivery process.
+                        </p>
+                      </div>
+
+                      <div style="
+                        padding: 20px;
+                        text-align: center;
+                        background: #111111;
+                        color: #aaaaaa;
+                        font-size: 13px;
                       ">
                         LAG Clothing
-                      </h1>
-
-                    </div>
-
-                    <!-- CONTENT -->
-
-                    <div style="
-                      padding: 30px;
-                    ">
-
-                      <h2 style="
-                        margin-top: 0;
-                        color: #111111;
-                      ">
-                        Order Confirmed 🎉
-                      </h2>
-
-                      <p style="
-                        color: #444444;
-                        font-size: 16px;
-                        line-height: 1.6;
-                      ">
-                        Hi ${escapeHtml(fullName)},
-                      </p>
-
-                      <p style="
-                        color: #444444;
-                        font-size: 16px;
-                        line-height: 1.6;
-                      ">
-                        Thank you for shopping with LAG Clothing.
-                        Your order has been successfully placed.
-                      </p>
-
-                      <!-- ORDER NUMBER -->
-
-                      <div style="
-                        margin: 20px 0;
-                        padding: 18px;
-                        background: #f5f5f5;
-                        border-radius: 8px;
-                      ">
-
-                        <div style="
-                          color: #777777;
-                          font-size: 13px;
-                        ">
-                          ORDER NUMBER
-                        </div>
-
-                        <div style="
-                          margin-top: 5px;
-                          color: #111111;
-                          font-size: 20px;
-                          font-weight: bold;
-                        ">
-                          #${escapeHtml(orderNumber)}
-                        </div>
-
                       </div>
-
-                      <!-- ITEMS -->
-
-                      <h3 style="
-                        color: #111111;
-                        margin-top: 30px;
-                      ">
-                        Order Items
-                      </h3>
-
-                      ${itemsHtml}
-
-                      <!-- SUMMARY -->
-
-                      <h3 style="
-                        color: #111111;
-                        margin-top: 30px;
-                      ">
-                        Order Summary
-                      </h3>
-
-                      <table style="
-                        width: 100%;
-                        border-collapse: collapse;
-                        font-size: 14px;
-                      ">
-
-                        <tr>
-                          <td style="
-                            padding: 6px 0;
-                            color: #666666;
-                          ">
-                            Subtotal
-                          </td>
-
-                          <td style="
-                            padding: 6px 0;
-                            text-align: right;
-                          ">
-                            ₹${subtotal.toFixed(2)}
-                          </td>
-                        </tr>
-
-                        <tr>
-                          <td style="
-                            padding: 6px 0;
-                            color: #666666;
-                          ">
-                            Shipping
-                          </td>
-
-                          <td style="
-                            padding: 6px 0;
-                            text-align: right;
-                          ">
-                            ₹${shippingCharge.toFixed(2)}
-                          </td>
-                        </tr>
-
-                        <tr>
-                          <td style="
-                            padding: 6px 0;
-                            color: #666666;
-                          ">
-                            Discount
-                          </td>
-
-                          <td style="
-                            padding: 6px 0;
-                            text-align: right;
-                          ">
-                            -₹${discount.toFixed(2)}
-                          </td>
-                        </tr>
-
-                        <tr>
-                          <td style="
-                            padding: 6px 0;
-                            color: #666666;
-                          ">
-                            Tax
-                          </td>
-
-                          <td style="
-                            padding: 6px 0;
-                            text-align: right;
-                          ">
-                            ₹${tax.toFixed(2)}
-                          </td>
-                        </tr>
-
-                        <tr>
-                          <td style="
-                            padding: 12px 0;
-                            border-top: 1px solid #dddddd;
-                            font-weight: bold;
-                            font-size: 17px;
-                          ">
-                            Total
-                          </td>
-
-                          <td style="
-                            padding: 12px 0;
-                            border-top: 1px solid #dddddd;
-                            text-align: right;
-                            font-weight: bold;
-                            font-size: 17px;
-                          ">
-                            ₹${total.toFixed(2)}
-                          </td>
-                        </tr>
-
-                      </table>
-
-                      <!-- PAYMENT -->
-
-                      <div style="
-                        margin-top: 25px;
-                        padding: 16px;
-                        background: #f5f5f5;
-                        border-radius: 8px;
-                      ">
-
-                        <div>
-                          <strong>Payment method:</strong>
-                          ${escapeHtml(paymentMethod)}
-                        </div>
-
-                        <div style="margin-top: 6px;">
-                          <strong>Payment status:</strong>
-                          ${escapeHtml(paymentStatus)}
-                        </div>
-
-                      </div>
-
-                      <!-- ADDRESS -->
-
-                      <h3 style="
-                        color: #111111;
-                        margin-top: 30px;
-                      ">
-                        Delivery Address
-                      </h3>
-
-                      <div style="
-                        color: #555555;
-                        font-size: 14px;
-                        line-height: 1.6;
-                      ">
-
-                        ${escapeHtml(fullName)}<br>
-
-                        ${escapeHtml(addressLine1)}<br>
-
-                        ${
-                          addressLine2 ?
-                            `${escapeHtml(addressLine2)}<br>` :
-                            ""
-}
-
-                        ${
-                          landmark ?
-                            `${escapeHtml(landmark)}<br>` :
-                            ""
-}
-
-                        ${escapeHtml(city)},
-                        ${escapeHtml(state)}
-                        ${escapeHtml(pincode)}<br>
-
-                        ${escapeHtml(country)}
-
-                      </div>
-
-                      <!-- FOOTER MESSAGE -->
-
-                      <p style="
-                        margin-top: 30px;
-                        color: #555555;
-                        font-size: 14px;
-                        line-height: 1.6;
-                      ">
-                        We will keep you updated as your order
-                        moves through the delivery process.
-                      </p>
-
                     </div>
+                  </body>
+                </html>
+              `,
 
-                    <!-- FOOTER -->
-
-                    <div style="
-                      padding: 20px;
-                      text-align: center;
-                      background: #111111;
-                      color: #aaaaaa;
-                      font-size: 13px;
-                    ">
-                      LAG Clothing
-                    </div>
-
-                  </div>
-
-                </body>
-
-              </html>
-            `,
-
-            // Temporary verified sender.
-            // Later change this to order@lagclothing.com.
+            // Official verified sender.
             sender: {
-              name: "Clothing App",
-              email: "mhdsiddq17@gmail.com",
+              name: "LAG Clothing",
+              email: OFFICIAL_EMAIL,
             },
 
             to: [
@@ -809,22 +712,206 @@ exports.sendOrderConfirmationEmail = onDocumentCreated(
                 name: fullName,
               },
             ],
+
+            // If the customer replies, it goes to the official mailbox.
+            replyTo: {
+              email: OFFICIAL_EMAIL,
+              name: "LAG Clothing",
+            },
           });
 
-        logger.info(
-            "Order confirmation email sent successfully",
-            {
-              orderId,
-              orderNumber,
-              customerEmail,
-              result,
+          logger.info(
+              "Order confirmation email sent successfully",
+              {
+                orderId,
+                orderNumber,
+                customerEmail,
+                result: customerResult,
+              },
+          );
+        } catch (error) {
+          logger.error(
+              "Failed to send order confirmation email to customer",
+              {
+                orderId,
+                customerEmail,
+                error: error.message,
+                stack: error.stack,
+              },
+          );
+        }
+
+        /**
+   * --------------------------------------------------------
+   * EMAIL 2 - NEW ORDER NOTIFICATION TO LAG CLOTHING
+   * --------------------------------------------------------
+   */
+
+        try {
+          const notifyResult =
+          await client.transactionalEmails.sendTransacEmail({
+            subject:
+              `New Order Received - #${orderNumber}`,
+
+            htmlContent: `
+                <!DOCTYPE html>
+                <html>
+                  <body style="
+                    margin: 0;
+                    padding: 0;
+                    background-color: #f5f5f5;
+                    font-family: Arial, Helvetica, sans-serif;
+                  ">
+                    <div style="
+                      max-width: 600px;
+                      margin: 30px auto;
+                      background: #ffffff;
+                      border-radius: 12px;
+                      overflow: hidden;
+                    ">
+                      <div style="
+                        background: #111111;
+                        padding: 25px;
+                        text-align: center;
+                      ">
+                        <h1 style="margin: 0; color: #ffffff; font-size: 26px;">
+                          LAG Clothing
+                        </h1>
+                      </div>
+
+                      <div style="padding: 30px;">
+                        <h2 style="margin-top: 0; color: #111111;">
+                          New Order Received
+                        </h2>
+
+                        <div style="
+                          margin: 20px 0;
+                          padding: 18px;
+                          background: #f5f5f5;
+                          border-radius: 8px;
+                        ">
+                          <div style="color: #777777; font-size: 13px;">
+                            ORDER NUMBER
+                          </div>
+                          <div style="
+                            margin-top: 5px;
+                            color: #111111;
+                            font-size: 20px;
+                            font-weight: bold;
+                          ">
+                            #${escapeHtml(orderNumber)}
+                          </div>
+                        </div>
+
+                        <div style="
+                          margin: 20px 0;
+                          padding: 16px;
+                          background: #f7f7f7;
+                          border-radius: 8px;
+                        ">
+                          <strong>Customer:</strong>
+${escapeHtml(customerName)
+}<br>
+                          <strong>Email:</strong> ${escapeHtml(customerEmail)}
+                        </div>
+
+                        <h3 style="color: #111111; margin-top: 30px;">
+                          Order Items
+                        </h3>
+
+                        ${itemsHtml}
+
+                        <h3 style="color: #111111; margin-top: 30px;">
+                          Order Summary
+                        </h3>
+
+                        ${summaryTableHtml}
+
+                        <div style="
+                          margin-top: 25px;
+                          padding: 16px;
+                          background: #f5f5f5;
+                          border-radius: 8px;
+                        ">
+                          <div>
+                            <strong>Payment method:</strong>
+                            ${escapeHtml(paymentMethod)}
+                          </div>
+                          <div style="margin-top: 6px;">
+                            <strong>Payment status:</strong>
+                            ${escapeHtml(paymentStatus)}
+                          </div>
+                        </div>
+
+                        <h3 style="color: #111111; margin-top: 30px;">
+                          Delivery Address
+                        </h3>
+
+                       <div style="
+  color: #555555;
+  font-size: 14px;
+  line-height: 1.6;
+">
+                          ${addressHtml}
+                        </div>
+                      </div>
+
+                      <div style="
+                        padding: 20px;
+                        text-align: center;
+                        background: #111111;
+                        color: #aaaaaa;
+                        font-size: 13px;
+                      ">
+                        LAG Clothing - Order Notification
+                      </div>
+                    </div>
+                  </body>
+                </html>
+              `,
+
+            sender: {
+              name: "LAG Clothing Orders",
+              email: OFFICIAL_EMAIL,
             },
-        );
+
+            to: [
+              {
+                email: OFFICIAL_EMAIL,
+                name: "LAG Clothing",
+              },
+            ],
+
+            // Reply goes straight to the customer.
+            replyTo: {
+              email: customerEmail,
+              name: customerName,
+            },
+          });
+
+          logger.info(
+              "Order notification email sent to LAG Clothing",
+              {
+                orderId,
+                orderNumber,
+                result: notifyResult,
+              },
+          );
+        } catch (error) {
+          logger.error(
+              "Failed to send order notification email to LAG Clothing",
+              {
+                orderId,
+                error: error.message,
+                stack: error.stack,
+              },
+          );
+        }
 
         return;
       } catch (error) {
         logger.error(
-            "Failed to send order confirmation email",
+            "Failed to process order confirmation flow",
             {
               error: error.message,
               stack: error.stack,
@@ -873,11 +960,11 @@ exports.sendContactMessage = onRequest(
       region: "us-central1",
     },
     async (req, res) => {
-      /**
-       * --------------------------------------------------------
-       * CORS
-       * --------------------------------------------------------
-       */
+    /**
+     * --------------------------------------------------------
+     * CORS
+     * --------------------------------------------------------
+     */
 
       res.set("Access-Control-Allow-Origin", "*");
       res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -887,8 +974,8 @@ exports.sendContactMessage = onRequest(
       );
 
       /**
-       * Handle browser preflight request.
-       */
+ * Handle browser preflight request.
+ */
 
       if (req.method === "OPTIONS") {
         res.status(204).send("");
@@ -896,10 +983,10 @@ exports.sendContactMessage = onRequest(
       }
 
       /**
-       * --------------------------------------------------------
-       * ONLY POST REQUESTS
-       * --------------------------------------------------------
-       */
+ * --------------------------------------------------------
+ * ONLY POST REQUESTS
+ * --------------------------------------------------------
+ */
 
       if (req.method !== "POST") {
         res.status(405).json({
@@ -911,35 +998,39 @@ exports.sendContactMessage = onRequest(
       }
 
       try {
-        /**
-         * --------------------------------------------------------
-         * READ REQUEST BODY
-         * --------------------------------------------------------
-         */
+      /**
+       * --------------------------------------------------------
+       * READ REQUEST BODY
+       * --------------------------------------------------------
+       */
 
         const body = req.body || {};
 
         const name =
-      body.name != null?
-       body.name.toString().trim(): "";
+        body.name != null ?
+          body.name.toString().trim() :
+          "";
 
         const email =
-  body.email != null?
-   body.email.toString().trim(): "";
+        body.email != null ?
+          body.email.toString().trim() :
+          "";
 
         const phone =
-  body.phone != null?
-   body.phone.toString().trim(): "";
+        body.phone != null ?
+          body.phone.toString().trim() :
+          "";
 
         const message =
-  body.message != null?
-   body.message.toString().trim(): "";
+        body.message != null ?
+          body.message.toString().trim() :
+          "";
 
         /**
-         * --------------------------------------------------------
-         * VALIDATION
-         * --------------------------------------------------------
-         */
+   * --------------------------------------------------------
+   * VALIDATION
+   * --------------------------------------------------------
+   */
 
         if (!name) {
           res.status(400).json({
@@ -969,11 +1060,11 @@ exports.sendContactMessage = onRequest(
         }
 
         /**
-         * Basic email validation.
-         */
+   * Basic email validation.
+   */
 
         const emailRegex =
-          /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailRegex.test(email)) {
           res.status(400).json({
@@ -985,12 +1076,12 @@ exports.sendContactMessage = onRequest(
         }
 
         /**
-         * --------------------------------------------------------
-         * ESCAPE USER INPUT
-         * --------------------------------------------------------
-         *
-         * Never insert raw user input into HTML.
-         */
+   * --------------------------------------------------------
+   * ESCAPE USER INPUT
+   * --------------------------------------------------------
+   *
+   * Never insert raw user input into HTML.
+   */
 
         const safeName = escapeHtml(name);
         const safeEmail = escapeHtml(email);
@@ -1001,58 +1092,43 @@ exports.sendContactMessage = onRequest(
             .replace(/\n/g, "<br>");
 
         /**
-         * --------------------------------------------------------
-         * EMAIL CONFIGURATION
-         * --------------------------------------------------------
-         *
-         * IMPORTANT:
-         *
-         * Keep this as your currently verified Brevo sender
-         * until your LAG Clothing domain email is configured.
-         */
+   * --------------------------------------------------------
+   * EMAIL CONFIGURATION
+   * --------------------------------------------------------
+   */
 
         const sender = {
           name: "LAG Clothing",
-          email: "mhdsiddq17@gmail.com",
+          email: OFFICIAL_EMAIL,
         };
 
         /**
-         * --------------------------------------------------------
-         * SUPPORT EMAIL
-         * --------------------------------------------------------
-         *
-         * Change this to the actual LAG Clothing support
-         * email address when ready.
-         *
-         * For now we use the same email destination already
-         * present in your existing Brevo test configuration.
-         */
+   * --------------------------------------------------------
+   * SUPPORT EMAIL
+   * --------------------------------------------------------
+   */
 
-        const supportEmail =
-          "abualmahdi07@gmail.com";
+        const supportEmail = OFFICIAL_EMAIL;
 
         /**
-         * --------------------------------------------------------
-         * BUILD EMAIL
-         * --------------------------------------------------------
-         */
+   * --------------------------------------------------------
+   * BUILD EMAIL
+   * --------------------------------------------------------
+   */
 
         const htmlContent = `
           <!DOCTYPE html>
           <html>
-
             <head>
               <meta charset="UTF-8">
               <title>New Contact Message</title>
             </head>
-
             <body style="
               margin: 0;
               padding: 0;
               background-color: #f5f5f5;
               font-family: Arial, Helvetica, sans-serif;
             ">
-
               <div style="
                 max-width: 650px;
                 margin: 40px auto;
@@ -1060,48 +1136,25 @@ exports.sendContactMessage = onRequest(
                 border-radius: 12px;
                 overflow: hidden;
               ">
-
-                <!-- HEADER -->
-
                 <div style="
                   background-color: #111111;
                   padding: 25px;
                   text-align: center;
                 ">
-
-                  <h1 style="
-                    margin: 0;
-                    color: #ffffff;
-                    font-size: 28px;
-                  ">
+                  <h1 style="margin: 0; color: #ffffff; font-size: 28px;">
                     LAG Clothing
                   </h1>
-
                 </div>
 
-                <!-- CONTENT -->
-
-                <div style="
-                  padding: 30px;
-                ">
-
-                  <h2 style="
-                    margin-top: 0;
-                    color: #111111;
-                  ">
+                <div style="padding: 30px;">
+                  <h2 style="margin-top: 0; color: #111111;">
                     New Contact Form Message
                   </h2>
 
-                  <p style="
-                    color: #555555;
-                    font-size: 15px;
-                    line-height: 1.6;
-                  ">
+                  <p style="color: #555555; font-size: 15px; line-height: 1.6;">
                     A customer has submitted a new message
                     through the LAG Clothing Contact Us page.
                   </p>
-
-                  <!-- CUSTOMER DETAILS -->
 
                   <div style="
                     margin-top: 25px;
@@ -1109,41 +1162,22 @@ exports.sendContactMessage = onRequest(
                     background-color: #f7f7f7;
                     border-radius: 10px;
                   ">
-
-                    <h3 style="
-                      margin-top: 0;
-                      color: #111111;
-                    ">
+                    <h3 style="margin-top: 0; color: #111111;">
                       Customer Details
                     </h3>
 
-                    <p style="
-                      margin: 8px 0;
-                      color: #444444;
-                    ">
-                      <strong>Name:</strong>
-                      ${safeName}
+                    <p style="margin: 8px 0; color: #444444;">
+                      <strong>Name:</strong> ${safeName}
                     </p>
 
-                    <p style="
-                      margin: 8px 0;
-                      color: #444444;
-                    ">
-                      <strong>Email:</strong>
-                      ${safeEmail}
+                    <p style="margin: 8px 0; color: #444444;">
+                      <strong>Email:</strong> ${safeEmail}
                     </p>
 
-                    <p style="
-                      margin: 8px 0;
-                      color: #444444;
-                    ">
-                      <strong>Phone:</strong>
-                      ${safePhone}
+                    <p style="margin: 8px 0; color: #444444;">
+                      <strong>Phone:</strong> ${safePhone}
                     </p>
-
                   </div>
-
-                  <!-- MESSAGE -->
 
                   <div style="
                     margin-top: 25px;
@@ -1152,11 +1186,7 @@ exports.sendContactMessage = onRequest(
                     border: 1px solid #e5e5e5;
                     border-radius: 10px;
                   ">
-
-                    <h3 style="
-                      margin-top: 0;
-                      color: #111111;
-                    ">
+                    <h3 style="margin-top: 0; color: #111111;">
                       Message
                     </h3>
 
@@ -1168,10 +1198,7 @@ exports.sendContactMessage = onRequest(
                     ">
                       ${safeMessage}
                     </p>
-
                   </div>
-
-                  <!-- REPLY -->
 
                   <div style="
                     margin-top: 25px;
@@ -1179,21 +1206,12 @@ exports.sendContactMessage = onRequest(
                     background-color: #f5f5f5;
                     border-radius: 8px;
                   ">
-
-                    <p style="
-                      margin: 0;
-                      color: #555555;
-                      font-size: 14px;
-                    ">
+                    <p style="margin: 0; color: #555555; font-size: 14px;">
                       To reply to this customer, use:
                       <strong>${safeEmail}</strong>
                     </p>
-
                   </div>
-
                 </div>
-
-                <!-- FOOTER -->
 
                 <div style="
                   padding: 20px;
@@ -1202,61 +1220,53 @@ exports.sendContactMessage = onRequest(
                   color: #aaaaaa;
                   font-size: 13px;
                 ">
-
                   LAG Clothing<br>
                   Contact Us Notification
-
                 </div>
-
               </div>
-
             </body>
-
           </html>
         `;
 
         /**
-         * --------------------------------------------------------
-         * SEND THROUGH BREVO
-         * --------------------------------------------------------
-         */
+   * --------------------------------------------------------
+   * SEND THROUGH BREVO
+   * --------------------------------------------------------
+   */
 
         const client = getBrevoClient();
 
         const result =
-          await client.transactionalEmails.sendTransacEmail({
-            subject:
-              `LAG Clothing - New Contact Message from ${name}`,
+        await client.transactionalEmails.sendTransacEmail({
+          subject:
+            `LAG Clothing - New Contact Message from ${name}`,
 
-            htmlContent: htmlContent,
+          htmlContent: htmlContent,
 
-            sender: sender,
+          sender: sender,
 
-            to: [
-              {
-                email: supportEmail,
-                name: "LAG Clothing Support",
-              },
-            ],
-
-            /**
-             * Reply directly to the customer.
-             *
-             * When you open the email in your email client
-             * and press Reply, it can reply to the customer.
-             */
-
-            replyTo: {
-              email: email,
-              name: name,
+          to: [
+            {
+              email: supportEmail,
+              name: "LAG Clothing Support",
             },
-          });
+          ],
+
+          /**
+           * Reply directly to the customer.
+           */
+
+          replyTo: {
+            email: email,
+            name: name,
+          },
+        });
 
         /**
-         * --------------------------------------------------------
-         * LOG SUCCESS
-         * --------------------------------------------------------
-         */
+   * --------------------------------------------------------
+   * LOG SUCCESS
+   * --------------------------------------------------------
+   */
 
         logger.info(
             "Contact form email sent successfully",
@@ -1268,22 +1278,22 @@ exports.sendContactMessage = onRequest(
         );
 
         /**
-         * --------------------------------------------------------
-         * RESPONSE TO FLUTTER
-         * --------------------------------------------------------
-         */
+   * --------------------------------------------------------
+   * RESPONSE TO FLUTTER
+   * --------------------------------------------------------
+   */
 
         res.status(200).json({
           success: true,
           message:
-            "Your message has been sent successfully.",
+          "Your message has been sent successfully.",
         });
       } catch (error) {
-        /**
-         * --------------------------------------------------------
-         * ERROR HANDLING
-         * --------------------------------------------------------
-         */
+      /**
+       * --------------------------------------------------------
+       * ERROR HANDLING
+       * --------------------------------------------------------
+       */
 
         logger.error(
             "Contact form email failed",
@@ -1296,7 +1306,7 @@ exports.sendContactMessage = onRequest(
         res.status(500).json({
           success: false,
           message:
-            "Unable to send your message right now. Please try again later.",
+          "Unable to send your message right now. Please try again later.",
         });
       }
     },
