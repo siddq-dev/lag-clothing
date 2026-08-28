@@ -36,6 +36,8 @@ class ProductDetailsPage extends StatelessWidget {
 class _ProductDetailsContent extends StatelessWidget {
   const _ProductDetailsContent();
 
+  static const double _mobileBreakpoint = 800;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductDetailsProvider>(
@@ -97,84 +99,113 @@ class _ProductDetailsContent extends StatelessWidget {
             ? product.salePrice
             : product.price;
 
-        return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 60),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ==================================================
-              // BREADCRUMB
-              // ==================================================
-              Row(
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      context.go(AppRouter.shop);
-                    },
-                    child: const Text('Shop'),
-                  ),
-                  const Icon(Icons.chevron_right, size: 18),
-                  Expanded(
-                    child: Text(
-                      product.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final isMobile = constraints.maxWidth < _mobileBreakpoint;
+
+            return SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 16 : 60,
+                vertical: isMobile ? 24 : 60,
               ),
-
-              const SizedBox(height: 30),
-
-              // ==================================================
-              // PRODUCT
-              // ==================================================
-              Row(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(flex: 6, child: _ProductImages(product: product)),
+                  // ==================================================
+                  // BREADCRUMB
+                  // ==================================================
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          context.go(AppRouter.shop);
+                        },
+                        child: const Text('Shop'),
+                      ),
+                      const Icon(Icons.chevron_right, size: 18),
+                      Expanded(
+                        child: Text(
+                          product.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
 
-                  const SizedBox(width: 60),
+                  const SizedBox(height: 30),
 
-                  Expanded(
-                    flex: 5,
-                    child: _ProductInformation(
+                  // ==================================================
+                  // PRODUCT
+                  // ==================================================
+                  if (isMobile) ...[
+                    // ------------------------------------------------
+                    // MOBILE: Stacked full-width layout
+                    // ------------------------------------------------
+                    _ProductImages(product: product, isMobile: true),
+
+                    const SizedBox(height: 30),
+
+                    _ProductInformation(
                       provider: provider,
                       displayPrice: displayPrice,
                     ),
+                  ] else ...[
+                    // ------------------------------------------------
+                    // DESKTOP: Original side-by-side flex 6 / 5 layout
+                    // ------------------------------------------------
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 6,
+                          child: _ProductImages(product: product),
+                        ),
+
+                        const SizedBox(width: 60),
+
+                        Expanded(
+                          flex: 5,
+                          child: _ProductInformation(
+                            provider: provider,
+                            displayPrice: displayPrice,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+
+                  const SizedBox(height: 70),
+
+                  // ==================================================
+                  // DESCRIPTION
+                  // ==================================================
+                  _ProductDescription(description: product.description),
+
+                  const SizedBox(height: 50),
+
+                  // ==================================================
+                  // META
+                  // ==================================================
+                  _ProductMeta(
+                    category: product.category,
+                    subCategory: product.subCategory,
+                    brand: product.brand,
+                  ),
+
+                  const SizedBox(height: 50),
+
+                  // ==================================================
+                  // REVIEWS
+                  // ==================================================
+                  _ProductReviews(
+                    rating: product.rating,
+                    reviewCount: product.reviewCount,
                   ),
                 ],
               ),
-
-              const SizedBox(height: 70),
-
-              // ==================================================
-              // DESCRIPTION
-              // ==================================================
-              _ProductDescription(description: product.description),
-
-              const SizedBox(height: 50),
-
-              // ==================================================
-              // META
-              // ==================================================
-              _ProductMeta(
-                category: product.category,
-                subCategory: product.subCategory,
-                brand: product.brand,
-              ),
-
-              const SizedBox(height: 50),
-
-              // ==================================================
-              // REVIEWS
-              // ==================================================
-              _ProductReviews(
-                rating: product.rating,
-                reviewCount: product.reviewCount,
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
@@ -186,9 +217,10 @@ class _ProductDetailsContent extends StatelessWidget {
 // ================================================================
 
 class _ProductImages extends StatefulWidget {
-  const _ProductImages({required this.product});
+  const _ProductImages({required this.product, this.isMobile = false});
 
   final dynamic product;
+  final bool isMobile;
 
   @override
   State<_ProductImages> createState() => _ProductImagesState();
@@ -200,10 +232,11 @@ class _ProductImagesState extends State<_ProductImages> {
   @override
   Widget build(BuildContext context) {
     final images = widget.product.images;
+    final mainImageHeight = widget.isMobile ? 350.0 : 550.0;
 
     if (images.isEmpty) {
       return Container(
-        height: 550,
+        height: mainImageHeight,
         decoration: BoxDecoration(
           color: Colors.grey.shade100,
           borderRadius: BorderRadius.circular(18),
@@ -221,7 +254,7 @@ class _ProductImagesState extends State<_ProductImages> {
     return Column(
       children: [
         Container(
-          height: 550,
+          height: mainImageHeight,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
@@ -252,7 +285,7 @@ class _ProductImagesState extends State<_ProductImages> {
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: images.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
+            separatorBuilder: (context, index) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
               final selected = selectedImage == index;
 
@@ -446,8 +479,8 @@ class _ProductInformation extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
               color: selectedVariant.stock > 5
-                  ? Colors.green.withOpacity(0.08)
-                  : Colors.orange.withOpacity(0.08),
+                  ? Colors.green.withValues(alpha: 0.08)
+                  : Colors.orange.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(

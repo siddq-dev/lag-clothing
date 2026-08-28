@@ -23,6 +23,8 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
+  static const double _mobileBreakpoint = 900;
+
   @override
   void initState() {
     super.initState();
@@ -92,81 +94,137 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
     return WebsiteLayout(
       currentRoute: AppRouter.checkout,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 40),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1300),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CheckoutHeader(),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isMobile = constraints.maxWidth < _mobileBreakpoint;
 
-                const SizedBox(height: AppSpacing.xl),
-
-                const CheckoutSectionTitle(
-                  title: 'Products',
-                  icon: Icons.shopping_bag_outlined,
-                ),
-
-                const SizedBox(height: AppSpacing.md),
-
-                const CheckoutProductList(),
-
-                const SizedBox(height: 30),
-
-                Row(
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 16 : 60,
+              vertical: isMobile ? 24 : 40,
+            ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1300),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      flex: 7,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const CheckoutSectionTitle(
-                            title: 'Shipping Address',
-                            icon: Icons.local_shipping_outlined,
-                          ),
+                    const CheckoutHeader(),
 
-                          const SizedBox(height: AppSpacing.md),
+                    const SizedBox(height: AppSpacing.xl),
 
-                          const CheckoutAddressForm(
-                            purpose: CheckoutAddressPurpose.shipping,
-                          ),
-
-                          const SizedBox(height: 30),
-
-                          const CheckoutSectionTitle(
-                            title: 'Billing Address',
-                            icon: Icons.receipt_long_outlined,
-                          ),
-
-                          const SizedBox(height: AppSpacing.md),
-
-                          const CheckoutAddressForm(
-                            purpose: CheckoutAddressPurpose.billing,
-                          ),
-
-                          const SizedBox(height: 30),
-
-                          const PaymentMethodCard(),
-
-                          const SizedBox(height: 30),
-
-                          const PlaceOrderButton(),
-                        ],
-                      ),
+                    const CheckoutSectionTitle(
+                      title: 'Products',
+                      icon: Icons.shopping_bag_outlined,
                     ),
 
-                    const SizedBox(width: 35),
+                    const SizedBox(height: AppSpacing.md),
 
-                    const Expanded(flex: 3, child: CheckoutOrderSummary()),
+                    const CheckoutProductList(),
+
+                    const SizedBox(height: 30),
+
+                    if (isMobile) ...[
+                      // ----------------------------------------------------
+                      // MOBILE: Stacked full-width layout
+                      // ----------------------------------------------------
+                      const CheckoutSectionTitle(
+                        title: 'Shipping Address',
+                        icon: Icons.local_shipping_outlined,
+                      ),
+
+                      const SizedBox(height: AppSpacing.md),
+
+                      const CheckoutAddressForm(
+                        purpose: CheckoutAddressPurpose.shipping,
+                      ),
+
+                      const SizedBox(height: 30),
+
+                      const CheckoutSectionTitle(
+                        title: 'Billing Address',
+                        icon: Icons.receipt_long_outlined,
+                      ),
+
+                      const SizedBox(height: AppSpacing.md),
+
+                      const CheckoutAddressForm(
+                        purpose: CheckoutAddressPurpose.billing,
+                      ),
+
+                      const SizedBox(height: 30),
+
+                      const PaymentMethodCard(),
+
+                      const SizedBox(height: 30),
+
+                      const PlaceOrderButton(),
+
+                      const SizedBox(height: 30),
+
+                      const CheckoutOrderSummary(),
+                    ] else ...[
+                      // ----------------------------------------------------
+                      // DESKTOP: Original side-by-side flex 7 / 3 layout
+                      // ----------------------------------------------------
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 7,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const CheckoutSectionTitle(
+                                  title: 'Shipping Address',
+                                  icon: Icons.local_shipping_outlined,
+                                ),
+
+                                const SizedBox(height: AppSpacing.md),
+
+                                const CheckoutAddressForm(
+                                  purpose: CheckoutAddressPurpose.shipping,
+                                ),
+
+                                const SizedBox(height: 30),
+
+                                const CheckoutSectionTitle(
+                                  title: 'Billing Address',
+                                  icon: Icons.receipt_long_outlined,
+                                ),
+
+                                const SizedBox(height: AppSpacing.md),
+
+                                const CheckoutAddressForm(
+                                  purpose: CheckoutAddressPurpose.billing,
+                                ),
+
+                                const SizedBox(height: 30),
+
+                                const PaymentMethodCard(),
+
+                                const SizedBox(height: 30),
+
+                                const PlaceOrderButton(),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(width: 35),
+
+                          const Expanded(
+                            flex: 3,
+                            child: CheckoutOrderSummary(),
+                          ),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

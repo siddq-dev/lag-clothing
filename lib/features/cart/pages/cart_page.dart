@@ -1,3 +1,4 @@
+// cart_page.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -16,13 +17,6 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ------------------------------------------------------------
-    // WebsiteLayout uses its default `scrollable: true`, exactly
-    // like every other page (e.g. product details). The whole
-    // page — header, cart body, and Footer — scrolls together,
-    // so Footer always sits naturally after the cart content
-    // instead of being squeezed into a fixed leftover height.
-    // ------------------------------------------------------------
     return const WebsiteLayout(
       currentRoute: AppRouter.cart,
       child: Column(children: [CartHeader(), _CartBody()]),
@@ -38,13 +32,13 @@ class _CartBody extends StatefulWidget {
 }
 
 class _CartBodyState extends State<_CartBody> {
+  static const double _mobileBreakpoint = 800;
+
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-
       context.read<CartProvider>().listenCart();
     });
   }
@@ -52,14 +46,8 @@ class _CartBodyState extends State<_CartBody> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<CartProvider>();
-
     final cartItems = provider.items;
 
-    // ------------------------------------------------------------
-    // A finite height (instead of Expanded) for the loading/error/
-    // empty states, so they still look centered on screen without
-    // requiring an unbounded-height ancestor to provide flex space.
-    // ------------------------------------------------------------
     final centeredHeight = MediaQuery.sizeOf(context).height * 0.6;
 
     if (provider.isLoading) {
@@ -99,56 +87,102 @@ class _CartBodyState extends State<_CartBody> {
         child: const EmptyCart(),
       );
     }
-    // ------------------------------------------------------------
-    // Items exist — no need for its own SingleChildScrollView,
-    // since the whole page (via WebsiteLayout) already scrolls.
-    // ------------------------------------------------------------
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 40),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 7,
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < _mobileBreakpoint;
+
+        // --------------------------------------------------------
+        // MOBILE: stacked, full-width, reduced padding
+        // --------------------------------------------------------
+        if (isMobile) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ...cartItems.map((item) {
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.only(bottom: 16),
                     child: CartItem(item: item),
                   );
                 }),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 10),
 
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: OutlinedButton.icon(
-                    onPressed: () {
-                      context.go(AppRouter.shop);
-                    },
-                    icon: const Icon(Icons.arrow_back),
-                    label: const Text('Continue Shopping'),
-                  ),
+                OutlinedButton.icon(
+                  onPressed: () {
+                    context.go(AppRouter.shop);
+                  },
+                  icon: const Icon(Icons.arrow_back),
+                  label: const Text('Continue Shopping'),
+                ),
+
+                const SizedBox(height: 24),
+
+                OrderSummary(
+                  subtotal: provider.subtotal,
+                  shipping: provider.shipping,
+                  tax: provider.tax,
+                  discount: provider.discount,
+                  total: provider.grandTotal,
                 ),
               ],
             ),
-          ),
+          );
+        }
 
-          const SizedBox(width: 40),
+        // --------------------------------------------------------
+        // DESKTOP: original side-by-side layout, unchanged
+        // --------------------------------------------------------
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 40),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 7,
+                child: Column(
+                  children: [
+                    ...cartItems.map((item) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: CartItem(item: item),
+                      );
+                    }),
 
-          Expanded(
-            flex: 3,
-            child: OrderSummary(
-              subtotal: provider.subtotal,
-              shipping: provider.shipping,
-              tax: provider.tax,
-              discount: provider.discount,
-              total: provider.grandTotal,
-            ),
+                    const SizedBox(height: 30),
+
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          context.go(AppRouter.shop);
+                        },
+                        icon: const Icon(Icons.arrow_back),
+                        label: const Text('Continue Shopping'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(width: 40),
+
+              Expanded(
+                flex: 3,
+                child: OrderSummary(
+                  subtotal: provider.subtotal,
+                  shipping: provider.shipping,
+                  tax: provider.tax,
+                  discount: provider.discount,
+                  total: provider.grandTotal,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
