@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://lagclothing.store/</loc>
+  </url>
+
+  <url>
+    <loc>https://lagclothing.store/shop</loc>
+  </url>
+
+  <url>
+    <loc>https://lagclothing.store/collections</loc>
+  </url>
+
+  <url>
+    <loc>https://lagclothing.store/about</loc>
+  </url>
+
+  <url>
+    <loc>https://lagclothing.store/contact</loc>
+  </url>
+
+  <url>
+    <loc>https://lagclothing.store/cart</loc>
+  </url>
+
+</urlset>
