@@ -1,11 +1,11 @@
 {
-    "name": "lag_clothing",
-    "short_name": "lag_clothing",
+    "name": "Lag Clothing",
+    "short_name": "Lag Clothing",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Premium Streetwear & Apparel",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
