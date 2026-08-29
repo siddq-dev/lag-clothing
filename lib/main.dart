@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'package:lag_clothing/providers/auth_provider.dart';
 import 'package:lag_clothing/providers/inventory_provider.dart';
@@ -31,6 +32,12 @@ import 'providers/cart_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Makes Flutter web use real URL paths (e.g. /shop) instead of
+  // hash-based routing (e.g. /#/shop). Without this, the router
+  // never reads the actual browser path, so every direct URL
+  // (typed or refreshed) falls back to the default/home route.
+  usePathUrlStrategy();
 
   WidgetsBinding.instance.addObserver(AnalyticsLifecycleService());
 

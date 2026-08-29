@@ -224,10 +224,41 @@ class AppRouter {
   static final GoRouter router = GoRouter(
     observers: [AnalyticsRouteObserver()],
     initialLocation: home,
+
+    // Shows a proper "page not found" screen instead of a blank
+    // or default error page when a URL doesn't match any route
+    // below (e.g. a typo, or a stale/removed link).
+    errorBuilder: (context, state) => Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Page not found'),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () => context.go(home),
+              child: const Text('Go to homepage'),
+            ),
+          ],
+        ),
+      ),
+    ),
+
     routes: [
       GoRoute(path: home, builder: (context, state) => const HomePage()),
 
       GoRoute(path: shop, builder: (context, state) => const ShopPage()),
+
+      // NOTE: This route was previously missing entirely, even
+      // though the `collections` path constant was already
+      // defined above. Without a matching GoRoute, visiting
+      // /collections had nothing to render against.
+      // TODO: Replace ShopPage with a dedicated CollectionsPage
+      // once you build one.
+      GoRoute(
+        path: collections,
+        builder: (context, state) => const ShopPage(),
+      ),
 
       GoRoute(path: about, builder: (context, state) => const AboutPage()),
 
