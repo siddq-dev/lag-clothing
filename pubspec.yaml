@@ -76,8 +76,8 @@ flutter:
   assets:
     - assets/images/logo/lag_logo.png
     - assets/images/auth/login_banner.jpg
-    - assets/images/hero/hero_banner_1.jpg
-    - assets/images/hero/hero_banner_2.jpg
+    - assets/images/hero/hero_banner_1.jpeg
+    - assets/images/hero/hero_banner_2.jpeg
     - assets/images/hero/hero_banner_3.jpg
 
     
