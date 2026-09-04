@@ -17,9 +17,9 @@ class _HeroImageState extends State<HeroImage> {
   int _currentIndex = 0;
 
   final List<String> _images = const [
-    'assets/images/hero/hero_banner_1.jpg',
-    'assets/images/hero/hero_banner_2.jpg',
-    'assets/images/hero/hero_banner_3.jpg',
+    'assets/images/hero/hero_banner_1.jpeg',
+    'assets/images/hero/hero_banner_2.jpeg',
+    'assets/images/hero/hero_banner_3.jpeg',
   ];
 
   @override
