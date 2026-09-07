@@ -6,6 +6,7 @@ const {BrevoClient} = require("@getbrevo/brevo");
 const admin = require("firebase-admin");
 
 admin.initializeApp();
+const {createSecureOrder} = require("./checkout");
 
 const brevoApiKey = defineSecret("BREVO_API_KEY");
 
@@ -1311,3 +1312,5 @@ exports.sendContactMessage = onRequest(
       }
     },
 );
+
+exports.createSecureOrder = createSecureOrder;

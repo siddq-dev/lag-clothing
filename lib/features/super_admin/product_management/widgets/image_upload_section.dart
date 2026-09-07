@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'package:lag_clothing/models/product_image_model.dart';
-import 'package:lag_clothing/services/firebase_storage_service.dart';
+import 'package:lag_clothing/services/product_storage_service.dart';
 import 'package:lag_clothing/providers/product_management_provider.dart';
 
 class ImageUploadSection extends StatefulWidget {
@@ -117,7 +117,7 @@ class _ImageUploadSectionState extends State<ImageUploadSection> {
     //--------------------------------------------------------
 
     try {
-      final imageUrl = await FirebaseStorageService.uploadProductImage(image);
+      final imageUrl = await ProductStorageService.uploadProductImage(image);
 
       if (!mounted) return;
 

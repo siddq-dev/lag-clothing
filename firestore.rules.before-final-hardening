@@ -21,6 +21,11 @@ service cloud.firestore {
       );
     }
 
+    function isAdmin() {
+      return signedIn()
+        && currentUser().data.role in ['admin', 'superAdmin'];
+    }
+
     function isSuperAdmin() {
       return signedIn()
         && currentUser().data.role == 'superAdmin';
@@ -45,17 +50,7 @@ service cloud.firestore {
 
       // Customer registration.
       allow create: if isOwner(userId)
-        && request.resource.data.role == 'customer'
-        && request.resource.data.status == true
-        && request.resource.data.permissions.dashboard == false
-        && request.resource.data.permissions.products == false
-        && request.resource.data.permissions.orders == false
-        && request.resource.data.permissions.customers == false
-        && request.resource.data.permissions.inventory == false
-        && request.resource.data.permissions.coupons == false
-        && request.resource.data.permissions.analytics == false
-        && request.resource.data.permissions.admins == false
-        && request.resource.data.permissions.settings == false;
+        && request.resource.data.role == 'customer';
 
       // A customer cannot change:
       // - role

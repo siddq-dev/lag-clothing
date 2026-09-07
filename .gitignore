@@ -1,8 +1,12 @@
+# ============================================================
 # Miscellaneous
+# ============================================================
+
 *.class
 *.log
 *.pyc
 *.swp
+
 .DS_Store
 .atom/
 .build/
@@ -12,41 +16,117 @@
 .swiftpm/
 migrate_working_dir/
 
-# IntelliJ related
+
+# ============================================================
+# IntelliJ / Android Studio
+# ============================================================
+
 *.iml
 *.ipr
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
 
-# Flutter/Dart/Pub related
+# ============================================================
+# VS Code
+# ============================================================
+# Keep this commented if you want to commit your VS Code
+# workspace settings.
+#
+# .vscode/
+
+
+# ============================================================
+# Flutter / Dart / Pub
+# ============================================================
+
 **/doc/api/
 **/ios/Flutter/.last_build_id
+
 .dart_tool/
+.flutter-plugins
 .flutter-plugins-dependencies
+
 .pub-cache/
 .pub/
+
+# Flutter generated output
 /build/
 /coverage/
 
-# Symbolication related
-app.*.symbols
 
-# Obfuscation related
+# ============================================================
+# Flutter obfuscation / symbolication
+# ============================================================
+
+app.*.symbols
 app.*.map.json
+
+
+# ============================================================
+# Android generated / local files
+# ============================================================
+
+android/.gradle/
+android/local.properties
+
+android/app/debug/
+android/app/profile/
+android/app/release/
 
 # Local Oracle JDK bundled inside Android folder
 android/oracleJdk-26/
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
 
-# Local bundled JDK
-android/oracleJdk-26/
-android/oracleJdk-26/
+# ============================================================
+# Firebase / Cloud Functions generated files
+# ============================================================
+
+functions/node_modules/
+
+# Firebase local emulator data
+.firebase/
+
+# Firebase debug logs
+firebase-debug.log
+firebase-debug.*.log
+
+
+# ============================================================
+# Environment files
+# ============================================================
+
+.env
+.env.*
+!.env.example
+
+
+# ============================================================
+# Secrets / private keys
+# ============================================================
+
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# Google / Firebase service-account credentials
+service-account*.json
+*-service-account*.json
+firebase-adminsdk-*.json
+
+# Generic credential files
+credentials.json
+secrets.json
+secret.json
+
+
+# ============================================================
+# OS / IDE temporary files
+# ============================================================
+
+Thumbs.db
+ehthumbs.db
+Desktop.ini

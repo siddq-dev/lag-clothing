@@ -116,24 +116,7 @@ class OrderProvider extends ChangeNotifier {
     );
   }
 
-  // ============================================================
-  // CREATE ORDER
-  // ============================================================
-
-  Future<void> createOrder(OrderModel order) async {
-    try {
-      _setLoading(true);
-
-      _error = null;
-
-      await OrderRepository.createOrder(order);
-    } catch (e) {
-      _error = _cleanError(e);
-      rethrow;
-    } finally {
-      _setLoading(false);
-    }
-  }
+  
 
   // ============================================================
   // GET SINGLE ORDER

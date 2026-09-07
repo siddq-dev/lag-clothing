@@ -259,68 +259,34 @@ class CheckoutProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final orderNumber = _repository.generateOrderNumber();
-
-      final trackingId = _repository.generateTrackingId();
-
-      final orderData = {
-        // --------------------------------------------------------
-        // USER
-        // --------------------------------------------------------
-
-        // userId is added by CheckoutRepository.
-        // Do not duplicate it here.
-
-        // --------------------------------------------------------
-        // ORDER IDENTIFIERS
-        // --------------------------------------------------------
-        'orderNumber': orderNumber,
-        'trackingId': trackingId,
-
-        // --------------------------------------------------------
-        // ADDRESSES
-        // --------------------------------------------------------
-        'shippingAddress': currentCheckout.shippingAddress!.toMap(),
-
-        'billingAddress': currentCheckout.billingAddress!.toMap(),
-
-        // --------------------------------------------------------
-        // ITEMS
-        // --------------------------------------------------------
-        'items': currentCheckout.cartItems.map((item) => item.toMap()).toList(),
-
-        // --------------------------------------------------------
-        // PAYMENT
-        // --------------------------------------------------------
-        'paymentMethod': currentCheckout.paymentMethod,
-
-        // --------------------------------------------------------
-        // TOTALS
-        // --------------------------------------------------------
-        'subtotal': currentCheckout.subtotal,
-
-        'tax': currentCheckout.tax,
-
-        'discount': currentCheckout.discount,
-
-        'grandTotal': currentCheckout.grandTotal,
-
-        // --------------------------------------------------------
-        // STATUS
-        // --------------------------------------------------------
-        'orderStatus': 'pending',
-
-        'paymentStatus': 'pending',
-      };
-
       // ----------------------------------------------------------
-      // CREATE ORDER + VALIDATE PRICE/STOCK + UPDATE INVENTORY
+      // SECURE ORDER CREATION
+      //
+      // The Cloud Function is responsible for:
+      // - authenticating the customer
+      // - reading real product prices
+      // - validating stock
+      // - validating variants
+      // - calculating totals
+      // - updating inventory
+      // - creating inventory logs
+      // - creating the order
       // ----------------------------------------------------------
 
-      await _repository.createOrder(
-        orderData: orderData,
-        items: currentCheckout.cartItems,
+      await _repository.createSecureOrder(
+        shippingAddress:
+            currentCheckout.shippingAddress!.toMap(),
+        billingAddress:
+            currentCheckout.billingAddress!.toMap(),
+        paymentMethod:
+            currentCheckout.paymentMethod!,
+        items:
+            currentCheckout.cartItems,
+        couponCode:
+            currentCheckout.coupon?.code,
       );
+
+
 
       // ----------------------------------------------------------
       // CLEAR CART ONLY AFTER SUCCESSFUL ORDER TRANSACTION

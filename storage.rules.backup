@@ -1,0 +1,19 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Product / catalog images: public can view, only admins/superAdmins can upload or delete
+    match /products/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null &&
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.permissions.products == true;
+    }
+    // Per-user files (profile photos, uploads): only that user can read/write their own folder
+    match /users/{userId}/{allPaths=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    // Deny everything else by default
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

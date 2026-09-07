@@ -1,0 +1,66 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================================
+    // USERS
+    // ============================================================
+    //
+    // A signed-in user can read their own user document.
+    //
+    // Users must NOT be allowed to modify their own role or
+    // permissions from the client.
+    //
+    match /users/{userId} {
+
+      allow read: if request.auth != null
+        && request.auth.uid == userId;
+
+      allow create: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.role == 'customer';
+
+      allow update: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.permissions == resource.data.permissions;
+
+      allow delete: if false;
+    }
+
+
+    // ============================================================
+    // PRODUCTS
+    // ============================================================
+    //
+    // Products are public catalog data.
+    //
+    // Anyone can read products.
+    //
+    // Only authenticated admins with the Products permission can
+    // create, update, or delete products.
+    //
+    match /products/{productId} {
+
+      allow read: if true;
+
+      allow create, update, delete: if request.auth != null
+        && get(
+          /databases/$(database)/documents/users/$(request.auth.uid)
+        ).data.permissions.products == true;
+    }
+
+
+    // ============================================================
+    // DEFAULT DENY
+    // ============================================================
+    //
+    // Any collection that does not have an explicit rule above
+    // is denied.
+    //
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
