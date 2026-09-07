@@ -47,6 +47,30 @@ class GoogleAuthService {
         'phone': user.phoneNumber ?? '',
         'photoUrl': user.photoURL ?? '',
         'role': 'customer',
+        // Required by firestore.rules' users update rule, which
+        // compares these fields before/after every update. Omitting
+        // them causes ANY future .update() on this doc (last-login
+        // timestamps, profile edits, etc.) to fail with
+        // permission-denied, since the rule can't safely compare a
+        // field that doesn't exist on the document at all.
+        // firestore.rules' create rule for /users/{userId}
+        // requires every one of these 9 permission keys to be
+        // explicitly present and false at creation time (plus
+        // status: true). A missing key, or an empty {} map,
+        // fails that rule the same way an entirely-missing
+        // "permissions" field breaks the update rule.
+        'status': true,
+        'permissions': {
+          'dashboard': false,
+          'products': false,
+          'orders': false,
+          'customers': false,
+          'inventory': false,
+          'coupons': false,
+          'analytics': false,
+          'admins': false,
+          'settings': false,
+        },
         'addresses': [],
         'wishlist': [],
         'cart': [],
